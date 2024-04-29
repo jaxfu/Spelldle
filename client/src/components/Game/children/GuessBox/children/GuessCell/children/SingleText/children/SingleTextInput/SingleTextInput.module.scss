@@ -1,0 +1,29 @@
+@import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../../../styles/vars";
+
+.root {
+	width: 100%;
+	height: fit-content;
+	position: relative;
+
+	input {
+		@include flex-center;
+		font-size: 1.5rem;
+		width: 100%;
+		height: fit-content;
+		text-align: center;
+		border: none;
+		border-bottom-right-radius: 13px;
+		border-bottom-left-radius: 13px;
+		background: $main_bg;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+
+	.icon {
+		@include center-absolute;
+		right: 1%;
+
+		pointer-events: none;
+	}
+}

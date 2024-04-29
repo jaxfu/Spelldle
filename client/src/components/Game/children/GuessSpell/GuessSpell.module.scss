@@ -1,0 +1,71 @@
+@import "../../../../styles/mixins";
+@import "../../../../styles/vars";
+
+.root {
+	@include flex-center;
+	height: fit-content;
+	margin-top: 50px;
+	margin-bottom: 50px;
+
+	button {
+		border: 1px solid white;
+		padding: 5px;
+		border-radius: 10px;
+		font-size: 1.2rem;
+	}
+
+	//border: 1px solid white;
+	.cell {
+		width: fit-content;
+
+		border: 1px solid white;
+
+		margin: 5px;
+
+		border-radius: $border-radius;
+
+		h2 {
+			width: 100%;
+			text-align: center;
+			position: relative;
+
+			background: rgba(255, 255, 255, 0.1);
+			border-top-left-radius: 14px;
+			border-top-right-radius: 14px;
+		}
+
+		.input {
+			@include full-size-percent;
+			position: relative;
+		}
+	}
+
+	.pastSpellGuesses {
+		width: 80%;
+		height: fit-content;
+		margin-top: 5px;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		span {
+			background: red;
+			border-radius: 5px;
+			padding: 5px;
+		}
+	}
+}
+
+@media (max-width: 550px) {
+	.root {
+		.cell {
+			width: 90%;
+		}
+		button {
+			font-size: 1.5rem;
+		}
+	}
+}

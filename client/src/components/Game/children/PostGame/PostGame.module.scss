@@ -1,0 +1,53 @@
+@import "../../../../styles/vars";
+@import "../../../../styles/mixins";
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	width: 80%;
+	height: fit-content;
+	overflow-y: auto;
+
+	border: 1px solid white;
+	border-radius: 0.5rem;
+	background: $color-bg;
+
+	margin-top: 100px;
+	margin-bottom: 100px;
+
+	h2 {
+		text-align: center;
+
+		&.correct {
+			color: $color-correct;
+		}
+
+		&.incorrect {
+			color: $color-incorrect;
+		}
+	}
+
+	span {
+		text-align: center;
+	}
+
+	.guesses {
+		width: 100%;
+		@include flex-center;
+	}
+
+	button {
+		font-size: larger;
+		font-weight: bolder;
+		padding: 5px;
+		border: none;
+		border-top: 1px solid white;
+		background: $color-correct;
+
+		&:hover {
+			background: rgb(104, 163, 104);
+		}
+	}
+}

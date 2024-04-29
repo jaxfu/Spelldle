@@ -1,0 +1,18 @@
+@import "../../../../styles/vars";
+@import "../../../../styles/mixins";
+
+.root {
+	width: 100%;
+	height: calc(100% - $height-navbar);
+
+	display: flex;
+	justify-content: center;
+
+	overflow-y: auto;
+
+	position: absolute;
+
+	z-index: 12;
+
+	backdrop-filter: blur(0.1rem);
+}

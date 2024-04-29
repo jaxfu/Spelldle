@@ -1,0 +1,31 @@
+[
+  {
+    "spell_id": 1,
+    "name": "Acid Splash",
+    "school": 1,
+    "range": 3,
+    "casting_time": 4,
+    "target": 1,
+    "duration": 0,
+    "level": [
+      9,
+      0
+    ],
+    "components": [
+      0,
+      1
+    ],
+    "effects": [
+      2,
+      16,
+      31,
+      40,
+      46
+    ],
+    "class": [
+      0,
+      6,
+      8
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+@import "../../../../../../../../styles/mixins";
+@import "../../../../../../../../styles/vars";
+
+.root {
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+
+	span {
+		@include flex-center;
+		padding: 2px;
+		height: 100%;
+
+		font-size: 1.5rem;
+
+		cursor: pointer;
+
+		&:nth-child(1) {
+			border-right: 1px solid white;
+			border-bottom-left-radius: 15px;
+		}
+
+		&:nth-child(2) {
+			border-right: 1px solid white;
+		}
+
+		&:nth-child(3) {
+			border-bottom-right-radius: 15px;
+		}
+
+		&.checked {
+			background: $color-btn;
+			color: lightseagreen;
+
+			// &:hover {
+			// 	background: $main_bg;
+			// }
+		}
+
+		&.unchecked {
+			background: $main_bg;
+			color: red;
+
+			// &:hover {
+			// 	background: $color-btn-hover;
+			// }
+		}
+	}
+}
+
+@media screen and (min-width: 550px) {
+	.root {
+		span.checked:hover {
+			background: $main_bg;
+		}
+
+		span.unchecked:hover {
+			background: $color-btn-hover;
+		}
+	}
+}

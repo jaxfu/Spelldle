@@ -1,0 +1,9 @@
+@import "../../../../../../styles/vars";
+@import "../../../../../../styles/mixins";
+
+.root {
+	display: flex;
+	flex-direction: column;
+
+	height: fit-content;
+}

@@ -1,0 +1,46 @@
+@import "../../../../styles/_vars";
+@import "../../../../styles/_mixins";
+
+.root {
+	width: 100%;
+	height: fit-content;
+	@include flex-center;
+
+	//border: 5px solid red;
+
+	.session_info {
+		width: 100%;
+		display: flex;
+		justify-content: space-evenly;
+	}
+
+	.guess_cells {
+		margin: 10px;
+		height: fit-content;
+
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.submit {
+		@include flex-center;
+
+		button {
+			border: 1px solid white;
+			padding: 5px;
+			border-radius: 10px;
+			font-size: 1.2rem;
+		}
+	}
+}
+
+@media screen and (max-width: 550px) {
+	.root {
+		button {
+			font-size: 1.5rem;
+		}
+	}
+}

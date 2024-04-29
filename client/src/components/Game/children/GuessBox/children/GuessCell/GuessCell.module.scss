@@ -1,0 +1,32 @@
+@import "../../../../../../styles/mixins";
+@import "../../../../../../styles/vars";
+
+.root {
+	width: 17.5rem;
+	height: fit-content;
+
+	border: 1px solid white;
+	position: relative;
+
+	margin: 5px;
+
+	border-radius: $border-radius;
+
+	h3 {
+		width: 100%;
+		text-align: center;
+
+		font-size: 1.5rem;
+
+		//border-bottom: 1px solid black;
+		background: $color-cell-header;
+		border-top-left-radius: 14px;
+		border-top-right-radius: 14px;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	.root {
+		width: 85%;
+	}
+}

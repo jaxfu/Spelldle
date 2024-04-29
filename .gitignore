@@ -1,0 +1,4 @@
+.DS_Store
+.idea
+backup_spells.sh
+restore_spells.sh

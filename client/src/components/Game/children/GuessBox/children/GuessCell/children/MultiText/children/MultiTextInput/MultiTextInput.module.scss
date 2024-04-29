@@ -1,0 +1,58 @@
+@import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../../../styles/vars";
+
+.root {
+	width: 100%;
+	height: fit-content;
+
+	border-top: 1px solid white;
+	display: flex;
+
+	position: relative;
+
+	input {
+		width: 100%;
+		height: fit-content;
+		font-size: 1.5rem;
+		border-bottom-left-radius: 13px;
+		border: none;
+		background: $main_bg;
+		text-align: center;
+		background: $color-guess-text-input;
+
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+
+	.solo {
+		border-bottom-right-radius: 13px;
+	}
+
+	button {
+		border-bottom-right-radius: 13px;
+		text-decoration: none;
+		border: none;
+		border-left: 1px solid white;
+		width: 20%;
+		background: $color-btn;
+
+		&:hover {
+			background-color: $color-btn-hover;
+		}
+	}
+
+	.icon {
+		@include center-absolute;
+		pointer-events: none;
+
+		&.check {
+			right: 19%;
+			color: $color-checkmark;
+		}
+
+		&.x {
+			right: 5px;
+			color: $color-xmark;
+		}
+	}
+}

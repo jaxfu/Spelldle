@@ -1,0 +1,33 @@
+.root {
+	width: 100%;
+	text-align: center;
+	max-height: 100px;
+	border: 1px solid black;
+	background: white;
+
+	overflow-y: scroll;
+
+	position: absolute;
+	top: 100%;
+	z-index: 10;
+
+	.cell {
+		width: 100%;
+		height: fit-content;
+		color: black;
+		border-top: 1px solid black;
+		border-bottom: 1px solid black;
+		cursor: pointer;
+
+		&:hover {
+			background: lightseagreen;
+		}
+	}
+}
+
+@media (max-width: 550px) {
+	.root {
+		font-size: 1.2rem;
+		max-height: 8rem;
+	}
+}

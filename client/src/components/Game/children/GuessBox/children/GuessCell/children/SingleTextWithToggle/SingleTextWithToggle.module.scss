@@ -1,0 +1,43 @@
+@import "../../../../../../../../styles/mixins";
+@import "../../../../../../../../styles/vars";
+
+.root {
+	@include full-size-percent;
+	display: flex;
+
+	user-select: none;
+
+	.ritual_toggle {
+		button {
+			width: fit-content;
+			height: 100%;
+			border: none;
+			border-left: 1px solid white;
+			border-top: 1px solid white;
+			border-bottom-right-radius: $border-radius;
+			padding: 5px;
+			font-weight: bold;
+			font-size: 1rem;
+			background: $color-btn;
+			display: flex;
+			align-items: center;
+
+			&:hover {
+				background: $color-btn-hover;
+			}
+
+			&.unchecked {
+				background: $main_bg;
+			}
+
+			.icon {
+				color: $color-checkmark;
+				margin-left: 5px;
+
+				&.unchecked {
+					color: $color-xmark;
+				}
+			}
+		}
+	}
+}

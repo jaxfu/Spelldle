@@ -1,0 +1,22 @@
+@import "../../../styles/mixins";
+
+.root {
+	@include flex-center;
+	flex-direction: row;
+	position: fixed;
+	bottom: 100px;
+	right: 25px;
+	background: black;
+	border-radius: 1rem;
+	color: white;
+	cursor: pointer;
+	z-index: 10;
+
+	&:hover {
+		background: grey;
+	}
+
+	button {
+		margin: 5px;
+	}
+}
