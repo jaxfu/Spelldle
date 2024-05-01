@@ -1,3 +1,8 @@
+@import "../../styles/mixins";
+
 .root {
-  background-color: black;
+	height: fit-content;
+	width: fit-content;
+
+	background-color: black;
 }
