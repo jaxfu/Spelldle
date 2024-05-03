@@ -1,13 +1,13 @@
 export enum E_CATEGORIES {
-	School = 1,
-	Level,
-	Casting,
-	Range,
-	Target,
-	Components,
-	Duration,
-	Class,
-	Effects,
+	SCHOOL = 1,
+	LEVEL,
+	CASTING,
+	RANGE,
+	TARGET,
+	COMPONENTS,
+	DURATION,
+	CLASS,
+	EFFECTS,
 }
 
 export const CATEGORY_NAMES: string[] = [
@@ -24,41 +24,41 @@ export const CATEGORY_NAMES: string[] = [
 ];
 
 export enum E_SCHOOL_VALUES {
-	abjuration = 1,
-	conjuration,
-	divination,
-	dunamancy,
-	enchantment,
-	evocation,
-	illusion,
-	necromancy,
-	transmutation,
+	ABJURATION = 1,
+	CONJURATION,
+	DIVINATION,
+	DUNAMANCY,
+	ENCHANTMENT,
+	EVOCATION,
+	ILLUSION,
+	NECROMANCY,
+	TRANSMUTATION,
 }
 
 export const SCHOOL_NAMES: string[] = [
 	"null",
 	"Abjuration",
-	"conjuration",
-	"divination",
-	"dunamancy",
-	"enchantment",
-	"evocation",
-	"illusion",
-	"necromancy",
-	"transmutation",
+	"Conjuration",
+	"Divination",
+	"Dunamancy",
+	"Enchantment",
+	"Evocation",
+	"Illusion",
+	"Necromancy",
+	"Transmutation",
 ];
 
 export enum E_LEVEL_VALUES {
-	first = 1,
-	second,
-	third,
-	fourth,
-	fifth,
-	sixth,
-	seventh,
-	eigth,
-	ninth,
-	cantrip,
+	FIRST = 1,
+	SECOND,
+	THIRD,
+	FOURTH,
+	FIFTH,
+	SIXTH,
+	SEVENTH,
+	EIGTH,
+	NINTH,
+	CANTRIP,
 }
 
 export const LEVEL_NAMES = [
