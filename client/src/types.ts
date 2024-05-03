@@ -1,16 +1,29 @@
-enum TURNCELL_TYPE {
+export enum E_TURNCELL_TYPE {
 	School = 1,
 	Level,
 	Casting,
 	Range,
 	Target,
-	Composition,
+	Components,
 	Duration,
 	Class,
 	Effects,
 }
 
-enum COMPONENTS {
+export const TURNCELL_TYPE_NAMES = [
+	"null",
+	"School",
+	"Level",
+	"Casting",
+	"Range",
+	"Target",
+	"Components",
+	"Duration",
+	"Class",
+	"Effects",
+];
+
+export enum COMPONENTS {
 	V = 1,
 	S,
 	M,

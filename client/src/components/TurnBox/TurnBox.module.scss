@@ -6,4 +6,8 @@
 
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
+
+	max-width: 90dvw;
+	border: 1px solid black;
 }
