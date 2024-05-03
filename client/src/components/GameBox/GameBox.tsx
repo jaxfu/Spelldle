@@ -1,7 +1,7 @@
 import TurnBox from "../TurnBox/TurnBox";
 import styles from "./GameBox.module.scss";
 
-const GameBox = () => {
+const GameBox: React.FC = () => {
 	return (
 		<div className={styles.root}>
 			<TurnBox />
