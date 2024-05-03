@@ -295,3 +295,19 @@ export const EFFECT_NAMES: string[] = [
 	"Slashing",
 	"Thunder",
 ];
+
+export type T_CATEGORY_INFO = {
+	SCHOOL: T_CATEGORY;
+	LEVEL: T_CATEGORY;
+	CASTING: T_CATEGORY;
+	RANGE: T_CATEGORY;
+	TARGET: T_CATEGORY;
+	COMPONENTS: T_CATEGORY;
+	DURATION: T_CATEGORY;
+	CLASS: T_CATEGORY;
+	EFFECTS: T_CATEGORY;
+};
+
+export type T_CATEGORY = {
+	name: string;
+};
