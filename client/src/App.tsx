@@ -1,12 +1,12 @@
 import styles from "./App.module.scss";
 
 // COMPONENTS
-import GameBox from "./components/GameBox/GameBox";
+import TurnBox from "./components/TurnBox/TurnBox";
 
 function App() {
 	return (
 		<div className={styles.root}>
-			<GameBox />
+			<TurnBox />
 		</div>
 	);
 }

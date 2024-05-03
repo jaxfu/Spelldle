@@ -10,6 +10,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			<span>{TURNCELL_TYPE_NAMES[props.type]}</span>
 			<input type="text" name="" id="" />
+			<button>Submit</button>
 		</div>
 	);
 };
