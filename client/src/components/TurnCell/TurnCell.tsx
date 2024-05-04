@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
 import { E_CATEGORIES, CATEGORY_NAMES } from "../../types";
+import { handleInput } from "../../utils/HandleInputs";
 
 interface IProps {
 	type: E_CATEGORIES;
@@ -9,11 +10,6 @@ interface IProps {
 const TurnCell: React.FC<IProps> = (props) => {
 	const [textInput, setTextInput] = useState<string>("");
 
-	// INPUT HANDLER
-	function handleInput(e: React.ChangeEvent<HTMLInputElement>): void {
-		setTextInput(e.target.value);
-	}
-
 	return (
 		<div className={styles.root}>
 			<span>{CATEGORY_NAMES[props.type]}</span>
@@ -21,7 +17,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 				type="text"
 				name="inputText"
 				value={textInput}
-				onChange={handleInput}
+				onChange={(e) => handleInput(e, setTextInput)}
 			/>
 			<button>Submit</button>
 		</div>
