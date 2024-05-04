@@ -1,7 +1,6 @@
 import TurnCell from "../TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
 import { E_CATEGORIES } from "../../types";
-import CATEGORY_INFO from "../../CATEGORY_INFO";
 
 const TurnBox: React.FC = () => {
 	return (
