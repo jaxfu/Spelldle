@@ -52,7 +52,6 @@ const TurnCell: React.FC<IProps> = (props) => {
 					})}
 				</div>
 			)}
-			<button>Submit</button>
 		</div>
 	);
 };
