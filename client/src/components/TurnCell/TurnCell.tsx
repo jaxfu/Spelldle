@@ -9,6 +9,25 @@ interface IProps {
 
 const TurnCell: React.FC<IProps> = (props) => {
 	const [textInput, setTextInput] = useState<string>("");
+	const [recommendations, setRecommendations] = useState<string[]>([]);
+
+	function getRecommendations(
+		e: React.ChangeEvent<HTMLInputElement>
+	): string[] {
+		if (e.target.value == "") {
+			return [];
+		}
+
+		const output: string[] = [];
+
+		for (const option of props.category.values) {
+			if (option.toLowerCase().includes(e.target.value.toLowerCase())) {
+				output.push(option);
+			}
+		}
+
+		return output;
+	}
 
 	return (
 		<div className={styles.root}>
@@ -17,8 +36,22 @@ const TurnCell: React.FC<IProps> = (props) => {
 				type="text"
 				name="inputText"
 				value={textInput}
-				onChange={(e) => handleInput(e, setTextInput)}
+				onChange={(e) => {
+					handleInput(e, setTextInput);
+					setRecommendations(getRecommendations(e));
+				}}
 			/>
+			{recommendations.length == 0 ? null : (
+				<div className={styles.recommend_root}>
+					{recommendations.map((option) => {
+						return (
+							<div className={styles.cell} key={option.toString()}>
+								{option.toString()}
+							</div>
+						);
+					})}
+				</div>
+			)}
 			<button>Submit</button>
 		</div>
 	);

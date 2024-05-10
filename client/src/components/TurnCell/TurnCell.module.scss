@@ -4,4 +4,24 @@
 	@include flex-center;
 
 	border: 1px solid white;
+
+	.recommend_root {
+		width: 100%;
+		height: fit-content;
+		border: 1px solid black;
+		background: white;
+
+		.cell {
+			width: 100%;
+			height: fit-content;
+			color: black;
+			border-top: 1px solid black;
+			border-bottom: 1px solid black;
+			cursor: pointer;
+
+			&:hover {
+				background: lightseagreen;
+			}
+		}
+	}
 }
