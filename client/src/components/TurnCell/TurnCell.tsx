@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
-import { E_CATEGORIES, CATEGORY_NAMES } from "../../types";
 import { handleInput } from "../../utils/HandleInputs";
+import { T_CATEGORY } from "../../types";
 
 interface IProps {
-	type: E_CATEGORIES;
+	category: T_CATEGORY;
 }
 
 const TurnCell: React.FC<IProps> = (props) => {
@@ -12,7 +12,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<span>{CATEGORY_NAMES[props.type]}</span>
+			<span>{props.category.name}</span>
 			<input
 				type="text"
 				name="inputText"
