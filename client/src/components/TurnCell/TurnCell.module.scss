@@ -2,14 +2,25 @@
 
 .root {
 	@include flex-center;
+	width: 100%;
+	height: fit-content;
 
 	border: 1px solid white;
+	position: relative;
 
 	.recommend_root {
 		width: 100%;
-		height: fit-content;
+		text-align: center;
+		min-height: fit-content;
+		max-height: 100px;
 		border: 1px solid black;
 		background: white;
+
+		overflow-y: scroll;
+
+		position: absolute;
+		top: 100%;
+		z-index: 10;
 
 		.cell {
 			width: 100%;
