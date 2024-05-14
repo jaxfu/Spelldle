@@ -11,7 +11,9 @@ export function getRecommendations(
 	const output: string[] = [];
 
 	for (const option of props.category.values) {
-		if (option.toLowerCase().includes(e.target.value.toLowerCase())) {
+		if (option.toLowerCase() === e.target.value.toLowerCase()) {
+			return [];
+		} else if (option.toLowerCase().includes(e.target.value.toLowerCase())) {
 			output.push(option);
 		}
 	}
