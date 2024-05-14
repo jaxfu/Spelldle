@@ -1,5 +1,5 @@
 export enum E_CATEGORIES {
-	SCHOOL = 1,
+	SCHOOL = 0,
 	LEVEL,
 	CASTING,
 	RANGE,
@@ -11,7 +11,7 @@ export enum E_CATEGORIES {
 }
 
 export enum E_SCHOOL_VALUES {
-	ABJURATION = 1,
+	ABJURATION = 0,
 	CONJURATION,
 	DIVINATION,
 	DUNAMANCY,
@@ -23,7 +23,7 @@ export enum E_SCHOOL_VALUES {
 }
 
 export enum E_LEVEL_VALUES {
-	FIRST = 1,
+	FIRST = 0,
 	SECOND,
 	THIRD,
 	FOURTH,
@@ -36,7 +36,7 @@ export enum E_LEVEL_VALUES {
 }
 
 export enum E_CASTING_VALUES {
-	ONE_ACTION = 1,
+	ONE_ACTION = 0,
 	ONE_REACTION,
 	BONUS_ACTION,
 	ONE_MINUTE,
@@ -46,7 +46,7 @@ export enum E_CASTING_VALUES {
 }
 
 export enum E_RANGE_VALUES {
-	TOUCH = 1,
+	TOUCH = 0,
 	SELF,
 	FIVE_FEET,
 	TEN_FEET,
@@ -66,13 +66,13 @@ export enum E_TARGET_VALUES {
 }
 
 export enum E_COMPONENT_VALUES {
-	V = 1,
+	V = 0,
 	S,
 	M,
 }
 
 export enum E_DURATION_VALUES {
-	INSTANTANEOUS = 1,
+	INSTANTANEOUS = 0,
 	ONE_ROUND,
 	ONE_MINUTE,
 	TEN_MINUTES,
@@ -83,7 +83,7 @@ export enum E_DURATION_VALUES {
 }
 
 export const enum E_CLASS_VALUES {
-	ARTIFICER = 1,
+	ARTIFICER = 0,
 	BARD,
 	CLERIC,
 	DRUID,
@@ -95,7 +95,7 @@ export const enum E_CLASS_VALUES {
 }
 
 export enum E_EFFECT_VALUES {
-	Damage = 1,
+	Damage = 0,
 	Healing,
 	HP,
 	AC,
