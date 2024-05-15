@@ -34,8 +34,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 		has_multi: false,
 		has_modifiers: true,
 	},
-	CASTING: {
-		name: "Casting",
+	CASTING_TIME: {
+		name: "Casting Time",
 		values: [
 			"1 Action",
 			"1 Reaction",

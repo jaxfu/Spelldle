@@ -3,6 +3,7 @@ import styles from "./TurnCell.module.scss";
 import { T_CATEGORY } from "../../types";
 import * as methods from "./methods";
 import { handleInput } from "../../utils/HandleInputs";
+import CATEGORY_INFO from "../../CATEGORY_INFO";
 
 export interface IProps {
 	category: T_CATEGORY;
@@ -11,6 +12,12 @@ export interface IProps {
 const TurnCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
 	const [recommendations, setRecommendations] = useState<string[]>([]);
+
+	// Handle unique category items
+	switch (props.category) {
+		case CATEGORY_INFO.LEVEL:
+			break;
+	}
 
 	return (
 		<div className={styles.root}>

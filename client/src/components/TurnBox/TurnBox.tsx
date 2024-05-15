@@ -7,7 +7,7 @@ const TurnBox: React.FC = () => {
 		<div className={styles.root}>
 			<TurnCell category={CATEGORY_INFO.SCHOOL} />
 			<TurnCell category={CATEGORY_INFO.LEVEL} />
-			<TurnCell category={CATEGORY_INFO.CASTING} />
+			<TurnCell category={CATEGORY_INFO.CASTING_TIME} />
 			<TurnCell category={CATEGORY_INFO.RANGE} />
 			<TurnCell category={CATEGORY_INFO.TARGET} />
 			<TurnCell category={CATEGORY_INFO.COMPONENTS} />
