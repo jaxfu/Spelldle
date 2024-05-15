@@ -20,6 +20,9 @@ const TurnCell: React.FC<IProps> = (props) => {
 			case CATEGORY_INFO.LEVEL:
 				return <LevelRitualToggle />;
 				break;
+			case CATEGORY_INFO.COMPONENTS:
+				return <div>Placeholder</div>;
+				break;
 			default:
 				return <></>;
 		}
