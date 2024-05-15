@@ -20,3 +20,13 @@ export function getRecommendations(
 
 	return output;
 }
+
+export function onRecommendationClick(
+	key: string,
+	setInputValue: React.Dispatch<React.SetStateAction<string>>,
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
+) {
+	console.log(key);
+	setInputValue(key);
+	setRecommendations([]);
+}

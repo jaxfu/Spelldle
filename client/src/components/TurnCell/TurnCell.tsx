@@ -12,12 +12,6 @@ const TurnCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
 	const [recommendations, setRecommendations] = useState<string[]>([]);
 
-	function onRecommendationClick(key: string) {
-		console.log(key);
-		setInputValue(key);
-		setRecommendations([]);
-	}
-
 	return (
 		<div className={styles.root}>
 			<span>{props.category.name}</span>
@@ -37,7 +31,13 @@ const TurnCell: React.FC<IProps> = (props) => {
 							<div
 								className={styles.cell}
 								key={option.toString()}
-								onClick={() => onRecommendationClick(option.toString())}
+								onClick={() =>
+									methods.onRecommendationClick(
+										option.toString(),
+										setInputValue,
+										setRecommendations
+									)
+								}
 							>
 								{option.toString()}
 							</div>

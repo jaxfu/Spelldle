@@ -8,6 +8,10 @@
 	border: 1px solid white;
 	position: relative;
 
+	& > input {
+		text-align: center;
+	}
+
 	.recommend_root {
 		width: 100%;
 		text-align: center;
