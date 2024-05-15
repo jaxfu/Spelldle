@@ -42,13 +42,15 @@ const TurnCell: React.FC<IProps> = (props) => {
 							<div
 								className={styles.cell}
 								key={option.toString()}
-								onClick={() =>
+								onClick={() => {
 									methods.onRecommendationClick(
 										option.toString(),
 										setInputValue,
 										setRecommendations
-									)
-								}
+									);
+								}}
+								// Keep focus on text input
+								onMouseDown={(e) => e.preventDefault()}
 							>
 								{option.toString()}
 							</div>
