@@ -14,6 +14,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"Necromancy",
 			"Transmutation",
 		],
+		has_multi: false,
+		has_modifiers: false,
 	},
 	LEVEL: {
 		name: "Level",
@@ -29,6 +31,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"9th",
 			"Cantrip",
 		],
+		has_multi: false,
+		has_modifiers: true,
 	},
 	CASTING: {
 		name: "Casting",
@@ -41,6 +45,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"1 hour",
 			"1+ hours",
 		],
+		has_multi: false,
+		has_modifiers: false,
 	},
 	RANGE: {
 		name: "Range",
@@ -54,14 +60,20 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"120 Feet",
 			"120+ Feet",
 		],
+		has_multi: false,
+		has_modifiers: false,
 	},
 	TARGET: {
 		name: "Target",
 		values: ["Creature", "Object", "Area", "Point", "Unnocupied Space"],
+		has_multi: false,
+		has_modifiers: false,
 	},
 	COMPONENTS: {
 		name: "Components",
 		values: ["V", "S", "M"],
+		has_multi: true,
+		has_modifiers: false,
 	},
 	DURATION: {
 		name: "Duration",
@@ -75,6 +87,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"8+ Hours",
 			"Until Dispelled",
 		],
+		has_multi: false,
+		has_modifiers: true,
 	},
 	CLASS: {
 		name: "Class",
@@ -89,6 +103,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"Warlock",
 			"Wizard",
 		],
+		has_multi: true,
+		has_modifiers: false,
 	},
 	EFFECTS: {
 		name: "Effects",
@@ -143,6 +159,8 @@ const CATEGORY_INFO: T_CATEGORY_INFO = {
 			"Slashing",
 			"Thunder",
 		],
+		has_multi: true,
+		has_modifiers: false,
 	},
 };
 

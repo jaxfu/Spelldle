@@ -161,16 +161,6 @@ export type T_CATEGORY_INFO = {
 export type T_CATEGORY = {
 	name: string;
 	values: string[];
-};
-
-export type T_SPELL_INFO = {
-	SCHOOL: string;
-	LEVEL: string;
-	CASTING: string;
-	RANGE: string;
-	TARGET: string;
-	COMPONENTS: string;
-	DURATION: string;
-	CLASS: string;
-	EFFECTS: string;
+	has_multi: boolean;
+	has_modifiers: boolean;
 };
