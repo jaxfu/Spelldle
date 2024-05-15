@@ -1,13 +1,6 @@
 import { IProps } from "./TurnCell";
 
-export function getRecommendations(
-	e: React.ChangeEvent<HTMLInputElement>,
-	props: IProps
-): string[] {
-	if (e.target.value == "") {
-		return [];
-	}
-
+export function getRecommendations(e: any, props: IProps): string[] {
 	const output: string[] = [];
 
 	for (const option of props.category.values) {

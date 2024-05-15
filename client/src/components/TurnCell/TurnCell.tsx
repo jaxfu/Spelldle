@@ -23,6 +23,10 @@ const TurnCell: React.FC<IProps> = (props) => {
 					handleInput(e, setInputValue);
 					setRecommendations(methods.getRecommendations(e, props));
 				}}
+				onFocus={(e) =>
+					setRecommendations(methods.getRecommendations(e, props))
+				}
+				onBlur={() => setRecommendations([])}
 			/>
 			{recommendations.length == 0 ? null : (
 				<div className={styles.recommend_root}>
