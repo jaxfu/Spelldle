@@ -3,7 +3,7 @@ import styles from "./ComponentTurncell.module.scss";
 const ComponentTurncell = () => {
 	return (
 		<div className={styles.root}>
-			Component
+			<h4>Component</h4>
 			<div className={styles.checkbox_root}>
 				<span>
 					<label htmlFor="v">V</label>

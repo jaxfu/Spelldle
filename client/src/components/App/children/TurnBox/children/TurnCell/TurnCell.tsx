@@ -30,7 +30,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<span>{props.category.name}</span>
+			<h4>{props.category.name}</h4>
 			<input
 				type="text"
 				name="inputText"
