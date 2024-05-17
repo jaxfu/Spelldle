@@ -1,9 +1,8 @@
-import styles from "./ComponentTurncell.module.scss";
+import styles from "./ComponentsSelection.module.scss";
 
-const ComponentTurncell = () => {
+const ComponentsSelection = () => {
 	return (
 		<div className={styles.root}>
-			<h4>Component</h4>
 			<div className={styles.checkbox_root}>
 				<span>
 					<label htmlFor="v">V</label>
@@ -22,4 +21,4 @@ const ComponentTurncell = () => {
 	);
 };
 
-export default ComponentTurncell;
+export default ComponentsSelection;
