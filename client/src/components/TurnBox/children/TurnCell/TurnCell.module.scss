@@ -1,0 +1,10 @@
+@import "../../../../styles/mixins";
+
+.root {
+	@include flex-center;
+	width: 100%;
+	height: fit-content;
+
+	border: 1px solid white;
+	position: relative;
+}

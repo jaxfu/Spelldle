@@ -1,8 +1,6 @@
 import TurnCell from "./children/TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
-import CATEGORY_INFO from "../../../../CATEGORY_INFO";
-import ComponentTurncell from "./children/ComponentTurnCell/ComponentTurncell";
-import MultiTurnCell from "./children/MultiTurnCell/MultiTurnCell";
+import CATEGORY_INFO from "../../CATEGORY_INFO";
 
 const TurnBox: React.FC = () => {
 	return (
@@ -12,9 +10,9 @@ const TurnBox: React.FC = () => {
 			<TurnCell category={CATEGORY_INFO.CASTING_TIME} />
 			<TurnCell category={CATEGORY_INFO.RANGE} />
 			<TurnCell category={CATEGORY_INFO.TARGET} />
-			<ComponentTurncell />
-			<MultiTurnCell category={CATEGORY_INFO.CLASS} />
-			<MultiTurnCell category={CATEGORY_INFO.EFFECTS} />
+			<TurnCell category={CATEGORY_INFO.COMPONENTS} />
+			<TurnCell category={CATEGORY_INFO.CLASS} />
+			<TurnCell category={CATEGORY_INFO.EFFECTS} />
 		</div>
 	);
 };

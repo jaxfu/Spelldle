@@ -1,7 +1,7 @@
 import styles from "./App.module.scss";
 
 // COMPONENTS
-import TurnBox from "./children/TurnBox/TurnBox";
+import TurnBox from "../TurnBox/TurnBox";
 
 function App() {
 	return (
