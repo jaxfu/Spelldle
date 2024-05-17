@@ -1,8 +1,8 @@
 import { useState } from "react";
-import styles from "./MultiTurnCell.module.scss";
-import { T_CATEGORY } from "../../../../types";
-import { handleInput } from "../../../../utils/HandleInputs";
-import * as methods from "../TurnCell/methods";
+import styles from "./MultiTextInput.module.scss";
+import { T_CATEGORY } from "../../../../../../types";
+import { handleInput } from "../../../../../../utils/HandleInputs";
+import * as methods from "../../methods";
 
 export interface IProps {
 	category: T_CATEGORY;
@@ -60,10 +60,14 @@ const MultiTurnCell: React.FC<IProps> = (props) => {
 					value={inputValue}
 					onChange={(e) => {
 						handleInput(e, setInputValue);
-						setRecommendations(methods.getRecommendations(e, props));
+						setRecommendations(
+							methods.getRecommendations(e, props.category.values)
+						);
 					}}
 					onFocus={(e) =>
-						setRecommendations(methods.getRecommendations(e, props))
+						setRecommendations(
+							methods.getRecommendations(e, props.category.values)
+						)
 					}
 					onBlur={() => setRecommendations([])}
 				/>

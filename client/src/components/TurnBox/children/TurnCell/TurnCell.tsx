@@ -43,6 +43,10 @@ const TurnCell: React.FC<IProps> = (props) => {
 			case CATEGORY_INFO.COMPONENTS:
 				return <ComponentsSelection />;
 				break;
+			case CATEGORY_INFO.CLASS:
+			case CATEGORY_INFO.EFFECTS:
+				return <div>Placeholder</div>;
+				break;
 			default:
 				return <></>;
 		}
