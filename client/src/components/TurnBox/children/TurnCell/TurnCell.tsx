@@ -1,11 +1,10 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
 import { T_CATEGORY } from "../../../../types";
-import * as methods from "./methods";
-import { handleInput } from "../../../../utils/HandleInputs";
 import CATEGORY_INFO from "../../../../CATEGORY_INFO";
 import LevelRitualToggle from "./children/LevelRitualToggle/LevelRitualToggle";
 import SingleTextInput from "./children/SingleTextInput/SingleTextInput";
+import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 
 interface IProps {
 	category: T_CATEGORY;
@@ -39,27 +38,11 @@ const TurnCell: React.FC<IProps> = (props) => {
 				recommendationValues={props.category.values}
 			/>
 			{recommendations.length == 0 ? null : (
-				<div className={styles.recommend_root}>
-					{recommendations.map((option) => {
-						return (
-							<div
-								className={styles.cell}
-								key={option.toString()}
-								onClick={() => {
-									methods.onRecommendationClick(
-										option.toString(),
-										setInputValue,
-										setRecommendations
-									);
-								}}
-								// Keep focus on text input
-								onMouseDown={(e) => e.preventDefault()}
-							>
-								{option.toString()}
-							</div>
-						);
-					})}
-				</div>
+				<RecommendationBox
+					recommendations={recommendations}
+					setRecommendations={setRecommendations}
+					setInputValue={setInputValue}
+				/>
 			)}
 			{getUniqueItems(props)}
 		</div>
