@@ -6,6 +6,7 @@ import LevelRitualToggle from "./children/LevelRitualToggle/LevelRitualToggle";
 import SingleTextInput from "./children/SingleTextInput/SingleTextInput";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 import ComponentsSelection from "./children/ComponentsSelection/ComponentsSelection";
+import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 
 interface IProps {
 	category: T_CATEGORY;
@@ -22,6 +23,15 @@ const TurnCell: React.FC<IProps> = (props) => {
 				setInputValue={setInputValue}
 				setRecommendations={setRecommendations}
 				recommendationValues={props.category.values}
+			/>
+		);
+
+		const multiInput: JSX.Element = (
+			<MultiTextInput
+				inputValue={inputValue}
+				setInputValue={setInputValue}
+				recommendationValues={props.category.values}
+				setRecommendations={setRecommendations}
 			/>
 		);
 
@@ -45,7 +55,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 				break;
 			case CATEGORY_INFO.CLASS:
 			case CATEGORY_INFO.EFFECTS:
-				return <div>Placeholder</div>;
+				return multiInput;
 				break;
 			default:
 				return <></>;
