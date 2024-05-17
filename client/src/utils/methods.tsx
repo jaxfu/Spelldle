@@ -1,6 +1,7 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
 import { T_CATEGORY } from "../types";
 
+// Multi
 export function getRecommendations(e: any, values: string[]): string[] {
 	const output: string[] = [];
 
@@ -24,6 +25,7 @@ export function onRecommendationClick(
 	setRecommendations([]);
 }
 
+// TurnCell
 export function getUniqueItems(
 	category: T_CATEGORY,
 	singleInput: JSX.Element,
@@ -56,4 +58,29 @@ export function getUniqueItems(
 		default:
 			return <></>;
 	}
+}
+
+// MultiTextInput
+export function onAddGuessClick(
+	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
+	inputValue: string,
+	setInputValue: React.Dispatch<React.SetStateAction<string>>
+): void {
+	setGuesses((guesses: string[]) => {
+		const newArr = [...guesses];
+		newArr.push(inputValue);
+		return newArr;
+	});
+	setInputValue("");
+}
+
+export function onRemoveGuessClick(
+	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
+	guess: string
+): void {
+	setGuesses((guesses) => {
+		return guesses.filter((g: string) => {
+			return g.toLocaleLowerCase() !== guess.toLocaleLowerCase();
+		});
+	});
 }

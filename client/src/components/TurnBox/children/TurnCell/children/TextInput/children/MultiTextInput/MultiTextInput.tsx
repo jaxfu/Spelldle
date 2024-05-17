@@ -13,30 +13,6 @@ interface IProps {
 const MultiTextInput: React.FC<IProps> = (props) => {
 	const [guesses, setGuesses] = useState<string[]>([]);
 
-	function onAddGuessClick(
-		setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
-		inputValue: string,
-		setInputValue: React.Dispatch<React.SetStateAction<string>>
-	): void {
-		setGuesses((guesses: string[]) => {
-			const newArr = [...guesses];
-			newArr.push(inputValue);
-			return newArr;
-		});
-		setInputValue("");
-	}
-
-	function onRemoveGuessClick(
-		setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
-		guess: string
-	): void {
-		setGuesses((guesses) => {
-			return guesses.filter((g: string) => {
-				return g.toLocaleLowerCase() !== guess.toLocaleLowerCase();
-			});
-		});
-	}
-
 	return (
 		<div className={styles.root}>
 			{guesses.length == 0 ? null : (
@@ -45,7 +21,9 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 						return (
 							<div key={guess}>
 								<h5>{guess}</h5>
-								<button onClick={() => onRemoveGuessClick(setGuesses, guess)}>
+								<button
+									onClick={() => methods.onRemoveGuessClick(setGuesses, guess)}
+								>
 									-
 								</button>
 							</div>
@@ -73,7 +51,11 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 				/>
 				<button
 					onClick={() =>
-						onAddGuessClick(setGuesses, props.inputValue, props.setInputValue)
+						methods.onAddGuessClick(
+							setGuesses,
+							props.inputValue,
+							props.setInputValue
+						)
 					}
 				>
 					+
