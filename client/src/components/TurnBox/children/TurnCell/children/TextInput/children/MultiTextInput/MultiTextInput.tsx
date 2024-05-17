@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./MultiTextInput.module.scss";
-import { handleInput } from "../../../../../../utils/inputHandlers";
-import * as methods from "../../../../../../utils/methods";
+import { handleInput } from "../../../../../../../../utils/inputHandlers";
+import * as methods from "../../../../../../../../utils/methods";
 
 interface IProps {
 	inputValue: string;

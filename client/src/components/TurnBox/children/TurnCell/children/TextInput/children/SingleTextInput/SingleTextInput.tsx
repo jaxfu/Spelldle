@@ -1,6 +1,6 @@
 import styles from "./SingleTextInput.module.scss";
-import { handleInput } from "../../../../../../utils/inputHandlers";
-import * as methods from "../../../../../../utils/methods";
+import { handleInput } from "../../../../../../../../utils/inputHandlers";
+import * as methods from "../../../../../../../../utils/methods";
 
 interface IProps {
 	inputValue: string;
