@@ -5,8 +5,8 @@ import * as methods from "../../methods";
 interface IProps {
 	inputValue: string;
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
 	recommendationValues: string[];
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const SingleTextInput: React.FC<IProps> = (props) => {
