@@ -1,21 +1,22 @@
 import { useState } from "react";
 import styles from "./MultiTextInput.module.scss";
-import { T_CATEGORY } from "../../../../../../types";
 import { handleInput } from "../../../../../../utils/HandleInputs";
 import * as methods from "../../methods";
 
-export interface IProps {
-	category: T_CATEGORY;
+interface IProps {
+	inputValue: string;
+	setInputValue: React.Dispatch<React.SetStateAction<string>>;
+	recommendationValues: string[];
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const MultiTurnCell: React.FC<IProps> = (props) => {
-	const [inputValue, setInputValue] = useState<string>("");
-	const [recommendations, setRecommendations] = useState<string[]>([]);
+const MultiTextInput: React.FC<IProps> = (props) => {
 	const [guesses, setGuesses] = useState<string[]>([]);
 
 	function onAddGuessClick(
 		setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
-		inputValue: string
+		inputValue: string,
+		setInputValue: React.Dispatch<React.SetStateAction<string>>
 	): void {
 		setGuesses((guesses: string[]) => {
 			const newArr = [...guesses];
@@ -38,7 +39,6 @@ const MultiTurnCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<h4>{props.category.name}</h4>
 			{guesses.length == 0 ? null : (
 				<div className={styles.guesses_root}>
 					{guesses.map((guess) => {
@@ -57,49 +57,30 @@ const MultiTurnCell: React.FC<IProps> = (props) => {
 				<input
 					type="text"
 					name="inputText"
-					value={inputValue}
+					value={props.inputValue}
 					onChange={(e) => {
-						handleInput(e, setInputValue);
-						setRecommendations(
-							methods.getRecommendations(e, props.category.values)
+						handleInput(e, props.setInputValue);
+						props.setRecommendations(
+							methods.getRecommendations(e, props.recommendationValues)
 						);
 					}}
 					onFocus={(e) =>
-						setRecommendations(
-							methods.getRecommendations(e, props.category.values)
+						props.setRecommendations(
+							methods.getRecommendations(e, props.recommendationValues)
 						)
 					}
-					onBlur={() => setRecommendations([])}
+					onBlur={() => props.setRecommendations([])}
 				/>
-				<button onClick={() => onAddGuessClick(setGuesses, inputValue)}>
+				<button
+					onClick={() =>
+						onAddGuessClick(setGuesses, props.inputValue, props.setInputValue)
+					}
+				>
 					+
 				</button>
 			</div>
-			{recommendations.length == 0 ? null : (
-				<div className={styles.recommend_root}>
-					{recommendations.map((option) => {
-						return (
-							<div
-								className={styles.cell}
-								key={option.toString()}
-								onClick={() => {
-									methods.onRecommendationClick(
-										option.toString(),
-										setInputValue,
-										setRecommendations
-									);
-								}}
-								// Keep focus on text input
-								onMouseDown={(e) => e.preventDefault()}
-							>
-								{option.toString()}
-							</div>
-						);
-					})}
-				</div>
-			)}
 		</div>
 	);
 };
 
-export default MultiTurnCell;
+export default MultiTextInput;
