@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
-import { T_CATEGORY } from "../../../../../../types";
+import { T_CATEGORY } from "../../../../types";
 import * as methods from "./methods";
-import { handleInput } from "../../../../../../utils/HandleInputs";
-import CATEGORY_INFO from "../../../../../../CATEGORY_INFO";
+import { handleInput } from "../../../../utils/HandleInputs";
+import CATEGORY_INFO from "../../../../CATEGORY_INFO";
 import LevelRitualToggle from "./children/LevelRitualToggle/LevelRitualToggle";
 
 export interface IProps {

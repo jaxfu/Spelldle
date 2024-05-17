@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./MultiTurnCell.module.scss";
-import { T_CATEGORY } from "../../../../../../types";
-import { handleInput } from "../../../../../../utils/HandleInputs";
+import { T_CATEGORY } from "../../../../types";
+import { handleInput } from "../../../../utils/HandleInputs";
 import * as methods from "../TurnCell/methods";
 
 export interface IProps {
