@@ -5,8 +5,9 @@ import * as methods from "./methods";
 import { handleInput } from "../../../../utils/HandleInputs";
 import CATEGORY_INFO from "../../../../CATEGORY_INFO";
 import LevelRitualToggle from "./children/LevelRitualToggle/LevelRitualToggle";
+import SingleTextInput from "./children/SingleTextInput/SingleTextInput";
 
-export interface IProps {
+interface IProps {
 	category: T_CATEGORY;
 }
 
@@ -31,18 +32,11 @@ const TurnCell: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<h4>{props.category.name}</h4>
-			<input
-				type="text"
-				name="inputText"
-				value={inputValue}
-				onChange={(e) => {
-					handleInput(e, setInputValue);
-					setRecommendations(methods.getRecommendations(e, props));
-				}}
-				onFocus={(e) =>
-					setRecommendations(methods.getRecommendations(e, props))
-				}
-				onBlur={() => setRecommendations([])}
+			<SingleTextInput
+				inputValue={inputValue}
+				setInputValue={setInputValue}
+				setRecommendations={setRecommendations}
+				recommendationValues={props.category.values}
 			/>
 			{recommendations.length == 0 ? null : (
 				<div className={styles.recommend_root}>

@@ -1,9 +1,7 @@
-import { IProps } from "./TurnCell";
-
-export function getRecommendations(e: any, props: IProps): string[] {
+export function getRecommendations(e: any, values: string[]): string[] {
 	const output: string[] = [];
 
-	for (const option of props.category.values) {
+	for (const option of values) {
 		if (option.toLowerCase() === e.target.value.toLowerCase()) {
 			return [];
 		} else if (option.toLowerCase().includes(e.target.value.toLowerCase())) {
@@ -18,8 +16,7 @@ export function onRecommendationClick(
 	key: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
-) {
-	console.log(key);
+): void {
 	setInputValue(key);
 	setRecommendations([]);
 }
