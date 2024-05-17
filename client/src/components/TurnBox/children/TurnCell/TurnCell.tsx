@@ -6,7 +6,7 @@ import SingleTextInput from "./children/SingleTextInput/SingleTextInput";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 import ComponentsSelection from "./children/ComponentsSelection/ComponentsSelection";
 import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
-import * as methods from "./methods";
+import * as methods from "../../../../utils/methods";
 
 interface IProps {
 	category: T_CATEGORY;

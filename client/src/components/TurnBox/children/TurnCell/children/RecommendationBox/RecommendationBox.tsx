@@ -1,5 +1,5 @@
 import styles from "./RecommendationBox.module.scss";
-import * as methods from "../../methods";
+import * as methods from "../../../../../../utils/methods";
 
 interface IProps {
 	recommendations: string[];

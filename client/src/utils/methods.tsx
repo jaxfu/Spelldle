@@ -1,5 +1,5 @@
-import CATEGORY_INFO from "../../../../CATEGORY_INFO";
-import { T_CATEGORY } from "../../../../types";
+import CATEGORY_INFO from "../CATEGORY_INFO";
+import { T_CATEGORY } from "../types";
 
 export function getRecommendations(e: any, values: string[]): string[] {
 	const output: string[] = [];
