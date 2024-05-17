@@ -1,6 +1,6 @@
 import TurnCell from "./children/TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
-import CATEGORY_INFO from "../../../../CATEGORY_INFO";
+import CATEGORY_INFO from "../../CATEGORY_INFO";
 import ComponentTurncell from "./children/ComponentTurnCell/ComponentTurncell";
 import MultiTurnCell from "./children/MultiTurnCell/MultiTurnCell";
 
