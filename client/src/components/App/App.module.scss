@@ -1,0 +1,12 @@
+@import "../../styles/mixins";
+@import "../../styles/vars";
+
+.root {
+	min-height: 100dvh;
+	width: 100dvw;
+	@include flex-center;
+
+	background: red;
+
+	overflow-y: scroll;
+}
