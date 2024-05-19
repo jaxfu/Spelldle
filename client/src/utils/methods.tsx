@@ -1,5 +1,8 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
 import { T_CATEGORY } from "../types";
+import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
+import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
+import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
 
 // Multi
 export function getRecommendations(e: any, values: string[]): string[] {
@@ -28,11 +31,29 @@ export function onRecommendationClick(
 // TurnCell
 export function getUniqueItems(
 	category: T_CATEGORY,
-	singleInput: JSX.Element,
-	multiInput: JSX.Element,
-	levelRitualToggle: JSX.Element,
-	componentsSelection: JSX.Element
+	inputValue: string,
+	setInputValue: React.Dispatch<React.SetStateAction<string>>,
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
 ): JSX.Element {
+	const singleInput = (
+		<TextInput
+			single={true}
+			inputValue={inputValue}
+			setInputValue={setInputValue}
+			recommendationValues={category.values}
+			setRecommendations={setRecommendations}
+		/>
+	);
+	const multiInput = (
+		<TextInput
+			single={false}
+			inputValue={inputValue}
+			setInputValue={setInputValue}
+			recommendationValues={category.values}
+			setRecommendations={setRecommendations}
+		/>
+	);
+
 	switch (category) {
 		case CATEGORY_INFO.SCHOOL:
 		case CATEGORY_INFO.CASTING_TIME:
@@ -43,13 +64,13 @@ export function getUniqueItems(
 		case CATEGORY_INFO.LEVEL:
 			return (
 				<>
-					{levelRitualToggle}
+					<LevelRitualToggle />
 					{singleInput}
 				</>
 			);
 			break;
 		case CATEGORY_INFO.COMPONENTS:
-			return componentsSelection;
+			return <ComponentsSelection />;
 			break;
 		case CATEGORY_INFO.CLASS:
 		case CATEGORY_INFO.EFFECTS:
