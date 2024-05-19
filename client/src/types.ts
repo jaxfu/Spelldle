@@ -164,3 +164,14 @@ export type T_CATEGORY = {
 	has_multi: boolean;
 	has_modifiers: boolean;
 };
+
+export type T_SPELL_CATEGORY_INFO {
+	SCHOOL: string;
+	LEVEL: [string, boolean];
+	CASTING: string;
+	RANGE: string;
+	TARGET: string;
+	COMPONENTS: string[];
+	CLASS: string[];
+	EFFECTS: string[]
+}
