@@ -19,6 +19,10 @@ export function getRecommendations(e: any, values: string[]): string[] {
 	return output;
 }
 
+export function createNewObject<T extends Object>(obj: T): T {
+	return JSON.parse(JSON.stringify(obj));
+}
+
 export function onRecommendationClick(
 	key: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
