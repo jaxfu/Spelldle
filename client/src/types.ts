@@ -175,3 +175,14 @@ export type T_SPELL_CATEGORY_INFO = {
 	CLASS: string[];
 	EFFECTS: string[];
 };
+
+export const NEW_SPELL_CATEGORY_INFO: T_SPELL_CATEGORY_INFO = {
+	SCHOOL: "",
+	LEVEL: ["", false],
+	CASTING: "",
+	RANGE: "",
+	TARGET: "",
+	COMPONENTS: [],
+	CLASS: [],
+	EFFECTS: [],
+};
