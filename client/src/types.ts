@@ -173,5 +173,5 @@ export type T_SPELL_CATEGORY_INFO {
 	TARGET: string;
 	COMPONENTS: string[];
 	CLASS: string[];
-	EFFECTS: string[]
+	EFFECTS: string[];
 }
