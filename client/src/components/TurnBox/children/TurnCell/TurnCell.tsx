@@ -12,24 +12,20 @@ const TurnCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
 	const [recommendations, setRecommendations] = useState<string[]>([]);
 
-	const uniqueItems: JSX.Element = methods.getUniqueItems(
-		props.category,
-		inputValue,
-		setInputValue,
-		setRecommendations
-	);
-
 	return (
 		<div className={styles.root}>
 			<h4>{props.category.name}</h4>
-			{uniqueItems}
-			{recommendations.length == 0 ? null : (
-				<RecommendationBox
-					recommendations={recommendations}
-					setRecommendations={setRecommendations}
-					setInputValue={setInputValue}
-				/>
+			{methods.getUniqueItems(
+				props.category,
+				inputValue,
+				setInputValue,
+				setRecommendations
 			)}
+			<RecommendationBox
+				recommendations={recommendations}
+				setRecommendations={setRecommendations}
+				setInputValue={setInputValue}
+			/>
 		</div>
 	);
 };

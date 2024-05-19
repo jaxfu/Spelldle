@@ -9,27 +9,31 @@ interface IProps {
 
 const RecommendationBox: React.FC<IProps> = (props) => {
 	return (
-		<div className={styles.root}>
-			{props.recommendations.map((option) => {
-				return (
-					<div
-						className={styles.cell}
-						key={option.toString()}
-						onClick={() => {
-							methods.onRecommendationClick(
-								option.toString(),
-								props.setInputValue,
-								props.setRecommendations
-							);
-						}}
-						// Keep focus on text input
-						onMouseDown={(e) => e.preventDefault()}
-					>
-						{option.toString()}
-					</div>
-				);
-			})}
-		</div>
+		<>
+			{props.recommendations.length == 0 ? null : (
+				<div className={styles.root}>
+					{props.recommendations.map((option) => {
+						return (
+							<div
+								className={styles.cell}
+								key={option.toString()}
+								onClick={() => {
+									methods.onRecommendationClick(
+										option.toString(),
+										props.setInputValue,
+										props.setRecommendations
+									);
+								}}
+								// Keep focus on text input
+								onMouseDown={(e) => e.preventDefault()}
+							>
+								{option.toString()}
+							</div>
+						);
+					})}
+				</div>
+			)}
+		</>
 	);
 };
 
