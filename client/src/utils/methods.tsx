@@ -32,7 +32,7 @@ export function createNewObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-function createNewGuessInfoObject(
+export function createNewGuessInfoObject(
 	categoryName: string,
 	newGuessInfo: any,
 	currentGuessInfo: T_SPELL_CATEGORY_INFO
