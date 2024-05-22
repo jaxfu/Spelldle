@@ -146,7 +146,7 @@ export enum E_EFFECT_VALUES {
 	Thunder,
 }
 
-export type T_CATEGORY_INFO = {
+export type T_ALL_CATEGORY_INFO = {
 	SCHOOL: T_CATEGORY;
 	LEVEL: T_CATEGORY;
 	CASTING_TIME: T_CATEGORY;

@@ -1,6 +1,6 @@
-import { T_CATEGORY_INFO } from "./types";
+import { T_ALL_CATEGORY_INFO } from "./types";
 
-const CATEGORY_INFO: T_CATEGORY_INFO = {
+const CATEGORY_INFO: T_ALL_CATEGORY_INFO = {
 	SCHOOL: {
 		name: "School",
 		values: [
