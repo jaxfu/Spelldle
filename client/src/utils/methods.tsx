@@ -1,5 +1,5 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
-import { T_CATEGORY } from "../types";
+import { T_CATEGORY, T_SPELL_CATEGORY_INFO } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -30,6 +30,43 @@ export function onRecommendationClick(
 
 export function createNewObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
+}
+
+function createNewGuessInfoObject(
+	categoryName: string,
+	newGuessInfo: any,
+	currentGuessInfo: T_SPELL_CATEGORY_INFO
+): T_SPELL_CATEGORY_INFO {
+	const newInfoObj: T_SPELL_CATEGORY_INFO = createNewObject(currentGuessInfo);
+
+	switch (categoryName) {
+		case "School":
+			newInfoObj.SCHOOL = newGuessInfo;
+			break;
+		case "Level":
+			newInfoObj.LEVEL = newGuessInfo;
+			break;
+		case "Casting":
+			newInfoObj.CASTING = newGuessInfo;
+			break;
+		case "Range":
+			newInfoObj.RANGE = newGuessInfo;
+			break;
+		case "Target":
+			newInfoObj.TARGET = newGuessInfo;
+			break;
+		case "Components":
+			newInfoObj.COMPONENTS = newGuessInfo;
+			break;
+		case "Class":
+			newInfoObj.CLASS = newGuessInfo;
+			break;
+		case "Effects":
+			newInfoObj.EFFECTS = newGuessInfo;
+			break;
+	}
+
+	return newInfoObj;
 }
 
 // TurnCell
