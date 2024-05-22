@@ -2,12 +2,20 @@ import { useState } from "react";
 import styles from "./MultiTextInput.module.scss";
 import { handleInput } from "../../../../../../../../utils/inputHandlers";
 import * as methods from "../../../../../../../../utils/methods";
+import {
+	T_CATEGORY,
+	T_SPELL_CATEGORY_INFO,
+} from "../../../../../../../../types";
 
 interface IProps {
+	category: T_CATEGORY;
 	inputValue: string;
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
 	recommendationValues: string[];
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
+	setCurrentGuessInfo: React.Dispatch<
+		React.SetStateAction<T_SPELL_CATEGORY_INFO>
+	>;
 }
 
 const MultiTextInput: React.FC<IProps> = (props) => {

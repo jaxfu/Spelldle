@@ -13,14 +13,38 @@ const TurnBox: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
-			<TurnCell category={CATEGORY_INFO.SCHOOL} />
-			<TurnCell category={CATEGORY_INFO.LEVEL} />
-			<TurnCell category={CATEGORY_INFO.CASTING_TIME} />
-			<TurnCell category={CATEGORY_INFO.RANGE} />
-			<TurnCell category={CATEGORY_INFO.TARGET} />
-			<TurnCell category={CATEGORY_INFO.COMPONENTS} />
-			<TurnCell category={CATEGORY_INFO.CLASS} />
-			<TurnCell category={CATEGORY_INFO.EFFECTS} />
+			<TurnCell
+				category={CATEGORY_INFO.SCHOOL}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.LEVEL}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.CASTING_TIME}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.RANGE}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.TARGET}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.COMPONENTS}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.CLASS}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
+			<TurnCell
+				category={CATEGORY_INFO.EFFECTS}
+				setCurrentGuessInfo={setCurrentGuessInfo}
+			/>
 		</div>
 	);
 };

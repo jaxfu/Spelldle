@@ -1,11 +1,14 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
-import { T_CATEGORY } from "../../../../types";
+import { T_CATEGORY, T_SPELL_CATEGORY_INFO } from "../../../../types";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 import * as methods from "../../../../utils/methods";
 
 interface IProps {
 	category: T_CATEGORY;
+	setCurrentGuessInfo: React.Dispatch<
+		React.SetStateAction<T_SPELL_CATEGORY_INFO>
+	>;
 }
 
 const TurnCell: React.FC<IProps> = (props) => {
@@ -19,7 +22,8 @@ const TurnCell: React.FC<IProps> = (props) => {
 				props.category,
 				inputValue,
 				setInputValue,
-				setRecommendations
+				setRecommendations,
+				props.setCurrentGuessInfo
 			)}
 			<RecommendationBox
 				recommendations={recommendations}

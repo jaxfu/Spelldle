@@ -46,8 +46,8 @@ export function createNewGuessInfoObject(
 		case "Level":
 			newInfoObj.LEVEL = newGuessInfo;
 			break;
-		case "Casting":
-			newInfoObj.CASTING = newGuessInfo;
+		case "Casting Time":
+			newInfoObj.CASTING_TIME = newGuessInfo;
 			break;
 		case "Range":
 			newInfoObj.RANGE = newGuessInfo;
@@ -74,24 +74,31 @@ export function getUniqueItems(
 	category: T_CATEGORY,
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
+	setCurrentGuessInfo: React.Dispatch<
+		React.SetStateAction<T_SPELL_CATEGORY_INFO>
+	>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
+			category={category}
 			single={true}
 			inputValue={inputValue}
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
+			setCurrentGuessInfo={setCurrentGuessInfo}
 		/>
 	);
 	const multiInput = (
 		<TextInput
+			category={category}
 			single={false}
 			inputValue={inputValue}
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
+			setCurrentGuessInfo={setCurrentGuessInfo}
 		/>
 	);
 

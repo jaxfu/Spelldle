@@ -35,7 +35,7 @@ export enum E_LEVEL_VALUES {
 	CANTRIP,
 }
 
-export enum E_CASTING_VALUES {
+export enum E_CASTING_TIME_VALUES {
 	ONE_ACTION = 0,
 	ONE_REACTION,
 	BONUS_ACTION,
@@ -168,7 +168,7 @@ export type T_CATEGORY = {
 export type T_SPELL_CATEGORY_INFO = {
 	SCHOOL: string;
 	LEVEL: [string, boolean];
-	CASTING: string;
+	CASTING_TIME: string;
 	RANGE: string;
 	TARGET: string;
 	COMPONENTS: string[];
@@ -179,7 +179,7 @@ export type T_SPELL_CATEGORY_INFO = {
 export const NEW_SPELL_CATEGORY_INFO: T_SPELL_CATEGORY_INFO = {
 	SCHOOL: "",
 	LEVEL: ["", false],
-	CASTING: "",
+	CASTING_TIME: "",
 	RANGE: "",
 	TARGET: "",
 	COMPONENTS: [],
