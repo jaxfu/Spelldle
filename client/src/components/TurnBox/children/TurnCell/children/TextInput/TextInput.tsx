@@ -14,29 +14,62 @@ interface IProps {
 }
 
 const TextInput: React.FC<IProps> = (props) => {
-	const [guessesForMulti, setGuessesForMulti] = props.multi
-		? useState<string[]>([])
-		: [null, () => {}];
+	const [guessesForMulti, setGuessesForMulti] = useState<string[]>([]);
 
 	return (
-		<input
-			className={styles.root}
-			type="text"
-			name="inputText"
-			value={props.inputValue}
-			onChange={(e) => {
-				handleInput(e, props.setInputValue);
-				props.setRecommendations(
-					methods.getRecommendations(e, props.recommendationValues)
-				);
-			}}
-			onFocus={(e) =>
-				props.setRecommendations(
-					methods.getRecommendations(e, props.recommendationValues)
-				)
-			}
-			onBlur={() => props.setRecommendations([])}
-		/>
+		<div className={styles.root}>
+			{props.multi && guessesForMulti.length == 0 ? null : (
+				<div className={styles.guessesForMulti_root}>
+					{guessesForMulti.map((guess) => {
+						return (
+							<div key={guess}>
+								<h5>{guess}</h5>
+								<button
+									onClick={() =>
+										methods.onRemoveGuessClick(setGuessesForMulti, guess)
+									}
+								>
+									-
+								</button>
+							</div>
+						);
+					})}
+				</div>
+			)}
+			<div className={styles.input_root}>
+				<input
+					className={styles.root}
+					type="text"
+					name="inputText"
+					value={props.inputValue}
+					onChange={(e) => {
+						handleInput(e, props.setInputValue);
+						props.setRecommendations(
+							methods.getRecommendations(e, props.recommendationValues)
+						);
+					}}
+					onFocus={(e) =>
+						props.setRecommendations(
+							methods.getRecommendations(e, props.recommendationValues)
+						)
+					}
+					onBlur={() => props.setRecommendations([])}
+				/>
+				{props.multi ? (
+					<button
+						onClick={() =>
+							methods.onAddGuessClick(
+								setGuessesForMulti,
+								props.inputValue,
+								props.setInputValue
+							)
+						}
+					>
+						+
+					</button>
+				) : null}
+			</div>
+		</div>
 	);
 };
 
