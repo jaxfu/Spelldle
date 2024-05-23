@@ -32,51 +32,6 @@ export function createNewObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-// function createNewGuessInfoObject(
-// 	categoryName: string,
-// 	newGuessInfo: any,
-// 	currentGuessInfo: T_SPELL_INFO
-// ): T_SPELL_INFO {
-// 	const newInfoObj: T_SPELL_INFO = createNewObject(currentGuessInfo);
-
-// 	switch (categoryName) {
-// 		case "School":
-// 			newInfoObj.SCHOOL = newGuessInfo;
-// 			break;
-// 		case "Level":
-// 			newInfoObj.LEVEL = newGuessInfo;
-// 			break;
-// 		case "Casting Time":
-// 			newInfoObj.CASTING_TIME = newGuessInfo;
-// 			break;
-// 		case "Range":
-// 			newInfoObj.RANGE = newGuessInfo;
-// 			break;
-// 		case "Target":
-// 			newInfoObj.TARGET = newGuessInfo;
-// 			break;
-// 		case "Components":
-// 			newInfoObj.COMPONENTS = newGuessInfo;
-// 			break;
-// 		case "Class":
-// 			newInfoObj.CLASS = newGuessInfo;
-// 			break;
-// 		case "Effects":
-// 			newInfoObj.EFFECTS = newGuessInfo;
-// 			break;
-// 	}
-
-// 	return newInfoObj;
-// }
-
-export function updateGuessMap(
-	categoryName: string,
-	newGuessInfo: any,
-	currentGuessMap: T_SPELL_INFO
-): void {
-	currentGuessMap.set(categoryName, newGuessInfo);
-}
-
 // TurnCell
 export function getUniqueItems(
 	category: T_SINGLE_CATEGORY_POSSIBILITIES,
