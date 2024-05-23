@@ -32,41 +32,49 @@ export function createNewObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-export function createNewGuessInfoObject(
+// function createNewGuessInfoObject(
+// 	categoryName: string,
+// 	newGuessInfo: any,
+// 	currentGuessInfo: T_SPELL_INFO
+// ): T_SPELL_INFO {
+// 	const newInfoObj: T_SPELL_INFO = createNewObject(currentGuessInfo);
+
+// 	switch (categoryName) {
+// 		case "School":
+// 			newInfoObj.SCHOOL = newGuessInfo;
+// 			break;
+// 		case "Level":
+// 			newInfoObj.LEVEL = newGuessInfo;
+// 			break;
+// 		case "Casting Time":
+// 			newInfoObj.CASTING_TIME = newGuessInfo;
+// 			break;
+// 		case "Range":
+// 			newInfoObj.RANGE = newGuessInfo;
+// 			break;
+// 		case "Target":
+// 			newInfoObj.TARGET = newGuessInfo;
+// 			break;
+// 		case "Components":
+// 			newInfoObj.COMPONENTS = newGuessInfo;
+// 			break;
+// 		case "Class":
+// 			newInfoObj.CLASS = newGuessInfo;
+// 			break;
+// 		case "Effects":
+// 			newInfoObj.EFFECTS = newGuessInfo;
+// 			break;
+// 	}
+
+// 	return newInfoObj;
+// }
+
+export function updateGuessMap(
 	categoryName: string,
 	newGuessInfo: any,
-	currentGuessInfo: T_SPELL_INFO
-): T_SPELL_INFO {
-	const newInfoObj: T_SPELL_INFO = createNewObject(currentGuessInfo);
-
-	switch (categoryName) {
-		case "School":
-			newInfoObj.SCHOOL = newGuessInfo;
-			break;
-		case "Level":
-			newInfoObj.LEVEL = newGuessInfo;
-			break;
-		case "Casting Time":
-			newInfoObj.CASTING_TIME = newGuessInfo;
-			break;
-		case "Range":
-			newInfoObj.RANGE = newGuessInfo;
-			break;
-		case "Target":
-			newInfoObj.TARGET = newGuessInfo;
-			break;
-		case "Components":
-			newInfoObj.COMPONENTS = newGuessInfo;
-			break;
-		case "Class":
-			newInfoObj.CLASS = newGuessInfo;
-			break;
-		case "Effects":
-			newInfoObj.EFFECTS = newGuessInfo;
-			break;
-	}
-
-	return newInfoObj;
+	currentGuessMap: T_SPELL_INFO
+): void {
+	currentGuessMap.set(categoryName, newGuessInfo);
 }
 
 // TurnCell
@@ -74,8 +82,7 @@ export function getUniqueItems(
 	category: T_SINGLE_CATEGORY_POSSIBILITIES,
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	setCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -85,7 +92,6 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
-			setCurrentGuessInfo={setCurrentGuessInfo}
 		/>
 	);
 	const multiInput = (
@@ -96,7 +102,6 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
-			setCurrentGuessInfo={setCurrentGuessInfo}
 		/>
 	);
 
@@ -125,6 +130,20 @@ export function getUniqueItems(
 		default:
 			return <></>;
 	}
+}
+
+// TurnBox
+export function createNewSpellInfoMap(): T_SPELL_INFO {
+	const map = new Map();
+	map.set("School", "");
+	map.set("Level", ["", false]);
+	map.set("Casting Time", "");
+	map.set("Range", "");
+	map.set("Target", "");
+	map.set("Components", []);
+	map.set("Class", []);
+	map.set("Effects", []);
+	return map;
 }
 
 // MultiTextInput

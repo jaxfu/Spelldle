@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./TurnCell.module.scss";
 import {
 	T_SINGLE_CATEGORY_POSSIBILITIES,
@@ -16,6 +16,13 @@ const TurnCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
 	const [recommendations, setRecommendations] = useState<string[]>([]);
 
+	useEffect(() => {
+		props.setCurrentGuessInfo((current) => {
+			const newMap = new Map(current);
+			return newMap.set(props.category.name, inputValue);
+		});
+	}, [inputValue]);
+
 	return (
 		<div className={styles.root}>
 			<h4>{props.category.name}</h4>
@@ -23,8 +30,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 				props.category,
 				inputValue,
 				setInputValue,
-				setRecommendations,
-				props.setCurrentGuessInfo
+				setRecommendations
 			)}
 			<RecommendationBox
 				recommendations={recommendations}

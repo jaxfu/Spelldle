@@ -1,10 +1,7 @@
 import styles from "./SingleTextInput.module.scss";
 import { handleInput } from "../../../../../../../../utils/inputHandlers";
 import * as methods from "../../../../../../../../utils/methods";
-import {
-	T_SINGLE_CATEGORY_POSSIBILITIES,
-	T_SPELL_INFO,
-} from "../../../../../../../../types";
+import { T_SINGLE_CATEGORY_POSSIBILITIES } from "../../../../../../../../types";
 
 interface IProps {
 	category: T_SINGLE_CATEGORY_POSSIBILITIES;
@@ -12,7 +9,6 @@ interface IProps {
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
 	recommendationValues: string[];
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
-	setCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
 }
 
 const SingleTextInput: React.FC<IProps> = (props) => {
@@ -26,13 +22,6 @@ const SingleTextInput: React.FC<IProps> = (props) => {
 				handleInput(e, props.setInputValue);
 				props.setRecommendations(
 					methods.getRecommendations(e, props.recommendationValues)
-				);
-				props.setCurrentGuessInfo((current) =>
-					methods.createNewGuessInfoObject(
-						props.category.name,
-						e.target.value,
-						current
-					)
 				);
 			}}
 			onFocus={(e) =>

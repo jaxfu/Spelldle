@@ -165,24 +165,4 @@ export type T_SINGLE_CATEGORY_POSSIBILITIES = {
 	has_modifiers: boolean;
 };
 
-export type T_SPELL_INFO = {
-	SCHOOL: string;
-	LEVEL: [string, boolean];
-	CASTING_TIME: string;
-	RANGE: string;
-	TARGET: string;
-	COMPONENTS: string[];
-	CLASS: string[];
-	EFFECTS: string[];
-};
-
-export const NEW_SPELL_INFO: T_SPELL_INFO = {
-	SCHOOL: "",
-	LEVEL: ["", false],
-	CASTING_TIME: "",
-	RANGE: "",
-	TARGET: "",
-	COMPONENTS: [],
-	CLASS: [],
-	EFFECTS: [],
-};
+export type T_SPELL_INFO = Map<string, string | string[] | [string, boolean]>;
