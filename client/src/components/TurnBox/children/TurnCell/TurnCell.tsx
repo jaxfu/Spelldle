@@ -14,14 +14,17 @@ interface IProps {
 
 const TurnCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
+	const [guessStateForThisComponent, setGuessStateForThisComponent] = useState<
+		string | string[] | [string, boolean]
+	>(methods.createInitialGuessStateForThisComponent(props.category.name));
 	const [recommendations, setRecommendations] = useState<string[]>([]);
 
 	useEffect(() => {
 		props.setCurrentGuessInfo((current) => {
 			const newMap = new Map(current);
-			return newMap.set(props.category.name, inputValue);
+			return newMap.set(props.category.name, guessStateForThisComponent);
 		});
-	}, [inputValue]);
+	}, [guessStateForThisComponent]);
 
 	return (
 		<div className={styles.root}>

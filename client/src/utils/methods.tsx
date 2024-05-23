@@ -101,6 +101,27 @@ export function createNewSpellInfoMap(): T_SPELL_INFO {
 	return map;
 }
 
+// TurnCell
+export function createInitialGuessStateForThisComponent(
+	categoryName: string
+): string | string[] | [string, boolean] {
+	switch (categoryName) {
+		case "School":
+		case "Casting Time":
+		case "Range":
+		case "Target":
+			return "";
+		case "Level":
+			return ["", false];
+		case "Components":
+		case "Class":
+		case "Effects":
+			return [];
+		default:
+			return "";
+	}
+}
+
 // MultiTextInput
 export function onAddGuessClick(
 	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
