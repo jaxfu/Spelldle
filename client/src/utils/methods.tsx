@@ -42,7 +42,7 @@ export function getUniqueItems(
 	const singleInput = (
 		<TextInput
 			category={category}
-			single={true}
+			multi={false}
 			inputValue={inputValue}
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
@@ -52,7 +52,7 @@ export function getUniqueItems(
 	const multiInput = (
 		<TextInput
 			category={category}
-			single={false}
+			multi={true}
 			inputValue={inputValue}
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
