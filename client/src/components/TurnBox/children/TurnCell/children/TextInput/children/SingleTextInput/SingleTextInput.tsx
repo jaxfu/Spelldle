@@ -2,19 +2,17 @@ import styles from "./SingleTextInput.module.scss";
 import { handleInput } from "../../../../../../../../utils/inputHandlers";
 import * as methods from "../../../../../../../../utils/methods";
 import {
-	T_CATEGORY,
-	T_SPELL_CATEGORY_INFO,
+	T_SINGLE_CATEGORY_POSSIBILITIES,
+	T_SPELL_INFO,
 } from "../../../../../../../../types";
 
 interface IProps {
-	category: T_CATEGORY;
+	category: T_SINGLE_CATEGORY_POSSIBILITIES;
 	inputValue: string;
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
 	recommendationValues: string[];
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
-	setCurrentGuessInfo: React.Dispatch<
-		React.SetStateAction<T_SPELL_CATEGORY_INFO>
-	>;
+	setCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
 }
 
 const SingleTextInput: React.FC<IProps> = (props) => {

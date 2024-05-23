@@ -1,5 +1,5 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
-import { T_CATEGORY, T_SPELL_CATEGORY_INFO } from "../types";
+import { T_SINGLE_CATEGORY_POSSIBILITIES, T_SPELL_INFO } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -35,9 +35,9 @@ export function createNewObject<T extends Object>(obj: T): T {
 export function createNewGuessInfoObject(
 	categoryName: string,
 	newGuessInfo: any,
-	currentGuessInfo: T_SPELL_CATEGORY_INFO
-): T_SPELL_CATEGORY_INFO {
-	const newInfoObj: T_SPELL_CATEGORY_INFO = createNewObject(currentGuessInfo);
+	currentGuessInfo: T_SPELL_INFO
+): T_SPELL_INFO {
+	const newInfoObj: T_SPELL_INFO = createNewObject(currentGuessInfo);
 
 	switch (categoryName) {
 		case "School":
@@ -71,13 +71,11 @@ export function createNewGuessInfoObject(
 
 // TurnCell
 export function getUniqueItems(
-	category: T_CATEGORY,
+	category: T_SINGLE_CATEGORY_POSSIBILITIES,
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	setCurrentGuessInfo: React.Dispatch<
-		React.SetStateAction<T_SPELL_CATEGORY_INFO>
-	>
+	setCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
