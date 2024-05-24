@@ -77,7 +77,7 @@ export function getUniqueItems(
 		case CATEGORY_INFO.LEVEL:
 			return (
 				<>
-					<LevelRitualToggle />
+					<LevelRitualToggle setAllCurrentGuessInfo={setAllCurrentGuessInfo} />
 					{singleInput}
 				</>
 			);
@@ -109,25 +109,25 @@ export function createNewSpellInfoMap(): T_SPELL_INFO {
 }
 
 // TurnCell
-export function createInitialGuessStateForThisComponent(
-	categoryName: string
-): T_CATEGORY_GUESS_STATE {
-	switch (categoryName) {
-		case "School":
-		case "Casting Time":
-		case "Range":
-		case "Target":
-			return "";
-		case "Level":
-			return ["", false];
-		case "Components":
-		case "Class":
-		case "Effects":
-			return [];
-		default:
-			return "";
-	}
-}
+// export function createInitialGuessStateForThisComponent(
+// 	categoryName: string
+// ): T_CATEGORY_GUESS_STATE {
+// 	switch (categoryName) {
+// 		case "School":
+// 		case "Casting Time":
+// 		case "Range":
+// 		case "Target":
+// 			return "";
+// 		case "Level":
+// 			return ["", false];
+// 		case "Components":
+// 		case "Class":
+// 		case "Effects":
+// 			return [];
+// 		default:
+// 			return "";
+// 	}
+// }
 
 // MultiTextInput
 export function onAddGuessClick(

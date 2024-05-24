@@ -2,7 +2,6 @@ import styles from "./TextInput.module.scss";
 import {
 	T_SINGLE_CATEGORY_POSSIBILITIES,
 	T_SPELL_INFO,
-	T_CATEGORY_GUESS_STATE,
 } from "../../../../../../types";
 import * as methods from "../../../../../../utils/methods";
 import { handleInput } from "../../../../../../utils/inputHandlers";
@@ -24,9 +23,22 @@ const TextInput: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		props.setAllCurrentGuessInfo((current) => {
 			const newAllCurrentGuessInfo: T_SPELL_INFO = new Map(current);
-			return props.multi
-				? newAllCurrentGuessInfo.set(props.category.name, [...guessesForMulti])
-				: newAllCurrentGuessInfo.set(props.category.name, props.inputValue);
+			const LEVEL_IDENTIFIER: string = "Level";
+			if (props.multi) {
+				return newAllCurrentGuessInfo.set(props.category.name, [
+					...guessesForMulti,
+				]);
+			} else if (props.category.name == LEVEL_IDENTIFIER) {
+				const levelState: any = newAllCurrentGuessInfo.get(LEVEL_IDENTIFIER);
+				if (levelState) levelState[0] = props.inputValue;
+				newAllCurrentGuessInfo.set(LEVEL_IDENTIFIER, levelState);
+				return newAllCurrentGuessInfo;
+			} else {
+				return newAllCurrentGuessInfo.set(
+					props.category.name,
+					props.inputValue
+				);
+			}
 		});
 		console.log(`Running setAllCurrentGuessInfo() for ${props.category.name}`);
 	}, [props.inputValue, guessesForMulti]);
