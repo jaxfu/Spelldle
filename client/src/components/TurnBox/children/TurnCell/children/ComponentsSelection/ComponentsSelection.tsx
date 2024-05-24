@@ -1,6 +1,5 @@
 import styles from "./ComponentsSelection.module.scss";
 import { T_SPELL_INFO } from "../../../../../../types";
-import { useState } from "react";
 
 interface IProps {
 	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
