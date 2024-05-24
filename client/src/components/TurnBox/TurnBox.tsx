@@ -2,7 +2,7 @@ import TurnCell from "./children/TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
 import CATEGORY_INFO from "../../CATEGORY_INFO";
 import { useState } from "react";
-import { T_CATEGORY_GUESS_STATE, T_SPELL_INFO } from "../../types";
+import { T_SPELL_INFO } from "../../types";
 import * as methods from "../../utils/methods";
 
 const TurnBox: React.FC = () => {

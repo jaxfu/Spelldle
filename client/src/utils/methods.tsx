@@ -1,9 +1,5 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
-import {
-	T_CATEGORY_GUESS_STATE,
-	T_SINGLE_CATEGORY_POSSIBILITIES,
-	T_SPELL_INFO,
-} from "../types";
+import { T_SINGLE_CATEGORY_POSSIBILITIES, T_SPELL_INFO } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -83,7 +79,9 @@ export function getUniqueItems(
 			);
 			break;
 		case CATEGORY_INFO.COMPONENTS:
-			return <ComponentsSelection />;
+			return (
+				<ComponentsSelection setAllCurrentGuessInfo={setAllCurrentGuessInfo} />
+			);
 			break;
 		case CATEGORY_INFO.CLASS:
 		case CATEGORY_INFO.EFFECTS:
@@ -108,28 +106,7 @@ export function createNewSpellInfoMap(): T_SPELL_INFO {
 	return map;
 }
 
-// TurnCell
-// export function createInitialGuessStateForThisComponent(
-// 	categoryName: string
-// ): T_CATEGORY_GUESS_STATE {
-// 	switch (categoryName) {
-// 		case "School":
-// 		case "Casting Time":
-// 		case "Range":
-// 		case "Target":
-// 			return "";
-// 		case "Level":
-// 			return ["", false];
-// 		case "Components":
-// 		case "Class":
-// 		case "Effects":
-// 			return [];
-// 		default:
-// 			return "";
-// 	}
-// }
-
-// MultiTextInput
+// TextInput
 export function onAddGuessClick(
 	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
 	inputValue: string,
