@@ -1,5 +1,9 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
-import { T_SINGLE_CATEGORY_POSSIBILITIES, T_SPELL_INFO } from "../types";
+import {
+	T_CATEGORY_GUESS_STATE,
+	T_SINGLE_CATEGORY_POSSIBILITIES,
+	T_SPELL_INFO,
+} from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -37,7 +41,8 @@ export function getUniqueItems(
 	category: T_SINGLE_CATEGORY_POSSIBILITIES,
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
+	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -47,6 +52,7 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
+			setAllCurrentGuessInfo={setAllCurrentGuessInfo}
 		/>
 	);
 	const multiInput = (
@@ -57,6 +63,7 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
+			setAllCurrentGuessInfo={setAllCurrentGuessInfo}
 		/>
 	);
 
@@ -104,7 +111,7 @@ export function createNewSpellInfoMap(): T_SPELL_INFO {
 // TurnCell
 export function createInitialGuessStateForThisComponent(
 	categoryName: string
-): string | string[] | [string, boolean] {
+): T_CATEGORY_GUESS_STATE {
 	switch (categoryName) {
 		case "School":
 		case "Casting Time":

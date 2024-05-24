@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./TurnCell.module.scss";
 import {
 	T_SINGLE_CATEGORY_POSSIBILITIES,
@@ -9,22 +9,12 @@ import * as methods from "../../../../utils/methods";
 
 interface IProps {
 	category: T_SINGLE_CATEGORY_POSSIBILITIES;
-	setCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
+	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
 }
 
 const TurnCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
-	const [guessStateForThisComponent, setGuessStateForThisComponent] = useState<
-		string | string[] | [string, boolean]
-	>(methods.createInitialGuessStateForThisComponent(props.category.name));
 	const [recommendations, setRecommendations] = useState<string[]>([]);
-
-	useEffect(() => {
-		props.setCurrentGuessInfo((current) => {
-			const newMap = new Map(current);
-			return newMap.set(props.category.name, guessStateForThisComponent);
-		});
-	}, [guessStateForThisComponent]);
 
 	return (
 		<div className={styles.root}>
@@ -33,7 +23,8 @@ const TurnCell: React.FC<IProps> = (props) => {
 				props.category,
 				inputValue,
 				setInputValue,
-				setRecommendations
+				setRecommendations,
+				props.setAllCurrentGuessInfo
 			)}
 			<RecommendationBox
 				recommendations={recommendations}
