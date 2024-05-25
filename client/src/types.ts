@@ -165,4 +165,5 @@ export type T_SINGLE_CATEGORY_POSSIBILITIES = {
 	has_modifiers: boolean;
 };
 
-export type T_SPELL_INFO = Map<string, string | string[] | [string, boolean]>;
+export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
+export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;

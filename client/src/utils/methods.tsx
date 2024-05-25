@@ -37,7 +37,8 @@ export function getUniqueItems(
 	category: T_SINGLE_CATEGORY_POSSIBILITIES,
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
+	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -47,6 +48,7 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
+			setAllCurrentGuessInfo={setAllCurrentGuessInfo}
 		/>
 	);
 	const multiInput = (
@@ -57,6 +59,7 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
+			setAllCurrentGuessInfo={setAllCurrentGuessInfo}
 		/>
 	);
 
@@ -70,13 +73,15 @@ export function getUniqueItems(
 		case CATEGORY_INFO.LEVEL:
 			return (
 				<>
-					<LevelRitualToggle />
+					<LevelRitualToggle setAllCurrentGuessInfo={setAllCurrentGuessInfo} />
 					{singleInput}
 				</>
 			);
 			break;
 		case CATEGORY_INFO.COMPONENTS:
-			return <ComponentsSelection />;
+			return (
+				<ComponentsSelection setAllCurrentGuessInfo={setAllCurrentGuessInfo} />
+			);
 			break;
 		case CATEGORY_INFO.CLASS:
 		case CATEGORY_INFO.EFFECTS:
@@ -101,7 +106,7 @@ export function createNewSpellInfoMap(): T_SPELL_INFO {
 	return map;
 }
 
-// MultiTextInput
+// TextInput
 export function onAddGuessClick(
 	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
 	inputValue: string,
