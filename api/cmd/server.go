@@ -21,6 +21,11 @@ func main() {
 			os.Exit(1)
 		}
 	}
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		fmt.Println("No env variable PORT")
+		os.Exit(1)
+	}
 
 	// Test backup
 	// cmd := exec.Command("./backup.sh")
@@ -49,5 +54,5 @@ func main() {
 
 	router.Use(spa.Middleware("/", "client"))
 
-	log.Panic(router.Run(":5000"))
+	log.Panic(router.Run(PORT))
 }
