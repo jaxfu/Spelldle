@@ -9,7 +9,7 @@ CREATE TABLE user_account_info
     username   VARCHAR(32) UNIQUE,
     password   VARCHAR(32),
     first_name VARCHAR(32),
-    last_name  VARCHAR(32),
+    last_name  VARCHAR(32)
 );
 
 CREATE TABLE user_session_data
