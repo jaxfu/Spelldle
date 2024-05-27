@@ -11,7 +11,10 @@ function App() {
 
 	return (
 		<div className={styles.root}>
-			<TurnBox />
+			<TurnBox
+				allCurrentGuessInfo={allCurrentGuessInfo}
+				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+			/>
 		</div>
 	);
 }

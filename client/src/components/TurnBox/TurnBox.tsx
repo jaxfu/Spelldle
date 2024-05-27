@@ -1,48 +1,47 @@
 import TurnCell from "./children/TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
 import CATEGORY_INFO from "../../CATEGORY_INFO";
-import { useState } from "react";
 import { T_SPELL_INFO } from "../../types";
-import * as methods from "../../utils/methods";
 
-const TurnBox: React.FC = () => {
-	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
-		methods.createNewSpellInfoMap()
-	);
+interface IProps {
+	allCurrentGuessInfo: T_SPELL_INFO;
+	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
+}
 
+const TurnBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<TurnCell
 				category={CATEGORY_INFO.SCHOOL}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.LEVEL}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.CASTING_TIME}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.RANGE}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.TARGET}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.COMPONENTS}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.CLASS}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<TurnCell
 				category={CATEGORY_INFO.EFFECTS}
-				setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+				setAllCurrentGuessInfo={props.setAllCurrentGuessInfo}
 			/>
 			<button>Submit</button>
 		</div>
