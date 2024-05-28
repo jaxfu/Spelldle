@@ -11,17 +11,13 @@ import {
 	T_UserInput_Register,
 } from "../../types";
 
-interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
-	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface IProps {
+// 	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
+// 	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+// 	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
-const Register: React.FC<IProps> = ({
-	setUserData,
-	setLoggedIn,
-	setValidationCompleted,
-}) => {
+const Register: React.FC = () => {
 	//STATE
 	const [userInput, setUserInput] = useState<T_UserInput_Register>({
 		...initUserInputRegister,
@@ -29,7 +25,7 @@ const Register: React.FC<IProps> = ({
 	const [taken, setTaken] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
 
-	const navigate = useNavigate();
+	//const navigate = useNavigate();
 
 	//INPUT HANDLER
 	function inputHandler(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -47,24 +43,24 @@ const Register: React.FC<IProps> = ({
 			};
 			console.log(registerResult);
 
-			if (registerResult.error) {
-				setTaken(false);
-				return setError(true);
-			} else if (!registerResult.valid) {
-				setError(false);
-				return setTaken(true);
-			} else {
-				sendToLocalStorage({
-					user_id: registerResult.user_data.user_id,
-					session_key: registerResult.session_key,
-				});
-				const userData = getUserDataFromAPIResponse(registerResult);
-				setUserData(userData);
-				setLoggedIn(true);
-				setValidationCompleted(true);
+			// if (registerResult.error) {
+			// 	setTaken(false);
+			// 	return setError(true);
+			// } else if (!registerResult.valid) {
+			// 	setError(false);
+			// 	return setTaken(true);
+			// } else {
+			// 	sendToLocalStorage({
+			// 		user_id: registerResult.user_data.user_id,
+			// 		session_key: registerResult.session_key,
+			// 	});
+			// 	const userData = getUserDataFromAPIResponse(registerResult);
+			// 	setUserData(userData);
+			// 	setLoggedIn(true);
+			// 	setValidationCompleted(true);
 
-				return navigate("/");
-			}
+			// 	return navigate("/");
+			// }
 		} catch (err) {
 			console.log(`ERROR: ${err}`);
 		}

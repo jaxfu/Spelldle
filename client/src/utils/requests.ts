@@ -1,8 +1,8 @@
 import axios, { HttpStatusCode } from "axios";
-
-// TYPES
-import { T_LoginResult, T_UserInput_Login, initLoginResult } from "../types";
 import {
+	T_LoginResult,
+	T_UserInput_Login,
+	initLoginResult,
 	T_RegisterResult,
 	T_UserInput_Register,
 	initRegisterResult,

@@ -28,7 +28,7 @@ export function onRecommendationClick(
 	setRecommendations([]);
 }
 
-export function createNewObject<T extends Object>(obj: T): T {
+export function deepCopyObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
 

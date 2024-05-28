@@ -5,8 +5,13 @@ import { T_SPELL_INFO } from "../../types";
 import * as methods from "../../utils/methods";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
+import { T_UserData, initUserData } from "../../types";
+import Register from "../Register/Register";
 
 function App() {
+	const [userData, setUserData] = useState<T_UserData>(
+		methods.deepCopyObject(initUserData)
+	);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
@@ -24,6 +29,7 @@ function App() {
 						/>
 					}
 				/>
+				<Route path="/register" element={<Register />} />
 			</Routes>
 		</div>
 	);
