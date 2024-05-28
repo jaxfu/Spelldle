@@ -1,0 +1,10 @@
+@import "../../styles/mixins";
+@import "../../styles/vars";
+
+.root {
+	@include full-size-percent;
+	height: 50px;
+	border: $border;
+	position: fixed;
+	top: 0;
+}
