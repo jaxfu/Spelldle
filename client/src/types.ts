@@ -167,3 +167,112 @@ export type T_SINGLE_CATEGORY_POSSIBILITIES = {
 
 export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
+
+// USER
+export type T_UserData = {
+	user_id: number;
+	username: string;
+	first_name: string;
+	last_name: string;
+	session_key: string;
+};
+
+export const initUserData: T_UserData = {
+	user_id: -1,
+	username: "",
+	first_name: "",
+	last_name: "",
+	session_key: "",
+};
+
+export type T_UserSessionData = {
+	user_id: number;
+	session_key: string;
+};
+
+export const initUserSessionData: T_UserSessionData = {
+	user_id: 0,
+	session_key: "uninitialized_session_key",
+};
+
+export type T_UserInput_Register = {
+	username: string;
+	password: string;
+	password2: string;
+	first_name: string;
+	last_name: string;
+};
+
+export const initUserInputRegister: T_UserInput_Register = {
+	username: "",
+	password: "",
+	password2: "",
+	first_name: "",
+	last_name: "",
+};
+
+// Result from Requests/attemptRegister
+export type T_RegisterResult = {
+	valid: boolean;
+	user_data: T_UserData;
+	session_key: string;
+	error: boolean;
+};
+
+export const initRegisterResult: T_RegisterResult = {
+	valid: false,
+	error: false,
+	user_data: { ...initUserData },
+	session_key: "",
+};
+
+export type T_UserInput_Login = {
+	username: string;
+	password: string;
+};
+
+export const initUserInputLogin: T_UserInput_Login = {
+	username: "",
+	password: "",
+};
+
+// Result from Requests/attemptLogin
+export type T_LoginResult = {
+	valid: boolean;
+	user_data: T_UserData;
+	session_key: string;
+	error: boolean;
+};
+
+export const initLoginResult: T_LoginResult = {
+	valid: false,
+	error: false,
+	user_data: { ...initUserData },
+	session_key: "",
+};
+
+export type T_APIUserDataResponse = {
+	valid: boolean;
+	user_data: T_UserData;
+	session_key: string;
+};
+
+export const initApiUserDataResponse: T_APIUserDataResponse = {
+	valid: false,
+	user_data: { ...initUserData },
+	session_key: "",
+};
+
+export type T_ValidateResult = {
+	valid: boolean;
+	user_data: T_UserData;
+	error: boolean;
+	session_key: string;
+};
+
+export const initValidateResult: T_ValidateResult = {
+	valid: false,
+	error: false,
+	user_data: { ...initUserData },
+	session_key: "",
+};

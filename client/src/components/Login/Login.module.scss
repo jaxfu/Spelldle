@@ -1,0 +1,22 @@
+@import "../../styles/mixins";
+@import "../../styles/vars";
+
+.root {
+    @include full-size-percent;
+
+    @include flex-center;
+
+    .passwordBox {
+        @include flex-center;
+
+        position: relative;
+    }
+
+    .eye {
+        position: absolute;
+        top: 55%;
+        right: 2%;
+        cursor: pointer;
+        color: white;
+    }
+}
