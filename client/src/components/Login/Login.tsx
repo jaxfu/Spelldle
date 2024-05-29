@@ -14,15 +14,11 @@ import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
 
 interface IProps {
 	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
-	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+	//setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginPage: React.FC<IProps> = ({
-	setUserData,
-	setLoggedIn,
-	setValidationCompleted,
-}) => {
+const Login: React.FC<IProps> = (props) => {
 	// Init State
 	const [userInput, setUserInuput] =
 		useState<T_UserInput_Login>(initUserInputLogin);
@@ -51,9 +47,9 @@ const LoginPage: React.FC<IProps> = ({
 				session_key: loginResult.session_key,
 			});
 			const userData = getUserDataFromAPIResponse(loginResult);
-			setUserData(userData);
-			setLoggedIn(true);
-			setValidationCompleted(true);
+			props.setUserData(userData);
+			props.setIsLoggedIn(true);
+			//setValidationCompleted(true);
 
 			return navigate("/");
 		} catch (err) {
@@ -117,4 +113,4 @@ const LoginPage: React.FC<IProps> = ({
 	);
 };
 
-export default LoginPage;
+export default Login;

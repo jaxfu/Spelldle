@@ -1,8 +1,16 @@
 import React from "react";
 import styles from "./Navbar.module.scss";
 
-const Navbar: React.FC = () => {
-	return <div className={styles.root}>Navbar</div>;
+interface IProps {
+	isLoggedIn: boolean;
+}
+
+const Navbar: React.FC<IProps> = (props) => {
+	return (
+		<div className={styles.root}>
+			{props.isLoggedIn ? "Logged In" : "Not logged in"}
+		</div>
+	);
 };
 
 export default Navbar;

@@ -11,13 +11,13 @@ import {
 	T_UserInput_Register,
 } from "../../types";
 
-// interface IProps {
-// 	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
-// 	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-// 	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
-// }
+interface IProps {
+	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
+	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+	// 	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Register: React.FC = () => {
+const Register: React.FC<IProps> = (props) => {
 	//STATE
 	const [userInput, setUserInput] = useState<T_UserInput_Register>({
 		...initUserInputRegister,
@@ -54,10 +54,10 @@ const Register: React.FC = () => {
 			// 		user_id: registerResult.user_data.user_id,
 			// 		session_key: registerResult.session_key,
 			// 	});
-			// 	const userData = getUserDataFromAPIResponse(registerResult);
-			// 	setUserData(userData);
-			// 	setLoggedIn(true);
-			// 	setValidationCompleted(true);
+			const userData = getUserDataFromAPIResponse(registerResult);
+			props.setUserData(userData);
+			props.setIsLoggedIn(true);
+			//setValidationCompleted(true);
 
 			// 	return navigate("/");
 			// }
