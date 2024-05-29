@@ -9,8 +9,11 @@ import {
 	T_LoginResult,
 	T_UserInput_Login,
 	T_UserData,
+	initUserData,
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import * as methods from "../../utils/methods.tsx";
 
 interface IProps {
 	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
@@ -25,7 +28,25 @@ const Login: React.FC<IProps> = (props) => {
 	const [error, setError] = useState<boolean>(false);
 	const [incorrectInfo, setIncorrectInfo] = useState<boolean>(false);
 
-	const navigate: NavigateFunction = useNavigate();
+	const queryClient = useQueryClient();
+	const query = useQuery({
+		queryKey: ["userData"],
+		queryFn: () => {
+			console.log("RUNNING queryFn");
+			return methods.deepCopyObject(initUserData);
+		},
+	});
+
+	const mutation = useMutation({
+		mutationFn: (userInput: T_UserInput_Login) => {
+			return attemptLogin(userInput);
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(["userData"], data);
+		},
+	});
+
+	//const navigate: NavigateFunction = useNavigate();
 
 	// On Login
 	async function onLoginSubmit(): Promise<void> {
@@ -51,7 +72,7 @@ const Login: React.FC<IProps> = (props) => {
 			props.setIsLoggedIn(true);
 			//setValidationCompleted(true);
 
-			return navigate("/");
+			//return navigate("/");
 		} catch (err) {
 			console.log(`Error: ${err}`);
 		}
@@ -105,7 +126,13 @@ const Login: React.FC<IProps> = (props) => {
 					<br />
 				</div>
 			)}
-			<button onClick={onLoginSubmit}>Login</button>
+			<button
+				onClick={() => {
+					mutation.mutate(userInput);
+				}}
+			>
+				Login
+			</button>
 			<Link to={"/register"}>
 				<button>Register</button>
 			</Link>

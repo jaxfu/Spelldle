@@ -8,8 +8,10 @@ import { Route, Routes } from "react-router-dom";
 import { T_UserData, initUserData } from "../../types";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-function App() {
+const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_UserData>(
 		methods.deepCopyObject(initUserData)
 	);
@@ -18,34 +20,42 @@ function App() {
 		methods.createNewSpellInfoMap()
 	);
 
+	const queryClient = new QueryClient();
+
 	return (
-		<div className={styles.root}>
-			<Navbar isLoggedIn={isLoggedIn} />
-			<Routes>
-				<Route
-					path="/game"
-					element={
-						<TurnBox
-							allCurrentGuessInfo={allCurrentGuessInfo}
-							setAllCurrentGuessInfo={setAllCurrentGuessInfo}
-						/>
-					}
-				/>
-				<Route
-					path="/register"
-					element={
-						<Register setUserData={setUserData} setIsLoggedIn={setIsLoggedIn} />
-					}
-				/>
-				<Route
-					path="/login"
-					element={
-						<Login setUserData={setUserData} setIsLoggedIn={setIsLoggedIn} />
-					}
-				/>
-			</Routes>
-		</div>
+		<QueryClientProvider client={queryClient}>
+			<ReactQueryDevtools initialIsOpen={false} />
+			<div className={styles.root}>
+				<Navbar isLoggedIn={isLoggedIn} />
+				<Routes>
+					<Route
+						path="/game"
+						element={
+							<TurnBox
+								allCurrentGuessInfo={allCurrentGuessInfo}
+								setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+							/>
+						}
+					/>
+					<Route
+						path="/register"
+						element={
+							<Register
+								setUserData={setUserData}
+								setIsLoggedIn={setIsLoggedIn}
+							/>
+						}
+					/>
+					<Route
+						path="/login"
+						element={
+							<Login setUserData={setUserData} setIsLoggedIn={setIsLoggedIn} />
+						}
+					/>
+				</Routes>
+			</div>
+		</QueryClientProvider>
 	);
-}
+};
 
 export default App;
