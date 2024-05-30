@@ -7,8 +7,8 @@ import {
 	T_UserInput_Register,
 	initRegisterResult,
 } from "../types";
-import { T_UserSessionData } from "../types";
-import { T_ValidateResult, initValidateResult } from "../types";
+import { T_USER_SESSION_DATA } from "../types";
+import { T_VALIDATE_SESSION_RESULT, initValidateSessionResult } from "../types";
 
 // Routes
 const prefix: string =
@@ -77,11 +77,13 @@ export async function attemptRegister(
 }
 
 export async function validateSession(
-	sessionData: T_UserSessionData
-): Promise<T_ValidateResult> {
+	sessionData: T_USER_SESSION_DATA
+): Promise<T_VALIDATE_SESSION_RESULT> {
 	console.log("Running validateSession");
 	console.log(sessionData);
-	let validateResult: T_ValidateResult = { ...initValidateResult };
+	let validateResult: T_VALIDATE_SESSION_RESULT = {
+		...initValidateSessionResult,
+	};
 
 	try {
 		const send = await axios({
@@ -92,13 +94,8 @@ export async function validateSession(
 			},
 		});
 
-		if (send.status != HttpStatusCode.Ok) {
-			validateResult.error = true;
-		} else {
-			if (send.data.valid) {
-				validateResult = { ...send.data };
-				validateResult.session_key = sessionData.session_key;
-			}
+		if (send.data.valid) {
+			validateResult = { ...send.data };
 		}
 		return validateResult;
 	} catch (err: any) {

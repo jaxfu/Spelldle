@@ -2,10 +2,10 @@ import CATEGORY_INFO from "../CATEGORY_INFO";
 import {
 	T_SINGLE_CATEGORY_POSSIBILITIES,
 	T_SPELL_INFO,
-	T_UserSessionData,
+	T_USER_SESSION_DATA,
 	initUserSessionData,
-	T_ValidateResult,
-	initValidateResult,
+	T_VALIDATE_SESSION_RESULT,
+	initValidateSessionResult,
 } from "../types";
 import { validateSession } from "./requests";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
@@ -140,15 +140,15 @@ export function onRemoveGuessClick(
 }
 
 // Storage
-export function checkForSessionInfo(): boolean {
+export function isSessionIdInLocalStorage(): boolean {
 	return !(
 		localStorage.getItem("session_key") === null ||
 		localStorage.getItem("session_key") === ""
 	);
 }
 
-export function getSessionInfoFromStorage(): T_UserSessionData {
-	const sessionInfo: T_UserSessionData = { ...initUserSessionData };
+export function getUserSessionDataFromStorage(): T_USER_SESSION_DATA {
+	const sessionInfo: T_USER_SESSION_DATA = { ...initUserSessionData };
 
 	try {
 		sessionInfo.user_id = parseInt(localStorage.getItem("user_id") || "-1");
@@ -159,7 +159,7 @@ export function getSessionInfoFromStorage(): T_UserSessionData {
 	}
 }
 
-export function sendToLocalStorage(sessionInfo: T_UserSessionData) {
+export function sendToLocalStorage(sessionInfo: T_USER_SESSION_DATA) {
 	localStorage.setItem("user_id", String(sessionInfo.user_id));
 	localStorage.setItem("session_key", sessionInfo.session_key);
 
@@ -169,13 +169,15 @@ export function sendToLocalStorage(sessionInfo: T_UserSessionData) {
 }
 
 // Auth
-export async function checkValidSession(): Promise<T_ValidateResult> {
-	const invalidResult: T_ValidateResult = { ...initValidateResult };
+export async function checkValidSession(): Promise<T_VALIDATE_SESSION_RESULT> {
+	const invalidResult: T_VALIDATE_SESSION_RESULT = {
+		...initValidateSessionResult,
+	};
 
-	if (!checkForSessionInfo()) return invalidResult;
+	if (!isSessionIdInLocalStorage()) return invalidResult;
 
 	try {
-		return await validateSession(getSessionInfoFromStorage());
+		return await validateSession(getUserSessionDataFromStorage());
 	} catch (err: any) {
 		throw new Error(err);
 	}

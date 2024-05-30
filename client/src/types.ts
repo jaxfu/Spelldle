@@ -1,3 +1,5 @@
+import { deepCopyObject } from "./utils/methods";
+
 export enum E_CATEGORIES {
 	SCHOOL = 0,
 	LEVEL,
@@ -169,7 +171,7 @@ export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 
 // USER
-export type T_UserData = {
+export type T_ALL_USER_DATA = {
 	user_id: number;
 	username: string;
 	first_name: string;
@@ -177,20 +179,20 @@ export type T_UserData = {
 	session_key: string;
 };
 
-export const initUserData: T_UserData = {
+export const initAllUserData: T_ALL_USER_DATA = {
 	user_id: -1,
+	session_key: "",
 	username: "",
 	first_name: "",
 	last_name: "",
-	session_key: "",
 };
 
-export type T_UserSessionData = {
+export type T_USER_SESSION_DATA = {
 	user_id: number;
 	session_key: string;
 };
 
-export const initUserSessionData: T_UserSessionData = {
+export const initUserSessionData: T_USER_SESSION_DATA = {
 	user_id: 0,
 	session_key: "uninitialized_session_key",
 };
@@ -214,7 +216,7 @@ export const initUserInputRegister: T_UserInput_Register = {
 // Result from Requests/attemptRegister
 export type T_RegisterResult = {
 	valid: boolean;
-	user_data: T_UserData;
+	user_data: T_ALL_USER_DATA;
 	session_key: string;
 	error: boolean;
 };
@@ -222,7 +224,7 @@ export type T_RegisterResult = {
 export const initRegisterResult: T_RegisterResult = {
 	valid: false,
 	error: false,
-	user_data: { ...initUserData },
+	user_data: { ...initAllUserData },
 	session_key: "",
 };
 
@@ -239,7 +241,7 @@ export const initUserInputLogin: T_UserInput_Login = {
 // Result from Requests/attemptLogin
 export type T_LoginResult = {
 	valid: boolean;
-	user_data: T_UserData;
+	user_data: T_ALL_USER_DATA;
 	session_key: string;
 	error: boolean;
 };
@@ -247,32 +249,28 @@ export type T_LoginResult = {
 export const initLoginResult: T_LoginResult = {
 	valid: false,
 	error: false,
-	user_data: { ...initUserData },
+	user_data: { ...initAllUserData },
 	session_key: "",
 };
 
 export type T_APIUserDataResponse = {
 	valid: boolean;
-	user_data: T_UserData;
+	user_data: T_ALL_USER_DATA;
 	session_key: string;
 };
 
 export const initApiUserDataResponse: T_APIUserDataResponse = {
 	valid: false,
-	user_data: { ...initUserData },
+	user_data: { ...initAllUserData },
 	session_key: "",
 };
 
-export type T_ValidateResult = {
+export type T_VALIDATE_SESSION_RESULT = {
 	valid: boolean;
-	user_data: T_UserData;
-	error: boolean;
-	session_key: string;
+	user_data: T_ALL_USER_DATA;
 };
 
-export const initValidateResult: T_ValidateResult = {
+export const initValidateSessionResult: T_VALIDATE_SESSION_RESULT = {
 	valid: false,
-	error: false,
-	user_data: { ...initUserData },
-	session_key: "",
+	user_data: deepCopyObject(initAllUserData),
 };

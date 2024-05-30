@@ -1,15 +1,15 @@
 import {
 	T_LoginResult,
 	T_RegisterResult,
-	T_UserData,
-	initUserData,
-	T_ValidateResult,
+	T_ALL_USER_DATA,
+	initAllUserData,
+	T_VALIDATE_SESSION_RESULT,
 } from "../types";
 
 export function getUserDataFromAPIResponse(
-	response: T_LoginResult | T_RegisterResult | T_ValidateResult
-): T_UserData {
-	const userData: T_UserData = { ...initUserData };
+	response: T_LoginResult | T_RegisterResult | T_VALIDATE_SESSION_RESULT
+): T_ALL_USER_DATA {
+	const userData: T_ALL_USER_DATA = { ...initAllUserData };
 
 	// Basic
 	userData.user_id = response.user_data.user_id;

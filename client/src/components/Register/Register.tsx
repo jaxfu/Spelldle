@@ -5,14 +5,14 @@ import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import { attemptRegister } from "../../utils/requests.ts";
 import {
-	T_UserData,
+	T_ALL_USER_DATA,
 	initUserInputRegister,
 	T_RegisterResult,
 	T_UserInput_Register,
 } from "../../types";
 
 interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
+	setUserData: React.Dispatch<React.SetStateAction<T_ALL_USER_DATA>>;
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 	// 	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }

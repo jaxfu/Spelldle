@@ -8,15 +8,15 @@ import {
 	initUserInputLogin,
 	T_LoginResult,
 	T_UserInput_Login,
-	T_UserData,
-	initUserData,
+	T_ALL_USER_DATA,
+	initAllUserData,
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as methods from "../../utils/methods.tsx";
 
 interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_UserData>>;
+	setUserData: React.Dispatch<React.SetStateAction<T_ALL_USER_DATA>>;
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 	//setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
