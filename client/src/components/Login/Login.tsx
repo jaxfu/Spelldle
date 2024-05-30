@@ -3,7 +3,7 @@ import { useNavigate, NavigateFunction, Link } from "react-router-dom";
 import styles from "./Login.module.scss";
 import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { attemptLogin } from "../../utils/requests.ts";
-import { sendToLocalStorage } from "../../auth/storage.ts";
+import { sendToLocalStorage } from "../../utils/methods.tsx";
 import {
 	initUserInputLogin,
 	T_LoginResult,

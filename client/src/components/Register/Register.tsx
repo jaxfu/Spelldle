@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.scss";
 import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
-import { sendToLocalStorage } from "../../auth/storage.ts";
+import { sendToLocalStorage } from "../../utils/methods.tsx";
 import { attemptRegister } from "../../utils/requests.ts";
 import {
 	T_UserData,
