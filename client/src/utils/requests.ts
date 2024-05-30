@@ -76,7 +76,7 @@ export async function attemptRegister(
 	}
 }
 
-export async function validateSession(
+export async function requestValidateSession(
 	sessionData: T_USER_SESSION_DATA
 ): Promise<T_VALIDATE_SESSION_RESULT> {
 	console.log("Running validateSession");
@@ -94,9 +94,7 @@ export async function validateSession(
 			},
 		});
 
-		if (send.data.valid) {
-			validateResult = { ...send.data };
-		}
+		validateResult = send.data;
 		return validateResult;
 	} catch (err: any) {
 		throw new Error(err);

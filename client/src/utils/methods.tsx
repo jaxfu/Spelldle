@@ -7,7 +7,7 @@ import {
 	T_VALIDATE_SESSION_RESULT,
 	initValidateSessionResult,
 } from "../types";
-import { validateSession } from "./requests";
+import { requestValidateSession } from "./requests";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -153,9 +153,11 @@ export function getUserSessionDataFromStorage(): T_USER_SESSION_DATA {
 	try {
 		sessionInfo.user_id = parseInt(localStorage.getItem("user_id") || "-1");
 		sessionInfo.session_key = localStorage.getItem("session_key") || "";
+		if (sessionInfo.user_id === -1 || sessionInfo.session_key === "")
+			throw new Error("Session Data Was Not Found");
 		return sessionInfo;
 	} catch (err: any) {
-		throw new Error(err);
+		throw new Error(`Error in getUserSessionDataFromStorage: ${err}`);
 	}
 }
 
@@ -177,7 +179,7 @@ export async function checkValidSession(): Promise<T_VALIDATE_SESSION_RESULT> {
 	if (!isSessionIdInLocalStorage()) return invalidResult;
 
 	try {
-		return await validateSession(getUserSessionDataFromStorage());
+		return await requestValidateSession(getUserSessionDataFromStorage());
 	} catch (err: any) {
 		throw new Error(err);
 	}

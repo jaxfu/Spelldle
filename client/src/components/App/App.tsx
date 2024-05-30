@@ -14,6 +14,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useQuery } from "@tanstack/react-query";
+import { requestValidateSession } from "../../utils/requests";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_ALL_USER_DATA>(
@@ -26,18 +27,22 @@ const App: React.FC = () => {
 
 	const { isPending, error, data } = useQuery({
 		queryKey: ["userData"],
-		queryFn: (): T_VALIDATE_SESSION_RESULT => {
+		queryFn: () => {
 			console.log("RUNNING QUERYFN");
-			const validateSessionResult: T_VALIDATE_SESSION_RESULT =
-				methods.deepCopyObject(initValidateSessionResult);
+			try {
+				if (methods.isSessionIdInLocalStorage()) {
+					console.log("SESSION DATA NOT FOUND");
+					return;
+				}
 
-			if (methods.isSessionIdInLocalStorage()) {
-				console.log("SESSION DATA NOT FOUND");
-				return validateSessionResult;
+				requestValidateSession(methods.getUserSessionDataFromStorage());
+			} catch (e: any) {
+				if (e instanceof Error) {
+					console.log(`ERROR: ${e.message}`);
+				}
 			}
-			const userSessionData = methods.getUserSessionDataFromStorage();
-			return validateSessionResult;
 		},
+		enabled: methods.isSessionIdInLocalStorage(),
 	});
 
 	if (isPending) console.log("PENDING...");
