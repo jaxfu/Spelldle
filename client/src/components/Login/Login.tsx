@@ -29,13 +29,6 @@ const Login: React.FC<IProps> = (props) => {
 	const [incorrectInfo, setIncorrectInfo] = useState<boolean>(false);
 
 	const queryClient = useQueryClient();
-	const query = useQuery({
-		queryKey: ["userData"],
-		queryFn: () => {
-			console.log("RUNNING queryFn");
-			return methods.deepCopyObject(initUserData);
-		},
-	});
 
 	const mutation = useMutation({
 		mutationFn: (userInput: T_UserInput_Login) => {
