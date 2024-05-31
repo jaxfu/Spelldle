@@ -2,10 +2,10 @@ import CATEGORY_INFO from "../CATEGORY_INFO";
 import {
 	T_SINGLE_CATEGORY_POSSIBILITIES,
 	T_SPELL_INFO,
-	T_USER_SESSION_DATA,
-	initUserSessionData,
-	T_VALIDATE_SESSION_RESULT,
-	initValidateSessionResult,
+	T_USERDATA_TOKENS,
+	INIT_USERDATA_TOKENS,
+	T_APIRESULT_VALIDATE_SESSION,
+	INIT_APIRESULT_VALIDATE_SESSION,
 } from "../types";
 import { requestValidateSession } from "./requests";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
@@ -147,8 +147,8 @@ export function isSessionIdInLocalStorage(): boolean {
 	);
 }
 
-export function getUserSessionDataFromStorage(): T_USER_SESSION_DATA {
-	const sessionInfo: T_USER_SESSION_DATA = { ...initUserSessionData };
+export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
+	const sessionInfo: T_USERDATA_TOKENS = { ...INIT_USERDATA_TOKENS };
 
 	try {
 		sessionInfo.user_id = parseInt(localStorage.getItem("user_id") || "-1");
@@ -161,7 +161,7 @@ export function getUserSessionDataFromStorage(): T_USER_SESSION_DATA {
 	}
 }
 
-export function sendToLocalStorage(sessionInfo: T_USER_SESSION_DATA) {
+export function sendToLocalStorage(sessionInfo: T_USERDATA_TOKENS) {
 	localStorage.setItem("user_id", String(sessionInfo.user_id));
 	localStorage.setItem("session_key", sessionInfo.session_key);
 
@@ -171,9 +171,9 @@ export function sendToLocalStorage(sessionInfo: T_USER_SESSION_DATA) {
 }
 
 // Auth
-export async function checkValidSession(): Promise<T_VALIDATE_SESSION_RESULT> {
-	const invalidResult: T_VALIDATE_SESSION_RESULT = {
-		...initValidateSessionResult,
+export async function checkValidSession(): Promise<T_APIRESULT_VALIDATE_SESSION> {
+	const invalidResult: T_APIRESULT_VALIDATE_SESSION = {
+		...INIT_APIRESULT_VALIDATE_SESSION,
 	};
 
 	if (!isSessionIdInLocalStorage()) return invalidResult;

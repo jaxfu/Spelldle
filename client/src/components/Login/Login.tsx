@@ -5,18 +5,18 @@ import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { attemptLogin } from "../../utils/requests.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import {
-	initUserInputLogin,
-	T_LoginResult,
-	T_UserInput_Login,
-	T_ALL_USER_DATA,
-	initAllUserData,
+	INIT_USERINPUT_LOGIN,
+	T_APIRESULT_LOGIN,
+	T_USERINPUT_LOGIN,
+	T_USERDATA_ACCOUNT,
+	INIT_USERDATA_ACCOUNT,
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as methods from "../../utils/methods.tsx";
 
 interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_ALL_USER_DATA>>;
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_ACCOUNT>>;
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 	//setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -24,14 +24,14 @@ interface IProps {
 const Login: React.FC<IProps> = (props) => {
 	// Init State
 	const [userInput, setUserInuput] =
-		useState<T_UserInput_Login>(initUserInputLogin);
+		useState<T_USERINPUT_LOGIN>(INIT_USERINPUT_LOGIN);
 	const [error, setError] = useState<boolean>(false);
 	const [incorrectInfo, setIncorrectInfo] = useState<boolean>(false);
 
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
-		mutationFn: (userInput: T_UserInput_Login) => {
+		mutationFn: (userInput: T_USERINPUT_LOGIN) => {
 			return attemptLogin(userInput);
 		},
 		onSuccess: (data) => {
@@ -44,7 +44,7 @@ const Login: React.FC<IProps> = (props) => {
 	// On Login
 	async function onLoginSubmit(): Promise<void> {
 		try {
-			const loginResult: T_LoginResult = await attemptLogin(userInput);
+			const loginResult: T_APIRESULT_LOGIN = await attemptLogin(userInput);
 			console.log(loginResult);
 
 			if (loginResult.error) {
