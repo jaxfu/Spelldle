@@ -2,8 +2,10 @@ import { useState } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
+	initUserSessionData,
 	initValidateSessionResult,
 	T_SPELL_INFO,
+	type T_USER_SESSION_DATA,
 	type T_VALIDATE_SESSION_RESULT,
 } from "../../types";
 import * as methods from "../../utils/methods";
@@ -20,7 +22,7 @@ const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_ALL_USER_DATA>(
 		methods.deepCopyObject(initAllUserData)
 	);
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
@@ -29,13 +31,10 @@ const App: React.FC = () => {
 		queryKey: ["userData"],
 		queryFn: () => {
 			console.log("RUNNING QUERYFN");
+			const userSessionData: T_USER_SESSION_DATA =
+				methods.deepCopyObject(initUserSessionData);
 			try {
-				if (methods.isSessionIdInLocalStorage()) {
-					console.log("SESSION DATA NOT FOUND");
-					return;
-				}
-
-				requestValidateSession(methods.getUserSessionDataFromStorage());
+				return requestValidateSession(methods.getUserSessionDataFromStorage());
 			} catch (e: any) {
 				if (e instanceof Error) {
 					console.log(`ERROR: ${e.message}`);
@@ -52,7 +51,7 @@ const App: React.FC = () => {
 	return (
 		<div className={styles.root}>
 			<ReactQueryDevtools initialIsOpen={false} />
-			<Navbar isLoggedIn={isLoggedIn} />
+			<Navbar isLoggedIn={userIsLoggedIn} />
 			<Routes>
 				<Route
 					path="/game"
@@ -66,13 +65,19 @@ const App: React.FC = () => {
 				<Route
 					path="/register"
 					element={
-						<Register setUserData={setUserData} setIsLoggedIn={setIsLoggedIn} />
+						<Register
+							setUserData={setUserData}
+							setIsLoggedIn={setUserIsLoggedIn}
+						/>
 					}
 				/>
 				<Route
 					path="/login"
 					element={
-						<Login setUserData={setUserData} setIsLoggedIn={setIsLoggedIn} />
+						<Login
+							setUserData={setUserData}
+							setIsLoggedIn={setUserIsLoggedIn}
+						/>
 					}
 				/>
 			</Routes>
