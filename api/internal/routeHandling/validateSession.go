@@ -17,7 +17,7 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	// Bind request body
 	if err := ctx.BindJSON(&validationPayload); err != nil {
 		fmt.Printf("Error binding validationPayload json: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error")
+		ctx.JSON(http.StatusOK, validationResponse)
 		return
 	}
 	fmt.Printf("%+v\n", validationPayload)
@@ -25,7 +25,8 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	userSessionData, err := r.dbHandler.GetUserSessionDataByUserID(validationPayload.UserID)
 	if err != nil {
 		fmt.Printf("Error getting user session data: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error")
+		ctx.JSON(http.StatusOK, validationResponse)
+		return
 	}
 
 	if userSessionData.SessionKey != validationPayload.SessionKey {
@@ -37,7 +38,8 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	userData, err := r.dbHandler.GetUserAccountInfoByUserID(validationPayload.UserID)
 	if err != nil {
 		fmt.Printf("Error searching for user data: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error")
+		ctx.JSON(http.StatusOK, validationResponse)
+		return
 	}
 	validationResponse.UserData.UserID = userData.UserID
 	validationResponse.UserData.Username = userData.Username
