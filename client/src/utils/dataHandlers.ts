@@ -15,11 +15,11 @@ export function getUserDataFromAPIResponse(
 	const userData: T_USERDATA_ACCOUNT = { ...INIT_USERDATA_ACCOUNT };
 
 	// Basic
-	userData.user_id = response.user_data.user_id;
-	userData.username = response.user_data.username;
-	userData.first_name = response.user_data.first_name;
-	userData.last_name = response.user_data.last_name;
-	userData.session_key = response.session_key;
+	// userData.user_id = response.user_data.user_id;
+	// userData.username = response.user_data.username;
+	// userData.first_name = response.user_data.first_name;
+	// userData.last_name = response.user_data.last_name;
+	// userData.session_key = response.session_key;
 
 	return userData;
 }

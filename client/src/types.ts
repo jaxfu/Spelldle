@@ -171,7 +171,10 @@ export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 
 // USER
-export type T_USERDATA_ALL = {};
+export type T_USERDATA_ALL = {
+	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_tokens: T_USERDATA_TOKENS;
+};
 
 export type T_USERDATA_ACCOUNT = {
 	user_id: number;
@@ -197,6 +200,7 @@ export const INIT_USERDATA_TOKENS: T_USERDATA_TOKENS = {
 	refresh_token: "",
 };
 
+// REGISTER
 export type T_USERINPUT_REGISTER = {
 	username: string;
 	password: string;
@@ -213,19 +217,19 @@ export const INIT_USERINPUT_REGISTER: T_USERINPUT_REGISTER = {
 	last_name: "",
 };
 
-// Result from Requests/attemptRegister
 export type T_APIRESULT_REGISTER = {
 	valid: boolean;
-	user_account_data: T_USERDATA_ACCOUNT;
-	user_tokens_data: T_USERDATA_TOKENS;
+	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_tokens: T_USERDATA_TOKENS;
 };
 
 export const INIT_APIRESULT_REGISTER: T_APIRESULT_REGISTER = {
 	valid: false,
-	user_account_data: deepCopyObject(INIT_USERDATA_ACCOUNT),
-	user_tokens_data: deepCopyObject(INIT_USERDATA_TOKENS),
+	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_tokens: deepCopyObject(INIT_USERDATA_TOKENS),
 };
 
+// LOGIN
 export type T_USERINPUT_LOGIN = {
 	username: string;
 	password: string;
@@ -236,21 +240,19 @@ export const INIT_USERINPUT_LOGIN: T_USERINPUT_LOGIN = {
 	password: "",
 };
 
-// Result from Requests/attemptLogin
 export type T_APIRESULT_LOGIN = {
 	valid: boolean;
-	user_data: T_USERDATA_ACCOUNT;
-	session_key: string;
-	error: boolean;
+	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_tokens: T_USERDATA_TOKENS;
 };
 
 export const INIT_APIRESULT_LOGIN: T_APIRESULT_LOGIN = {
 	valid: false,
-	error: false,
-	user_data: deepCopyObject(INIT_USERDATA_ACCOUNT),
-	session_key: "",
+	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_tokens: deepCopyObject(INIT_USERDATA_TOKENS),
 };
 
+// VALIDATE
 export type T_APIRESULT_VALIDATE_SESSION = {
 	valid: boolean;
 	user_data: T_USERDATA_ACCOUNT;
