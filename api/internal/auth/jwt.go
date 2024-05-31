@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func CreateJWTFromUserID(userID uint64) (string, error) {
+func CreateJWTFromUserID(userID uint) (string, error) {
 	var (
 		key []byte
 		t   *jwt.Token
@@ -22,7 +22,7 @@ func CreateJWTFromUserID(userID uint64) (string, error) {
 	t = jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"iss": "spelldle.com/api",
-			"sub": strconv.FormatUint(userID, 10),
+			"sub": strconv.FormatUint(uint64(userID), 10),
 			"exp": strconv.FormatInt(expiryTime, 10),
 		})
 	s, err = t.SignedString(key)

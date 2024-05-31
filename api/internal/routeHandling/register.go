@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/internal/schemas"
 	"spelldle.com/server/internal/userHandlers"
 )
@@ -67,11 +68,22 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
+
+	accessToken, err := auth.CreateJWTFromUserID(userData.UserID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		return
+	}
+
+	// UserData
 	registerResponse.UserData.UserID = userData.UserID
 	registerResponse.UserData.Username = userData.Username
 	registerResponse.UserData.FirstName = userData.FirstName
 	registerResponse.UserData.LastName = userData.LastName
-
+	// Tokens Data
+	registerResponse.UserTokensData.AccessToken = accessToken
+	registerResponse.UserTokensData.RefreshToken = accessToken
+	// Valid
 	registerResponse.Valid = true
 
 	ctx.JSON(http.StatusOK, registerResponse)
