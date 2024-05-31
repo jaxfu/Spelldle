@@ -19,7 +19,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 	// Bind request body
 	if err := ctx.BindJSON(&registerPayload); err != nil {
 		fmt.Printf("Error binding json: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error")
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
 	fmt.Printf("%+v\n", registerPayload)
@@ -28,7 +28,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 	exists, err := r.dbHandler.CheckIfUsernameExists(registerPayload.Username)
 	if err != nil {
 		fmt.Printf("Error checking username validity: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error")
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
 	if exists {
@@ -40,7 +40,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 	// Insert into user_info
 	if err := r.dbHandler.InsertUserRegisterInfo(registerPayload); err != nil {
 		fmt.Printf("Error inserting user from /register: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error inserting new user")
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
 
@@ -48,7 +48,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 	id, err := r.dbHandler.GetUserIDByUsername(registerPayload.Username)
 	if err != nil {
 		fmt.Printf("Error searching for newly inserted user: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error inserting new user")
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
 
@@ -56,16 +56,15 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 	sessionData := userHandlers.GenerateNewUserSessionData(id)
 	if err := r.dbHandler.InsertUserSessionData(sessionData); err != nil {
 		fmt.Printf("Error inserting session data: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error generating and inserting session data")
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
-	registerResponse.SessionKey = sessionData.SessionKey
 
-	//Get all new user data
+	// Get all new user data
 	userData, err := r.dbHandler.GetUserAccountInfoByUsername(registerPayload.Username)
 	if err != nil {
 		fmt.Printf("Error retrieving new user information: %+v\n", err)
-		ctx.String(http.StatusNotFound, "Error retrieving new user data afer insertion")
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
 		return
 	}
 	registerResponse.UserData.UserID = userData.UserID

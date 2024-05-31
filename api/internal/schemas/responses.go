@@ -14,9 +14,9 @@ type LoginResponse struct {
 }
 
 type RegisterResponse struct {
-	Valid      bool                  `json:"valid"`
-	UserData   BasicUserDataResponse `json:"user_data,omitempty"`
-	SessionKey string                `json:"session_key"`
+	Valid          bool                  `json:"valid"`
+	UserData       BasicUserDataResponse `json:"user_data,omitempty"`
+	UserTokensData UserTokensData        `json:"user_tokens_data,omitempty"`
 }
 
 type ValidationResponse struct {

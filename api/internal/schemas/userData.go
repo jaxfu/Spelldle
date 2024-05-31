@@ -13,3 +13,8 @@ type UserSessionData struct {
 	SessionKey string `json:"session_key"`
 	Expires    uint64 `json:"expires"`
 }
+
+type UserTokensData struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
