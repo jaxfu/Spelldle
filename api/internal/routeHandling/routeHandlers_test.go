@@ -18,16 +18,17 @@ import (
 
 //goland:noinspection GoUnhandledErrorResult
 func TestRouteHandlers(t *testing.T) {
-	var sessionData schemas.UserSessionData
-
 	if err := godotenv.Load("../../config.env"); err != nil {
 		fmt.Printf("Error loading env vars: %+v\n", err)
 		os.Exit(1)
 	}
 
+	// Init DBHandler
 	db := dbHandler.InitDBHandler(os.Getenv("DB_URL_TEST"))
 	routeHandler := InitRouteHandler(db)
 	defer routeHandler.dbHandler.DB.Close()
+
+	// Set up database
 
 	t.Run("Register", func(t *testing.T) {
 		if err := db.CreateTables(); err != nil {
@@ -47,11 +48,11 @@ func TestRouteHandlers(t *testing.T) {
 		router.POST("/api/register", routeHandler.Register)
 		router.ServeHTTP(w, r)
 
-		var responseData schemas.RegisterResponse
+		var responseData schemas.ResponseRegisterLogin
 		json.Unmarshal(w.Body.Bytes(), &responseData)
 
-		if responseData.UserData.Username != registerPayload.Username {
-			t.Errorf("Username mismatch after inserting new user, got %s, want %s", responseData.UserData.Username, registerPayload.Username)
+		if responseData.UserDataAccount.Username != registerPayload.Username {
+			t.Errorf("Username mismatch after inserting new user, got %s, want %s", responseData.UserDataAccount.Username, registerPayload.Username)
 		}
 
 		var err error
@@ -115,7 +116,7 @@ func TestRouteHandlers(t *testing.T) {
 		}
 	})
 	t.Run("Login_invalid_username", func(t *testing.T) {
-		loginPayload := schemas.LoginPayload{
+		loginPayload := schemas.RequestPayloadLogin{
 			Username: "incorrect",
 			Password: testHelpers.TestUserLoginPayload.Password,
 		}
@@ -137,7 +138,7 @@ func TestRouteHandlers(t *testing.T) {
 		}
 	})
 	t.Run("Login_invalid_password", func(t *testing.T) {
-		loginPayload := schemas.LoginPayload{
+		loginPayload := schemas.RequestPayloadLogin{
 			Username: testHelpers.TestUserLoginPayload.Username,
 			Password: "incorrect",
 		}

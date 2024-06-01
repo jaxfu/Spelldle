@@ -1,25 +1,20 @@
 package schemas
 
-type BasicUserDataResponse struct {
-	UserID    uint   `json:"user_id"`
-	Username  string `json:"username"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
+type ResponseRegisterLogin struct {
+	Valid            bool                    `json:"valid"`
+	UserId           UserID                  `json:"user_id"`
+	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
+	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
+	UserDataTokens   UserDataTokens          `json:"user_data_tokens"`
 }
 
-type LoginResponse struct {
-	Valid      bool                  `json:"valid"`
-	UserData   BasicUserDataResponse `json:"user_data,omitempty"`
-	SessionKey string                `json:"session_key"`
+type ResponseUserDataAccount struct {
+	Username string `json:"username"`
 }
 
-type RegisterResponse struct {
-	Valid          bool                  `json:"valid"`
-	UserData       BasicUserDataResponse `json:"user_account_data"`
-	UserTokensData UserTokensData        `json:"user_tokens_data"`
-}
-
-type ValidationResponse struct {
-	Valid    bool                  `json:"valid"`
-	UserData BasicUserDataResponse `json:"user_data,omitempty"`
+type ResponseValidateSession struct {
+	Valid            bool                    `json:"valid"`
+	UserId           UserID                  `json:"user_id"`
+	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
+	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
 }

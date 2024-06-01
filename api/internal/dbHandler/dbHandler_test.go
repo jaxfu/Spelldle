@@ -2,7 +2,9 @@ package dbHandler
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/jackc/pgx/v5"
 	"os"
 	"spelldle.com/server/internal/testHelpers"
 	"testing"
@@ -38,11 +40,17 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("Error initializing tables: %+v\n", err)
 		}
 	})
+
 	t.Run("InsertUser", func(t *testing.T) {
-		if err := dbHandler.InsertUser(); err != nil {
+		userId, err := dbHandler.InsertUser()
+		if err != nil {
 			t.Errorf("Error in InsertUser: %+v\n", err)
 		}
+		if userId != 1 {
+			t.Errorf("Inserted user id should be %d, but got %d\n", testUserID, userId)
+		}
 	})
+
 	t.Run("InsertUserDataAccount", func(t *testing.T) {
 		if err := dbHandler.InsertUserDataAccount(testUserID, testUserDataAccount); err != nil {
 			t.Errorf("Error in InsertUserDataAccount: %+v\n", err)
@@ -72,6 +80,20 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("Mismatch in GetUserDataPersonalByUserID: got %+v, want %+v", userDataPersonal, testUserDataPersonal)
 		}
 	})
+
+	t.Run("GetUserIDByUsernameValid", func(t *testing.T) {
+		_, err := dbHandler.GetUserIDByUsername(testUserDataAccount.Username)
+		if err != nil {
+			t.Errorf("Error in GetUserIDByUsername: %+v\n", err)
+		}
+	})
+	t.Run("GetUserIDByUsernameInvalid", func(t *testing.T) {
+		_, err := dbHandler.GetUserIDByUsername("test")
+		if !errors.Is(err, pgx.ErrNoRows) {
+			t.Errorf("Expected pgx.ErrNoRows: %+v\n", err)
+		}
+	})
+
 	t.Run("DropTables", func(t *testing.T) {
 		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
 			t.Errorf("Error dropping tables: %+v\n", err)

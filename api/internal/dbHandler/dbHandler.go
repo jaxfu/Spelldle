@@ -3,9 +3,7 @@ package dbHandler
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"os"
 	"spelldle.com/server/internal/schemas"
@@ -31,28 +29,12 @@ func InitDBHandler(connectionString string) *DBHandler {
 
 // Gets
 
-const QCheckIfUsernameExists = `
-	SELECT username FROM user_data_account WHERE username=$1
-`
-
-func (dbHandler *DBHandler) CheckIfUsernameExists(username string) (bool, error) {
-	var returnedUsername string
-	err := dbHandler.DB.QueryRow(context.Background(), QCheckIfUsernameExists, username).Scan(&returnedUsername)
-	if errors.Is(err, pgx.ErrNoRows) {
-		return false, nil
-	}
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
 const QGetUserIDByUsername = `
 	SELECT user_id FROM user_data_account WHERE username=$1
 `
 
-func (dbHandler *DBHandler) GetUserIDByUsername(username string) (uint, error) {
-	var id uint
+func (dbHandler *DBHandler) GetUserIDByUsername(username string) (schemas.UserID, error) {
+	var id schemas.UserID
 	err := dbHandler.DB.QueryRow(context.Background(), QGetUserIDByUsername, username).Scan(&id)
 	if err != nil {
 		return 0, err
@@ -122,14 +104,16 @@ func (dbHandler *DBHandler) GetUserDataPersonalByUserID(userID schemas.UserID) (
 
 const EInsertUser = `
 	INSERT INTO users DEFAULT VALUES
+	RETURNING user_id
 `
 
-func (dbHandler *DBHandler) InsertUser() error {
-	_, err := dbHandler.DB.Exec(context.Background(), EInsertUser)
+func (dbHandler *DBHandler) InsertUser() (schemas.UserID, error) {
+	var userID schemas.UserID
+	err := dbHandler.DB.QueryRow(context.Background(), EInsertUser).Scan(&userID)
 	if err != nil {
-		return err
+		return userID, err
 	}
-	return nil
+	return userID, nil
 }
 
 const EInsertUserDataAccount = `

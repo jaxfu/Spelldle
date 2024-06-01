@@ -1,19 +1,20 @@
 package routeHandling
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	"net/http"
 	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/internal/schemas"
-	"spelldle.com/server/internal/userHandlers"
 )
 
-// Register recieves a RegisterPayload, then checks if the username is valid,
-// inserts into user_info, generates UserSessionData, then sends a RegisterResponse
+// Register recieves a RequestPayloadRegister, then checks if the username is valid,
+// inserts into user_info, generates UserDataSession, then sends a ResponseRegisterLogin
 func (r *RouteHandler) Register(ctx *gin.Context) {
-	var registerPayload schemas.RegisterPayload
-	registerResponse := schemas.RegisterResponse{
+	var registerPayload schemas.RequestPayloadRegister
+	registerResponse := schemas.ResponseRegisterLogin{
 		Valid: false,
 	}
 
@@ -26,65 +27,81 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 	fmt.Printf("%+v\n", registerPayload)
 
 	// Check if username currently exists
-	exists, err := r.dbHandler.CheckIfUsernameExists(registerPayload.Username)
+	_, err := r.dbHandler.GetUserIDByUsername(registerPayload.Username)
 	if err != nil {
-		fmt.Printf("Error checking username validity: %+v\n", err)
-		ctx.JSON(http.StatusInternalServerError, registerResponse)
-		return
-	}
-	if exists {
+		if !errors.Is(err, pgx.ErrNoRows) {
+			fmt.Printf("Error checking username validity: %+v\n", err)
+			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			return
+		}
+	} else {
 		fmt.Printf("Username '%s' already exists", registerPayload.Username)
 		ctx.JSON(http.StatusOK, registerResponse)
 		return
 	}
 
-	// Insert into user_info
-	if err := r.dbHandler.InsertUserRegisterInfo(registerPayload); err != nil {
-		fmt.Printf("Error inserting user from /register: %+v\n", err)
-		ctx.JSON(http.StatusInternalServerError, registerResponse)
-		return
-	}
-
-	// Get UserID from newly inserted user
-	id, err := r.dbHandler.GetUserIDByUsername(registerPayload.Username)
-	if err != nil {
-		fmt.Printf("Error searching for newly inserted user: %+v\n", err)
-		ctx.JSON(http.StatusInternalServerError, registerResponse)
-		return
-	}
-
-	// Generate and insert Session Data
-	sessionData := userHandlers.GenerateNewUserSessionData(id)
-	if err := r.dbHandler.InsertUserSessionData(sessionData); err != nil {
-		fmt.Printf("Error inserting session data: %+v\n", err)
-		ctx.JSON(http.StatusInternalServerError, registerResponse)
-		return
-	}
-
-	// Get all new user data
-	userData, err := r.dbHandler.GetUserAccountInfoByUsername(registerPayload.Username)
-	if err != nil {
-		fmt.Printf("Error retrieving new user information: %+v\n", err)
-		ctx.JSON(http.StatusInternalServerError, registerResponse)
-		return
-	}
-
-	accessToken, err := auth.CreateJWTFromUserID(userData.UserID)
+	// Insert User
+	userID, err := r.dbHandler.InsertUser()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		fmt.Printf("Error inserting user: %+v\n", err)
 		return
 	}
 
-	// UserData
-	registerResponse.UserData.UserID = userData.UserID
-	registerResponse.UserData.Username = userData.Username
-	registerResponse.UserData.FirstName = userData.FirstName
-	registerResponse.UserData.LastName = userData.LastName
-	// Tokens Data
-	registerResponse.UserTokensData.AccessToken = accessToken
-	registerResponse.UserTokensData.RefreshToken = accessToken
-	// Valid
-	registerResponse.Valid = true
+	// Insert UserDataAccount
+	if err := r.dbHandler.InsertUserDataAccount(userID,
+		schemas.UserDataAccount{
+			Username: registerPayload.Username,
+			Password: registerPayload.Password,
+		}); err != nil {
+		fmt.Printf("Error in InsertUserDataAccount during POST->register: %+v\n", err)
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		return
+	}
+
+	// Insert UserDataPersonal
+	if err := r.dbHandler.InsertUserDataPersonal(userID,
+		schemas.UserDataPersonal{
+			FirstName: registerPayload.FirstName,
+			LastName:  registerPayload.LastName,
+		}); err != nil {
+		fmt.Printf("Error in InsertUserDataPersonal during POST->register: %+v\n", err)
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		return
+	}
+
+	accessToken, err := auth.CreateJWTFromUserID(userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		return
+	}
+
+	// Get UserDataAccount
+	userDataAccount, err := r.dbHandler.GetUserDataAccountByUserID(userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		fmt.Printf("Error getting UserDataAccount during POST->register: %+v\n", err)
+		return
+	}
+
+	// Get UserDataPersonal
+	userDataPersonal, err := r.dbHandler.GetUserDataPersonalByUserID(userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, registerResponse)
+		fmt.Printf("Error getting GetUserDataPersonalByUserID during POST->register: %+v\n", err)
+		return
+	}
+
+	registerResponse = CreateResponseRegisterLogin(
+		true,
+		userID,
+		userDataAccount,
+		userDataPersonal,
+		schemas.UserDataTokens{
+			AccessToken:  accessToken,
+			RefreshToken: accessToken,
+		},
+	)
 
 	ctx.JSON(http.StatusOK, registerResponse)
 

@@ -1,20 +1,25 @@
 package schemas
 
-type UserAccountData struct {
-	UserID    uint   `json:"user_id"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
+type UserID uint
+
+type UserDataPersonal struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 }
 
-type UserSessionData struct {
-	UserID     uint   `json:"user_id"`
-	SessionKey string `json:"session_key"`
-	Expires    uint64 `json:"expires"`
+type UserDataAccount struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
-type UserTokensData struct {
+type UserDataTokens struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
+}
+
+type UserDataAll struct {
+	UserID           UserID           `json:"user_id"`
+	UserDataPersonal UserDataPersonal `json:"userDataPersonal"`
+	UserDataAccount  UserDataAccount  `json:"userDataAccount"`
+	UserDataTokens   UserDataTokens   `json:"userDataTokens"`
 }

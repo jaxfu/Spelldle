@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, NavigateFunction, Link } from "react-router-dom";
 import styles from "./Login.module.scss";
 import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
-import { attemptLogin } from "../../utils/requests.ts";
+import { requestLogin } from "../../utils/requests.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import {
 	INIT_USERINPUT_LOGIN,
@@ -32,7 +32,7 @@ const Login: React.FC<IProps> = (props) => {
 
 	const mutation = useMutation({
 		mutationFn: (userInput: T_USERINPUT_LOGIN) => {
-			return attemptLogin(userInput);
+			return requestLogin(userInput);
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(["userData"], data);
@@ -42,34 +42,34 @@ const Login: React.FC<IProps> = (props) => {
 	//const navigate: NavigateFunction = useNavigate();
 
 	// On Login
-	async function onLoginSubmit(): Promise<void> {
-		try {
-			const loginResult: T_APIRESULT_LOGIN = await attemptLogin(userInput);
-			console.log(loginResult);
+	// async function onLoginSubmit(): Promise<void> {
+	// 	try {
+	// 		const loginResult: T_APIRESULT_LOGIN = await attemptLogin(userInput);
+	// 		console.log(loginResult);
 
-			if (loginResult.error) {
-				setIncorrectInfo(false);
-				return setError(true);
-			}
-			if (!loginResult.valid) {
-				setError(false);
-				return setIncorrectInfo(true);
-			}
+	// 		if (loginResult.error) {
+	// 			setIncorrectInfo(false);
+	// 			return setError(true);
+	// 		}
+	// 		if (!loginResult.valid) {
+	// 			setError(false);
+	// 			return setIncorrectInfo(true);
+	// 		}
 
-			sendToLocalStorage({
-				user_id: loginResult.user_data.user_id,
-				session_key: loginResult.session_key,
-			});
-			const userData = getUserDataFromAPIResponse(loginResult);
-			props.setUserData(userData);
-			props.setIsLoggedIn(true);
-			//setValidationCompleted(true);
+	// 		sendToLocalStorage({
+	// 			user_id: loginResult.user_data.user_id,
+	// 			session_key: loginResult.session_key,
+	// 		});
+	// 		const userData = getUserDataFromAPIResponse(loginResult);
+	// 		props.setUserData(userData);
+	// 		props.setIsLoggedIn(true);
+	// 		//setValidationCompleted(true);
 
-			//return navigate("/");
-		} catch (err) {
-			console.log(`Error: ${err}`);
-		}
-	}
+	// 		//return navigate("/");
+	// 	} catch (err) {
+	// 		console.log(`Error: ${err}`);
+	// 	}
+	// }
 
 	// INPUT HANDLER
 	const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
