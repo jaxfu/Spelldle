@@ -20,14 +20,14 @@ var TestUserDataAll = schemas.UserDataAll{
 	},
 }
 
-var TestRegisterPayload = schemas.RequestPayloadRegister{
-	Username:  "Poemmys",
-	Password:  "password",
+var TestUserRegisterPayload = schemas.RequestPayloadRegister{
+	Username:  "poemmys",
+	Password:  "pass",
 	FirstName: "Jackson",
 	LastName:  "Furr",
 }
 
 var TestUserLoginPayload = schemas.RequestPayloadLogin{
-	Username: "Poemmys",
-	Password: "password",
+	Username: "poemmys",
+	Password: "pass",
 }
