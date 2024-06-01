@@ -19,58 +19,61 @@ func TestDBHandler(t *testing.T) {
 	dbHandler := InitDBHandler(os.Getenv("DB_URL_TEST"))
 	defer dbHandler.DB.Close()
 
+	testUserID := testHelpers.TestUserDataAll.UserID
+	testUserDataAccount := testHelpers.TestUserDataAll.UserDataAccount
+	testUserDataPersonal := testHelpers.TestUserDataAll.UserDataPersonal
+
 	t.Run("Ping connection", func(t *testing.T) {
 		if err := dbHandler.DB.Ping(context.Background()); err != nil {
 			t.Errorf("Error initializing database: %+v\n", err)
 		}
 	})
+	t.Run("DropTables", func(t *testing.T) {
+		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
+			t.Errorf("Error dropping tables: %+v\n", err)
+		}
+	})
 	t.Run("InitTables", func(t *testing.T) {
-		if err := dbHandler.CreateTables(); err != nil {
+		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_CREATE_TABLES")); err != nil {
 			t.Errorf("Error initializing tables: %+v\n", err)
 		}
 	})
-	t.Run("InsertUserRegisterInfo", func(t *testing.T) {
-		if err := dbHandler.InsertUserRegisterInfo(testHelpers.TestRegisterPayload); err != nil {
-			t.Errorf("Error in InsertUserRegisterInfo: %+v\n", err)
+	t.Run("InsertUser", func(t *testing.T) {
+		if err := dbHandler.InsertUser(); err != nil {
+			t.Errorf("Error in InsertUser: %+v\n", err)
 		}
 	})
-	t.Run("GetUserAccountInfoByUserID", func(t *testing.T) {
-		want := testHelpers.TestUserAccountData
-		got, err := dbHandler.GetUserAccountInfoByUserID(testHelpers.TestUserAccountData.UserID)
+	t.Run("InsertUserDataAccount", func(t *testing.T) {
+		if err := dbHandler.InsertUserDataAccount(testUserID, testUserDataAccount); err != nil {
+			t.Errorf("Error in InsertUserDataAccount: %+v\n", err)
+		}
+	})
+	t.Run("GetUserDataAccountByUserID", func(t *testing.T) {
+		userDataAccount, err := dbHandler.GetUserDataAccountByUserID(testUserID)
 		if err != nil {
-			t.Errorf("Error in GetUserAccountInfoByUserID: %+v\n", err)
+			t.Errorf("Error in GetUserDataAccountByUserID: %+v\n", err)
 		}
-		if got != want {
-			t.Errorf("Mismatch on retrieved data from GetUserAccountInfoByUserID: got %+v, want %+v\n", got, want)
+		if userDataAccount != testUserDataAccount {
+			t.Errorf("Mismatch in GetUserDataAccountByUserID: got %+v, want %+v", userDataAccount, testUserDataAccount)
 		}
 	})
-	t.Run("GetUserAccountInfoByUsername", func(t *testing.T) {
-		want := testHelpers.TestUserAccountData
-		got, err := dbHandler.GetUserAccountInfoByUsername(testHelpers.TestUserAccountData.Username)
+
+	t.Run("InsertUserDataPersonal", func(t *testing.T) {
+		if err := dbHandler.InsertUserDataPersonal(testUserID, testUserDataPersonal); err != nil {
+			t.Errorf("Error in InsertUserDataPersonal: %+v\n", err)
+		}
+	})
+	t.Run("GetUserDataPersonalByUserID", func(t *testing.T) {
+		userDataPersonal, err := dbHandler.GetUserDataPersonalByUserID(testUserID)
 		if err != nil {
-			t.Errorf("Error in GetUserAccountInfoByUserID: %+v\n", err)
+			t.Errorf("Error in GetUserDataPersonalByUserID: %+v\n", err)
 		}
-		if got != want {
-			t.Errorf("Mismatch on retrieved data from GetUserAccountInfoByUsername: got %+v, want %+v\n", got, want)
-		}
-	})
-	t.Run("InsertUserSessionData", func(t *testing.T) {
-		if err := dbHandler.InsertUserSessionData(testHelpers.TestUserSessionData); err != nil {
-			t.Errorf("Error in InsertUserSessionData: %+v\n", err)
-		}
-	})
-	t.Run("GetUserSessionDataByUserID", func(t *testing.T) {
-		want := testHelpers.TestUserSessionData
-		got, err := dbHandler.GetUserSessionDataByUserID(testHelpers.TestUserSessionData.UserID)
-		if err != nil {
-			t.Errorf("Error in GetUserSessionDataByUserID: %+v\n", err)
-		}
-		if got != want {
-			t.Errorf("Mismatch in data returned from GetUserSessionDataByUserID: got %+v, want %+v\n", got, want)
+		if userDataPersonal != testUserDataPersonal {
+			t.Errorf("Mismatch in GetUserDataPersonalByUserID: got %+v, want %+v", userDataPersonal, testUserDataPersonal)
 		}
 	})
 	t.Run("DropTables", func(t *testing.T) {
-		if err := dbHandler.DropTables(); err != nil {
+		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
 			t.Errorf("Error dropping tables: %+v\n", err)
 		}
 	})
