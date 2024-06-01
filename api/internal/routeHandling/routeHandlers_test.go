@@ -37,9 +37,9 @@ func TestRouteHandlers(t *testing.T) {
 		}
 	})
 
-	t.Run("RegisterValid", func(t *testing.T) {
+	t.Run("Register", func(t *testing.T) {
 		var responseData schemas.ResponseRegisterLogin
-		if err := testHelpers.TestMakeHTTPRequest(&testUserRegisterPayload, &responseData, routeHandler.Register); err != nil {
+		if err := testHelpers.TestHTTPRequest(&testUserRegisterPayload, &responseData, routeHandler.Register); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
 
@@ -47,104 +47,6 @@ func TestRouteHandlers(t *testing.T) {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
 	})
-	//t.Run("ValidateSession_valid", func(t *testing.T) {
-	//	gin.SetMode(gin.TestMode)
-	//
-	//	w := httptest.NewRecorder()
-	//	_, router := gin.CreateTestContext(w)
-	//
-	//	marshalled, _ := json.Marshal(sessionData)
-	//
-	//	r, _ := http.NewRequest(http.MethodPost, "/api/validateSession", bytes.NewReader(marshalled))
-	//	router.POST("/api/validateSession", routeHandler.ValidateSession)
-	//	router.ServeHTTP(w, r)
-	//
-	//	var validationReponse schemas.ValidationResponse
-	//	json.Unmarshal(w.Body.Bytes(), &validationReponse)
-	//	if !validationReponse.Valid {
-	//		t.Error("Wanted valid response, got invalid")
-	//	}
-	//})
-	//t.Run("ValidateSession_invalid", func(t *testing.T) {
-	//	gin.SetMode(gin.TestMode)
-	//
-	//	w := httptest.NewRecorder()
-	//	_, router := gin.CreateTestContext(w)
-	//
-	//	marshalled, _ := json.Marshal(testHelpers.TestUserSessionDataIncorrect)
-	//
-	//	r, _ := http.NewRequest(http.MethodPost, "/api/validateSession", bytes.NewReader(marshalled))
-	//	router.POST("/api/validateSession", routeHandler.ValidateSession)
-	//	router.ServeHTTP(w, r)
-	//
-	//	var validationReponse schemas.ValidationResponse
-	//	json.Unmarshal(w.Body.Bytes(), &validationReponse)
-	//	if validationReponse.Valid {
-	//		t.Error("Wanted invalid response, got valid")
-	//	}
-	//})
-	//t.Run("Login_valid", func(t *testing.T) {
-	//	gin.SetMode(gin.TestMode)
-	//
-	//	w := httptest.NewRecorder()
-	//	_, router := gin.CreateTestContext(w)
-	//
-	//	marshalled, _ := json.Marshal(testHelpers.TestUserLoginPayload)
-	//
-	//	r, _ := http.NewRequest(http.MethodPost, "/api/login", bytes.NewReader(marshalled))
-	//	router.POST("/api/login", routeHandler.Login)
-	//	router.ServeHTTP(w, r)
-	//
-	//	var loginResponse schemas.LoginResponse
-	//	json.Unmarshal(w.Body.Bytes(), &loginResponse)
-	//	if !loginResponse.Valid {
-	//		t.Error("Wanted valid response, got invalid")
-	//	}
-	//})
-	//t.Run("Login_invalid_username", func(t *testing.T) {
-	//	loginPayload := schemas.RequestPayloadLogin{
-	//		Username: "incorrect",
-	//		Password: testHelpers.TestUserLoginPayload.Password,
-	//	}
-	//	gin.SetMode(gin.TestMode)
-	//
-	//	w := httptest.NewRecorder()
-	//	_, router := gin.CreateTestContext(w)
-	//
-	//	marshalled, _ := json.Marshal(loginPayload)
-	//
-	//	r, _ := http.NewRequest(http.MethodPost, "/api/login", bytes.NewReader(marshalled))
-	//	router.POST("/api/login", routeHandler.Login)
-	//	router.ServeHTTP(w, r)
-	//
-	//	var loginResponse schemas.LoginResponse
-	//	json.Unmarshal(w.Body.Bytes(), &loginResponse)
-	//	if loginResponse.Valid {
-	//		t.Error("Wanted invalid response, got valid")
-	//	}
-	//})
-	//t.Run("Login_invalid_password", func(t *testing.T) {
-	//	loginPayload := schemas.RequestPayloadLogin{
-	//		Username: testHelpers.TestUserLoginPayload.Username,
-	//		Password: "incorrect",
-	//	}
-	//	gin.SetMode(gin.TestMode)
-	//
-	//	w := httptest.NewRecorder()
-	//	_, router := gin.CreateTestContext(w)
-	//
-	//	marshalled, _ := json.Marshal(loginPayload)
-	//
-	//	r, _ := http.NewRequest(http.MethodPost, "/api/login", bytes.NewReader(marshalled))
-	//	router.POST("/api/login", routeHandler.Login)
-	//	router.ServeHTTP(w, r)
-	//
-	//	var loginResponse schemas.LoginResponse
-	//	json.Unmarshal(w.Body.Bytes(), &loginResponse)
-	//	if loginResponse.Valid {
-	//		t.Error("Wanted invalid response, got valid")
-	//	}
-	//})
 
 	//t.Run("DropTables", func(t *testing.T) {
 	//	if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {

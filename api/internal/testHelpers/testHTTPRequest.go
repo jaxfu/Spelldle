@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 )
 
-func TestMakeHTTPRequest[P any, R any](payload *P, response *R, routeHandler func(ctx *gin.Context)) error {
+func TestHTTPRequest[P any, R any](payload *P, response *R, routeHandler func(ctx *gin.Context)) error {
 	marshalled, err := json.Marshal(payload)
 	if err != nil {
 		return fmt.Errorf("error marshalling payload: %+vn", err)
