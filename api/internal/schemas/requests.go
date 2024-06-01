@@ -1,18 +1,17 @@
 package schemas
 
-type LoginPayload struct {
+type RequestPayloadLogin struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
-type RegisterPayload struct {
+type RequestPayloadRegister struct {
 	Username  string `json:"username"`
 	Password  string `json:"password"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 }
 
-type ValidationPayload struct {
-	UserID     uint   `json:"user_id"`
-	SessionKey string `json:"session_key"`
+type RequestPayloadValidateSession struct {
+	AccessToken string `json:"access_token"`
 }

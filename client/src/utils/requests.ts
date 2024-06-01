@@ -1,14 +1,17 @@
 import axios, { HttpStatusCode } from "axios";
 import {
-	T_LoginResult,
-	T_UserInput_Login,
-	initLoginResult,
-	T_RegisterResult,
-	T_UserInput_Register,
-	initRegisterResult,
+	T_APIRESULT_LOGIN,
+	T_USERINPUT_LOGIN,
+	INIT_APIRESULT_LOGIN,
+	T_APIRESULT_REGISTER,
+	T_USERINPUT_REGISTER,
+	INIT_APIRESULT_REGISTER,
 } from "../types";
-import { T_USER_SESSION_DATA } from "../types";
-import { T_VALIDATE_SESSION_RESULT, initValidateSessionResult } from "../types";
+import { T_USERDATA_TOKENS } from "../types";
+import {
+	T_APIRESULT_VALIDATE_SESSION,
+	INIT_APIRESULT_VALIDATE_SESSION,
+} from "../types";
 
 // Routes
 const prefix: string =
@@ -17,13 +20,9 @@ const LOGIN_ROUTE: string = prefix + "/api/login";
 const REGISTER_ROUTE: string = prefix + "/api/register";
 const VALIDATE_ROUTE: string = prefix + "/api/validateSession";
 
-export async function attemptLogin(
-	userInput: T_UserInput_Login
-): Promise<T_LoginResult> {
-	let loginResult: T_LoginResult = {
-		...initLoginResult,
-	};
-
+export async function requestLogin(
+	userInput: T_USERINPUT_LOGIN
+): Promise<T_APIRESULT_LOGIN> {
 	try {
 		const send = await axios({
 			method: "POST",
@@ -33,24 +32,15 @@ export async function attemptLogin(
 			},
 		});
 
-		if (send.status != HttpStatusCode.Ok) {
-			loginResult.error = true;
-		} else {
-			if (send.data.valid) {
-				loginResult = { ...send.data };
-			}
-		}
-		return loginResult;
+		return send.data;
 	} catch (err: any) {
 		throw new Error(err);
 	}
 }
 
-export async function attemptRegister(
-	userInput: T_UserInput_Register
-): Promise<T_RegisterResult> {
-	let registerResult: T_RegisterResult = { ...initRegisterResult };
-
+export async function requestRegister(
+	userInput: T_USERINPUT_REGISTER
+): Promise<T_APIRESULT_REGISTER> {
 	try {
 		const send = await axios({
 			method: "POST",
@@ -63,28 +53,16 @@ export async function attemptRegister(
 			},
 		});
 
-		if (send.status != HttpStatusCode.Ok) {
-			registerResult.error = true;
-		} else {
-			if (send.data.valid) {
-				registerResult = { ...send.data };
-			}
-		}
-		return registerResult;
+		return send.data;
 	} catch (err: any) {
 		throw new Error(err);
 	}
 }
 
 export async function requestValidateSession(
-	sessionData: T_USER_SESSION_DATA
-): Promise<T_VALIDATE_SESSION_RESULT> {
+	sessionData: T_USERDATA_TOKENS
+): Promise<T_APIRESULT_VALIDATE_SESSION> {
 	console.log("Running validateSession");
-	console.log(sessionData);
-	let validateResult: T_VALIDATE_SESSION_RESULT = {
-		...initValidateSessionResult,
-	};
-
 	try {
 		const send = await axios({
 			method: "POST",
@@ -94,8 +72,7 @@ export async function requestValidateSession(
 			},
 		});
 
-		validateResult = send.data;
-		return validateResult;
+		return send.data;
 	} catch (err: any) {
 		throw new Error(err);
 	}

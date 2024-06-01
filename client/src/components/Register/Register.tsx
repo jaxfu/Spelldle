@@ -3,24 +3,24 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.scss";
 import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
-import { attemptRegister } from "../../utils/requests.ts";
+import { requestRegister } from "../../utils/requests.ts";
 import {
-	T_ALL_USER_DATA,
-	initUserInputRegister,
-	T_RegisterResult,
-	T_UserInput_Register,
+	T_USERDATA_ACCOUNT,
+	INIT_USERINPUT_REGISTER,
+	T_APIRESULT_REGISTER,
+	T_USERINPUT_REGISTER,
 } from "../../types";
 
 interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_ALL_USER_DATA>>;
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_ACCOUNT>>;
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 	// 	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Register: React.FC<IProps> = (props) => {
 	//STATE
-	const [userInput, setUserInput] = useState<T_UserInput_Register>({
-		...initUserInputRegister,
+	const [userInput, setUserInput] = useState<T_USERINPUT_REGISTER>({
+		...INIT_USERINPUT_REGISTER,
 	});
 	const [taken, setTaken] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
@@ -38,8 +38,8 @@ const Register: React.FC<IProps> = (props) => {
 	// On Register Button Click
 	async function onRegisterSubmit(): Promise<void> {
 		try {
-			const registerResult: T_RegisterResult = {
-				...(await attemptRegister(userInput)),
+			const registerResult: T_APIRESULT_REGISTER = {
+				...(await requestRegister(userInput)),
 			};
 			console.log(registerResult);
 

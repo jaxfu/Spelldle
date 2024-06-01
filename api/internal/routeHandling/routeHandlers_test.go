@@ -1,164 +1,167 @@
 package routeHandling
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"os"
+	"spelldle.com/server/internal/schemas"
 	"spelldle.com/server/internal/testHelpers"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"spelldle.com/server/internal/dbHandler"
-	"spelldle.com/server/internal/schemas"
 )
 
-//goland:noinspection GoUnhandledErrorResult
 func TestRouteHandlers(t *testing.T) {
-	var sessionData schemas.UserSessionData
-
 	if err := godotenv.Load("../../config.env"); err != nil {
 		fmt.Printf("Error loading env vars: %+v\n", err)
 		os.Exit(1)
 	}
 
+	// Init DBHandler
 	db := dbHandler.InitDBHandler(os.Getenv("DB_URL_TEST"))
 	routeHandler := InitRouteHandler(db)
 	defer routeHandler.dbHandler.DB.Close()
 
+	// Set up vars
+	testUserRegisterPayload := testHelpers.TestUserRegisterPayload
+	testUserLoginPayload := testHelpers.TestUserLoginPayload
+	var testUserDataTokens schemas.UserDataTokens
+
+	t.Run("DropTables", func(t *testing.T) {
+		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
+			t.Errorf("Error dropping tables: %+v\n", err)
+		}
+	})
+	t.Run("InitTables", func(t *testing.T) {
+		if err := db.ExecuteSqlScript(os.Getenv("SQL_CREATE_TABLES")); err != nil {
+			t.Errorf("Error initializing tables: %+v\n", err)
+		}
+	})
+
 	t.Run("Register", func(t *testing.T) {
-		if err := db.CreateTables(); err != nil {
-			t.Errorf("Error creating tables: %+v\n", err)
+		var responseData schemas.ResponseRegisterLogin
+		if err := testHelpers.TestHTTPRequest(
+			&testUserRegisterPayload, &responseData,
+			routeHandler.Register,
+		); err != nil {
+			t.Errorf("Error making request: %+v\n", err)
 		}
+		testUserDataTokens = responseData.UserDataTokens
 
-		registerPayload := testHelpers.TestRegisterPayload
-
-		marshalled, _ := json.Marshal(registerPayload)
-
-		gin.SetMode(gin.TestMode)
-
-		w := httptest.NewRecorder()
-		_, router := gin.CreateTestContext(w)
-
-		r, _ := http.NewRequest(http.MethodPost, "/api/register", bytes.NewReader(marshalled))
-		router.POST("/api/register", routeHandler.Register)
-		router.ServeHTTP(w, r)
-
-		var responseData schemas.RegisterResponse
-		json.Unmarshal(w.Body.Bytes(), &responseData)
-
-		if responseData.UserData.Username != registerPayload.Username {
-			t.Errorf("Username mismatch after inserting new user, got %s, want %s", responseData.UserData.Username, registerPayload.Username)
+		if !responseData.Valid {
+			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-
-		var err error
-		sessionData, err = db.GetUserSessionDataByUserID(testHelpers.TestUserAccountData.UserID)
-		if err != nil {
-			t.Errorf("Error retrieving registered session data")
+		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
+		}
+		if responseData.UserDataPersonal.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.LastName, testUserRegisterPayload.LastName)
+		}
+		if responseData.UserDataAccount.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAccount.Username, testUserRegisterPayload.Username)
 		}
 	})
-	t.Run("ValidateSession_valid", func(t *testing.T) {
-		gin.SetMode(gin.TestMode)
 
-		w := httptest.NewRecorder()
-		_, router := gin.CreateTestContext(w)
+	t.Run("LoginValid", func(t *testing.T) {
+		var responseData schemas.ResponseRegisterLogin
+		if err := testHelpers.TestHTTPRequest(
+			&testUserLoginPayload,
+			&responseData,
+			routeHandler.Login,
+		); err != nil {
+			t.Errorf("Error making request: %+v\n", err)
+		}
 
-		marshalled, _ := json.Marshal(sessionData)
-
-		r, _ := http.NewRequest(http.MethodPost, "/api/validateSession", bytes.NewReader(marshalled))
-		router.POST("/api/validateSession", routeHandler.ValidateSession)
-		router.ServeHTTP(w, r)
-
-		var validationReponse schemas.ValidationResponse
-		json.Unmarshal(w.Body.Bytes(), &validationReponse)
-		if !validationReponse.Valid {
-			t.Error("Wanted valid response, got invalid")
+		if !responseData.Valid {
+			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
+		}
+		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
+		}
+		if responseData.UserDataPersonal.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.LastName, testUserRegisterPayload.LastName)
+		}
+		if responseData.UserDataAccount.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAccount.Username, testUserRegisterPayload.Username)
 		}
 	})
-	t.Run("ValidateSession_invalid", func(t *testing.T) {
-		gin.SetMode(gin.TestMode)
 
-		w := httptest.NewRecorder()
-		_, router := gin.CreateTestContext(w)
+	t.Run("LoginInvalidUsername", func(t *testing.T) {
+		var responseData schemas.ResponseRegisterLogin
 
-		marshalled, _ := json.Marshal(testHelpers.TestUserSessionDataIncorrect)
+		if err := testHelpers.TestHTTPRequest(
+			&testHelpers.TestUserLoginPayloadInvalidUsername,
+			&responseData,
+			routeHandler.Login,
+		); err != nil {
+			t.Errorf("Error making request: %+v\n", err)
+		}
 
-		r, _ := http.NewRequest(http.MethodPost, "/api/validateSession", bytes.NewReader(marshalled))
-		router.POST("/api/validateSession", routeHandler.ValidateSession)
-		router.ServeHTTP(w, r)
-
-		var validationReponse schemas.ValidationResponse
-		json.Unmarshal(w.Body.Bytes(), &validationReponse)
-		if validationReponse.Valid {
-			t.Error("Wanted invalid response, got valid")
+		if responseData.Valid {
+			t.Errorf("Valid response, expected invalid: %+v\n", responseData)
 		}
 	})
-	t.Run("Login_valid", func(t *testing.T) {
-		gin.SetMode(gin.TestMode)
 
-		w := httptest.NewRecorder()
-		_, router := gin.CreateTestContext(w)
+	t.Run("LoginInvalidPassword", func(t *testing.T) {
+		var responseData schemas.ResponseRegisterLogin
 
-		marshalled, _ := json.Marshal(testHelpers.TestUserLoginPayload)
+		if err := testHelpers.TestHTTPRequest(
+			&testHelpers.TestUserLoginPayloadInvalidPassword,
+			&responseData,
+			routeHandler.Login,
+		); err != nil {
+			t.Errorf("Error making request: %+v\n", err)
+		}
 
-		r, _ := http.NewRequest(http.MethodPost, "/api/login", bytes.NewReader(marshalled))
-		router.POST("/api/login", routeHandler.Login)
-		router.ServeHTTP(w, r)
-
-		var loginResponse schemas.LoginResponse
-		json.Unmarshal(w.Body.Bytes(), &loginResponse)
-		if !loginResponse.Valid {
-			t.Error("Wanted valid response, got invalid")
+		if responseData.Valid {
+			t.Errorf("Valid response, expected invalid: %+v\n", responseData)
 		}
 	})
-	t.Run("Login_invalid_username", func(t *testing.T) {
-		loginPayload := schemas.LoginPayload{
-			Username: "incorrect",
-			Password: testHelpers.TestUserLoginPayload.Password,
+
+	t.Run("ValidateSession", func(t *testing.T) {
+		var responseData schemas.ResponseRegisterLogin
+
+		if err := testHelpers.TestHTTPRequest(
+			&testUserDataTokens,
+			&responseData,
+			routeHandler.ValidateSession,
+		); err != nil {
+			t.Errorf("Error making request: %+v\n", err)
 		}
-		gin.SetMode(gin.TestMode)
 
-		w := httptest.NewRecorder()
-		_, router := gin.CreateTestContext(w)
-
-		marshalled, _ := json.Marshal(loginPayload)
-
-		r, _ := http.NewRequest(http.MethodPost, "/api/login", bytes.NewReader(marshalled))
-		router.POST("/api/login", routeHandler.Login)
-		router.ServeHTTP(w, r)
-
-		var loginResponse schemas.LoginResponse
-		json.Unmarshal(w.Body.Bytes(), &loginResponse)
-		if loginResponse.Valid {
-			t.Error("Wanted invalid response, got valid")
+		if !responseData.Valid {
+			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-	})
-	t.Run("Login_invalid_password", func(t *testing.T) {
-		loginPayload := schemas.LoginPayload{
-			Username: testHelpers.TestUserLoginPayload.Username,
-			Password: "incorrect",
+		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
 		}
-		gin.SetMode(gin.TestMode)
-
-		w := httptest.NewRecorder()
-		_, router := gin.CreateTestContext(w)
-
-		marshalled, _ := json.Marshal(loginPayload)
-
-		r, _ := http.NewRequest(http.MethodPost, "/api/login", bytes.NewReader(marshalled))
-		router.POST("/api/login", routeHandler.Login)
-		router.ServeHTTP(w, r)
-
-		var loginResponse schemas.LoginResponse
-		json.Unmarshal(w.Body.Bytes(), &loginResponse)
-		if loginResponse.Valid {
-			t.Error("Wanted invalid response, got valid")
+		if responseData.UserDataPersonal.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.LastName, testUserRegisterPayload.LastName)
+		}
+		if responseData.UserDataAccount.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAccount.Username, testUserRegisterPayload.Username)
 		}
 	})
-	if err := db.DropTables(); err != nil {
-		t.Errorf("Error dropping tables: %+v\n", err)
-	}
+
+	t.Run("ValidateSessionInvalid", func(t *testing.T) {
+		var responseData schemas.ResponseRegisterLogin
+
+		if err := testHelpers.TestHTTPRequest(
+			&testHelpers.TestUserDataAll.UserDataTokens,
+			&responseData,
+			routeHandler.ValidateSession,
+		); err != nil {
+			t.Errorf("Error making request: %+v\n", err)
+		}
+
+		if responseData.Valid {
+			t.Errorf("Valid response, expected invalid: %+v\n", responseData)
+		}
+	})
+
+	t.Run("DropTables", func(t *testing.T) {
+		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
+			t.Errorf("Error dropping tables: %+v\n", err)
+		}
+	})
 }

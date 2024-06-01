@@ -3,11 +3,8 @@ package dbHandler
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"log"
 	"os"
 	"spelldle.com/server/internal/schemas"
 )
@@ -17,7 +14,7 @@ type DBHandler struct {
 	DB *pgxpool.Pool
 }
 
-// InitDBHandler is constructor for DBHandler, takes a database connection
+// InitDBHandler is the constructor for DBHandler, takes a database connection
 // string and returns a pointer to instantiated DBHandler.
 func InitDBHandler(connectionString string) *DBHandler {
 	var newDBHandler DBHandler
@@ -30,34 +27,14 @@ func InitDBHandler(connectionString string) *DBHandler {
 	return &newDBHandler
 }
 
-// QUERIES
-
-const QCheckIfUsernameExists = `
-	SELECT username FROM user_account_info WHERE username=$1
-`
-
-// CheckIfUsernameExists takes in username string and searches database
-// for it. Returns true/false and error.
-func (dbHandler *DBHandler) CheckIfUsernameExists(username string) (bool, error) {
-	var returnedUsername string
-	err := dbHandler.DB.QueryRow(context.Background(), QCheckIfUsernameExists, username).Scan(&returnedUsername)
-	if errors.Is(err, pgx.ErrNoRows) {
-		return false, nil
-	}
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
+// Gets
 
 const QGetUserIDByUsername = `
-	SELECT user_id FROM user_account_info WHERE username=$1
+	SELECT user_id FROM user_data_account WHERE username=$1
 `
 
-// GetUserIDByUsername takes in username string and searches database
-// for it. Returns userID (0 if error) and error
-func (dbHandler *DBHandler) GetUserIDByUsername(username string) (uint, error) {
-	var id uint
+func (dbHandler *DBHandler) GetUserIDByUsername(username string) (schemas.UserID, error) {
+	var id schemas.UserID
 	err := dbHandler.DB.QueryRow(context.Background(), QGetUserIDByUsername, username).Scan(&id)
 	if err != nil {
 		return 0, err
@@ -65,88 +42,109 @@ func (dbHandler *DBHandler) GetUserIDByUsername(username string) (uint, error) {
 	return id, nil
 }
 
-const QGetUserAccountInfoByID = `
+const QGetUserDataAllByUserID = `
 	SELECT user_id, username, password, first_name, last_name
-	FROM user_account_info
+	FROM users
+	NATURAL JOIN user_data_account
+	NATURAL JOIN user_data_personal
 	WHERE user_id=$1
 `
 
-// GetUserAccountInfoByUserID takes in user_id and searches database,
-// then returns result and error
-func (dbHandler *DBHandler) GetUserAccountInfoByUserID(UserID uint) (schemas.UserAccountData, error) {
-	var user schemas.UserAccountData
-	err := dbHandler.DB.QueryRow(context.Background(), QGetUserAccountInfoByID, UserID).Scan(&user.UserID, &user.Username, &user.Password, &user.FirstName, &user.LastName)
+func (dbHandler *DBHandler) GetUserDataAllByUserID(UserID schemas.UserID) (schemas.UserDataAll, error) {
+	var userDataAll schemas.UserDataAll
+	err := dbHandler.DB.QueryRow(context.Background(), QGetUserDataAllByUserID, UserID).Scan(
+		&userDataAll.UserID,
+		&userDataAll.UserDataAccount.Username,
+		&userDataAll.UserDataAccount.Password,
+		&userDataAll.UserDataPersonal.FirstName,
+		&userDataAll.UserDataPersonal.LastName)
 	if err != nil {
-		return user, err
+		return userDataAll, err
 	}
-	return user, nil
+	return userDataAll, nil
 }
 
-const QGetUserAccountInfoByUsername = `
-	SELECT user_id, username, password, first_name, last_name
-	FROM user_account_info
-	WHERE username=$1
-`
-
-// GetUserAccountInfoByUsername takes in username string and searches database,
-// then returns result and error
-func (dbHandler *DBHandler) GetUserAccountInfoByUsername(username string) (schemas.UserAccountData, error) {
-	var user schemas.UserAccountData
-	err := dbHandler.DB.QueryRow(context.Background(), QGetUserAccountInfoByUsername, username).Scan(&user.UserID, &user.Username, &user.Password, &user.FirstName, &user.LastName)
-	if err != nil {
-		return user, err
-	}
-	return user, nil
-}
-
-const QGetUserSessionDataByUserID = `
-	SELECT user_id, session_key, expires
-	FROM user_session_data
+const QGetUserDataAccountByUserID = `
+	SELECT username, password
+	FROM user_data_account
 	WHERE user_id=$1
 `
 
-// GetUserSessionDataByUserID takes in username string, searches then returns
-// session data and error
-func (dbHandler *DBHandler) GetUserSessionDataByUserID(id uint) (schemas.UserSessionData, error) {
-	var sessionData schemas.UserSessionData
-
-	if err := dbHandler.DB.QueryRow(context.Background(), QGetUserSessionDataByUserID, id).Scan(&sessionData.UserID, &sessionData.SessionKey, &sessionData.Expires); err != nil {
-		return sessionData, err
-	} else if id != sessionData.UserID {
-		return sessionData, errors.New("id mismatch when searching for session data by id")
+func (dbHandler *DBHandler) GetUserDataAccountByUserID(UserID schemas.UserID) (schemas.UserDataAccount, error) {
+	userDataAccount := schemas.UserDataAccount{}
+	err := dbHandler.DB.QueryRow(context.Background(), QGetUserDataAccountByUserID, UserID).Scan(
+		&userDataAccount.Username,
+		&userDataAccount.Password,
+	)
+	if err != nil {
+		return userDataAccount, err
 	}
-
-	return sessionData, nil
+	return userDataAccount, nil
 }
 
-// EXECS
-
-const EInsertUserRegisterInfo = `
-	INSERT INTO user_account_info (username, password, first_name, last_name)
-	VALUES ($1, $2, $3, $4)
+const QGetUserDataPersonalByUserID = `
+	SELECT first_name, last_name
+	FROM user_data_personal
+	WHERE user_id=$1
 `
 
-// InsertUserRegisterInfo RegisterPayload and inserts data into user_info
-// table, returns error
-func (dbHandler *DBHandler) InsertUserRegisterInfo(r schemas.RegisterPayload) error {
-	_, err := dbHandler.DB.Exec(context.Background(), EInsertUserRegisterInfo, r.Username, r.Password, r.FirstName, r.LastName)
+func (dbHandler *DBHandler) GetUserDataPersonalByUserID(userID schemas.UserID) (schemas.UserDataPersonal, error) {
+	userDataPersonal := schemas.UserDataPersonal{}
+	err := dbHandler.DB.QueryRow(context.Background(), QGetUserDataPersonalByUserID, userID).Scan(
+		&userDataPersonal.FirstName,
+		&userDataPersonal.LastName,
+	)
+	if err != nil {
+		return userDataPersonal, err
+	}
+	return userDataPersonal, nil
+}
+
+// Inserts
+
+const EInsertUser = `
+	INSERT INTO users DEFAULT VALUES
+	RETURNING user_id
+`
+
+func (dbHandler *DBHandler) InsertUser() (schemas.UserID, error) {
+	var userID schemas.UserID
+	err := dbHandler.DB.QueryRow(context.Background(), EInsertUser).Scan(&userID)
+	if err != nil {
+		return userID, err
+	}
+	return userID, nil
+}
+
+const EInsertUserDataAccount = `
+	INSERT INTO user_data_account
+	VALUES ($1, $2, $3)
+`
+
+func (dbHandler *DBHandler) InsertUserDataAccount(userID schemas.UserID, accountData schemas.UserDataAccount) error {
+	_, err := dbHandler.DB.Exec(context.Background(), EInsertUserDataAccount,
+		userID,
+		accountData.Username,
+		accountData.Password,
+	)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-const EInsertUserSessionData = `
-	INSERT INTO user_session_data (user_id, session_key, expires)
+const EInsertUserDataPersonal = `
+	INSERT INTO user_data_personal
 	VALUES ($1, $2, $3)
 `
 
-// InsertUserSessionData takes UserSessionData object and inserts it into database
-// session_data table, returns error
-func (dbHandler *DBHandler) InsertUserSessionData(s schemas.UserSessionData) error {
-	_, err := dbHandler.DB.Exec(context.Background(), EInsertUserSessionData, s.UserID, s.SessionKey, s.Expires)
+func (dbHandler *DBHandler) InsertUserDataPersonal(userID schemas.UserID, personalData schemas.UserDataPersonal) error {
+	_, err := dbHandler.DB.Exec(context.Background(), EInsertUserDataPersonal,
+		userID,
+		personalData.FirstName,
+		personalData.LastName,
+	)
 	if err != nil {
-		log.Printf("Error inserting session data: %+v\n", err)
 		return err
 	}
 	return nil
@@ -154,57 +152,16 @@ func (dbHandler *DBHandler) InsertUserSessionData(s schemas.UserSessionData) err
 
 // TESTING
 
-const EInitUserInfo = `
-	CREATE TABLE user_account_info
-(
-    user_id    SERIAL PRIMARY KEY,
-    username   VARCHAR(32),
-    password   VARCHAR(32),
-    first_name VARCHAR(32),
-    last_name  VARCHAR(32)
-)
-`
-
-const EInitSessionData = `
-	CREATE TABLE user_session_data
-(
-    user_id     INTEGER PRIMARY KEY,
-    session_key VARCHAR(36),
-    expires     BIGINT,
-    CONSTRAINT fk_user_id
-        FOREIGN KEY (user_id)
-			REFERENCES user_account_info (user_id)
-)
-`
-
-// CreateTables is used for testing, creates all tables from database, returns error
-func (dbHandler *DBHandler) CreateTables() error {
-	if _, err := dbHandler.DB.Exec(context.Background(), EInitUserInfo); err != nil {
-		fmt.Printf("Error initializing user_info: %+v\n", err)
-	}
-	if _, err := dbHandler.DB.Exec(context.Background(), EInitSessionData); err != nil {
-		fmt.Printf("Error initializing session_data: %+v\n", err)
-	}
-	return nil
-}
-
-const EDeleteAllSessionData = `
-	DROP TABLE IF EXISTS user_session_data
-`
-
-const EDeleteAllUserInfo = `
-	DROP TABLE IF EXISTS user_account_info
-`
-
-// DropTables is used for testing, drops all tables from database, returns error
-func (dbHandler *DBHandler) DropTables() error {
-	if _, err := dbHandler.DB.Exec(context.Background(), EDeleteAllSessionData); err != nil {
-		fmt.Printf("Error dropping session_data table: %+v\n", err)
+func (dbHandler *DBHandler) ExecuteSqlScript(filepath string) error {
+	sqlFile, err := os.ReadFile(filepath)
+	if err != nil {
 		return err
 	}
-	if _, err := dbHandler.DB.Exec(context.Background(), EDeleteAllUserInfo); err != nil {
-		fmt.Printf("Error dropping user_info table: %+v\n", err)
+
+	_, err = dbHandler.DB.Exec(context.Background(), string(sqlFile))
+	if err != nil {
 		return err
 	}
+
 	return nil
 }

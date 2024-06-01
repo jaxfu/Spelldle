@@ -1,67 +1,83 @@
 package routeHandling
 
 import (
+	"errors"
 	"fmt"
+	"github.com/jackc/pgx/v5"
 	"net/http"
+	"spelldle.com/server/internal/auth"
 
 	"github.com/gin-gonic/gin"
 	"spelldle.com/server/internal/schemas"
 )
 
 func (r *RouteHandler) Login(ctx *gin.Context) {
-	var loginPayload schemas.LoginPayload
-	var loginResponse = schemas.LoginResponse{
+	var loginPayload schemas.RequestPayloadLogin
+	var loginResponse = schemas.ResponseRegisterLogin{
 		Valid: false,
 	}
 
 	// Bind loginPayload
 	if err := ctx.BindJSON(&loginPayload); err != nil {
 		fmt.Printf("Error binding json: %+v\n", err)
-		ctx.JSON(http.StatusOK, loginResponse)
+		ctx.JSON(http.StatusInternalServerError, loginResponse)
 		return
 	}
 	fmt.Printf("Login Payload: %+v\n", loginPayload)
 
 	// Check if username exists
-	exists, err := r.dbHandler.CheckIfUsernameExists(loginPayload.Username)
+	userID, err := r.dbHandler.GetUserIDByUsername(loginPayload.Username)
 	if err != nil {
-		fmt.Printf("Error in CheckIfUsernameExists: %+v\n", err)
-		ctx.JSON(http.StatusOK, loginResponse)
-		return
-	}
-	if !exists {
-		fmt.Printf("Username '%s' does not exist", loginPayload.Username)
-		ctx.JSON(http.StatusOK, loginResponse)
+		if errors.Is(err, pgx.ErrNoRows) {
+			fmt.Printf("Username does not exist: %+v\n", err)
+			ctx.JSON(http.StatusOK, loginResponse)
+		} else {
+			fmt.Printf("Error in GetUserIDByUsername during POST->login: %+v\n", err)
+			ctx.JSON(http.StatusInternalServerError, loginResponse)
+		}
+
 		return
 	}
 
-	// Get basic user data
-	userData, err := r.dbHandler.GetUserAccountInfoByUsername(loginPayload.Username)
+	accessToken, err := auth.CreateJWTFromUserID(userID)
 	if err != nil {
-		fmt.Printf("Error in GetBasicUserInfoByUsername: %+v\n", err)
-		ctx.JSON(http.StatusOK, loginResponse)
+		ctx.JSON(http.StatusInternalServerError, loginResponse)
 		return
 	}
 
-	if loginPayload.Password != userData.Password {
-		ctx.JSON(http.StatusOK, loginResponse)
-		return
-	}
-
-	// Get session data
-	sessionData, err := r.dbHandler.GetUserSessionDataByUserID(userData.UserID)
+	// Get UserDataAccount
+	userDataAccount, err := r.dbHandler.GetUserDataAccountByUserID(userID)
 	if err != nil {
-		fmt.Printf("Error retrieving session data: %+v\n", err)
+		ctx.JSON(http.StatusInternalServerError, loginResponse)
+		fmt.Printf("Error getting UserDataAccount during POST->login: %+v\n", err)
+		return
+	}
+
+	// Check password
+	if loginPayload.Password != userDataAccount.Password {
+		fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userDataAccount.Password)
 		ctx.JSON(http.StatusOK, loginResponse)
 		return
 	}
 
-	loginResponse.UserData.UserID = userData.UserID
-	loginResponse.UserData.Username = userData.Username
-	loginResponse.UserData.FirstName = userData.FirstName
-	loginResponse.UserData.LastName = userData.LastName
-	loginResponse.SessionKey = sessionData.SessionKey
-	loginResponse.Valid = true
+	// Get UserDataPersonal
+	userDataPersonal, err := r.dbHandler.GetUserDataPersonalByUserID(userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, loginResponse)
+		fmt.Printf("Error getting GetUserDataPersonalByUserID during POST->login: %+v\n", err)
+		return
+	}
+
+	loginResponse = CreateResponseRegisterLogin(
+		true,
+		userID,
+		userDataAccount,
+		userDataPersonal,
+		schemas.UserDataTokens{
+			AccessToken:  accessToken,
+			RefreshToken: accessToken,
+		},
+	)
 
 	ctx.JSON(http.StatusOK, loginResponse)
 }
