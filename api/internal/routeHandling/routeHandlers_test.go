@@ -132,6 +132,9 @@ func TestRouteHandlers(t *testing.T) {
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
+		if responseData.UserId != testHelpers.TestUserDataAll.UserID {
+			t.Errorf("First name is incorrect: got %d, want %d\n", responseData.UserId, testHelpers.TestUserDataAll.UserID)
+		}
 		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
 			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
 		}

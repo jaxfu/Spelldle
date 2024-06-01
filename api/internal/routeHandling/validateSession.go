@@ -72,6 +72,7 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	}
 
 	validationResponse.Valid = true
+	validationResponse.UserId = userID
 	validationResponse.UserDataAccount = schemas.ResponseUserDataAccount{
 		Username: userDataAccount.Username,
 	}
