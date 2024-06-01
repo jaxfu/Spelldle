@@ -31,3 +31,13 @@ var TestUserLoginPayload = schemas.RequestPayloadLogin{
 	Username: "poemmys",
 	Password: "pass",
 }
+
+var TestUserLoginPayloadInvalidPassword = schemas.RequestPayloadLogin{
+	Username: "poemmys",
+	Password: "invalid",
+}
+
+var TestUserLoginPayloadInvalidUsername = schemas.RequestPayloadLogin{
+	Username: "invalid",
+	Password: "pass",
+}

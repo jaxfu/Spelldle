@@ -30,10 +30,12 @@ func (r *RouteHandler) Login(ctx *gin.Context) {
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			fmt.Printf("Username does not exist: %+v\n", err)
+			ctx.JSON(http.StatusOK, loginResponse)
 		} else {
 			fmt.Printf("Error in GetUserIDByUsername during POST->login: %+v\n", err)
+			ctx.JSON(http.StatusInternalServerError, loginResponse)
 		}
-		ctx.JSON(http.StatusInternalServerError, loginResponse)
+
 		return
 	}
 
@@ -53,7 +55,7 @@ func (r *RouteHandler) Login(ctx *gin.Context) {
 
 	// Check password
 	if loginPayload.Password != userDataAccount.Password {
-		fmt.Printf("Password does not match: got %s, want %s", loginPayload.Password, userDataAccount.Password)
+		fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userDataAccount.Password)
 		ctx.JSON(http.StatusOK, loginResponse)
 		return
 	}

@@ -29,7 +29,7 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	token, err := auth.ParseAndValidateJWT(validationPayload.AccessToken, []byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenMalformed) {
-			fmt.Printf("Token is malformed: %+v\n", err)
+			fmt.Printf("%+v\n", err)
 		} else {
 			fmt.Printf("Error parsing token: %+v\n", err)
 		}
