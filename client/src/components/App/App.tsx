@@ -17,6 +17,8 @@ import Login from "../Login/Login";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequestValidateSession } from "../../utils/requests";
+import { QUERY_KEYS } from "../../utils/consts";
+import { AxiosResponse } from "axios";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_USERDATA_ACCOUNT>(
@@ -28,20 +30,10 @@ const App: React.FC = () => {
 	);
 
 	const { isPending, error, data } = useQuery({
-		queryKey: ["userData"],
-		queryFn: () => {
+		queryKey: [QUERY_KEYS.userData],
+		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> => {
 			console.log("RUNNING QUERYFN");
-			const userDataTokens: T_USERDATA_TOKENS =
-				methods.deepCopyObject(INIT_USERDATA_TOKENS);
-			try {
-				return apiRequestValidateSession(
-					methods.getUserSessionDataFromStorage()
-				);
-			} catch (e: any) {
-				if (e instanceof Error) {
-					console.log(`ERROR: ${e.message}`);
-				}
-			}
+			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
 		},
 		enabled: methods.AreTokensInLocalStorage(),
 	});

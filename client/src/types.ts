@@ -280,3 +280,7 @@ export const INIT_APIRESULT_VALIDATE_SESSION: T_APIRESULT_VALIDATE_SESSION = {
 	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
 	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 };
+
+export type T_QUERY_KEYS = {
+	userData: string;
+};

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.scss";
-import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import { apiRequestRegister } from "../../utils/requests.ts";
 import {
@@ -10,7 +8,9 @@ import {
 	T_APIRESULT_REGISTER,
 	T_USERINPUT_REGISTER,
 } from "../../types";
-import type { AxiosResponse } from "axios";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { QUERY_KEYS } from "../../utils/consts.ts";
+import axios, { AxiosResponse } from "axios";
 
 interface IProps {
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_ACCOUNT>>;
@@ -26,7 +26,21 @@ const Register: React.FC<IProps> = (props) => {
 	const [taken, setTaken] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
 
-	//const navigate = useNavigate();
+	const queryClient = useQueryClient();
+
+	const mutation = useMutation({
+		mutationFn: (
+			userInput: T_USERINPUT_REGISTER
+		): Promise<AxiosResponse<T_APIRESULT_REGISTER>> => {
+			return apiRequestRegister(userInput);
+		},
+		onError(err) {
+			console.log(err);
+		},
+		onSuccess(data) {
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+		},
+	});
 
 	//INPUT HANDLER
 	function inputHandler(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -128,7 +142,10 @@ const Register: React.FC<IProps> = (props) => {
 			)}
 
 			<br />
-			<button className="btn btn-primary" onClick={onRegisterSubmit}>
+			<button
+				className="btn btn-primary"
+				onClick={() => mutation.mutate(userInput)}
+			>
 				Register
 			</button>
 		</div>
