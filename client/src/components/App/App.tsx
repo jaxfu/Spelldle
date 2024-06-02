@@ -31,7 +31,7 @@ const App: React.FC = () => {
 		queryKey: ["userData"],
 		queryFn: () => {
 			console.log("RUNNING QUERYFN");
-			const userSessionData: T_USERDATA_TOKENS =
+			const userDataTokens: T_USERDATA_TOKENS =
 				methods.deepCopyObject(INIT_USERDATA_TOKENS);
 			try {
 				return apiRequestValidateSession(

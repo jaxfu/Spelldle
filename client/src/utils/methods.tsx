@@ -142,9 +142,9 @@ export function onRemoveGuessClick(
 
 // Storage
 export function AreTokensInLocalStorage(): boolean {
-	return !(
-		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) === "" ||
-		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) === ""
+	return (
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) !== null &&
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) !== null
 	);
 }
 
@@ -179,19 +179,4 @@ export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 	console.log(
 		`${LOCAL_STORAGE_TOKENS_KEYS.refresh_token}: ${userDataTokens.refresh_token}`
 	);
-}
-
-// Auth
-export async function checkValidSession(): Promise<T_APIRESULT_VALIDATE_SESSION> {
-	const invalidResult: T_APIRESULT_VALIDATE_SESSION = deepCopyObject(
-		INIT_APIRESULT_VALIDATE_SESSION
-	);
-
-	if (!AreTokensInLocalStorage()) return invalidResult;
-
-	try {
-		return await apiRequestValidateSession(getUserSessionDataFromStorage());
-	} catch (err: any) {
-		throw new Error(err);
-	}
 }

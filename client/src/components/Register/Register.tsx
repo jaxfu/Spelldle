@@ -10,6 +10,7 @@ import {
 	T_APIRESULT_REGISTER,
 	T_USERINPUT_REGISTER,
 } from "../../types";
+import type { AxiosResponse } from "axios";
 
 interface IProps {
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_ACCOUNT>>;
@@ -38,10 +39,9 @@ const Register: React.FC<IProps> = (props) => {
 	// On Register Button Click
 	async function onRegisterSubmit(): Promise<void> {
 		try {
-			const registerResult: T_APIRESULT_REGISTER = {
-				...(await apiRequestRegister(userInput)),
-			};
-			console.log(registerResult);
+			const apiResult: AxiosResponse<T_APIRESULT_REGISTER> =
+				await apiRequestRegister(userInput);
+			console.log(apiResult);
 
 			// if (registerResult.error) {
 			// 	setTaken(false);
@@ -54,9 +54,9 @@ const Register: React.FC<IProps> = (props) => {
 			// 		user_id: registerResult.user_data.user_id,
 			// 		session_key: registerResult.session_key,
 			// 	});
-			const userData = getUserDataFromAPIResponse(registerResult);
-			props.setUserData(userData);
-			props.setIsLoggedIn(true);
+			// const userData = getUserDataFromAPIResponse(registerResult);
+			// props.setUserData(userData);
+			// props.setIsLoggedIn(true);
 			//setValidationCompleted(true);
 
 			// 	return navigate("/");

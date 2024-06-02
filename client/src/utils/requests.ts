@@ -1,17 +1,12 @@
-import axios, { HttpStatusCode } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
 	T_APIRESULT_LOGIN,
 	T_USERINPUT_LOGIN,
-	INIT_APIRESULT_LOGIN,
 	T_APIRESULT_REGISTER,
 	T_USERINPUT_REGISTER,
-	INIT_APIRESULT_REGISTER,
+	type T_APIRESULT_VALIDATE_SESSION,
 } from "../types";
 import { T_USERDATA_TOKENS } from "../types";
-import {
-	T_APIRESULT_VALIDATE_SESSION,
-	INIT_APIRESULT_VALIDATE_SESSION,
-} from "../types";
 
 // Routes
 const prefix: string =
@@ -22,17 +17,15 @@ const VALIDATE_ROUTE: string = prefix + "/api/validateSession";
 
 export async function apiRequestLogin(
 	userInput: T_USERINPUT_LOGIN
-): Promise<T_APIRESULT_LOGIN> {
+): Promise<AxiosResponse<T_APIRESULT_LOGIN>> {
 	try {
-		const send = await axios({
+		return await axios<T_APIRESULT_LOGIN>({
 			method: "POST",
 			url: LOGIN_ROUTE,
 			data: {
 				...userInput,
 			},
 		});
-
-		return send.data;
 	} catch (err: any) {
 		throw new Error(err);
 	}
@@ -40,9 +33,9 @@ export async function apiRequestLogin(
 
 export async function apiRequestRegister(
 	userInput: T_USERINPUT_REGISTER
-): Promise<T_APIRESULT_REGISTER> {
+): Promise<AxiosResponse<T_APIRESULT_REGISTER>> {
 	try {
-		const send = await axios({
+		return await axios<T_APIRESULT_REGISTER>({
 			method: "POST",
 			url: REGISTER_ROUTE,
 			data: {
@@ -52,27 +45,23 @@ export async function apiRequestRegister(
 				last_name: userInput.last_name,
 			},
 		});
-
-		return send.data;
 	} catch (err: any) {
 		throw new Error(err);
 	}
 }
 
 export async function apiRequestValidateSession(
-	sessionData: T_USERDATA_TOKENS
-): Promise<T_APIRESULT_VALIDATE_SESSION> {
+	userDataTokens: T_USERDATA_TOKENS
+): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> {
 	console.log("Running validateSession");
 	try {
-		const send = await axios({
+		return await axios<T_APIRESULT_VALIDATE_SESSION>({
 			method: "POST",
 			url: VALIDATE_ROUTE,
 			data: {
-				...sessionData,
+				...userDataTokens,
 			},
 		});
-
-		return send.data;
 	} catch (err: any) {
 		throw new Error(err);
 	}
