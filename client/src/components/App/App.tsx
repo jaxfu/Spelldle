@@ -16,7 +16,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useQuery } from "@tanstack/react-query";
-import { requestValidateSession } from "../../utils/requests";
+import { apiRequestValidateSession } from "../../utils/requests";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_USERDATA_ACCOUNT>(
@@ -34,7 +34,9 @@ const App: React.FC = () => {
 			const userSessionData: T_USERDATA_TOKENS =
 				methods.deepCopyObject(INIT_USERDATA_TOKENS);
 			try {
-				return requestValidateSession(methods.getUserSessionDataFromStorage());
+				return apiRequestValidateSession(
+					methods.getUserSessionDataFromStorage()
+				);
 			} catch (e: any) {
 				if (e instanceof Error) {
 					console.log(`ERROR: ${e.message}`);

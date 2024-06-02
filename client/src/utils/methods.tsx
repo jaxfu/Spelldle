@@ -7,7 +7,7 @@ import {
 	T_APIRESULT_VALIDATE_SESSION,
 	INIT_APIRESULT_VALIDATE_SESSION,
 } from "../types";
-import { requestValidateSession } from "./requests";
+import { apiRequestValidateSession } from "./requests";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -179,7 +179,7 @@ export async function checkValidSession(): Promise<T_APIRESULT_VALIDATE_SESSION>
 	if (!isSessionIdInLocalStorage()) return invalidResult;
 
 	try {
-		return await requestValidateSession(getUserSessionDataFromStorage());
+		return await apiRequestValidateSession(getUserSessionDataFromStorage());
 	} catch (err: any) {
 		throw new Error(err);
 	}

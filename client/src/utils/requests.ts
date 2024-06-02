@@ -20,7 +20,7 @@ const LOGIN_ROUTE: string = prefix + "/api/login";
 const REGISTER_ROUTE: string = prefix + "/api/register";
 const VALIDATE_ROUTE: string = prefix + "/api/validateSession";
 
-export async function requestLogin(
+export async function apiRequestLogin(
 	userInput: T_USERINPUT_LOGIN
 ): Promise<T_APIRESULT_LOGIN> {
 	try {
@@ -38,7 +38,7 @@ export async function requestLogin(
 	}
 }
 
-export async function requestRegister(
+export async function apiRequestRegister(
 	userInput: T_USERINPUT_REGISTER
 ): Promise<T_APIRESULT_REGISTER> {
 	try {
@@ -59,7 +59,7 @@ export async function requestRegister(
 	}
 }
 
-export async function requestValidateSession(
+export async function apiRequestValidateSession(
 	sessionData: T_USERDATA_TOKENS
 ): Promise<T_APIRESULT_VALIDATE_SESSION> {
 	console.log("Running validateSession");

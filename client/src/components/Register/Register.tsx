@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.scss";
 import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
-import { requestRegister } from "../../utils/requests.ts";
+import { apiRequestRegister } from "../../utils/requests.ts";
 import {
 	T_USERDATA_ACCOUNT,
 	INIT_USERINPUT_REGISTER,
@@ -39,7 +39,7 @@ const Register: React.FC<IProps> = (props) => {
 	async function onRegisterSubmit(): Promise<void> {
 		try {
 			const registerResult: T_APIRESULT_REGISTER = {
-				...(await requestRegister(userInput)),
+				...(await apiRequestRegister(userInput)),
 			};
 			console.log(registerResult);
 

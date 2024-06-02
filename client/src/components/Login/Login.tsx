@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, NavigateFunction, Link } from "react-router-dom";
 import styles from "./Login.module.scss";
 import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
-import { requestLogin } from "../../utils/requests.ts";
+import { apiRequestLogin } from "../../utils/requests.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import {
 	INIT_USERINPUT_LOGIN,
@@ -32,7 +32,7 @@ const Login: React.FC<IProps> = (props) => {
 
 	const mutation = useMutation({
 		mutationFn: (userInput: T_USERINPUT_LOGIN) => {
-			return requestLogin(userInput);
+			return apiRequestLogin(userInput);
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(["userData"], data);
