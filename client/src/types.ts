@@ -170,7 +170,7 @@ export type T_SINGLE_CATEGORY_POSSIBILITIES = {
 export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 
-// USER
+// USERDATA
 export type T_USERDATA_ACCOUNT = {
 	username: string;
 };
@@ -211,6 +211,18 @@ export const INIT_USERDATA_ALL: T_USERDATA_ALL = {
 	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
 	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 	user_data_tokens: deepCopyObject(INIT_USERDATA_TOKENS),
+};
+
+export type T_USERDATA_STATE = {
+	user_id: number;
+	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_personal: T_USERDATA_PERSONAL;
+};
+
+export const INIT_USERDATA_STATE: T_USERDATA_STATE = {
+	user_id: 0,
+	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 };
 
 // REGISTER

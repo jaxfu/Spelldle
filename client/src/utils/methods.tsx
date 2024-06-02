@@ -1,9 +1,13 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
 import {
-	T_SINGLE_CATEGORY_POSSIBILITIES,
-	T_SPELL_INFO,
-	T_USERDATA_TOKENS,
+	type T_SINGLE_CATEGORY_POSSIBILITIES,
+	type T_SPELL_INFO,
+	type T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
+	type T_USERDATA_STATE,
+	type T_APIRESULT_LOGIN,
+	type T_APIRESULT_REGISTER,
+	type T_APIRESULT_VALIDATE_SESSION,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
@@ -184,4 +188,18 @@ export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 export function clearTokensFromLocalStorage() {
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.access_token);
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
+}
+
+// Data
+export function createUserDataStateFromApiResult(
+	apiResult:
+		| T_APIRESULT_LOGIN
+		| T_APIRESULT_REGISTER
+		| T_APIRESULT_VALIDATE_SESSION
+): T_USERDATA_STATE {
+	return {
+		user_id: apiResult.user_id,
+		user_data_account: apiResult.user_data_account,
+		user_data_personal: apiResult.user_data_personal,
+	};
 }

@@ -11,11 +11,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts.ts";
 import { AxiosResponse } from "axios";
 
-interface IProps {
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Register: React.FC<IProps> = (props) => {
+const Register: React.FC = () => {
 	//STATE
 	const [userInput, setUserInput] = useState<T_USERINPUT_REGISTER>({
 		...INIT_USERINPUT_REGISTER,
@@ -37,10 +33,9 @@ const Register: React.FC<IProps> = (props) => {
 		onSuccess(data) {
 			if (data.data.valid) {
 				sendToLocalStorage(data.data.user_data_tokens);
-				props.setEnableQueryFn(false);
 				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
 			} else {
-				console.log("Invalid");
+				console.log("Invalid Register");
 			}
 		},
 	});

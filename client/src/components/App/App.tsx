@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
 	type T_SPELL_INFO,
 	type T_APIRESULT_VALIDATE_SESSION,
 	INIT_APIRESULT_VALIDATE_SESSION,
+	type T_USERDATA_STATE,
+	INIT_USERDATA_STATE,
 } from "../../types";
 import * as methods from "../../utils/methods";
 import Navbar from "../Navbar/Navbar";
@@ -19,19 +21,14 @@ import { QUERY_KEYS } from "../../utils/consts";
 import { AxiosResponse } from "axios";
 
 const App: React.FC = () => {
-	const [userData, setUserData] = useState<T_APIRESULT_VALIDATE_SESSION>(
-		methods.deepCopyObject(INIT_APIRESULT_VALIDATE_SESSION)
+	const [userData, setUserData] = useState<T_USERDATA_STATE>(
+		methods.deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
+	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(true);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
-	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
-
-	useEffect(() => {
-		console.log("RUNNING USEEFFECT IN APP");
-		setEnableQueryFn(methods.AreTokensInLocalStorage());
-	}, []);
 
 	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
@@ -39,22 +36,15 @@ const App: React.FC = () => {
 			console.log("RUNNING QUERYFN");
 			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
 		},
-		enabled: enableQueryFn,
+		enabled: methods.AreTokensInLocalStorage() && enableQueryFn,
 	});
 
 	if (isPending) {
-		if (fetchStatus === "fetching") console.log("PENDING");
+		if (fetchStatus === "fetching") console.log("FETCHING");
 	}
 	if (error) console.log(error);
 	if (isSuccess) {
 		console.log(JSON.stringify(data.data));
-		if (data.data.valid) {
-			if (!userIsLoggedIn) setUserIsLoggedIn(true);
-			if (userData != data.data) setUserData(data.data);
-		} else {
-			if (userData != INIT_APIRESULT_VALIDATE_SESSION)
-				setUserData(methods.deepCopyObject(INIT_APIRESULT_VALIDATE_SESSION));
-		}
 	}
 
 	return (
@@ -63,8 +53,9 @@ const App: React.FC = () => {
 			<Navbar
 				userData={userData}
 				setUserData={setUserData}
-				setEnableQueryFn={setEnableQueryFn}
 				userIsLoggedIn={userIsLoggedIn}
+				setUserIsLoggedIn={setUserIsLoggedIn}
+				setEnableQueryFn={setEnableQueryFn}
 			/>
 			<Routes>
 				<Route
@@ -76,13 +67,16 @@ const App: React.FC = () => {
 						/>
 					}
 				/>
-				<Route
-					path="/register"
-					element={<Register setEnableQueryFn={setEnableQueryFn} />}
-				/>
+				<Route path="/register" element={<Register />} />
 				<Route
 					path="/login"
-					element={<Login setEnableQueryFn={setEnableQueryFn} />}
+					element={
+						<Login
+							setUserData={setUserData}
+							setEnableQueryFn={setEnableQueryFn}
+							setUserIsLoggedIn={setUserIsLoggedIn}
+						/>
+					}
 				/>
 			</Routes>
 		</div>
