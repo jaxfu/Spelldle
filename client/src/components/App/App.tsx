@@ -26,18 +26,12 @@ const App: React.FC = () => {
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
-	const [toggleToCheckTokens, setToggleToCheckTokens] =
-		useState<boolean>(false);
 	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
 
 	useEffect(() => {
 		console.log("RUNNING USEEFFECT IN APP");
-		const tokensInStorage = methods.AreTokensInLocalStorage();
-		setEnableQueryFn((current) => {
-			if (current !== tokensInStorage) return tokensInStorage;
-			return current;
-		});
-	}, [toggleToCheckTokens]);
+		setEnableQueryFn(methods.AreTokensInLocalStorage());
+	}, []);
 
 	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
@@ -84,11 +78,11 @@ const App: React.FC = () => {
 				/>
 				<Route
 					path="/register"
-					element={<Register setToggleToCheckTokens={setToggleToCheckTokens} />}
+					element={<Register setEnableQueryFn={setEnableQueryFn} />}
 				/>
 				<Route
 					path="/login"
-					element={<Login setToggleToCheckTokens={setToggleToCheckTokens} />}
+					element={<Login setEnableQueryFn={setEnableQueryFn} />}
 				/>
 			</Routes>
 		</div>

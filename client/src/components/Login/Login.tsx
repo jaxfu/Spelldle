@@ -14,7 +14,7 @@ import { AxiosResponse } from "axios";
 import { QUERY_KEYS } from "../../utils/consts.ts";
 
 interface IProps {
-	setToggleToCheckTokens: React.Dispatch<React.SetStateAction<boolean>>;
+	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Login: React.FC<IProps> = (props) => {
@@ -38,7 +38,7 @@ const Login: React.FC<IProps> = (props) => {
 		onSuccess(data) {
 			if (data.data.valid) {
 				sendToLocalStorage(data.data.user_data_tokens);
-				props.setToggleToCheckTokens((current) => !current);
+				props.setEnableQueryFn(true);
 				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
 			}
 		},

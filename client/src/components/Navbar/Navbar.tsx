@@ -26,7 +26,6 @@ const Navbar: React.FC<IProps> = (props) => {
 			<button
 				onClick={() => {
 					methods.clearTokensFromLocalStorage();
-					props.setEnableQueryFn(false);
 					props.setUserData(
 						methods.deepCopyObject(INIT_APIRESULT_VALIDATE_SESSION)
 					);
