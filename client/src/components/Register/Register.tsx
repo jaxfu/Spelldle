@@ -10,12 +10,10 @@ import {
 } from "../../types";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts.ts";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_ACCOUNT>>;
-	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	// 	setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+	setToggleToCheckTokens: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Register: React.FC<IProps> = (props) => {
@@ -38,7 +36,13 @@ const Register: React.FC<IProps> = (props) => {
 			console.log(err);
 		},
 		onSuccess(data) {
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+			if (data.data.valid) {
+				sendToLocalStorage(data.data.user_data_tokens);
+				props.setToggleToCheckTokens((current) => !current);
+				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+			} else {
+				console.log("Invalid");
+			}
 		},
 	});
 
@@ -48,36 +52,6 @@ const Register: React.FC<IProps> = (props) => {
 			...userInput,
 			[e.target.name]: e.target.value,
 		});
-	}
-
-	// On Register Button Click
-	async function onRegisterSubmit(): Promise<void> {
-		try {
-			const apiResult: AxiosResponse<T_APIRESULT_REGISTER> =
-				await apiRequestRegister(userInput);
-			console.log(apiResult);
-
-			// if (registerResult.error) {
-			// 	setTaken(false);
-			// 	return setError(true);
-			// } else if (!registerResult.valid) {
-			// 	setError(false);
-			// 	return setTaken(true);
-			// } else {
-			// 	sendToLocalStorage({
-			// 		user_id: registerResult.user_data.user_id,
-			// 		session_key: registerResult.session_key,
-			// 	});
-			// const userData = getUserDataFromAPIResponse(registerResult);
-			// props.setUserData(userData);
-			// props.setIsLoggedIn(true);
-			//setValidationCompleted(true);
-
-			// 	return navigate("/");
-			// }
-		} catch (err) {
-			console.log(`ERROR: ${err}`);
-		}
 	}
 
 	return (

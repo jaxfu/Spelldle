@@ -1,24 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate, NavigateFunction, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Login.module.scss";
-import { getUserDataFromAPIResponse } from "../../utils/dataHandlers.ts";
 import { apiRequestLogin } from "../../utils/requests.ts";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import {
 	INIT_USERINPUT_LOGIN,
 	T_APIRESULT_LOGIN,
 	T_USERINPUT_LOGIN,
-	T_USERDATA_ACCOUNT,
-	INIT_USERDATA_ACCOUNT,
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as methods from "../../utils/methods.tsx";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+import { QUERY_KEYS } from "../../utils/consts.ts";
 
 interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_ACCOUNT>>;
-	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	//setValidationCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+	setToggleToCheckTokens: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Login: React.FC<IProps> = (props) => {
@@ -31,45 +27,22 @@ const Login: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
-		mutationFn: (userInput: T_USERINPUT_LOGIN) => {
+		mutationFn: (
+			userInput: T_USERINPUT_LOGIN
+		): Promise<AxiosResponse<T_APIRESULT_LOGIN>> => {
 			return apiRequestLogin(userInput);
 		},
-		onSuccess: (data) => {
-			queryClient.setQueryData(["userData"], data);
+		onError(err) {
+			console.log(err);
+		},
+		onSuccess(data) {
+			if (data.data.valid) {
+				sendToLocalStorage(data.data.user_data_tokens);
+				props.setToggleToCheckTokens((current) => !current);
+				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+			}
 		},
 	});
-
-	//const navigate: NavigateFunction = useNavigate();
-
-	// On Login
-	// async function onLoginSubmit(): Promise<void> {
-	// 	try {
-	// 		const loginResult: T_APIRESULT_LOGIN = await attemptLogin(userInput);
-	// 		console.log(loginResult);
-
-	// 		if (loginResult.error) {
-	// 			setIncorrectInfo(false);
-	// 			return setError(true);
-	// 		}
-	// 		if (!loginResult.valid) {
-	// 			setError(false);
-	// 			return setIncorrectInfo(true);
-	// 		}
-
-	// 		sendToLocalStorage({
-	// 			user_id: loginResult.user_data.user_id,
-	// 			session_key: loginResult.session_key,
-	// 		});
-	// 		const userData = getUserDataFromAPIResponse(loginResult);
-	// 		props.setUserData(userData);
-	// 		props.setIsLoggedIn(true);
-	// 		//setValidationCompleted(true);
-
-	// 		//return navigate("/");
-	// 	} catch (err) {
-	// 		console.log(`Error: ${err}`);
-	// 	}
-	// }
 
 	// INPUT HANDLER
 	const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {

@@ -1,11 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
-	INIT_USERDATA_TOKENS,
-	INIT_APIRESULT_VALIDATE_SESSION,
-	T_SPELL_INFO,
-	type T_USERDATA_TOKENS,
+	type T_SPELL_INFO,
 	type T_APIRESULT_VALIDATE_SESSION,
 } from "../../types";
 import * as methods from "../../utils/methods";
@@ -21,26 +18,40 @@ import { QUERY_KEYS } from "../../utils/consts";
 import { AxiosResponse } from "axios";
 
 const App: React.FC = () => {
-	const [userData, setUserData] = useState<T_USERDATA_ACCOUNT>(
-		methods.deepCopyObject(INIT_USERDATA_ACCOUNT)
-	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
+	const [toggleToCheckTokens, setToggleToCheckTokens] =
+		useState<boolean>(false);
+	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
 
-	const { isPending, error, data } = useQuery({
+	useEffect(() => {
+		console.log("RUNNING USEEFFECT");
+		const tokensInStorage = methods.AreTokensInLocalStorage();
+		setEnableQueryFn((current) => {
+			if (current !== tokensInStorage) return tokensInStorage;
+			return current;
+		});
+	}, [toggleToCheckTokens]);
+
+	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
 		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> => {
 			console.log("RUNNING QUERYFN");
 			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
 		},
-		enabled: methods.AreTokensInLocalStorage(),
+		enabled: enableQueryFn,
 	});
 
-	if (isPending) console.log("PENDING...");
-	else if (error) console.log(`ERROR: ${error.message}`);
-	else console.log(data);
+	if (isPending) console.log("PENDING");
+	if (error) console.log(error);
+	if (isSuccess) {
+		console.log(JSON.stringify(data.data));
+		if (data.data.valid) {
+			if (!userIsLoggedIn) setUserIsLoggedIn(true);
+		}
+	}
 
 	return (
 		<div className={styles.root}>
@@ -58,21 +69,11 @@ const App: React.FC = () => {
 				/>
 				<Route
 					path="/register"
-					element={
-						<Register
-							setUserData={setUserData}
-							setIsLoggedIn={setUserIsLoggedIn}
-						/>
-					}
+					element={<Register setToggleToCheckTokens={setToggleToCheckTokens} />}
 				/>
 				<Route
 					path="/login"
-					element={
-						<Login
-							setUserData={setUserData}
-							setIsLoggedIn={setUserIsLoggedIn}
-						/>
-					}
+					element={<Login setToggleToCheckTokens={setToggleToCheckTokens} />}
 				/>
 			</Routes>
 		</div>

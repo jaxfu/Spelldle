@@ -4,10 +4,7 @@ import {
 	T_SPELL_INFO,
 	T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
-	T_APIRESULT_VALIDATE_SESSION,
-	INIT_APIRESULT_VALIDATE_SESSION,
 } from "../types";
-import { apiRequestValidateSession } from "./requests";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
@@ -142,9 +139,12 @@ export function onRemoveGuessClick(
 
 // Storage
 export function AreTokensInLocalStorage(): boolean {
+	console.log("RUNNING AreTokensInLocalStorage()");
 	return (
 		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) !== null &&
-		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) !== null
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) !== null &&
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) !== "" &&
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) !== ""
 	);
 }
 

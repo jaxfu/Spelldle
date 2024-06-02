@@ -53,7 +53,7 @@ export async function apiRequestRegister(
 export async function apiRequestValidateSession(
 	userDataTokens: T_USERDATA_TOKENS
 ): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> {
-	console.log("Running validateSession");
+	console.log("Running apiRequestValidateSession");
 	try {
 		return await axios<T_APIRESULT_VALIDATE_SESSION>({
 			method: "POST",
