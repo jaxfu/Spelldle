@@ -4,6 +4,7 @@ import TurnBox from "../TurnBox/TurnBox";
 import {
 	type T_SPELL_INFO,
 	type T_APIRESULT_VALIDATE_SESSION,
+	INIT_APIRESULT_VALIDATE_SESSION,
 } from "../../types";
 import * as methods from "../../utils/methods";
 import Navbar from "../Navbar/Navbar";
@@ -18,6 +19,9 @@ import { QUERY_KEYS } from "../../utils/consts";
 import { AxiosResponse } from "axios";
 
 const App: React.FC = () => {
+	const [userData, setUserData] = useState<T_APIRESULT_VALIDATE_SESSION>(
+		methods.deepCopyObject(INIT_APIRESULT_VALIDATE_SESSION)
+	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
@@ -27,7 +31,7 @@ const App: React.FC = () => {
 	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
 
 	useEffect(() => {
-		console.log("RUNNING USEEFFECT");
+		console.log("RUNNING USEEFFECT IN APP");
 		const tokensInStorage = methods.AreTokensInLocalStorage();
 		setEnableQueryFn((current) => {
 			if (current !== tokensInStorage) return tokensInStorage;
@@ -44,19 +48,24 @@ const App: React.FC = () => {
 		enabled: enableQueryFn,
 	});
 
-	if (isPending) console.log("PENDING");
+	if (isPending) {
+		if (fetchStatus === "fetching") console.log("PENDING");
+	}
 	if (error) console.log(error);
 	if (isSuccess) {
 		console.log(JSON.stringify(data.data));
 		if (data.data.valid) {
 			if (!userIsLoggedIn) setUserIsLoggedIn(true);
+			if (userData != data.data) setUserData(data.data);
 		}
 	}
+
+	useEffect(() => {});
 
 	return (
 		<div className={styles.root}>
 			<ReactQueryDevtools initialIsOpen={false} />
-			<Navbar isLoggedIn={userIsLoggedIn} />
+			<Navbar userData={userData} isLoggedIn={userIsLoggedIn} />
 			<Routes>
 				<Route
 					path="/game"

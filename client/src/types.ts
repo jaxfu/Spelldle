@@ -171,18 +171,11 @@ export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 
 // USER
-export type T_USERDATA_ALL = {
-	user_data_account: T_USERDATA_ACCOUNT;
-	user_data_tokens: T_USERDATA_TOKENS;
-};
-
 export type T_USERDATA_ACCOUNT = {
-	user_id: number;
 	username: string;
 };
 
 export const INIT_USERDATA_ACCOUNT: T_USERDATA_ACCOUNT = {
-	user_id: 0,
 	username: "",
 };
 
@@ -204,6 +197,20 @@ export type T_USERDATA_TOKENS = {
 export const INIT_USERDATA_TOKENS: T_USERDATA_TOKENS = {
 	access_token: "",
 	refresh_token: "",
+};
+
+export type T_USERDATA_ALL = {
+	user_id: number;
+	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_personal: T_USERDATA_PERSONAL;
+	user_data_tokens: T_USERDATA_TOKENS;
+};
+
+export const INIT_USERDATA_ALL: T_USERDATA_ALL = {
+	user_id: 0,
+	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
+	user_data_tokens: deepCopyObject(INIT_USERDATA_TOKENS),
 };
 
 // REGISTER
