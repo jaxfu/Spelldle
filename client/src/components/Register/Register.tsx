@@ -3,7 +3,6 @@ import styles from "./Register.module.scss";
 import { sendToLocalStorage } from "../../utils/methods.tsx";
 import { apiRequestRegister } from "../../utils/requests.ts";
 import {
-	T_USERDATA_ACCOUNT,
 	INIT_USERINPUT_REGISTER,
 	T_APIRESULT_REGISTER,
 	T_USERINPUT_REGISTER,
