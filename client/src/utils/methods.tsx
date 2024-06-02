@@ -180,3 +180,8 @@ export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 		`${LOCAL_STORAGE_TOKENS_KEYS.refresh_token}: ${userDataTokens.refresh_token}`
 	);
 }
+
+export function clearTokensFromLocalStorage() {
+	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.access_token);
+	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
+}

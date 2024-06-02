@@ -57,15 +57,21 @@ const App: React.FC = () => {
 		if (data.data.valid) {
 			if (!userIsLoggedIn) setUserIsLoggedIn(true);
 			if (userData != data.data) setUserData(data.data);
+		} else {
+			if (userData != INIT_APIRESULT_VALIDATE_SESSION)
+				setUserData(methods.deepCopyObject(INIT_APIRESULT_VALIDATE_SESSION));
 		}
 	}
-
-	useEffect(() => {});
 
 	return (
 		<div className={styles.root}>
 			<ReactQueryDevtools initialIsOpen={false} />
-			<Navbar userData={userData} isLoggedIn={userIsLoggedIn} />
+			<Navbar
+				userData={userData}
+				setUserData={setUserData}
+				setEnableQueryFn={setEnableQueryFn}
+				userIsLoggedIn={userIsLoggedIn}
+			/>
 			<Routes>
 				<Route
 					path="/game"
