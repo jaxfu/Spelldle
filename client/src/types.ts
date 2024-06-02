@@ -179,13 +179,19 @@ export type T_USERDATA_ALL = {
 export type T_USERDATA_ACCOUNT = {
 	user_id: number;
 	username: string;
+};
+
+export const INIT_USERDATA_ACCOUNT: T_USERDATA_ACCOUNT = {
+	user_id: 0,
+	username: "",
+};
+
+export type T_USERDATA_PERSONAL = {
 	first_name: string;
 	last_name: string;
 };
 
-export const INIT_USERDATA_ACCOUNT: T_USERDATA_ACCOUNT = {
-	user_id: -1,
-	username: "",
+export const INIT_USERDATA_PERSONAL: T_USERDATA_PERSONAL = {
 	first_name: "",
 	last_name: "",
 };
@@ -219,13 +225,17 @@ export const INIT_USERINPUT_REGISTER: T_USERINPUT_REGISTER = {
 
 export type T_APIRESULT_REGISTER = {
 	valid: boolean;
+	user_id: number;
 	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_personal: T_USERDATA_PERSONAL;
 	user_data_tokens: T_USERDATA_TOKENS;
 };
 
 export const INIT_APIRESULT_REGISTER: T_APIRESULT_REGISTER = {
 	valid: false,
+	user_id: 0,
 	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 	user_data_tokens: deepCopyObject(INIT_USERDATA_TOKENS),
 };
 
@@ -242,23 +252,31 @@ export const INIT_USERINPUT_LOGIN: T_USERINPUT_LOGIN = {
 
 export type T_APIRESULT_LOGIN = {
 	valid: boolean;
+	user_id: number;
 	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_personal: T_USERDATA_PERSONAL;
 	user_data_tokens: T_USERDATA_TOKENS;
 };
 
 export const INIT_APIRESULT_LOGIN: T_APIRESULT_LOGIN = {
 	valid: false,
+	user_id: 0,
 	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 	user_data_tokens: deepCopyObject(INIT_USERDATA_TOKENS),
 };
 
 // VALIDATE
 export type T_APIRESULT_VALIDATE_SESSION = {
 	valid: boolean;
-	user_data: T_USERDATA_ACCOUNT;
+	user_id: number;
+	user_data_account: T_USERDATA_ACCOUNT;
+	user_data_personal: T_USERDATA_PERSONAL;
 };
 
 export const INIT_APIRESULT_VALIDATE_SESSION: T_APIRESULT_VALIDATE_SESSION = {
 	valid: false,
-	user_data: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_id: 0,
+	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 };
