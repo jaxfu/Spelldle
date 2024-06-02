@@ -43,7 +43,7 @@ const App: React.FC = () => {
 				}
 			}
 		},
-		enabled: methods.isSessionIdInLocalStorage(),
+		enabled: methods.AreTokensInLocalStorage(),
 	});
 
 	if (isPending) console.log("PENDING...");

@@ -11,6 +11,7 @@ import { apiRequestValidateSession } from "./requests";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
+import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
 
 // Multi
 export function getRecommendations(e: any, values: string[]): string[] {
@@ -140,43 +141,53 @@ export function onRemoveGuessClick(
 }
 
 // Storage
-export function isSessionIdInLocalStorage(): boolean {
+export function AreTokensInLocalStorage(): boolean {
 	return !(
-		localStorage.getItem("session_key") === null ||
-		localStorage.getItem("session_key") === ""
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) === "" ||
+		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) === ""
 	);
 }
 
 export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
-	const sessionInfo: T_USERDATA_TOKENS = { ...INIT_USERDATA_TOKENS };
+	const userDataTokens: T_USERDATA_TOKENS = { ...INIT_USERDATA_TOKENS };
 
 	try {
-		sessionInfo.user_id = parseInt(localStorage.getItem("user_id") || "-1");
-		sessionInfo.session_key = localStorage.getItem("session_key") || "";
-		if (sessionInfo.user_id === -1 || sessionInfo.session_key === "")
-			throw new Error("Session Data Was Not Found");
-		return sessionInfo;
+		userDataTokens.access_token =
+			localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) || "";
+		userDataTokens.refresh_token =
+			localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token) || "";
+		return userDataTokens;
 	} catch (err: any) {
 		throw new Error(`Error in getUserSessionDataFromStorage: ${err}`);
 	}
 }
 
-export function sendToLocalStorage(sessionInfo: T_USERDATA_TOKENS) {
-	localStorage.setItem("user_id", String(sessionInfo.user_id));
-	localStorage.setItem("session_key", sessionInfo.session_key);
+export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
+	localStorage.setItem(
+		LOCAL_STORAGE_TOKENS_KEYS.access_token,
+		userDataTokens.access_token
+	);
+	localStorage.setItem(
+		LOCAL_STORAGE_TOKENS_KEYS.refresh_token,
+		userDataTokens.refresh_token
+	);
 
 	console.log("Sent to localStorage: ");
-	console.log(`user_id: ${localStorage.getItem("user_id")}`);
-	console.log(`session_key: ${localStorage.getItem("session_key")}`);
+	console.log(
+		`${LOCAL_STORAGE_TOKENS_KEYS.access_token}: ${userDataTokens.access_token}`
+	);
+	console.log(
+		`${LOCAL_STORAGE_TOKENS_KEYS.refresh_token}: ${userDataTokens.refresh_token}`
+	);
 }
 
 // Auth
 export async function checkValidSession(): Promise<T_APIRESULT_VALIDATE_SESSION> {
-	const invalidResult: T_APIRESULT_VALIDATE_SESSION = {
-		...INIT_APIRESULT_VALIDATE_SESSION,
-	};
+	const invalidResult: T_APIRESULT_VALIDATE_SESSION = deepCopyObject(
+		INIT_APIRESULT_VALIDATE_SESSION
+	);
 
-	if (!isSessionIdInLocalStorage()) return invalidResult;
+	if (!AreTokensInLocalStorage()) return invalidResult;
 
 	try {
 		return await apiRequestValidateSession(getUserSessionDataFromStorage());
