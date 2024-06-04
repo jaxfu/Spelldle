@@ -1,17 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
 	type T_SPELL_INFO,
 	type T_APIRESULT_VALIDATE_SESSION,
-	INIT_APIRESULT_VALIDATE_SESSION,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 } from "../../types";
 import * as methods from "../../utils/methods";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
-import { T_USERDATA_ACCOUNT, INIT_USERDATA_ACCOUNT } from "../../types";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -25,10 +23,24 @@ const App: React.FC = () => {
 		methods.deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
-	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(true);
+	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
+	const [toggleToRunUserDataUseEffect, setToggleToRunUserDataUseEffect] =
+		useState<boolean>(false);
+
+	const allowSetUserDataFromFetch = useRef<boolean>(true);
+
+	useEffect(() => {
+		const tokensAreInStorage = methods.AreTokensInLocalStorage();
+		if (!tokensAreInStorage) {
+			console.log("NO TOKENS DETECTED");
+		} else {
+			console.log("TOKENS DETECTED");
+			setEnableQueryFn(true);
+		}
+	}, []);
 
 	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
@@ -36,7 +48,7 @@ const App: React.FC = () => {
 			console.log("RUNNING QUERYFN");
 			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
 		},
-		enabled: methods.AreTokensInLocalStorage() && enableQueryFn,
+		enabled: enableQueryFn,
 	});
 
 	if (isPending) {
@@ -44,8 +56,18 @@ const App: React.FC = () => {
 	}
 	if (error) console.log(error);
 	if (isSuccess) {
-		console.log(JSON.stringify(data.data));
+		console.log("FETCH SUCCESS");
 	}
+
+	useEffect(() => {
+		console.log("RUNNING UserDataUseEffect");
+		if (isSuccess && data.data.valid && allowSetUserDataFromFetch) {
+			console.log(`Setting userData: ${JSON.stringify(data.data)}`);
+			setUserData(methods.createUserDataStateFromApiResult(data.data));
+			setEnableQueryFn(false);
+			allowSetUserDataFromFetch.current = false;
+		}
+	}, [toggleToRunUserDataUseEffect, isSuccess]);
 
 	return (
 		<div className={styles.root}>
@@ -73,7 +95,7 @@ const App: React.FC = () => {
 					element={
 						<Login
 							setUserData={setUserData}
-							setEnableQueryFn={setEnableQueryFn}
+							allowSetUserDataFromFetch={allowSetUserDataFromFetch}
 							setUserIsLoggedIn={setUserIsLoggedIn}
 						/>
 					}
