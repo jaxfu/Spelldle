@@ -5,6 +5,7 @@ import {
 	type T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
 	type T_USERDATA_STATE,
+	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
@@ -139,8 +140,18 @@ export function onRemoveGuessClick(
 	});
 }
 
+// Login
+export function logoutUser(
+	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>
+): void {
+	clearTokensFromLocalStorage();
+	setUserIsLoggedIn(false);
+	setUserData(deepCopyObject(INIT_USERDATA_STATE));
+}
+
 // Storage
-export function AreTokensInLocalStorage(): boolean {
+export function areTokensInLocalStorage(): boolean {
 	console.log("RUNNING AreTokensInLocalStorage()");
 	return (
 		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) !== null &&
@@ -184,6 +195,7 @@ export function sendTokensToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 }
 
 export function clearTokensFromLocalStorage() {
+	console.log("CLEARING TOKENS FROM LOCALSOTRAGE");
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.access_token);
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
 }
@@ -203,16 +215,14 @@ export function setUserDataFromAPIResult(
 	data: T_APIRESULTS,
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
-	allowSetUserData: React.MutableRefObject<boolean>
+	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>
 ): void {
 	console.log(
 		`Setting userData: ${JSON.stringify(
 			createUserDataStateFromApiResult(data)
 		)}`
 	);
-	//setUserData(createUserDataStateFromApiResult(data));
+	setUserData(createUserDataStateFromApiResult(data));
 	setUserIsLoggedIn(true);
-	//setEnableQueryFn(false);
-	allowSetUserData.current = false;
+	setEnableQueryFn(false);
 }

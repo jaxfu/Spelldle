@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
@@ -7,7 +7,6 @@ import {
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 } from "../../types";
-import * as methods from "../../utils/methods";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Register from "../Register/Register";
@@ -17,58 +16,57 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequestValidateSession } from "../../utils/requests";
 import { QUERY_KEYS } from "../../utils/consts";
 import { AxiosResponse } from "axios";
+import {
+	deepCopyObject,
+	createNewSpellInfoMap,
+	areTokensInLocalStorage,
+	getUserSessionDataFromStorage,
+	setUserDataFromAPIResult,
+} from "../../utils/methods";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_USERDATA_STATE>(
-		methods.deepCopyObject(INIT_USERDATA_STATE)
+		deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
-		methods.createNewSpellInfoMap()
+		createNewSpellInfoMap()
 	);
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
-	const allowSetUserData = useRef<boolean>(true);
 
-	// useEffect(() => {
-	// 	const tokensAreInStorage = methods.AreTokensInLocalStorage();
-	// 	if (!tokensAreInStorage) {
-	// 		console.log("NO TOKENS DETECTED");
-	// 	} else {
-	// 		console.log("TOKENS DETECTED");
-	// 		allowSetUserData.current = true;
-	// 		setEnableInitialQueryFn(true);
-	// 	}
-	// }, []);
+	useEffect(() => {
+		const tokensAreInStorage = areTokensInLocalStorage();
+		if (!tokensAreInStorage) {
+			console.log("NO TOKENS DETECTED");
+		} else {
+			console.log("TOKENS DETECTED");
+			setEnableInitialQueryFn(true);
+		}
+	}, []);
 
-	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
+	const { isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
 		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> => {
 			console.log("RUNNING QUERYFN");
-			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
+			return apiRequestValidateSession(getUserSessionDataFromStorage());
 		},
-		//enabled: enableInitialQueryFn,
+		enabled: enableInitialQueryFn,
 	});
 
-	if (isPending) {
-		if (fetchStatus === "fetching") console.log("FETCHING");
-	}
 	if (error) console.log(error);
-	if (isSuccess) {
-		console.log("FETCH SUCCESSFUL");
-		console.log(data.data);
-		//setUserIsLoggedIn(true);
-		//allowSetUserData.current = false;
-		// methods.setUserDataFromAPIResult(
-		// 	data.data,
-		// 	setUserData,
-		// 	setUserIsLoggedIn,
-		// 	setEnableInitialQueryFn,
-		// 	allowSetUserData
-		// );
-	}
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		if (isSuccess) {
+			console.log(`ISSUCCESS USEEFFECT: ${JSON.stringify(data.data)}`);
+			setUserDataFromAPIResult(
+				data.data,
+				setUserData,
+				setUserIsLoggedIn,
+				setEnableInitialQueryFn
+			);
+		}
+	}, [isSuccess]);
 
 	return (
 		<div className={styles.root}>
@@ -78,7 +76,6 @@ const App: React.FC = () => {
 				setUserData={setUserData}
 				userIsLoggedIn={userIsLoggedIn}
 				setUserIsLoggedIn={setUserIsLoggedIn}
-				allowSetUserData={allowSetUserData}
 			/>
 			<Routes>
 				<Route
@@ -98,7 +95,6 @@ const App: React.FC = () => {
 							setUserData={setUserData}
 							setUserIsLoggedIn={setUserIsLoggedIn}
 							setEnableQueryFn={setEnableInitialQueryFn}
-							allowSetUserData={allowSetUserData}
 						/>
 					}
 				/>
