@@ -1,9 +1,12 @@
 import CATEGORY_INFO from "../CATEGORY_INFO";
 import {
-	T_SINGLE_CATEGORY_POSSIBILITIES,
-	T_SPELL_INFO,
-	T_USERDATA_TOKENS,
+	type T_SINGLE_CATEGORY_POSSIBILITIES,
+	type T_SPELL_INFO,
+	type T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
+	type T_USERDATA_STATE,
+	INIT_USERDATA_STATE,
+	type T_APIRESULTS,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
@@ -137,8 +140,18 @@ export function onRemoveGuessClick(
 	});
 }
 
+// Login
+export function logoutUser(
+	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>
+): void {
+	clearTokensFromLocalStorage();
+	setUserIsLoggedIn(false);
+	setUserData(deepCopyObject(INIT_USERDATA_STATE));
+}
+
 // Storage
-export function AreTokensInLocalStorage(): boolean {
+export function areTokensInLocalStorage(): boolean {
 	console.log("RUNNING AreTokensInLocalStorage()");
 	return (
 		localStorage.getItem(LOCAL_STORAGE_TOKENS_KEYS.access_token) !== null &&
@@ -162,7 +175,7 @@ export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
 	}
 }
 
-export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
+export function sendTokensToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 	localStorage.setItem(
 		LOCAL_STORAGE_TOKENS_KEYS.access_token,
 		userDataTokens.access_token
@@ -179,4 +192,37 @@ export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 	console.log(
 		`${LOCAL_STORAGE_TOKENS_KEYS.refresh_token}: ${userDataTokens.refresh_token}`
 	);
+}
+
+export function clearTokensFromLocalStorage() {
+	console.log("CLEARING TOKENS FROM LOCALSOTRAGE");
+	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.access_token);
+	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
+}
+
+// Data
+export function createUserDataStateFromApiResult(
+	apiResult: T_APIRESULTS
+): T_USERDATA_STATE {
+	return {
+		user_id: apiResult.user_id,
+		user_data_account: apiResult.user_data_account,
+		user_data_personal: apiResult.user_data_personal,
+	};
+}
+
+export function setUserDataFromAPIResult(
+	data: T_APIRESULTS,
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
+	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>
+): void {
+	console.log(
+		`Setting userData: ${JSON.stringify(
+			createUserDataStateFromApiResult(data)
+		)}`
+	);
+	setUserData(createUserDataStateFromApiResult(data));
+	setUserIsLoggedIn(true);
+	setEnableQueryFn(false);
 }

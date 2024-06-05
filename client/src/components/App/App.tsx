@@ -3,13 +3,12 @@ import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
 	type T_SPELL_INFO,
-	type T_APIRESULT_VALIDATE_SESSION,
-	INIT_APIRESULT_VALIDATE_SESSION,
+	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
+	type T_USERDATA_STATE,
+	INIT_USERDATA_STATE,
 } from "../../types";
-import * as methods from "../../utils/methods";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
-import { T_USERDATA_ACCOUNT, INIT_USERDATA_ACCOUNT } from "../../types";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -17,55 +16,67 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequestValidateSession } from "../../utils/requests";
 import { QUERY_KEYS } from "../../utils/consts";
 import { AxiosResponse } from "axios";
+import {
+	deepCopyObject,
+	createNewSpellInfoMap,
+	areTokensInLocalStorage,
+	getUserSessionDataFromStorage,
+	setUserDataFromAPIResult,
+} from "../../utils/methods";
 
 const App: React.FC = () => {
-	const [userData, setUserData] = useState<T_APIRESULT_VALIDATE_SESSION>(
-		methods.deepCopyObject(INIT_APIRESULT_VALIDATE_SESSION)
+	const [userData, setUserData] = useState<T_USERDATA_STATE>(
+		deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
-		methods.createNewSpellInfoMap()
+		createNewSpellInfoMap()
 	);
-	const [toggleToCheckTokens, setToggleToCheckTokens] =
+	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
-	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
 
 	useEffect(() => {
-		console.log("RUNNING USEEFFECT IN APP");
-		const tokensInStorage = methods.AreTokensInLocalStorage();
-		setEnableQueryFn((current) => {
-			if (current !== tokensInStorage) return tokensInStorage;
-			return current;
-		});
-	}, [toggleToCheckTokens]);
+		const tokensAreInStorage = areTokensInLocalStorage();
+		if (!tokensAreInStorage) {
+			console.log("NO TOKENS DETECTED");
+		} else {
+			console.log("TOKENS DETECTED");
+			setEnableInitialQueryFn(true);
+		}
+	}, []);
 
-	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
+	const { isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
-		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> => {
+		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> => {
 			console.log("RUNNING QUERYFN");
-			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
+			return apiRequestValidateSession(getUserSessionDataFromStorage());
 		},
-		enabled: enableQueryFn,
+		enabled: enableInitialQueryFn,
 	});
 
-	if (isPending) {
-		if (fetchStatus === "fetching") console.log("PENDING");
-	}
 	if (error) console.log(error);
-	if (isSuccess) {
-		console.log(JSON.stringify(data.data));
-		if (data.data.valid) {
-			if (!userIsLoggedIn) setUserIsLoggedIn(true);
-			if (userData != data.data) setUserData(data.data);
-		}
-	}
 
-	useEffect(() => {});
+	useEffect(() => {
+		if (isSuccess) {
+			console.log(`ISSUCCESS USEEFFECT: ${JSON.stringify(data.data)}`);
+			setUserDataFromAPIResult(
+				data.data,
+				setUserData,
+				setUserIsLoggedIn,
+				setEnableInitialQueryFn
+			);
+		}
+	}, [isSuccess]);
 
 	return (
 		<div className={styles.root}>
 			<ReactQueryDevtools initialIsOpen={false} />
-			<Navbar userData={userData} isLoggedIn={userIsLoggedIn} />
+			<Navbar
+				userData={userData}
+				setUserData={setUserData}
+				userIsLoggedIn={userIsLoggedIn}
+				setUserIsLoggedIn={setUserIsLoggedIn}
+			/>
 			<Routes>
 				<Route
 					path="/game"
@@ -78,11 +89,23 @@ const App: React.FC = () => {
 				/>
 				<Route
 					path="/register"
-					element={<Register setToggleToCheckTokens={setToggleToCheckTokens} />}
+					element={
+						<Register
+							setUserData={setUserData}
+							setUserIsLoggedIn={setUserIsLoggedIn}
+							setEnableQueryFn={setEnableInitialQueryFn}
+						/>
+					}
 				/>
 				<Route
 					path="/login"
-					element={<Login setToggleToCheckTokens={setToggleToCheckTokens} />}
+					element={
+						<Login
+							setUserData={setUserData}
+							setUserIsLoggedIn={setUserIsLoggedIn}
+							setEnableQueryFn={setEnableInitialQueryFn}
+						/>
+					}
 				/>
 			</Routes>
 		</div>
