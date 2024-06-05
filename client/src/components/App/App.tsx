@@ -87,7 +87,16 @@ const App: React.FC = () => {
 						/>
 					}
 				/>
-				<Route path="/register" element={<Register />} />
+				<Route
+					path="/register"
+					element={
+						<Register
+							setUserData={setUserData}
+							setUserIsLoggedIn={setUserIsLoggedIn}
+							setEnableQueryFn={setEnableInitialQueryFn}
+						/>
+					}
+				/>
 				<Route
 					path="/login"
 					element={
