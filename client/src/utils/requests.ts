@@ -4,7 +4,7 @@ import {
 	T_USERINPUT_LOGIN,
 	T_APIRESULT_REGISTER,
 	T_USERINPUT_REGISTER,
-	type T_APIRESULT_VALIDATE_SESSION,
+	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import { T_USERDATA_TOKENS } from "../types";
 
@@ -52,10 +52,10 @@ export async function apiRequestRegister(
 
 export async function apiRequestValidateSession(
 	userDataTokens: T_USERDATA_TOKENS
-): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> {
+): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> {
 	console.log("Running apiRequestValidateSession");
 	try {
-		return await axios<T_APIRESULT_VALIDATE_SESSION>({
+		return await axios<T_APIRESULT_VALIDATE_ACCESS_TOKEN>({
 			method: "POST",
 			url: VALIDATE_ROUTE,
 			data: {

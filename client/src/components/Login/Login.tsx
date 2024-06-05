@@ -16,8 +16,9 @@ import { QUERY_KEYS } from "../../utils/consts.ts";
 
 interface IProps {
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>;
-	allowSetUserDataFromFetch: React.MutableRefObject<boolean>;
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>;
+	allowSetUserData: React.MutableRefObject<boolean>;
 }
 
 const Login: React.FC<IProps> = (props) => {
@@ -37,11 +38,15 @@ const Login: React.FC<IProps> = (props) => {
 			console.log(err);
 		},
 		onSuccess(data) {
+			methods.sendToLocalStorage(data.data.user_data_tokens);
 			if (data.data.valid) {
-				methods.sendToLocalStorage(data.data.user_data_tokens);
-				props.setUserData(methods.createUserDataStateFromApiResult(data.data));
-				props.setUserIsLoggedIn(true);
-				props.allowSetUserDataFromFetch.current = false;
+				methods.setUserDataFromAPIResult(
+					data.data,
+					props.setUserData,
+					props.setUserIsLoggedIn,
+					props.setEnableQueryFn,
+					props.allowSetUserData
+				);
 			}
 		},
 	});

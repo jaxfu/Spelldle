@@ -3,7 +3,7 @@ import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
 	type T_SPELL_INFO,
-	type T_APIRESULT_VALIDATE_SESSION,
+	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 } from "../../types";
@@ -23,14 +23,15 @@ const App: React.FC = () => {
 		methods.deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
-	const [enableQueryFn, setEnableQueryFn] = useState<boolean>(false);
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
 	const [toggleToRunUserDataUseEffect, setToggleToRunUserDataUseEffect] =
 		useState<boolean>(false);
 
-	const allowSetUserDataFromFetch = useRef<boolean>(true);
+	const [enableInitialQueryFn, setEnableInitialQueryFn] =
+		useState<boolean>(false);
+	const allowSetUserData = useRef<boolean>(false);
 
 	useEffect(() => {
 		const tokensAreInStorage = methods.AreTokensInLocalStorage();
@@ -38,17 +39,18 @@ const App: React.FC = () => {
 			console.log("NO TOKENS DETECTED");
 		} else {
 			console.log("TOKENS DETECTED");
-			setEnableQueryFn(true);
+			allowSetUserData.current = true;
+			setEnableInitialQueryFn(true);
 		}
 	}, []);
 
 	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
-		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_SESSION>> => {
+		queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> => {
 			console.log("RUNNING QUERYFN");
 			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
 		},
-		enabled: enableQueryFn,
+		enabled: enableInitialQueryFn,
 	});
 
 	if (isPending) {
@@ -56,18 +58,27 @@ const App: React.FC = () => {
 	}
 	if (error) console.log(error);
 	if (isSuccess) {
-		console.log("FETCH SUCCESS");
+		console.log("FETCH SUCCESSFUL");
+		if (data.data.valid && allowSetUserData.current) {
+			methods.setUserDataFromAPIResult(
+				data.data,
+				setUserData,
+				setUserIsLoggedIn,
+				setEnableInitialQueryFn,
+				allowSetUserData
+			);
+		}
 	}
 
-	useEffect(() => {
-		console.log("RUNNING UserDataUseEffect");
-		if (isSuccess && data.data.valid && allowSetUserDataFromFetch) {
-			console.log(`Setting userData: ${JSON.stringify(data.data)}`);
-			setUserData(methods.createUserDataStateFromApiResult(data.data));
-			setEnableQueryFn(false);
-			allowSetUserDataFromFetch.current = false;
-		}
-	}, [toggleToRunUserDataUseEffect, isSuccess]);
+	// useEffect(() => {
+	// 	console.log("RUNNING UserDataUseEffect");
+	// 	if (isSuccess && data.data.valid && allowSetUserDataFromFetch) {
+	// 		console.log(`Setting userData: ${JSON.stringify(data.data)}`);
+	// 		setUserData(methods.createUserDataStateFromApiResult(data.data));
+	// 		setEnableQueryFn(false);
+	// 		allowSetUserDataFromFetch.current = false;
+	// 	}
+	// }, [toggleToRunUserDataUseEffect, isSuccess]);
 
 	return (
 		<div className={styles.root}>
@@ -77,7 +88,7 @@ const App: React.FC = () => {
 				setUserData={setUserData}
 				userIsLoggedIn={userIsLoggedIn}
 				setUserIsLoggedIn={setUserIsLoggedIn}
-				setEnableQueryFn={setEnableQueryFn}
+				allowSetUserData={allowSetUserData}
 			/>
 			<Routes>
 				<Route
@@ -95,8 +106,9 @@ const App: React.FC = () => {
 					element={
 						<Login
 							setUserData={setUserData}
-							allowSetUserDataFromFetch={allowSetUserDataFromFetch}
 							setUserIsLoggedIn={setUserIsLoggedIn}
+							setEnableQueryFn={setEnableInitialQueryFn}
+							allowSetUserData={allowSetUserData}
 						/>
 					}
 				/>

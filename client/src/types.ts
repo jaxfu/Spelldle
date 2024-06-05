@@ -286,20 +286,28 @@ export const INIT_APIRESULT_LOGIN: T_APIRESULT_LOGIN = {
 };
 
 // VALIDATE
-export type T_APIRESULT_VALIDATE_SESSION = {
+export type T_APIRESULT_VALIDATE_ACCESS_TOKEN = {
 	valid: boolean;
 	user_id: number;
 	user_data_account: T_USERDATA_ACCOUNT;
 	user_data_personal: T_USERDATA_PERSONAL;
 };
 
-export const INIT_APIRESULT_VALIDATE_SESSION: T_APIRESULT_VALIDATE_SESSION = {
-	valid: false,
-	user_id: 0,
-	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
-	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
-};
+export const INIT_APIRESULT_VALIDATE_ACCESS_TOKEN: T_APIRESULT_VALIDATE_ACCESS_TOKEN =
+	{
+		valid: false,
+		user_id: 0,
+		user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
+		user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
+	};
 
+// ALL API_RESULTS
+export type T_APIRESULTS =
+	| T_APIRESULT_LOGIN
+	| T_APIRESULT_REGISTER
+	| T_APIRESULT_VALIDATE_ACCESS_TOKEN;
+
+// React-Query
 export type T_QUERY_KEYS = {
 	userData: string;
 };

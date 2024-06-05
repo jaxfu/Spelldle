@@ -7,7 +7,8 @@ import {
 	type T_USERDATA_STATE,
 	type T_APIRESULT_LOGIN,
 	type T_APIRESULT_REGISTER,
-	type T_APIRESULT_VALIDATE_SESSION,
+	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
+	type T_APIRESULTS,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
@@ -192,14 +193,25 @@ export function clearTokensFromLocalStorage() {
 
 // Data
 export function createUserDataStateFromApiResult(
-	apiResult:
-		| T_APIRESULT_LOGIN
-		| T_APIRESULT_REGISTER
-		| T_APIRESULT_VALIDATE_SESSION
+	apiResult: T_APIRESULTS
 ): T_USERDATA_STATE {
 	return {
 		user_id: apiResult.user_id,
 		user_data_account: apiResult.user_data_account,
 		user_data_personal: apiResult.user_data_personal,
 	};
+}
+
+export function setUserDataFromAPIResult(
+	data: T_APIRESULTS,
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
+	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
+	allowSetUserData: React.MutableRefObject<boolean>
+): void {
+	console.log(`Setting userData: ${JSON.stringify(data)}`);
+	setUserData(createUserDataStateFromApiResult(data));
+	setUserIsLoggedIn(true);
+	setEnableQueryFn(false);
+	allowSetUserData.current = false;
 }

@@ -1,11 +1,6 @@
 import React from "react";
 import styles from "./Navbar.module.scss";
-import {
-	INIT_APIRESULT_VALIDATE_SESSION,
-	INIT_USERDATA_STATE,
-	type T_APIRESULT_VALIDATE_SESSION,
-	type T_USERDATA_STATE,
-} from "../../types";
+import { INIT_USERDATA_STATE, type T_USERDATA_STATE } from "../../types";
 import * as methods from "../../utils/methods";
 
 interface IProps {
@@ -13,10 +8,19 @@ interface IProps {
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>;
 	userIsLoggedIn: boolean;
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>;
+	allowSetUserData: React.MutableRefObject<boolean>;
 }
 
 const Navbar: React.FC<IProps> = (props) => {
+	function logoutUser(
+		setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+		setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>
+	): void {
+		methods.clearTokensFromLocalStorage();
+		setUserIsLoggedIn(false);
+		setUserData(methods.deepCopyObject(INIT_USERDATA_STATE));
+	}
+
 	return (
 		<div className={styles.root}>
 			<span>
@@ -25,12 +29,7 @@ const Navbar: React.FC<IProps> = (props) => {
 					: "NOT LOGGED IN"}
 			</span>
 			<button
-				onClick={() => {
-					props.setEnableQueryFn(false);
-					methods.clearTokensFromLocalStorage();
-					props.setUserData(methods.deepCopyObject(INIT_USERDATA_STATE));
-					props.setUserIsLoggedIn(false);
-				}}
+				onClick={() => logoutUser(props.setUserIsLoggedIn, props.setUserData)}
 			>
 				Logout
 			</button>
