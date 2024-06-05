@@ -5,9 +5,6 @@ import {
 	type T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
 	type T_USERDATA_STATE,
-	type T_APIRESULT_LOGIN,
-	type T_APIRESULT_REGISTER,
-	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_APIRESULTS,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
@@ -167,7 +164,7 @@ export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
 	}
 }
 
-export function sendToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
+export function sendTokensToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 	localStorage.setItem(
 		LOCAL_STORAGE_TOKENS_KEYS.access_token,
 		userDataTokens.access_token
@@ -209,9 +206,13 @@ export function setUserDataFromAPIResult(
 	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
 	allowSetUserData: React.MutableRefObject<boolean>
 ): void {
-	console.log(`Setting userData: ${JSON.stringify(data)}`);
-	setUserData(createUserDataStateFromApiResult(data));
+	console.log(
+		`Setting userData: ${JSON.stringify(
+			createUserDataStateFromApiResult(data)
+		)}`
+	);
+	//setUserData(createUserDataStateFromApiResult(data));
 	setUserIsLoggedIn(true);
-	setEnableQueryFn(false);
+	//setEnableQueryFn(false);
 	allowSetUserData.current = false;
 }

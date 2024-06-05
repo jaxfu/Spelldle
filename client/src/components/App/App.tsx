@@ -26,23 +26,20 @@ const App: React.FC = () => {
 	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
 		methods.createNewSpellInfoMap()
 	);
-	const [toggleToRunUserDataUseEffect, setToggleToRunUserDataUseEffect] =
-		useState<boolean>(false);
-
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
-	const allowSetUserData = useRef<boolean>(false);
+	const allowSetUserData = useRef<boolean>(true);
 
-	useEffect(() => {
-		const tokensAreInStorage = methods.AreTokensInLocalStorage();
-		if (!tokensAreInStorage) {
-			console.log("NO TOKENS DETECTED");
-		} else {
-			console.log("TOKENS DETECTED");
-			allowSetUserData.current = true;
-			setEnableInitialQueryFn(true);
-		}
-	}, []);
+	// useEffect(() => {
+	// 	const tokensAreInStorage = methods.AreTokensInLocalStorage();
+	// 	if (!tokensAreInStorage) {
+	// 		console.log("NO TOKENS DETECTED");
+	// 	} else {
+	// 		console.log("TOKENS DETECTED");
+	// 		allowSetUserData.current = true;
+	// 		setEnableInitialQueryFn(true);
+	// 	}
+	// }, []);
 
 	const { isPending, isSuccess, error, data, fetchStatus } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
@@ -50,7 +47,7 @@ const App: React.FC = () => {
 			console.log("RUNNING QUERYFN");
 			return apiRequestValidateSession(methods.getUserSessionDataFromStorage());
 		},
-		enabled: enableInitialQueryFn,
+		//enabled: enableInitialQueryFn,
 	});
 
 	if (isPending) {
@@ -59,26 +56,19 @@ const App: React.FC = () => {
 	if (error) console.log(error);
 	if (isSuccess) {
 		console.log("FETCH SUCCESSFUL");
-		if (data.data.valid && allowSetUserData.current) {
-			methods.setUserDataFromAPIResult(
-				data.data,
-				setUserData,
-				setUserIsLoggedIn,
-				setEnableInitialQueryFn,
-				allowSetUserData
-			);
-		}
+		console.log(data.data);
+		//setUserIsLoggedIn(true);
+		//allowSetUserData.current = false;
+		// methods.setUserDataFromAPIResult(
+		// 	data.data,
+		// 	setUserData,
+		// 	setUserIsLoggedIn,
+		// 	setEnableInitialQueryFn,
+		// 	allowSetUserData
+		// );
 	}
 
-	// useEffect(() => {
-	// 	console.log("RUNNING UserDataUseEffect");
-	// 	if (isSuccess && data.data.valid && allowSetUserDataFromFetch) {
-	// 		console.log(`Setting userData: ${JSON.stringify(data.data)}`);
-	// 		setUserData(methods.createUserDataStateFromApiResult(data.data));
-	// 		setEnableQueryFn(false);
-	// 		allowSetUserDataFromFetch.current = false;
-	// 	}
-	// }, [toggleToRunUserDataUseEffect, isSuccess]);
+	useEffect(() => {}, []);
 
 	return (
 		<div className={styles.root}>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Register.module.scss";
-import { sendToLocalStorage } from "../../utils/methods.tsx";
+import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
 import { apiRequestRegister } from "../../utils/requests.ts";
 import {
 	INIT_USERINPUT_REGISTER,
@@ -32,7 +32,7 @@ const Register: React.FC = () => {
 		},
 		onSuccess(data) {
 			if (data.data.valid) {
-				sendToLocalStorage(data.data.user_data_tokens);
+				sendTokensToLocalStorage(data.data.user_data_tokens);
 				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
 			} else {
 				console.log("Invalid Register");

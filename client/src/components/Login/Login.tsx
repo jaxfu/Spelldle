@@ -38,7 +38,7 @@ const Login: React.FC<IProps> = (props) => {
 			console.log(err);
 		},
 		onSuccess(data) {
-			methods.sendToLocalStorage(data.data.user_data_tokens);
+			methods.sendTokensToLocalStorage(data.data.user_data_tokens);
 			if (data.data.valid) {
 				methods.setUserDataFromAPIResult(
 					data.data,
