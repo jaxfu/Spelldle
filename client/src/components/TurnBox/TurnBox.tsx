@@ -1,13 +1,13 @@
 import TurnCell from "./children/TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
 import {
-	type T_SPELL_INFO,
+	type T_ALL_CURRENT_GUESS_INFO,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../types";
 
 interface IProps {
 	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
-	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const TurnBox: React.FC<IProps> = (props) => {

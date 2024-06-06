@@ -1,5 +1,5 @@
 import styles from "./TextInput.module.scss";
-import { type T_SPELL_INFO } from "../../../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../../../types";
 import * as methods from "../../../../../../utils/methods";
 import { handleInput } from "../../../../../../utils/inputHandlers";
 import { useState, useEffect } from "react";
@@ -11,7 +11,7 @@ interface IProps {
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
 	recommendationValues: string[];
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
-	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const TextInput: React.FC<IProps> = (props) => {

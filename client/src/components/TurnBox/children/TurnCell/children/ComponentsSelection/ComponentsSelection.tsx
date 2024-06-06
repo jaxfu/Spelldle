@@ -1,15 +1,15 @@
 import styles from "./ComponentsSelection.module.scss";
-import { type T_SPELL_INFO } from "../../../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../../../types";
 
 interface IProps {
-	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const ComponentsSelection: React.FC<IProps> = (props) => {
 	function componentSelectionCheckboxStateHandler(
 		e: React.ChangeEvent<HTMLInputElement>,
 		component: string,
-		allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>
+		allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>
 	) {
 		const COMPONENENTS_IDENTIFIER: string = "Components";
 		let currentComponentState: any = allCurrentGuessInfo.current.get(

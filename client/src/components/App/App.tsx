@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
-	type T_SPELL_INFO,
+	type T_ALL_CURRENT_GUESS_INFO,
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
@@ -34,7 +34,9 @@ const App: React.FC = () => {
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
-	const allCurrentGuessInfo = useRef<T_SPELL_INFO>(createNewSpellInfoMap());
+	const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
+		createNewSpellInfoMap()
+	);
 	const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
 		getAllCategoriesInfo()
 	);
@@ -76,7 +78,10 @@ const App: React.FC = () => {
 		<div className={styles.root}>
 			{/* DEBUG */}
 			<ReactQueryDevtools initialIsOpen={false} />
-			<GuessInfoButton allCurrentGuessInfo={allCurrentGuessInfo} />
+			<GuessInfoButton
+				allCurrentGuessInfo={allCurrentGuessInfo.current}
+				categoryInfo={allCategoriesInfo.current}
+			/>
 
 			{/* CORE */}
 			<Navbar

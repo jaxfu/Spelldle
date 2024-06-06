@@ -1,8 +1,8 @@
 import styles from "./LevelRitualToggle.module.scss";
-import { type T_SPELL_INFO } from "../../../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../../../types";
 
 interface IProps {
-	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const LevelRitualToggle: React.FC<IProps> = (props) => {

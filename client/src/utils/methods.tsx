@@ -1,5 +1,5 @@
 import {
-	type T_SPELL_INFO,
+	type T_ALL_CURRENT_GUESS_INFO,
 	type T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
 	type T_USERDATA_STATE,
@@ -50,7 +50,7 @@ export function getUniqueComponents(
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -104,7 +104,7 @@ export function getUniqueComponents(
 }
 
 // TurnBox
-export function createNewSpellInfoMap(): T_SPELL_INFO {
+export function createNewSpellInfoMap(): T_ALL_CURRENT_GUESS_INFO {
 	const map = new Map();
 	map.set("School", "");
 	map.set("Level", ["", false]);
@@ -231,11 +231,25 @@ export function setUserDataFromAPIResult(
 }
 
 export function createRequestObjectFromCurrentGuessInfo(
-	currentGuessInfo: T_SPELL_INFO
+	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
+	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO
 ): T_APIREQUEST_MAKE_GUESS {
 	const requestObject: T_APIREQUEST_MAKE_GUESS = deepCopyObject(
 		INIT_APIREQUEST_MAKE_GUESS
 	);
+
+	const schoolString = currentGuessInfo.get(
+		CATEGORY_INFO.SCHOOL.name
+	) as string;
+	if (schoolString) {
+		const schoolInt = categoryInfo.SCHOOL.id_map.get(
+			schoolString.toLowerCase()
+		);
+
+		if (schoolInt) requestObject.school = schoolInt;
+	}
+
+	console.log(`REQUEST OBJECT: ${JSON.stringify(requestObject)}`);
 
 	return requestObject;
 }

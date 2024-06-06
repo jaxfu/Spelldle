@@ -1,13 +1,13 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
-import { type T_SPELL_INFO } from "../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../types";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 import * as methods from "../../../../utils/methods";
 
 interface IProps {
 	category_name: string;
 	category_values: string[];
-	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const TurnCell: React.FC<IProps> = (props) => {
