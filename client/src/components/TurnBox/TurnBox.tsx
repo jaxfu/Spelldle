@@ -14,35 +14,48 @@ const TurnBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<TurnCell
-				category={props.allCategoriesInfo.current.SCHOOL}
+				category_name={props.allCategoriesInfo.current.SCHOOL.name}
+				category_values={props.allCategoriesInfo.current.SCHOOL.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.LEVEL}
+				category_name={props.allCategoriesInfo.current.LEVEL.name}
+				category_values={props.allCategoriesInfo.current.LEVEL.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.CASTING_TIME}
+				category_name={props.allCategoriesInfo.current.CASTING_TIME.name}
+				category_values={props.allCategoriesInfo.current.CASTING_TIME.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.RANGE}
+				category_name={props.allCategoriesInfo.current.RANGE.name}
+				category_values={props.allCategoriesInfo.current.RANGE.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.TARGET}
+				category_name={props.allCategoriesInfo.current.TARGET.name}
+				category_values={props.allCategoriesInfo.current.TARGET.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.COMPONENTS}
+				category_name={props.allCategoriesInfo.current.DURATION.name}
+				category_values={props.allCategoriesInfo.current.DURATION.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.CLASS}
+				category_name={props.allCategoriesInfo.current.COMPONENTS.name}
+				category_values={props.allCategoriesInfo.current.COMPONENTS.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={props.allCategoriesInfo.current.EFFECTS}
+				category_name={props.allCategoriesInfo.current.CLASS.name}
+				category_values={props.allCategoriesInfo.current.CLASS.values}
+				allCurrentGuessInfo={props.allCurrentGuessInfo}
+			/>
+			<TurnCell
+				category_name={props.allCategoriesInfo.current.EFFECTS.name}
+				category_values={props.allCategoriesInfo.current.EFFECTS.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<button>Submit</button>

@@ -1,31 +1,11 @@
 import styles from "./ComponentsSelection.module.scss";
-import { T_SPELL_INFO } from "../../../../../../types";
+import { type T_SPELL_INFO } from "../../../../../../types";
 
 interface IProps {
 	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
 }
 
 const ComponentsSelection: React.FC<IProps> = (props) => {
-	// function componentSelectionCheckboxStateHandler(
-	// 	e: React.ChangeEvent<HTMLInputElement>,
-	// 	component: string,
-	// 	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>
-	// ) {
-	// 	setAllCurrentGuessInfo((current) => {
-	// 		const COMPONENENTS_IDENTIFIER: string = "Components";
-	// 		const newMap = new Map(current);
-	// 		let currentComponentState: any = newMap.get(COMPONENENTS_IDENTIFIER);
-	// 		if (e.target.checked) currentComponentState.push(component);
-	// 		else {
-	// 			currentComponentState = currentComponentState.filter(
-	// 				(c: string) => c !== component
-	// 			);
-	// 		}
-	// 		newMap.set(COMPONENENTS_IDENTIFIER, currentComponentState);
-	// 		return newMap;
-	// 	});
-	// }
-
 	function componentSelectionCheckboxStateHandler(
 		e: React.ChangeEvent<HTMLInputElement>,
 		component: string,
@@ -45,20 +25,6 @@ const ComponentsSelection: React.FC<IProps> = (props) => {
 			COMPONENENTS_IDENTIFIER,
 			currentComponentState
 		);
-
-		// setAllCurrentGuessInfo((current) => {
-		// 	const COMPONENENTS_IDENTIFIER: string = "Components";
-		// 	const newMap = new Map(current);
-		// 	let currentComponentState: any = newMap.get(COMPONENENTS_IDENTIFIER);
-		// 	if (e.target.checked) currentComponentState.push(component);
-		// 	else {
-		// 		currentComponentState = currentComponentState.filter(
-		// 			(c: string) => c !== component
-		// 		);
-		// 	}
-		// 	newMap.set(COMPONENENTS_IDENTIFIER, currentComponentState);
-		// 	return newMap;
-		// });
 	}
 
 	return (

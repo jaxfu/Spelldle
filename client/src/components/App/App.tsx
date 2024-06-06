@@ -85,6 +85,7 @@ const App: React.FC = () => {
 				userIsLoggedIn={userIsLoggedIn}
 				setUserIsLoggedIn={setUserIsLoggedIn}
 			/>
+			<div style={{ height: "50px" }}></div>
 			<Routes>
 				<Route
 					path="/game"

@@ -1,5 +1,4 @@
 import {
-	type T_SINGLE_CATEGORY_POSSIBILITIES,
 	type T_SPELL_INFO,
 	type T_USERDATA_TOKENS,
 	INIT_USERDATA_TOKENS,
@@ -45,8 +44,9 @@ export function deepCopyObject<T extends Object>(obj: T): T {
 }
 
 // TurnCell
-export function getUniqueItems(
-	category: T_SINGLE_CATEGORY_POSSIBILITIES,
+export function getUniqueComponents(
+	category_name: string,
+	category_values: string[],
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
@@ -54,35 +54,36 @@ export function getUniqueItems(
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
-			category={category}
+			category_name={category_name}
+			recommendationValues={category_values}
+			setRecommendations={setRecommendations}
 			multi={false}
 			inputValue={inputValue}
 			setInputValue={setInputValue}
-			recommendationValues={category.values}
-			setRecommendations={setRecommendations}
 			allCurrentGuessInfo={allCurrentGuessInfo}
 		/>
 	);
 	const multiInput = (
 		<TextInput
-			category={category}
+			category_name={category_name}
+			recommendationValues={category_values}
+			setRecommendations={setRecommendations}
 			multi={true}
 			inputValue={inputValue}
 			setInputValue={setInputValue}
-			recommendationValues={category.values}
-			setRecommendations={setRecommendations}
 			allCurrentGuessInfo={allCurrentGuessInfo}
 		/>
 	);
 
-	switch (category) {
-		case CATEGORY_INFO.SCHOOL:
-		case CATEGORY_INFO.CASTING_TIME:
-		case CATEGORY_INFO.RANGE:
-		case CATEGORY_INFO.TARGET:
+	switch (category_name) {
+		case CATEGORY_INFO.SCHOOL.name:
+		case CATEGORY_INFO.CASTING_TIME.name:
+		case CATEGORY_INFO.RANGE.name:
+		case CATEGORY_INFO.TARGET.name:
+		case CATEGORY_INFO.DURATION.name:
 			return singleInput;
 			break;
-		case CATEGORY_INFO.LEVEL:
+		case CATEGORY_INFO.LEVEL.name:
 			return (
 				<>
 					<LevelRitualToggle allCurrentGuessInfo={allCurrentGuessInfo} />
@@ -90,11 +91,11 @@ export function getUniqueItems(
 				</>
 			);
 			break;
-		case CATEGORY_INFO.COMPONENTS:
+		case CATEGORY_INFO.COMPONENTS.name:
 			return <ComponentsSelection allCurrentGuessInfo={allCurrentGuessInfo} />;
 			break;
-		case CATEGORY_INFO.CLASS:
-		case CATEGORY_INFO.EFFECTS:
+		case CATEGORY_INFO.CLASS.name:
+		case CATEGORY_INFO.EFFECTS.name:
 			return multiInput;
 			break;
 		default:
@@ -110,6 +111,7 @@ export function createNewSpellInfoMap(): T_SPELL_INFO {
 	map.set("Casting Time", "");
 	map.set("Range", "");
 	map.set("Target", "");
+	map.set("Duration", "");
 	map.set("Components", []);
 	map.set("Class", []);
 	map.set("Effects", []);
@@ -238,10 +240,6 @@ export function createRequestObjectFromCurrentGuessInfo(
 	return requestObject;
 }
 
-// export function createInitalCurrentGuessInfoObject(): T_SPELL_INFO {
-// 	const currentGuessInfoObject =
-// }
-
 function createMapFromValues(arr: string[]) {
 	const map = new Map();
 	arr.forEach((item: string, index: number) => {
@@ -260,8 +258,8 @@ export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
 		infoObj.CASTING_TIME.values
 	);
 	infoObj.RANGE.id_map = createMapFromValues(infoObj.RANGE.values);
-	infoObj.COMPONENTS.id_map = createMapFromValues(infoObj.COMPONENTS.values);
 	infoObj.DURATION.id_map = createMapFromValues(infoObj.DURATION.values);
+	infoObj.COMPONENTS.id_map = createMapFromValues(infoObj.COMPONENTS.values);
 	infoObj.CLASS.id_map = createMapFromValues(infoObj.CLASS.values);
 	infoObj.EFFECTS.id_map = createMapFromValues(infoObj.EFFECTS.values);
 
