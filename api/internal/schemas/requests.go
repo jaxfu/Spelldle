@@ -16,7 +16,7 @@ type RequestPayloadValidateSession struct {
 	AccessToken string `json:"access_token"`
 }
 
-type RequestPayloadMakeGuess struct {
+type RequestPayloadMakeGuessCategories struct {
 	School      int                `json:"school"`
 	Level       SpellCategoryLevel `json:"level"`
 	CastingTime int                `json:"casting_time"`
