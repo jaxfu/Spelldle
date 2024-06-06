@@ -6,6 +6,7 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
+	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../types";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
@@ -22,6 +23,7 @@ import {
 	areTokensInLocalStorage,
 	getUserSessionDataFromStorage,
 	setUserDataFromAPIResult,
+	getAllCategoriesInfo,
 } from "../../utils/methods";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 
@@ -33,6 +35,9 @@ const App: React.FC = () => {
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
 	const allCurrentGuessInfo = useRef<T_SPELL_INFO>(createNewSpellInfoMap());
+	const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
+		getAllCategoriesInfo()
+	);
 
 	useEffect(() => {
 		const tokensAreInStorage = areTokensInLocalStorage();
@@ -69,8 +74,11 @@ const App: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
+			{/* DEBUG */}
 			<ReactQueryDevtools initialIsOpen={false} />
 			<GuessInfoButton allCurrentGuessInfo={allCurrentGuessInfo} />
+
+			{/* CORE */}
 			<Navbar
 				userData={userData}
 				setUserData={setUserData}
@@ -80,7 +88,12 @@ const App: React.FC = () => {
 			<Routes>
 				<Route
 					path="/game"
-					element={<TurnBox allCurrentGuessInfo={allCurrentGuessInfo} />}
+					element={
+						<TurnBox
+							allCategoriesInfo={allCategoriesInfo}
+							allCurrentGuessInfo={allCurrentGuessInfo}
+						/>
+					}
 				/>
 				<Route
 					path="/register"

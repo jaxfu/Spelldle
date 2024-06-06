@@ -1,9 +1,12 @@
 import TurnCell from "./children/TurnCell/TurnCell";
 import styles from "./TurnBox.module.scss";
-import CATEGORY_INFO from "../../CATEGORY_INFO";
-import { T_SPELL_INFO } from "../../types";
+import {
+	type T_SPELL_INFO,
+	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+} from "../../types";
 
 interface IProps {
+	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
 	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
 }
 
@@ -11,35 +14,35 @@ const TurnBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<TurnCell
-				category={CATEGORY_INFO.SCHOOL}
+				category={props.allCategoriesInfo.current.SCHOOL}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.LEVEL}
+				category={props.allCategoriesInfo.current.LEVEL}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.CASTING_TIME}
+				category={props.allCategoriesInfo.current.CASTING_TIME}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.RANGE}
+				category={props.allCategoriesInfo.current.RANGE}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.TARGET}
+				category={props.allCategoriesInfo.current.TARGET}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.COMPONENTS}
+				category={props.allCategoriesInfo.current.COMPONENTS}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.CLASS}
+				category={props.allCategoriesInfo.current.CLASS}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<TurnCell
-				category={CATEGORY_INFO.EFFECTS}
+				category={props.allCategoriesInfo.current.EFFECTS}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<button>Submit</button>

@@ -1,4 +1,3 @@
-import CATEGORY_INFO from "../CATEGORY_INFO";
 import {
 	type T_SINGLE_CATEGORY_POSSIBILITIES,
 	type T_SPELL_INFO,
@@ -9,11 +8,13 @@ import {
 	type T_APIRESULTS,
 	type T_APIREQUEST_MAKE_GUESS,
 	INIT_APIREQUEST_MAKE_GUESS,
+	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
 import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
+import CATEGORY_INFO from "../CATEGORY_INFO.json";
 
 // Multi
 export function getRecommendations(e: any, values: string[]): string[] {
@@ -235,4 +236,34 @@ export function createRequestObjectFromCurrentGuessInfo(
 	);
 
 	return requestObject;
+}
+
+// export function createInitalCurrentGuessInfoObject(): T_SPELL_INFO {
+// 	const currentGuessInfoObject =
+// }
+
+function createMapFromValues(arr: string[]) {
+	const map = new Map();
+	arr.forEach((item: string, index: number) => {
+		map.set(item.toLowerCase(), index);
+	});
+	return map;
+}
+
+export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
+	const infoObj: T_ALL_POSSIBLE_CATEGORIES_INFO =
+		CATEGORY_INFO as T_ALL_POSSIBLE_CATEGORIES_INFO;
+
+	infoObj.SCHOOL.id_map = createMapFromValues(infoObj.SCHOOL.values);
+	infoObj.LEVEL.id_map = createMapFromValues(infoObj.LEVEL.values);
+	infoObj.CASTING_TIME.id_map = createMapFromValues(
+		infoObj.CASTING_TIME.values
+	);
+	infoObj.RANGE.id_map = createMapFromValues(infoObj.RANGE.values);
+	infoObj.COMPONENTS.id_map = createMapFromValues(infoObj.COMPONENTS.values);
+	infoObj.DURATION.id_map = createMapFromValues(infoObj.DURATION.values);
+	infoObj.CLASS.id_map = createMapFromValues(infoObj.CLASS.values);
+	infoObj.EFFECTS.id_map = createMapFromValues(infoObj.EFFECTS.values);
+
+	return infoObj;
 }
