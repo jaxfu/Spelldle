@@ -47,7 +47,7 @@ export function getUniqueItems(
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>
+	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -57,7 +57,7 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
-			setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+			allCurrentGuessInfo={allCurrentGuessInfo}
 		/>
 	);
 	const multiInput = (
@@ -68,7 +68,7 @@ export function getUniqueItems(
 			setInputValue={setInputValue}
 			recommendationValues={category.values}
 			setRecommendations={setRecommendations}
-			setAllCurrentGuessInfo={setAllCurrentGuessInfo}
+			allCurrentGuessInfo={allCurrentGuessInfo}
 		/>
 	);
 
@@ -82,15 +82,13 @@ export function getUniqueItems(
 		case CATEGORY_INFO.LEVEL:
 			return (
 				<>
-					<LevelRitualToggle setAllCurrentGuessInfo={setAllCurrentGuessInfo} />
+					<LevelRitualToggle allCurrentGuessInfo={allCurrentGuessInfo} />
 					{singleInput}
 				</>
 			);
 			break;
 		case CATEGORY_INFO.COMPONENTS:
-			return (
-				<ComponentsSelection setAllCurrentGuessInfo={setAllCurrentGuessInfo} />
-			);
+			return <ComponentsSelection allCurrentGuessInfo={allCurrentGuessInfo} />;
 			break;
 		case CATEGORY_INFO.CLASS:
 		case CATEGORY_INFO.EFFECTS:

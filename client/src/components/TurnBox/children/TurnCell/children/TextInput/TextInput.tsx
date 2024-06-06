@@ -14,33 +14,49 @@ interface IProps {
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
 	recommendationValues: string[];
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
-	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
+	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
 }
 
 const TextInput: React.FC<IProps> = (props) => {
 	const [guessesForMulti, setGuessesForMulti] = useState<string[]>([]);
 
 	useEffect(() => {
-		props.setAllCurrentGuessInfo((current) => {
-			const newAllCurrentGuessInfo: T_SPELL_INFO = new Map(current);
-			const LEVEL_IDENTIFIER: string = "Level";
-			if (props.multi) {
-				return newAllCurrentGuessInfo.set(props.category.name, [
-					...guessesForMulti,
-				]);
-			} else if (props.category.name == LEVEL_IDENTIFIER) {
-				const levelState: any = newAllCurrentGuessInfo.get(LEVEL_IDENTIFIER);
-				if (levelState) levelState[0] = props.inputValue;
-				newAllCurrentGuessInfo.set(LEVEL_IDENTIFIER, levelState);
-				return newAllCurrentGuessInfo;
-			} else {
-				return newAllCurrentGuessInfo.set(
-					props.category.name,
-					props.inputValue
-				);
-			}
-		});
-		console.log(`Running setAllCurrentGuessInfo() for ${props.category.name}`);
+		const LEVEL_IDENTIFIER: string = "Level";
+		if (props.multi) {
+			props.allCurrentGuessInfo.current.set(props.category.name, [
+				...guessesForMulti,
+			]);
+		} else if (props.category.name == LEVEL_IDENTIFIER) {
+			const levelState: any =
+				props.allCurrentGuessInfo.current.get(LEVEL_IDENTIFIER);
+			if (levelState) levelState[0] = props.inputValue;
+			props.allCurrentGuessInfo.current.set(LEVEL_IDENTIFIER, levelState);
+		} else {
+			props.allCurrentGuessInfo.current.set(
+				props.category.name,
+				props.inputValue
+			);
+		}
+
+		// props.setAllCurrentGuessInfo((current) => {
+		// 	const newAllCurrentGuessInfo: T_SPELL_INFO = new Map(current);
+		// 	const LEVEL_IDENTIFIER: string = "Level";
+		// 	if (props.multi) {
+		// 		return newAllCurrentGuessInfo.set(props.category.name, [
+		// 			...guessesForMulti,
+		// 		]);
+		// 	} else if (props.category.name == LEVEL_IDENTIFIER) {
+		// 		const levelState: any = newAllCurrentGuessInfo.get(LEVEL_IDENTIFIER);
+		// 		if (levelState) levelState[0] = props.inputValue;
+		// 		newAllCurrentGuessInfo.set(LEVEL_IDENTIFIER, levelState);
+		// 		return newAllCurrentGuessInfo;
+		// 	} else {
+		// 		return newAllCurrentGuessInfo.set(
+		// 			props.category.name,
+		// 			props.inputValue
+		// 		);
+		// 	}
+		// });
 	}, [props.inputValue, guessesForMulti]);
 
 	return (

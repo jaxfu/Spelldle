@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
@@ -23,17 +23,16 @@ import {
 	getUserSessionDataFromStorage,
 	setUserDataFromAPIResult,
 } from "../../utils/methods";
+import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_USERDATA_STATE>(
 		deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
-	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
-		createNewSpellInfoMap()
-	);
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
+	const allCurrentGuessInfo = useRef<T_SPELL_INFO>(createNewSpellInfoMap());
 
 	useEffect(() => {
 		const tokensAreInStorage = areTokensInLocalStorage();
@@ -71,6 +70,7 @@ const App: React.FC = () => {
 	return (
 		<div className={styles.root}>
 			<ReactQueryDevtools initialIsOpen={false} />
+			<GuessInfoButton allCurrentGuessInfo={allCurrentGuessInfo} />
 			<Navbar
 				userData={userData}
 				setUserData={setUserData}
@@ -80,12 +80,7 @@ const App: React.FC = () => {
 			<Routes>
 				<Route
 					path="/game"
-					element={
-						<TurnBox
-							allCurrentGuessInfo={allCurrentGuessInfo}
-							setAllCurrentGuessInfo={setAllCurrentGuessInfo}
-						/>
-					}
+					element={<TurnBox allCurrentGuessInfo={allCurrentGuessInfo} />}
 				/>
 				<Route
 					path="/register"

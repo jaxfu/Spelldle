@@ -9,7 +9,7 @@ import * as methods from "../../../../utils/methods";
 
 interface IProps {
 	category: T_SINGLE_CATEGORY_POSSIBILITIES;
-	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
+	allCurrentGuessInfo: React.MutableRefObject<T_SPELL_INFO>;
 }
 
 const TurnCell: React.FC<IProps> = (props) => {
@@ -24,7 +24,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 				inputValue,
 				setInputValue,
 				setRecommendations,
-				props.setAllCurrentGuessInfo
+				props.allCurrentGuessInfo
 			)}
 			<RecommendationBox
 				recommendations={recommendations}
