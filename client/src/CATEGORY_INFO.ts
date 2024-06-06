@@ -1,5 +1,13 @@
 import { T_ALL_POSSIBLE_CATEGORIES_INFO } from "./types";
 
+function createMapFromValues(arr: string[]) {
+	const map = new Map();
+	arr.forEach((item: string, index: number) => {
+		map.set(item.toLowerCase(), index);
+	});
+	return map;
+}
+
 const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 	SCHOOL: {
 		name: "School",

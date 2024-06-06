@@ -7,6 +7,8 @@ import {
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
+	type T_APIREQUEST_MAKE_GUESS,
+	INIT_APIREQUEST_MAKE_GUESS,
 } from "../types";
 import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
@@ -223,4 +225,14 @@ export function setUserDataFromAPIResult(
 	setUserData(createUserDataStateFromApiResult(data));
 	setUserIsLoggedIn(true);
 	setEnableQueryFn(false);
+}
+
+export function createRequestObjectFromCurrentGuessInfo(
+	currentGuessInfo: T_SPELL_INFO
+): T_APIREQUEST_MAKE_GUESS {
+	const requestObject: T_APIREQUEST_MAKE_GUESS = deepCopyObject(
+		INIT_APIREQUEST_MAKE_GUESS
+	);
+
+	return requestObject;
 }
