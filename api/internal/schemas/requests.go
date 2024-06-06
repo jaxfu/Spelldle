@@ -22,6 +22,7 @@ type RequestPayloadMakeGuessCategories struct {
 	CastingTime int                `json:"casting_time"`
 	Range       int                `json:"range"`
 	Target      int                `json:"target"`
+	Duration    int                `json:"duration"`
 	Components  []int              `json:"components"`
 	Class       []int              `json:"class"`
 	Effects     []int              `json:"effects"`

@@ -309,6 +309,7 @@ export type T_APIREQUEST_MAKE_GUESS = {
 	casting_time: number;
 	range: number;
 	target: number;
+	duration: number;
 	components: number[];
 	class: number[];
 	effects: number[];
@@ -320,6 +321,7 @@ export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
 	casting_time: 0,
 	range: 0,
 	target: 0,
+	duration: 0,
 	components: [0],
 	class: [0],
 	effects: [0],
