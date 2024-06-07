@@ -238,18 +238,101 @@ export function createRequestObjectFromCurrentGuessInfo(
 		INIT_APIREQUEST_MAKE_GUESS
 	);
 
-	const schoolString = currentGuessInfo.get(
+	// SCHOOOL
+	const schoolGuessValue = currentGuessInfo.get(
 		CATEGORY_INFO.SCHOOL.name
 	) as string;
-	if (schoolString) {
-		const schoolInt = categoryInfo.SCHOOL.id_map.get(
-			schoolString.toLowerCase()
+	const schoolRequestValue = categoryInfo.SCHOOL.id_map.get(
+		schoolGuessValue.toLowerCase()
+	) as number;
+	requestObject.school = schoolRequestValue;
+
+	// LEVEL
+	const levelGuessValue = currentGuessInfo.get(CATEGORY_INFO.LEVEL.name) as [
+		string,
+		boolean
+	];
+	const levelRequestValue: { level: number; is_ritual: boolean } = {
+		level: categoryInfo.LEVEL.id_map.get(
+			levelGuessValue[0].toLowerCase()
+		) as number,
+		is_ritual: levelGuessValue[1],
+	};
+	requestObject.level = levelRequestValue;
+
+	// CASTING_TIME
+	const castingTimeGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.CASTING_TIME.name
+	) as string;
+	const castingTimeRequestValue = categoryInfo.CASTING_TIME.id_map.get(
+		castingTimeGuessValue.toLowerCase()
+	) as number;
+	requestObject.casting_time = castingTimeRequestValue;
+
+	// RANGE
+	const rangeGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.RANGE.name
+	) as string;
+	const rangeRequestValue = categoryInfo.RANGE.id_map.get(
+		rangeGuessValue.toLowerCase()
+	) as number;
+	requestObject.range = rangeRequestValue;
+
+	// TARGET
+	const targetGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.TARGET.name
+	) as string;
+	const targetRequestValue = categoryInfo.TARGET.id_map.get(
+		targetGuessValue.toLowerCase()
+	) as number;
+	requestObject.target = targetRequestValue;
+
+	// DURATION
+	const durationGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.DURATION.name
+	) as string;
+	const durationRequestValue = categoryInfo.DURATION.id_map.get(
+		durationGuessValue.toLowerCase()
+	) as number;
+	requestObject.duration = durationRequestValue;
+
+	// COMPONENTS
+	const componentsGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.COMPONENTS.name
+	) as string[];
+	const componentsRequestValue: number[] = [];
+	componentsGuessValue.forEach((component) => {
+		componentsRequestValue.push(
+			categoryInfo.COMPONENTS.id_map.get(component.toLowerCase()) as number
 		);
+	});
+	requestObject.components = componentsRequestValue.sort((a, b) => a - b);
 
-		if (schoolInt) requestObject.school = schoolInt;
-	}
+	// CLASS
+	const classGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.CLASS.name
+	) as string[];
+	const classRequestValue: number[] = [];
+	classGuessValue.forEach((component) => {
+		classRequestValue.push(
+			categoryInfo.CLASS.id_map.get(component.toLowerCase()) as number
+		);
+	});
+	requestObject.class = classRequestValue.sort((a, b) => a - b);
 
-	console.log(`REQUEST OBJECT: ${JSON.stringify(requestObject)}`);
+	// EFFECTS
+	const effectsGuessValue = currentGuessInfo.get(
+		CATEGORY_INFO.EFFECTS.name
+	) as string[];
+	const effectsRequestValue: number[] = [];
+	effectsGuessValue.forEach((component) => {
+		effectsRequestValue.push(
+			categoryInfo.EFFECTS.id_map.get(component.toLowerCase()) as number
+		);
+	});
+	requestObject.effects = effectsRequestValue.sort((a, b) => a - b);
+
+	console.log(JSON.stringify(requestObject));
 
 	return requestObject;
 }
@@ -272,6 +355,7 @@ export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
 		infoObj.CASTING_TIME.values
 	);
 	infoObj.RANGE.id_map = createMapFromValues(infoObj.RANGE.values);
+	infoObj.TARGET.id_map = createMapFromValues(infoObj.TARGET.values);
 	infoObj.DURATION.id_map = createMapFromValues(infoObj.DURATION.values);
 	infoObj.COMPONENTS.id_map = createMapFromValues(infoObj.COMPONENTS.values);
 	infoObj.CLASS.id_map = createMapFromValues(infoObj.CLASS.values);
