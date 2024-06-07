@@ -4,6 +4,7 @@ import {
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../types";
+import { apiRequestMakeGuess } from "../../utils/requests";
 
 interface IProps {
 	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
@@ -58,7 +59,16 @@ const TurnBox: React.FC<IProps> = (props) => {
 				category_values={props.allCategoriesInfo.current.EFFECTS.values}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
-			<button>Submit</button>
+			<button
+				onClick={async () => {
+					await apiRequestMakeGuess(
+						props.allCurrentGuessInfo.current,
+						props.allCategoriesInfo.current
+					);
+				}}
+			>
+				Submit
+			</button>
 		</div>
 	);
 };
