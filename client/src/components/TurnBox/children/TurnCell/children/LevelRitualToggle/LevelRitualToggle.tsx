@@ -1,8 +1,8 @@
 import styles from "./LevelRitualToggle.module.scss";
-import { T_SPELL_INFO } from "../../../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../../../types";
 
 interface IProps {
-	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const LevelRitualToggle: React.FC<IProps> = (props) => {
@@ -14,14 +14,11 @@ const LevelRitualToggle: React.FC<IProps> = (props) => {
 				name="ritual_toggle"
 				id="ritual_toggle"
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-					props.setAllCurrentGuessInfo((current) => {
-						const LEVEL_IDENTIFIER: string = "Level";
-						const newState = new Map(current);
-						const levelState: any = newState.get(LEVEL_IDENTIFIER);
-						if (levelState) levelState[1] = e.target.checked;
-						newState.set(LEVEL_IDENTIFIER, levelState);
-						return newState;
-					});
+					const LEVEL_IDENTIFIER: string = "Level";
+					const levelState: any =
+						props.allCurrentGuessInfo.current.get(LEVEL_IDENTIFIER);
+					if (levelState) levelState[1] = e.target.checked;
+					props.allCurrentGuessInfo.current.set(LEVEL_IDENTIFIER, levelState);
 				}}
 			/>
 		</div>

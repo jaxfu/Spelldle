@@ -1,19 +1,23 @@
 import axios, { AxiosResponse } from "axios";
 import {
-	T_APIRESULT_LOGIN,
-	T_USERINPUT_LOGIN,
-	T_APIRESULT_REGISTER,
-	T_USERINPUT_REGISTER,
+	type T_APIRESULT_LOGIN,
+	type T_USERINPUT_LOGIN,
+	type T_APIRESULT_REGISTER,
+	type T_USERINPUT_REGISTER,
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
+	type T_ALL_CURRENT_GUESS_INFO,
+	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../types";
 import { T_USERDATA_TOKENS } from "../types";
+import { createRequestObjectFromCurrentGuessInfo } from "./methods";
 
 // Routes
 const prefix: string =
 	import.meta.env.DEV == true ? "http://localhost:5000" : "";
-const LOGIN_ROUTE: string = prefix + "/api/login";
-const REGISTER_ROUTE: string = prefix + "/api/register";
-const VALIDATE_ROUTE: string = prefix + "/api/validateSession";
+const APIROUTE_LOGIN: string = prefix + "/api/login";
+const APIROUTE_REGISTER: string = prefix + "/api/register";
+const APIROUTE_VALIDATE: string = prefix + "/api/validateSession";
+const APIROUTE_MAKE_GUESS: string = prefix + "/api/makeGuess";
 
 export async function apiRequestLogin(
 	userInput: T_USERINPUT_LOGIN
@@ -21,9 +25,9 @@ export async function apiRequestLogin(
 	try {
 		return await axios<T_APIRESULT_LOGIN>({
 			method: "POST",
-			url: LOGIN_ROUTE,
+			url: APIROUTE_LOGIN,
 			data: {
-				...userInput,
+				userInput,
 			},
 		});
 	} catch (err: any) {
@@ -37,7 +41,7 @@ export async function apiRequestRegister(
 	try {
 		return await axios<T_APIRESULT_REGISTER>({
 			method: "POST",
-			url: REGISTER_ROUTE,
+			url: APIROUTE_REGISTER,
 			data: {
 				username: userInput.username,
 				password: userInput.password,
@@ -57,10 +61,29 @@ export async function apiRequestValidateSession(
 	try {
 		return await axios<T_APIRESULT_VALIDATE_ACCESS_TOKEN>({
 			method: "POST",
-			url: VALIDATE_ROUTE,
+			url: APIROUTE_VALIDATE,
 			data: {
-				...userDataTokens,
+				userDataTokens,
 			},
+		});
+	} catch (err: any) {
+		throw new Error(err);
+	}
+}
+
+export async function apiRequestMakeGuess(
+	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
+	categoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO
+): Promise<AxiosResponse<string>> {
+	try {
+		const data = createRequestObjectFromCurrentGuessInfo(
+			allCurrentGuessInfo,
+			categoriesInfo
+		);
+		return await axios<string>({
+			method: "POST",
+			url: APIROUTE_MAKE_GUESS,
+			data,
 		});
 	} catch (err: any) {
 		throw new Error(err);

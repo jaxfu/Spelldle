@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./App.module.scss";
 import TurnBox from "../TurnBox/TurnBox";
 import {
-	type T_SPELL_INFO,
+	type T_ALL_CURRENT_GUESS_INFO,
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
+	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../types";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
@@ -22,18 +23,23 @@ import {
 	areTokensInLocalStorage,
 	getUserSessionDataFromStorage,
 	setUserDataFromAPIResult,
+	getAllCategoriesInfo,
 } from "../../utils/methods";
+import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_USERDATA_STATE>(
 		deepCopyObject(INIT_USERDATA_STATE)
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
-	const [allCurrentGuessInfo, setAllCurrentGuessInfo] = useState<T_SPELL_INFO>(
-		createNewSpellInfoMap()
-	);
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
+	const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
+		createNewSpellInfoMap()
+	);
+	const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
+		getAllCategoriesInfo()
+	);
 
 	useEffect(() => {
 		const tokensAreInStorage = areTokensInLocalStorage();
@@ -70,20 +76,28 @@ const App: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
+			{/* DEBUG */}
 			<ReactQueryDevtools initialIsOpen={false} />
+			<GuessInfoButton
+				allCurrentGuessInfo={allCurrentGuessInfo.current}
+				categoryInfo={allCategoriesInfo.current}
+			/>
+
+			{/* CORE */}
 			<Navbar
 				userData={userData}
 				setUserData={setUserData}
 				userIsLoggedIn={userIsLoggedIn}
 				setUserIsLoggedIn={setUserIsLoggedIn}
 			/>
+			<div style={{ height: "50px" }}></div>
 			<Routes>
 				<Route
 					path="/game"
 					element={
 						<TurnBox
+							allCategoriesInfo={allCategoriesInfo}
 							allCurrentGuessInfo={allCurrentGuessInfo}
-							setAllCurrentGuessInfo={setAllCurrentGuessInfo}
 						/>
 					}
 				/>

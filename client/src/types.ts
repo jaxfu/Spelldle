@@ -154,8 +154,8 @@ export type T_ALL_POSSIBLE_CATEGORIES_INFO = {
 	CASTING_TIME: T_SINGLE_CATEGORY_POSSIBILITIES;
 	RANGE: T_SINGLE_CATEGORY_POSSIBILITIES;
 	TARGET: T_SINGLE_CATEGORY_POSSIBILITIES;
-	COMPONENTS: T_SINGLE_CATEGORY_POSSIBILITIES;
 	DURATION: T_SINGLE_CATEGORY_POSSIBILITIES;
+	COMPONENTS: T_SINGLE_CATEGORY_POSSIBILITIES;
 	CLASS: T_SINGLE_CATEGORY_POSSIBILITIES;
 	EFFECTS: T_SINGLE_CATEGORY_POSSIBILITIES;
 };
@@ -163,12 +163,13 @@ export type T_ALL_POSSIBLE_CATEGORIES_INFO = {
 export type T_SINGLE_CATEGORY_POSSIBILITIES = {
 	name: string;
 	values: string[];
+	id_map: Map<string, number>;
 	has_multi: boolean;
 	has_modifiers: boolean;
 };
 
 export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
-export type T_SPELL_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
+export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 
 // USERDATA
 export type T_USERDATA_ACCOUNT = {
@@ -300,6 +301,31 @@ export const INIT_APIRESULT_VALIDATE_ACCESS_TOKEN: T_APIRESULT_VALIDATE_ACCESS_T
 		user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
 		user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
 	};
+
+// MakeGuess
+export type T_APIREQUEST_MAKE_GUESS = {
+	school: number;
+	level: { level: number; is_ritual: boolean };
+	casting_time: number;
+	range: number;
+	target: number;
+	duration: number;
+	components: number[];
+	class: number[];
+	effects: number[];
+};
+
+export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
+	school: 0,
+	level: { level: 0, is_ritual: false },
+	casting_time: 0,
+	range: 0,
+	target: 0,
+	duration: 0,
+	components: [0],
+	class: [0],
+	effects: [0],
+};
 
 // ALL API_RESULTS
 export type T_APIRESULTS =

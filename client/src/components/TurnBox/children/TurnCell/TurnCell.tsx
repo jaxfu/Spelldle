@@ -1,15 +1,13 @@
 import { useState } from "react";
 import styles from "./TurnCell.module.scss";
-import {
-	T_SINGLE_CATEGORY_POSSIBILITIES,
-	T_SPELL_INFO,
-} from "../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../types";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 import * as methods from "../../../../utils/methods";
 
 interface IProps {
-	category: T_SINGLE_CATEGORY_POSSIBILITIES;
-	setAllCurrentGuessInfo: React.Dispatch<React.SetStateAction<T_SPELL_INFO>>;
+	category_name: string;
+	category_values: string[];
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const TurnCell: React.FC<IProps> = (props) => {
@@ -18,13 +16,14 @@ const TurnCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<h4>{props.category.name}</h4>
-			{methods.getUniqueItems(
-				props.category,
+			<h4>{props.category_name}</h4>
+			{methods.getUniqueComponents(
+				props.category_name,
+				props.category_values,
 				inputValue,
 				setInputValue,
 				setRecommendations,
-				props.setAllCurrentGuessInfo
+				props.allCurrentGuessInfo
 			)}
 			<RecommendationBox
 				recommendations={recommendations}

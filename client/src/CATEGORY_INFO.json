@@ -1,9 +1,7 @@
-import { T_ALL_POSSIBLE_CATEGORIES_INFO } from "./types";
-
-const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
-	SCHOOL: {
-		name: "School",
-		values: [
+{
+	"SCHOOL": {
+		"name": "School",
+		"values": [
 			"Abjuration",
 			"Conjuration",
 			"Divination",
@@ -12,14 +10,14 @@ const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 			"Evocation",
 			"Illusion",
 			"Necromancy",
-			"Transmutation",
+			"Transmutation"
 		],
-		has_multi: false,
-		has_modifiers: false,
+		"has_multi": false,
+		"has_modifiers": false
 	},
-	LEVEL: {
-		name: "Level",
-		values: [
+	"LEVEL": {
+		"name": "Level",
+		"values": [
 			"1st",
 			"2nd",
 			"3rd",
@@ -29,28 +27,28 @@ const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 			"7th",
 			"8th",
 			"9th",
-			"Cantrip",
+			"Cantrip"
 		],
-		has_multi: false,
-		has_modifiers: true,
+		"has_multi": false,
+		"has_modifiers": true
 	},
-	CASTING_TIME: {
-		name: "Casting Time",
-		values: [
+	"CASTING_TIME": {
+		"name": "Casting Time",
+		"values": [
 			"1 Action",
 			"1 Reaction",
 			"Bonus Action",
 			"1 minute",
 			"10 minutes",
 			"1 hour",
-			"1+ hours",
+			"1+ hours"
 		],
-		has_multi: false,
-		has_modifiers: false,
+		"has_multi": false,
+		"has_modifiers": false
 	},
-	RANGE: {
-		name: "Range",
-		values: [
+	"RANGE": {
+		"name": "Range",
+		"values": [
 			"Touch",
 			"Self",
 			"5 Feet",
@@ -58,26 +56,26 @@ const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 			"30 Feet",
 			"60 Feet",
 			"120 Feet",
-			"120+ Feet",
+			"120+ Feet"
 		],
-		has_multi: false,
-		has_modifiers: false,
+		"has_multi": false,
+		"has_modifiers": false
 	},
-	TARGET: {
-		name: "Target",
-		values: ["Creature", "Object", "Area", "Point", "Unnocupied Space"],
-		has_multi: false,
-		has_modifiers: false,
+	"TARGET": {
+		"name": "Target",
+		"values": ["Creature", "Object", "Area", "Point", "Unnocupied Space"],
+		"has_multi": false,
+		"has_modifiers": false
 	},
-	COMPONENTS: {
-		name: "Components",
-		values: ["V", "S", "M"],
-		has_multi: true,
-		has_modifiers: false,
+	"COMPONENTS": {
+		"name": "Components",
+		"values": ["V", "S", "M"],
+		"has_multi": true,
+		"has_modifiers": false
 	},
-	DURATION: {
-		name: "Duration",
-		values: [
+	"DURATION": {
+		"name": "Duration",
+		"values": [
 			"Instantaneous",
 			"1 Round",
 			"1 Minute",
@@ -85,14 +83,14 @@ const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 			"1 Hour",
 			"8 Hours",
 			"8+ Hours",
-			"Until Dispelled",
+			"Until Dispelled"
 		],
-		has_multi: false,
-		has_modifiers: true,
+		"has_multi": false,
+		"has_modifiers": true
 	},
-	CLASS: {
-		name: "Class",
-		values: [
+	"CLASS": {
+		"name": "Class",
+		"values": [
 			"Artificer",
 			"Bard",
 			"Cleric",
@@ -101,14 +99,14 @@ const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 			"Ranger",
 			"Sorcerer",
 			"Warlock",
-			"Wizard",
+			"Wizard"
 		],
-		has_multi: true,
-		has_modifiers: false,
+		"has_multi": true,
+		"has_modifiers": false
 	},
-	EFFECTS: {
-		name: "Effects",
-		values: [
+	"EFFECTS": {
+		"name": "Effects",
+		"values": [
 			"Damage",
 			"Healing",
 			"HP",
@@ -157,11 +155,9 @@ const CATEGORY_INFO: T_ALL_POSSIBLE_CATEGORIES_INFO = {
 			"Psychic",
 			"Radiant",
 			"Slashing",
-			"Thunder",
+			"Thunder"
 		],
-		has_multi: true,
-		has_modifiers: false,
-	},
-};
-
-export default CATEGORY_INFO;
+		"has_multi": true,
+		"has_modifiers": false
+	}
+}

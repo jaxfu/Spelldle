@@ -51,6 +51,7 @@ func main() {
 	router.POST("/api/register", routeHandler.Register)
 	router.POST("/api/validateSession", routeHandler.ValidateSession)
 	router.POST("/api/login", routeHandler.Login)
+	router.POST("/api/makeGuess", routeHandler.MakeGuessCategories)
 
 	router.Use(spa.Middleware("/", "client"))
 
