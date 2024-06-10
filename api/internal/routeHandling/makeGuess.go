@@ -8,7 +8,7 @@ import (
 )
 
 func (r *RouteHandler) MakeGuessCategories(ctx *gin.Context) {
-	var payload schemas.RequestPayloadMakeGuessCategories
+	var payload schemas.SpellCategories
 	if err := ctx.BindJSON(&payload); err != nil {
 		fmt.Printf("Error binding payload: %v\n", err)
 		ctx.String(http.StatusInternalServerError, "Invalid payload")

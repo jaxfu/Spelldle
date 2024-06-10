@@ -1,11 +1,11 @@
 package schemas
 
 type ResponseRegisterLogin struct {
-	Valid            bool                    `json:"valid"`
-	UserId           UserID                  `json:"user_id"`
-	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
 	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
 	UserDataTokens   UserDataTokens          `json:"user_data_tokens"`
+	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
+	UserId           UserID                  `json:"user_id"`
+	Valid            bool                    `json:"valid"`
 }
 
 type ResponseUserDataAccount struct {
@@ -13,8 +13,8 @@ type ResponseUserDataAccount struct {
 }
 
 type ResponseValidateSession struct {
-	Valid            bool                    `json:"valid"`
-	UserId           UserID                  `json:"user_id"`
-	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
 	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
+	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
+	UserId           UserID                  `json:"user_id"`
+	Valid            bool                    `json:"valid"`
 }

@@ -18,8 +18,8 @@ type UserDataTokens struct {
 }
 
 type UserDataAll struct {
-	UserID           UserID           `json:"user_id"`
 	UserDataPersonal UserDataPersonal `json:"userDataPersonal"`
 	UserDataAccount  UserDataAccount  `json:"userDataAccount"`
 	UserDataTokens   UserDataTokens   `json:"userDataTokens"`
+	UserID           UserID           `json:"user_id"`
 }
