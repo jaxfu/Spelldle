@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"os"
-	"spelldle.com/server/internal/types"
+	"spelldle.com/server/types"
 )
 
 // DBHandler object contains a pointer to pgx connection, one per server

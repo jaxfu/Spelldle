@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"spelldle.com/db/internal/parser"
+)
 
 func main() {
-	fmt.Println("hi")
+	spells, err := parser.ParseSpells("spells.json")
+	if err != nil {
+		fmt.Printf("%+v\n", err)
+	}
+	fmt.Printf("%+v\n", spells)
 }

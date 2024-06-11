@@ -7,14 +7,14 @@ import (
 	"github.com/jackc/pgx/v5"
 	"net/http"
 	"spelldle.com/server/internal/auth"
-	"spelldle.com/server/internal/types"
+	types2 "spelldle.com/server/types"
 )
 
 // Register recieves a RequestPayloadRegister, then checks if the username is valid,
 // inserts into user_info, generates UserDataSession, then sends a ResponseRegisterLogin
 func (r *RouteHandler) Register(ctx *gin.Context) {
-	var registerPayload types.RequestPayloadRegister
-	registerResponse := types.ResponseRegisterLogin{
+	var registerPayload types2.RequestPayloadRegister
+	registerResponse := types2.ResponseRegisterLogin{
 		Valid: false,
 	}
 
@@ -50,7 +50,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 
 	// Insert UserDataAccount
 	if err := r.dbHandler.InsertUserDataAccount(userID,
-		types.UserDataAccount{
+		types2.UserDataAccount{
 			Username: registerPayload.Username,
 			Password: registerPayload.Password,
 		}); err != nil {
@@ -61,7 +61,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 
 	// Insert UserDataPersonal
 	if err := r.dbHandler.InsertUserDataPersonal(userID,
-		types.UserDataPersonal{
+		types2.UserDataPersonal{
 			FirstName: registerPayload.FirstName,
 			LastName:  registerPayload.LastName,
 		}); err != nil {
@@ -97,7 +97,7 @@ func (r *RouteHandler) Register(ctx *gin.Context) {
 		userID,
 		userDataAccount,
 		userDataPersonal,
-		types.UserDataTokens{
+		types2.UserDataTokens{
 			AccessToken:  accessToken,
 			RefreshToken: accessToken,
 		},

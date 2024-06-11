@@ -2,9 +2,10 @@ package parser
 
 import (
 	"encoding/json"
-	"furrj/go_csv_parse/internal/types"
 	"io"
 	"os"
+
+	"spelldle.com/server/types"
 )
 
 func ParseSpells(filename string) ([]types.SpellAllInfo, error) {

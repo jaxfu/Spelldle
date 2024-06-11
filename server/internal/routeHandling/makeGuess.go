@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"spelldle.com/server/internal/types"
+	"spelldle.com/server/types"
 )
 
 func (r *RouteHandler) MakeGuessCategories(ctx *gin.Context) {

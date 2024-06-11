@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"os"
-	"spelldle.com/server/internal/types"
+	"spelldle.com/server/types"
 	"strconv"
 	"time"
 )
