@@ -8,12 +8,12 @@ import (
 	"spelldle.com/server/internal/auth"
 
 	"github.com/gin-gonic/gin"
-	"spelldle.com/server/internal/schemas"
+	"spelldle.com/server/internal/types"
 )
 
 func (r *RouteHandler) Login(ctx *gin.Context) {
-	var loginPayload schemas.RequestPayloadLogin
-	var loginResponse = schemas.ResponseRegisterLogin{
+	var loginPayload types.RequestPayloadLogin
+	var loginResponse = types.ResponseRegisterLogin{
 		Valid: false,
 	}
 
@@ -73,7 +73,7 @@ func (r *RouteHandler) Login(ctx *gin.Context) {
 		userID,
 		userDataAccount,
 		userDataPersonal,
-		schemas.UserDataTokens{
+		types.UserDataTokens{
 			AccessToken:  accessToken,
 			RefreshToken: accessToken,
 		},

@@ -2,42 +2,42 @@
 // different unit tests
 package testHelpers
 
-import "spelldle.com/server/internal/schemas"
+import "spelldle.com/server/internal/types"
 
-var TestUserDataAll = schemas.UserDataAll{
+var TestUserDataAll = types.UserDataAll{
 	UserID: 1,
-	UserDataPersonal: schemas.UserDataPersonal{
+	UserDataPersonal: types.UserDataPersonal{
 		FirstName: "Jackson",
 		LastName:  "Furr",
 	},
-	UserDataAccount: schemas.UserDataAccount{
+	UserDataAccount: types.UserDataAccount{
 		Username: "poemmys",
 		Password: "pass",
 	},
-	UserDataTokens: schemas.UserDataTokens{
+	UserDataTokens: types.UserDataTokens{
 		AccessToken:  "test_token",
 		RefreshToken: "test_token",
 	},
 }
 
-var TestUserRegisterPayload = schemas.RequestPayloadRegister{
+var TestUserRegisterPayload = types.RequestPayloadRegister{
 	Username:  "poemmys",
 	Password:  "pass",
 	FirstName: "Jackson",
 	LastName:  "Furr",
 }
 
-var TestUserLoginPayload = schemas.RequestPayloadLogin{
+var TestUserLoginPayload = types.RequestPayloadLogin{
 	Username: "poemmys",
 	Password: "pass",
 }
 
-var TestUserLoginPayloadInvalidPassword = schemas.RequestPayloadLogin{
+var TestUserLoginPayloadInvalidPassword = types.RequestPayloadLogin{
 	Username: "poemmys",
 	Password: "invalid",
 }
 
-var TestUserLoginPayloadInvalidUsername = schemas.RequestPayloadLogin{
+var TestUserLoginPayloadInvalidUsername = types.RequestPayloadLogin{
 	Username: "invalid",
 	Password: "pass",
 }

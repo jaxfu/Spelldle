@@ -1,4 +1,4 @@
-package schemas
+package types
 
 type RequestPayloadLogin struct {
 	Username string `json:"username"`

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"os"
-	"spelldle.com/server/internal/schemas"
+	"spelldle.com/server/internal/types"
 )
 
 // DBHandler object contains a pointer to pgx connection, one per server
@@ -33,8 +33,8 @@ const QGetUserIDByUsername = `
 	SELECT user_id FROM user_data_account WHERE username=$1
 `
 
-func (dbHandler *DBHandler) GetUserIDByUsername(username string) (schemas.UserID, error) {
-	var id schemas.UserID
+func (dbHandler *DBHandler) GetUserIDByUsername(username string) (types.UserID, error) {
+	var id types.UserID
 	err := dbHandler.DB.QueryRow(context.Background(), QGetUserIDByUsername, username).Scan(&id)
 	if err != nil {
 		return 0, err
@@ -50,8 +50,8 @@ const QGetUserDataAllByUserID = `
 	WHERE user_id=$1
 `
 
-func (dbHandler *DBHandler) GetUserDataAllByUserID(UserID schemas.UserID) (schemas.UserDataAll, error) {
-	var userDataAll schemas.UserDataAll
+func (dbHandler *DBHandler) GetUserDataAllByUserID(UserID types.UserID) (types.UserDataAll, error) {
+	var userDataAll types.UserDataAll
 	err := dbHandler.DB.QueryRow(context.Background(), QGetUserDataAllByUserID, UserID).Scan(
 		&userDataAll.UserID,
 		&userDataAll.UserDataAccount.Username,
@@ -70,8 +70,8 @@ const QGetUserDataAccountByUserID = `
 	WHERE user_id=$1
 `
 
-func (dbHandler *DBHandler) GetUserDataAccountByUserID(UserID schemas.UserID) (schemas.UserDataAccount, error) {
-	userDataAccount := schemas.UserDataAccount{}
+func (dbHandler *DBHandler) GetUserDataAccountByUserID(UserID types.UserID) (types.UserDataAccount, error) {
+	userDataAccount := types.UserDataAccount{}
 	err := dbHandler.DB.QueryRow(context.Background(), QGetUserDataAccountByUserID, UserID).Scan(
 		&userDataAccount.Username,
 		&userDataAccount.Password,
@@ -88,8 +88,8 @@ const QGetUserDataPersonalByUserID = `
 	WHERE user_id=$1
 `
 
-func (dbHandler *DBHandler) GetUserDataPersonalByUserID(userID schemas.UserID) (schemas.UserDataPersonal, error) {
-	userDataPersonal := schemas.UserDataPersonal{}
+func (dbHandler *DBHandler) GetUserDataPersonalByUserID(userID types.UserID) (types.UserDataPersonal, error) {
+	userDataPersonal := types.UserDataPersonal{}
 	err := dbHandler.DB.QueryRow(context.Background(), QGetUserDataPersonalByUserID, userID).Scan(
 		&userDataPersonal.FirstName,
 		&userDataPersonal.LastName,
@@ -107,8 +107,8 @@ const EInsertUser = `
 	RETURNING user_id
 `
 
-func (dbHandler *DBHandler) InsertUser() (schemas.UserID, error) {
-	var userID schemas.UserID
+func (dbHandler *DBHandler) InsertUser() (types.UserID, error) {
+	var userID types.UserID
 	err := dbHandler.DB.QueryRow(context.Background(), EInsertUser).Scan(&userID)
 	if err != nil {
 		return userID, err
@@ -121,7 +121,7 @@ const EInsertUserDataAccount = `
 	VALUES ($1, $2, $3)
 `
 
-func (dbHandler *DBHandler) InsertUserDataAccount(userID schemas.UserID, accountData schemas.UserDataAccount) error {
+func (dbHandler *DBHandler) InsertUserDataAccount(userID types.UserID, accountData types.UserDataAccount) error {
 	_, err := dbHandler.DB.Exec(context.Background(), EInsertUserDataAccount,
 		userID,
 		accountData.Username,
@@ -138,7 +138,7 @@ const EInsertUserDataPersonal = `
 	VALUES ($1, $2, $3)
 `
 
-func (dbHandler *DBHandler) InsertUserDataPersonal(userID schemas.UserID, personalData schemas.UserDataPersonal) error {
+func (dbHandler *DBHandler) InsertUserDataPersonal(userID types.UserID, personalData types.UserDataPersonal) error {
 	_, err := dbHandler.DB.Exec(context.Background(), EInsertUserDataPersonal,
 		userID,
 		personalData.FirstName,

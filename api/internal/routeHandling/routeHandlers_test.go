@@ -3,7 +3,7 @@ package routeHandling
 import (
 	"fmt"
 	"os"
-	"spelldle.com/server/internal/schemas"
+	"spelldle.com/server/internal/types"
 	"spelldle.com/server/internal/testHelpers"
 	"testing"
 
@@ -25,7 +25,7 @@ func TestRouteHandlers(t *testing.T) {
 	// Set up vars
 	testUserRegisterPayload := testHelpers.TestUserRegisterPayload
 	testUserLoginPayload := testHelpers.TestUserLoginPayload
-	var testUserDataTokens schemas.UserDataTokens
+	var testUserDataTokens types.UserDataTokens
 
 	t.Run("DropTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
@@ -39,7 +39,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("Register", func(t *testing.T) {
-		var responseData schemas.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestHTTPRequest(
 			&testUserRegisterPayload, &responseData,
 			routeHandler.Register,
@@ -63,7 +63,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("LoginValid", func(t *testing.T) {
-		var responseData schemas.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestHTTPRequest(
 			&testUserLoginPayload,
 			&responseData,
@@ -87,7 +87,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("LoginInvalidUsername", func(t *testing.T) {
-		var responseData schemas.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testHelpers.TestUserLoginPayloadInvalidUsername,
@@ -103,7 +103,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("LoginInvalidPassword", func(t *testing.T) {
-		var responseData schemas.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testHelpers.TestUserLoginPayloadInvalidPassword,
@@ -119,7 +119,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("ValidateSession", func(t *testing.T) {
-		var responseData schemas.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testUserDataTokens,
@@ -147,7 +147,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("ValidateSessionInvalid", func(t *testing.T) {
-		var responseData schemas.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testHelpers.TestUserDataAll.UserDataTokens,

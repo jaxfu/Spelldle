@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"os"
-	"spelldle.com/server/internal/schemas"
+	"spelldle.com/server/internal/types"
 	"strconv"
 	"time"
 )
 
-func CreateJWTFromUserID(userID schemas.UserID) (string, error) {
+func CreateJWTFromUserID(userID types.UserID) (string, error) {
 	var (
 		key []byte
 		t   *jwt.Token

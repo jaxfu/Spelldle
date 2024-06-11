@@ -1,4 +1,4 @@
-package schemas
+package types
 
 type SpellAllInfo struct {
 	Name string `json:"name"`

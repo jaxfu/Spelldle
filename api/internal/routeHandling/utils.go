@@ -1,18 +1,18 @@
 package routeHandling
 
-import "spelldle.com/server/internal/schemas"
+import "spelldle.com/server/internal/types"
 
 func CreateResponseRegisterLogin(
 	valid bool,
-	userID schemas.UserID,
-	userDataAccount schemas.UserDataAccount,
-	userDataPersonal schemas.UserDataPersonal,
-	userDataTokens schemas.UserDataTokens,
-) schemas.ResponseRegisterLogin {
-	return schemas.ResponseRegisterLogin{
+	userID types.UserID,
+	userDataAccount types.UserDataAccount,
+	userDataPersonal types.UserDataPersonal,
+	userDataTokens types.UserDataTokens,
+) types.ResponseRegisterLogin {
+	return types.ResponseRegisterLogin{
 		Valid:  valid,
 		UserId: userID,
-		UserDataAccount: schemas.ResponseUserDataAccount{
+		UserDataAccount: types.ResponseUserDataAccount{
 			Username: userDataAccount.Username,
 		},
 		UserDataPersonal: userDataPersonal,

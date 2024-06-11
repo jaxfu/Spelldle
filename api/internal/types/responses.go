@@ -1,4 +1,4 @@
-package schemas
+package types
 
 type ResponseRegisterLogin struct {
 	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`

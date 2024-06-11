@@ -8,13 +8,13 @@ import (
 	"net/http"
 	"os"
 	"spelldle.com/server/internal/auth"
-	"spelldle.com/server/internal/schemas"
+	"spelldle.com/server/internal/types"
 	"strconv"
 )
 
 func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
-	var validationPayload schemas.RequestPayloadValidateSession
-	validationResponse := schemas.ResponseValidateSession{
+	var validationPayload types.RequestPayloadValidateSession
+	validationResponse := types.ResponseValidateSession{
 		Valid: false,
 	}
 
@@ -53,7 +53,7 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 		fmt.Printf("Error getting userId from token: %+v\n", err)
 		return
 	}
-	userID := schemas.UserID(uint(userID64))
+	userID := types.UserID(uint(userID64))
 
 	// Get UserDataAccount
 	userDataAccount, err := r.dbHandler.GetUserDataAccountByUserID(userID)
@@ -73,7 +73,7 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 
 	validationResponse.Valid = true
 	validationResponse.UserId = userID
-	validationResponse.UserDataAccount = schemas.ResponseUserDataAccount{
+	validationResponse.UserDataAccount = types.ResponseUserDataAccount{
 		Username: userDataAccount.Username,
 	}
 	validationResponse.UserDataPersonal = userDataPersonal
