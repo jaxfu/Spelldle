@@ -1,7 +1,2 @@
-BEGIN;
-
-DROP TABLE IF EXISTS user_data_account;
-DROP TABLE IF EXISTS user_data_personal;
-DROP TABLE IF EXISTS users;
-
-COMMIT;
+DROP SCHEMA IF EXISTS user_info CASCADE;
+DROP SCHEMA IF EXISTS spell_info CASCADE;
