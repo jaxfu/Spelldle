@@ -4,16 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/jackc/pgx/v5"
 	"os"
-	"spelldle.com/server/internal/testHelpers"
 	"testing"
+
+	"github.com/jackc/pgx/v5"
+	"spelldle.com/server/internal/testHelpers"
 
 	"github.com/joho/godotenv"
 )
 
 func TestDBHandler(t *testing.T) {
-	if err := godotenv.Load("../../config.env"); err != nil {
+	if err := godotenv.Load("../../../config/config.env"); err != nil {
 		fmt.Printf("Error loading env vars: %+v\n", err)
 		os.Exit(1)
 	}

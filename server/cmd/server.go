@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
-	"github.com/mandrigin/gin-spa/spa"
 	"log"
 	"os"
+
+	"github.com/gin-contrib/cors"
+	"github.com/mandrigin/gin-spa/spa"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -16,7 +17,7 @@ import (
 func main() {
 	// ENV CONFIG
 	if os.Getenv("MODE") != "PROD" {
-		if err := godotenv.Load("config.env"); err != nil {
+		if err := godotenv.Load("../../config/config.env"); err != nil {
 			fmt.Printf("%+v\n", err)
 			os.Exit(1)
 		}

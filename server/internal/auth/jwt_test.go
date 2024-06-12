@@ -2,13 +2,14 @@ package auth
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"os"
 	"testing"
+
+	"github.com/joho/godotenv"
 )
 
 func TestJWT(t *testing.T) {
-	if err := godotenv.Load("../../config.env"); err != nil {
+	if err := godotenv.Load("../../../config/config.env"); err != nil {
 		fmt.Printf("Error loading env vars: %+v\n", err)
 		os.Exit(1)
 	}

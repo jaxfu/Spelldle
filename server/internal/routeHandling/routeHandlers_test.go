@@ -3,16 +3,17 @@ package routeHandling
 import (
 	"fmt"
 	"os"
+	"testing"
+
 	"spelldle.com/server/internal/testHelpers"
 	types2 "spelldle.com/server/types"
-	"testing"
 
 	"github.com/joho/godotenv"
 	"spelldle.com/server/internal/dbHandler"
 )
 
 func TestRouteHandlers(t *testing.T) {
-	if err := godotenv.Load("../../config.env"); err != nil {
+	if err := godotenv.Load("../../../config/config.env"); err != nil {
 		fmt.Printf("Error loading env vars: %+v\n", err)
 		os.Exit(1)
 	}
