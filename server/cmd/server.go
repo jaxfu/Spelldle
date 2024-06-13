@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-contrib/cors"
@@ -17,7 +18,7 @@ import (
 func main() {
 	// ENV CONFIG
 	if os.Getenv("MODE") != "PROD" {
-		if err := godotenv.Load("../../config/config.env"); err != nil {
+		if err := godotenv.Load("../config/config.env"); err != nil {
 			fmt.Printf("%+v\n", err)
 			os.Exit(1)
 		}
