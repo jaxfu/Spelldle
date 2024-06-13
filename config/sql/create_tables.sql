@@ -19,3 +19,24 @@ CREATE TABLE user_info.user_data_personal
     first_name VARCHAR(32),
     last_name  VARCHAR(32)
 );
+
+CREATE TABLE spell_info.spells
+(
+  spell_id INTEGER PRIMARY KEY UNIQUE,
+  name TEXT UNIQUE,
+  school INTEGER,
+  casting_time INTEGER,
+  range INTEGER,
+  target INTEGER,
+  duration INTEGER,
+  components INTEGER[],
+  class INTEGER[],
+  effects INTEGER[]
+);
+
+CREATE TABLE spell_info.spell_level_objects
+(
+  spell_id INTEGER PRIMARY KEY UNIQUE references spell_info.spells(spell_id),
+  level INTEGER,
+  is_ritual BOOLEAN
+);
