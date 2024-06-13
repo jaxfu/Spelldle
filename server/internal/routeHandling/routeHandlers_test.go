@@ -3,13 +3,12 @@ package routeHandling
 import (
 	"fmt"
 	"os"
+	"spelldle.com/server/shared/dbHandler"
+	"spelldle.com/server/shared/types"
 	"testing"
 
-	"spelldle.com/server/internal/testHelpers"
-	types2 "spelldle.com/server/types"
-
 	"github.com/joho/godotenv"
-	"spelldle.com/server/internal/dbHandler"
+	"spelldle.com/server/internal/testHelpers"
 )
 
 func TestRouteHandlers(t *testing.T) {
@@ -26,7 +25,7 @@ func TestRouteHandlers(t *testing.T) {
 	// Set up vars
 	testUserRegisterPayload := testHelpers.TestUserRegisterPayload
 	testUserLoginPayload := testHelpers.TestUserLoginPayload
-	var testUserDataTokens types2.UserDataTokens
+	var testUserDataTokens types.UserDataTokens
 
 	t.Run("DropTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
@@ -40,7 +39,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("Register", func(t *testing.T) {
-		var responseData types2.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestHTTPRequest(
 			&testUserRegisterPayload, &responseData,
 			routeHandler.Register,
@@ -64,7 +63,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("LoginValid", func(t *testing.T) {
-		var responseData types2.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestHTTPRequest(
 			&testUserLoginPayload,
 			&responseData,
@@ -88,7 +87,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("LoginInvalidUsername", func(t *testing.T) {
-		var responseData types2.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testHelpers.TestUserLoginPayloadInvalidUsername,
@@ -104,7 +103,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("LoginInvalidPassword", func(t *testing.T) {
-		var responseData types2.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testHelpers.TestUserLoginPayloadInvalidPassword,
@@ -120,7 +119,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("ValidateSession", func(t *testing.T) {
-		var responseData types2.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testUserDataTokens,
@@ -148,7 +147,7 @@ func TestRouteHandlers(t *testing.T) {
 	})
 
 	t.Run("ValidateSessionInvalid", func(t *testing.T) {
-		var responseData types2.ResponseRegisterLogin
+		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestHTTPRequest(
 			&testHelpers.TestUserDataAll.UserDataTokens,

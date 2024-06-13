@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
-
-	"spelldle.com/server/types"
+	"spelldle.com/server/shared/types"
 )
 
 func ParseSpells(filename string) ([]types.SpellAllInfo, error) {

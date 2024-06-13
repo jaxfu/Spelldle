@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-contrib/cors"
 	"github.com/mandrigin/gin-spa/spa"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"spelldle.com/server/internal/dbHandler"
 	"spelldle.com/server/internal/routeHandling"
 )
 

@@ -3,7 +3,7 @@
 package routeHandling
 
 import (
-	"spelldle.com/server/internal/dbHandler"
+	"spelldle.com/server/shared/dbHandler"
 )
 
 // RouteHandler responds to requests to the route specified in each method's name

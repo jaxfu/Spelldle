@@ -7,12 +7,12 @@ import (
 	"github.com/jackc/pgx/v5"
 	"net/http"
 	"spelldle.com/server/internal/auth"
-	types2 "spelldle.com/server/types"
+	"spelldle.com/server/shared/types"
 )
 
 func (r *RouteHandler) Login(ctx *gin.Context) {
-	var loginPayload types2.RequestPayloadLogin
-	var loginResponse = types2.ResponseRegisterLogin{
+	var loginPayload types.RequestPayloadLogin
+	var loginResponse = types.ResponseRegisterLogin{
 		Valid: false,
 	}
 
@@ -72,7 +72,7 @@ func (r *RouteHandler) Login(ctx *gin.Context) {
 		userID,
 		userDataAccount,
 		userDataPersonal,
-		types2.UserDataTokens{
+		types.UserDataTokens{
 			AccessToken:  accessToken,
 			RefreshToken: accessToken,
 		},
