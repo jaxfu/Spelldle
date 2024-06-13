@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+
 	"spelldle.com/server/shared/types"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -28,6 +29,7 @@ func InitDBHandler(connectionString string) *DBHandler {
 	return &newDBHandler
 }
 
+// user_info
 // Gets
 
 const QGetUserIDByUsername = `
@@ -150,6 +152,18 @@ func (dbHandler *DBHandler) InsertUserDataPersonal(userID types.UserID, personal
 	}
 	return nil
 }
+
+// spell_info
+// GETS
+const EInsertSpell = `
+  INSERT INTO spell_info.spells(spell_id, name, school, casting_time, range, target, duration, components, class, effects)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+`
+
+const EInsertSpellLevel = `
+  INSERT INTO spell_info.spell_level_objects(spell_id, level, is_ritual)
+  VALUES ($1, $2, $3);
+`
 
 // TESTING
 
