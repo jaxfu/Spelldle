@@ -32,6 +32,7 @@ const Login: React.FC<IProps> = (props) => {
     mutationFn: (
       userInput: T_USERINPUT_LOGIN
     ): Promise<AxiosResponse<T_APIRESULT_LOGIN>> => {
+      console.log(userInput)
       return apiRequestLogin(userInput);
     },
     onError(err) {
