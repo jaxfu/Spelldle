@@ -1,1 +1,4 @@
-1. Get current dbHandler working with schemas
+- Parse spells.json into db
+
+DONE
+- Get current dbHandler working with schemas
