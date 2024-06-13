@@ -23,7 +23,7 @@ const GuessInfoButton: React.FC<IProps> = (props) => {
 
 				createRequestObjectFromCurrentGuessInfo(
 					props.allCurrentGuessInfo,
-					props.categoryInfo
+					props.categoryInfo,
 				);
 			}}
 		>

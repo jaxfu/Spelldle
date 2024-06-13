@@ -21,7 +21,7 @@ const RecommendationBox: React.FC<IProps> = (props) => {
 									methods.onRecommendationClick(
 										option.toString(),
 										props.setInputValue,
-										props.setRecommendations
+										props.setRecommendations,
 									);
 								}}
 								// Keep focus on text input

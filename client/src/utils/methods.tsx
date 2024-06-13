@@ -33,7 +33,7 @@ export function getRecommendations(e: any, values: string[]): string[] {
 export function onRecommendationClick(
 	key: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>
+	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
 ): void {
 	setInputValue(key);
 	setRecommendations([]);
@@ -50,7 +50,7 @@ export function getUniqueComponents(
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>
+	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>,
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -122,7 +122,7 @@ export function createNewSpellInfoMap(): T_ALL_CURRENT_GUESS_INFO {
 export function onAddGuessClick(
 	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
 	inputValue: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>
+	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 ): void {
 	setGuesses((guesses: string[]) => {
 		const newArr = [...guesses];
@@ -134,7 +134,7 @@ export function onAddGuessClick(
 
 export function onRemoveGuessClick(
 	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
-	guess: string
+	guess: string,
 ): void {
 	setGuesses((guesses) => {
 		return guesses.filter((g: string) => {
@@ -146,7 +146,7 @@ export function onRemoveGuessClick(
 // Login
 export function logoutUser(
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>
+	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
 ): void {
 	clearTokensFromLocalStorage();
 	setUserIsLoggedIn(false);
@@ -181,19 +181,19 @@ export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
 export function sendTokensToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
 	localStorage.setItem(
 		LOCAL_STORAGE_TOKENS_KEYS.access_token,
-		userDataTokens.access_token
+		userDataTokens.access_token,
 	);
 	localStorage.setItem(
 		LOCAL_STORAGE_TOKENS_KEYS.refresh_token,
-		userDataTokens.refresh_token
+		userDataTokens.refresh_token,
 	);
 
 	console.log("Sent to localStorage: ");
 	console.log(
-		`${LOCAL_STORAGE_TOKENS_KEYS.access_token}: ${userDataTokens.access_token}`
+		`${LOCAL_STORAGE_TOKENS_KEYS.access_token}: ${userDataTokens.access_token}`,
 	);
 	console.log(
-		`${LOCAL_STORAGE_TOKENS_KEYS.refresh_token}: ${userDataTokens.refresh_token}`
+		`${LOCAL_STORAGE_TOKENS_KEYS.refresh_token}: ${userDataTokens.refresh_token}`,
 	);
 }
 
@@ -205,7 +205,7 @@ export function clearTokensFromLocalStorage() {
 
 // Data
 export function createUserDataStateFromApiResult(
-	apiResult: T_APIRESULTS
+	apiResult: T_APIRESULTS,
 ): T_USERDATA_STATE {
 	return {
 		user_id: apiResult.user_id,
@@ -218,12 +218,12 @@ export function setUserDataFromAPIResult(
 	data: T_APIRESULTS,
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>
+	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
 ): void {
 	console.log(
 		`Setting userData: ${JSON.stringify(
-			createUserDataStateFromApiResult(data)
-		)}`
+			createUserDataStateFromApiResult(data),
+		)}`,
 	);
 	setUserData(createUserDataStateFromApiResult(data));
 	setUserIsLoggedIn(true);
@@ -232,29 +232,29 @@ export function setUserDataFromAPIResult(
 
 export function createRequestObjectFromCurrentGuessInfo(
 	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
-	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO
+	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
 ): T_APIREQUEST_MAKE_GUESS {
 	const requestObject: T_APIREQUEST_MAKE_GUESS = deepCopyObject(
-		INIT_APIREQUEST_MAKE_GUESS
+		INIT_APIREQUEST_MAKE_GUESS,
 	);
 
 	// SCHOOOL
 	const schoolGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.SCHOOL.name
+		CATEGORY_INFO.SCHOOL.name,
 	) as string;
 	const schoolRequestValue = categoryInfo.SCHOOL.id_map.get(
-		schoolGuessValue.toLowerCase()
+		schoolGuessValue.toLowerCase(),
 	) as number;
 	requestObject.school = schoolRequestValue;
 
 	// LEVEL
 	const levelGuessValue = currentGuessInfo.get(CATEGORY_INFO.LEVEL.name) as [
 		string,
-		boolean
+		boolean,
 	];
 	const levelRequestValue: { level: number; is_ritual: boolean } = {
 		level: categoryInfo.LEVEL.id_map.get(
-			levelGuessValue[0].toLowerCase()
+			levelGuessValue[0].toLowerCase(),
 		) as number,
 		is_ritual: levelGuessValue[1],
 	};
@@ -262,72 +262,72 @@ export function createRequestObjectFromCurrentGuessInfo(
 
 	// CASTING_TIME
 	const castingTimeGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.CASTING_TIME.name
+		CATEGORY_INFO.CASTING_TIME.name,
 	) as string;
 	const castingTimeRequestValue = categoryInfo.CASTING_TIME.id_map.get(
-		castingTimeGuessValue.toLowerCase()
+		castingTimeGuessValue.toLowerCase(),
 	) as number;
 	requestObject.casting_time = castingTimeRequestValue;
 
 	// RANGE
 	const rangeGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.RANGE.name
+		CATEGORY_INFO.RANGE.name,
 	) as string;
 	const rangeRequestValue = categoryInfo.RANGE.id_map.get(
-		rangeGuessValue.toLowerCase()
+		rangeGuessValue.toLowerCase(),
 	) as number;
 	requestObject.range = rangeRequestValue;
 
 	// TARGET
 	const targetGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.TARGET.name
+		CATEGORY_INFO.TARGET.name,
 	) as string;
 	const targetRequestValue = categoryInfo.TARGET.id_map.get(
-		targetGuessValue.toLowerCase()
+		targetGuessValue.toLowerCase(),
 	) as number;
 	requestObject.target = targetRequestValue;
 
 	// DURATION
 	const durationGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.DURATION.name
+		CATEGORY_INFO.DURATION.name,
 	) as string;
 	const durationRequestValue = categoryInfo.DURATION.id_map.get(
-		durationGuessValue.toLowerCase()
+		durationGuessValue.toLowerCase(),
 	) as number;
 	requestObject.duration = durationRequestValue;
 
 	// COMPONENTS
 	const componentsGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.COMPONENTS.name
+		CATEGORY_INFO.COMPONENTS.name,
 	) as string[];
 	const componentsRequestValue: number[] = [];
 	componentsGuessValue.forEach((component) => {
 		componentsRequestValue.push(
-			categoryInfo.COMPONENTS.id_map.get(component.toLowerCase()) as number
+			categoryInfo.COMPONENTS.id_map.get(component.toLowerCase()) as number,
 		);
 	});
 	requestObject.components = componentsRequestValue.sort((a, b) => a - b);
 
 	// CLASS
 	const classGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.CLASS.name
+		CATEGORY_INFO.CLASS.name,
 	) as string[];
 	const classRequestValue: number[] = [];
 	classGuessValue.forEach((component) => {
 		classRequestValue.push(
-			categoryInfo.CLASS.id_map.get(component.toLowerCase()) as number
+			categoryInfo.CLASS.id_map.get(component.toLowerCase()) as number,
 		);
 	});
 	requestObject.class = classRequestValue.sort((a, b) => a - b);
 
 	// EFFECTS
 	const effectsGuessValue = currentGuessInfo.get(
-		CATEGORY_INFO.EFFECTS.name
+		CATEGORY_INFO.EFFECTS.name,
 	) as string[];
 	const effectsRequestValue: number[] = [];
 	effectsGuessValue.forEach((component) => {
 		effectsRequestValue.push(
-			categoryInfo.EFFECTS.id_map.get(component.toLowerCase()) as number
+			categoryInfo.EFFECTS.id_map.get(component.toLowerCase()) as number,
 		);
 	});
 	requestObject.effects = effectsRequestValue.sort((a, b) => a - b);
@@ -352,7 +352,7 @@ export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
 	infoObj.SCHOOL.id_map = createMapFromValues(infoObj.SCHOOL.values);
 	infoObj.LEVEL.id_map = createMapFromValues(infoObj.LEVEL.values);
 	infoObj.CASTING_TIME.id_map = createMapFromValues(
-		infoObj.CASTING_TIME.values
+		infoObj.CASTING_TIME.values,
 	);
 	infoObj.RANGE.id_map = createMapFromValues(infoObj.RANGE.values);
 	infoObj.TARGET.id_map = createMapFromValues(infoObj.TARGET.values);

@@ -29,16 +29,16 @@ import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 
 const App: React.FC = () => {
 	const [userData, setUserData] = useState<T_USERDATA_STATE>(
-		deepCopyObject(INIT_USERDATA_STATE)
+		deepCopyObject(INIT_USERDATA_STATE),
 	);
 	const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
 	const [enableInitialQueryFn, setEnableInitialQueryFn] =
 		useState<boolean>(false);
 	const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
-		createNewSpellInfoMap()
+		createNewSpellInfoMap(),
 	);
 	const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
-		getAllCategoriesInfo()
+		getAllCategoriesInfo(),
 	);
 
 	useEffect(() => {
@@ -69,7 +69,7 @@ const App: React.FC = () => {
 				data.data,
 				setUserData,
 				setUserIsLoggedIn,
-				setEnableInitialQueryFn
+				setEnableInitialQueryFn,
 			);
 		}
 	}, [isSuccess]);

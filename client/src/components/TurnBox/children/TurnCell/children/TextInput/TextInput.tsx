@@ -31,7 +31,7 @@ const TextInput: React.FC<IProps> = (props) => {
 		} else {
 			props.allCurrentGuessInfo.current.set(
 				props.category_name,
-				props.inputValue
+				props.inputValue,
 			);
 		}
 	}, [props.inputValue, guessesForMulti]);
@@ -65,12 +65,12 @@ const TextInput: React.FC<IProps> = (props) => {
 					onChange={(e) => {
 						handleInput(e, props.setInputValue);
 						props.setRecommendations(
-							methods.getRecommendations(e, props.recommendationValues)
+							methods.getRecommendations(e, props.recommendationValues),
 						);
 					}}
 					onFocus={(e) =>
 						props.setRecommendations(
-							methods.getRecommendations(e, props.recommendationValues)
+							methods.getRecommendations(e, props.recommendationValues),
 						)
 					}
 					onBlur={() => props.setRecommendations([])}
@@ -81,7 +81,7 @@ const TextInput: React.FC<IProps> = (props) => {
 							methods.onAddGuessClick(
 								setGuessesForMulti,
 								props.inputValue,
-								props.setInputValue
+								props.setInputValue,
 							)
 						}
 					>

@@ -28,7 +28,7 @@ const Register: React.FC<IProps> = (props) => {
 
 	const mutation = useMutation({
 		mutationFn: (
-			userInput: T_USERINPUT_REGISTER
+			userInput: T_USERINPUT_REGISTER,
 		): Promise<AxiosResponse<T_APIRESULT_REGISTER>> => {
 			return apiRequestRegister(userInput);
 		},
@@ -42,7 +42,7 @@ const Register: React.FC<IProps> = (props) => {
 					data.data,
 					props.setUserData,
 					props.setUserIsLoggedIn,
-					props.setEnableQueryFn
+					props.setEnableQueryFn,
 				);
 			}
 		},

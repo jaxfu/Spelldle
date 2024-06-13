@@ -2,7 +2,6 @@
 @import "../../styles/vars";
 
 .root {
-  @include full-size-percent;
-  @include flex-center;
+	@include full-size-percent;
+	@include flex-center;
 }
-
