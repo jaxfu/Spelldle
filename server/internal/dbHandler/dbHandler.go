@@ -4,8 +4,9 @@ package dbHandler
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"os"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 	"spelldle.com/server/types"
 )
 
@@ -30,7 +31,7 @@ func InitDBHandler(connectionString string) *DBHandler {
 // Gets
 
 const QGetUserIDByUsername = `
-	SELECT user_id FROM user_data_account WHERE username=$1
+	SELECT user_id FROM user_info.user_data_account WHERE username=$1
 `
 
 func (dbHandler *DBHandler) GetUserIDByUsername(username string) (types.UserID, error) {
@@ -44,9 +45,9 @@ func (dbHandler *DBHandler) GetUserIDByUsername(username string) (types.UserID, 
 
 const QGetUserDataAllByUserID = `
 	SELECT user_id, username, password, first_name, last_name
-	FROM users
-	NATURAL JOIN user_data_account
-	NATURAL JOIN user_data_personal
+	FROM user_info.users
+	NATURAL JOIN user_info.user_data_account
+	NATURAL JOIN user_info.user_data_personal
 	WHERE user_id=$1
 `
 
@@ -66,7 +67,7 @@ func (dbHandler *DBHandler) GetUserDataAllByUserID(UserID types.UserID) (types.U
 
 const QGetUserDataAccountByUserID = `
 	SELECT username, password
-	FROM user_data_account
+	FROM user_info.user_data_account
 	WHERE user_id=$1
 `
 
@@ -84,7 +85,7 @@ func (dbHandler *DBHandler) GetUserDataAccountByUserID(UserID types.UserID) (typ
 
 const QGetUserDataPersonalByUserID = `
 	SELECT first_name, last_name
-	FROM user_data_personal
+	FROM user_info.user_data_personal
 	WHERE user_id=$1
 `
 
@@ -103,7 +104,7 @@ func (dbHandler *DBHandler) GetUserDataPersonalByUserID(userID types.UserID) (ty
 // Inserts
 
 const EInsertUser = `
-	INSERT INTO users DEFAULT VALUES
+	INSERT INTO user_info.users DEFAULT VALUES
 	RETURNING user_id
 `
 
@@ -117,7 +118,7 @@ func (dbHandler *DBHandler) InsertUser() (types.UserID, error) {
 }
 
 const EInsertUserDataAccount = `
-	INSERT INTO user_data_account
+	INSERT INTO user_info.user_data_account
 	VALUES ($1, $2, $3)
 `
 
@@ -134,7 +135,7 @@ func (dbHandler *DBHandler) InsertUserDataAccount(userID types.UserID, accountDa
 }
 
 const EInsertUserDataPersonal = `
-	INSERT INTO user_data_personal
+	INSERT INTO user_info.user_data_personal
 	VALUES ($1, $2, $3)
 `
 
