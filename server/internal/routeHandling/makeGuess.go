@@ -26,5 +26,25 @@ func (r *RouteHandler) MakeGuessCategories(ctx *gin.Context) {
 		return
 	}
 
+	response = checkGuessAgainstSpell(payload, spell)
+
 	ctx.JSON(http.StatusOK, response)
+}
+
+func checkGuessAgainstSpell(guess types.SpellCategories, spell types.SpellAllInfo) types.ResponseMakeGuess {
+	var result types.ResponseMakeGuess
+
+	singlesGuess := [5]*int{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration}
+	singlesResult := [5]*int{&result.School, &result.CastingTime, &result.Range, &result.Target, &result.Duration}
+	singlesSpell := [5]*int{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration}
+
+	for i := range singlesGuess {
+		if *singlesGuess[i] == *singlesSpell[i] {
+			*singlesResult[i] = 2
+		} else {
+			*singlesResult[i] = 0
+		}
+	}
+
+	return result
 }
