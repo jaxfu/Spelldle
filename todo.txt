@@ -1,3 +1,4 @@
+In Progress
 - Parse spells.json into db
 
 DONE
