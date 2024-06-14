@@ -3,9 +3,10 @@ package routeHandling
 import (
 	"fmt"
 	"os"
+	"testing"
+
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
-	"testing"
 
 	"github.com/joho/godotenv"
 	"spelldle.com/server/internal/testHelpers"
@@ -32,7 +33,7 @@ func TestRouteHandlers(t *testing.T) {
 			t.Errorf("Error dropping tables: %+v\n", err)
 		}
 	})
-	t.Run("InitTables", func(t *testing.T) {
+	t.Run("CreateTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_CREATE_TABLES")); err != nil {
 			t.Errorf("Error initializing tables: %+v\n", err)
 		}

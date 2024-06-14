@@ -36,7 +36,7 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("Error dropping tables: %+v\n", err)
 		}
 	})
-	t.Run("InitTables", func(t *testing.T) {
+	t.Run("CreateTables", func(t *testing.T) {
 		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_CREATE_TABLES")); err != nil {
 			t.Errorf("Error initializing tables: %+v\n", err)
 		}
