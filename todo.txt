@@ -1,9 +1,10 @@
 In Progress
 - Create tests for spell dbHandler routes
-- Create response type for /api/makeGuess
+- Implement /api/makeGuess routeHandler that tests for correctness
 - Create users.currentGameData with currentSpell
 - Create accessToken middleware
 
 DONE
 - Get current dbHandler working with schemas
 - Parse spells.json into db
+- Create response type for /api/makeGuess
