@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
 	"spelldle.com/server/shared/types"
 )
 
-func ParseSpells(filename string) ([]types.SpellAllInfo, error) {
+func ParseSpellsFromJson(filename string) ([]types.SpellAllInfo, error) {
 	var spells []types.SpellAllInfo
 
 	buf, err := os.Open(filename)

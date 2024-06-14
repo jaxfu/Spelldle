@@ -1,5 +1,6 @@
 [
   {
+    "spell_id": 1,
     "name": "test_0",
     "school": 0,
     "range": 0,
@@ -26,6 +27,7 @@
     ]
   },
   {
+    "spell_id": 2,
     "name": "test_1",
     "school": 1,
     "range": 1,

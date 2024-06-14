@@ -155,6 +155,7 @@ func (dbHandler *DBHandler) InsertUserDataPersonal(userID types.UserID, personal
 
 // spell_info
 // GETS
+
 const EInsertSpell = `
   INSERT INTO spell_info.spells(spell_id, name, school, casting_time, range, target, duration, components, class, effects)
   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
@@ -164,6 +165,36 @@ const EInsertSpellLevel = `
   INSERT INTO spell_info.spell_level_objects(spell_id, level, is_ritual)
   VALUES ($1, $2, $3);
 `
+
+// Inserts
+
+func (dbHandler *DBHandler) InsertSpell(spellInfo types.SpellAllInfo) error {
+	_, err := dbHandler.DB.Exec(context.Background(), EInsertSpell,
+		spellInfo.SpellID,
+		spellInfo.Name,
+		spellInfo.School,
+		spellInfo.CastingTime,
+		spellInfo.Range,
+		spellInfo.Target,
+		spellInfo.Duration,
+		spellInfo.Components,
+		spellInfo.Effects,
+		spellInfo.Class,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = dbHandler.DB.Exec(context.Background(), EInsertSpellLevel,
+		spellInfo.SpellID,
+		spellInfo.Level.Level,
+		spellInfo.Level.IsRitual,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // TESTING
 

@@ -3,6 +3,7 @@ package types
 type SpellAllInfo struct {
 	Name string `json:"name"`
 	SpellCategories
+	SpellID uint `json:"spell_id"`
 }
 
 type SpellCategories struct {
