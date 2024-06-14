@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"spelldle.com/db/internal/parser"
 	"spelldle.com/server/shared/dbHandler"
 )
 
@@ -19,20 +20,19 @@ func main() {
 	db := dbHandler.InitDBHandler(os.Getenv("DB_URL"))
 	defer db.DB.Close()
 
-	spell, err := db.GetSpellBySpellId(1)
+	spells, err := parser.ParseSpellsFromJson("../config/spells.json")
 	if err != nil {
 		fmt.Printf("%+v\n", err)
+		os.Exit(1)
 	}
 
-	// spells, err := parser.ParseSpellsFromJson("../config/spells.json")
-	// if err != nil {
-	// 	fmt.Printf("%+v\n", err)
-	// }
-	//
-	// err = db.InsertSpell(spells[1])
-	// if err != nil {
-	// 	fmt.Printf("error inserting spell: %+v\n", err)
-	// }
+	for spell := range spells {
+		err = db.InsertSpell(spells[spell])
+		if err != nil {
+			fmt.Printf("error inserting spell: %+v\n", err)
+			os.Exit(1)
+		}
+	}
 
-	fmt.Printf("%+v\n", spell)
+	fmt.Println("Succesfully inserted spells")
 }
