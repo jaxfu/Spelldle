@@ -30,8 +30,9 @@ const Login: React.FC<IProps> = (props) => {
 
 	const mutation = useMutation({
 		mutationFn: (
-			userInput: T_USERINPUT_LOGIN
+			userInput: T_USERINPUT_LOGIN,
 		): Promise<AxiosResponse<T_APIRESULT_LOGIN>> => {
+			console.log(userInput);
 			return apiRequestLogin(userInput);
 		},
 		onError(err) {
@@ -44,7 +45,7 @@ const Login: React.FC<IProps> = (props) => {
 					data.data,
 					props.setUserData,
 					props.setUserIsLoggedIn,
-					props.setEnableQueryFn
+					props.setEnableQueryFn,
 				);
 			}
 		},

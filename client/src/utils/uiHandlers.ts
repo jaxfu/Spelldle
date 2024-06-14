@@ -1,5 +1,5 @@
 export const togglePasswordLogin = (
-	e: React.MouseEvent<HTMLButtonElement>
+	e: React.MouseEvent<HTMLButtonElement>,
 ): void => {
 	const passwordBox = document.querySelector("#passwordBox");
 	if (passwordBox) {
@@ -19,7 +19,7 @@ export const togglePasswordLogin = (
 };
 
 export const togglePasswordRegister1 = (
-	e: React.MouseEvent<HTMLButtonElement>
+	e: React.MouseEvent<HTMLButtonElement>,
 ): void => {
 	const password1 = document.querySelector("#password1");
 	if (password1) {
@@ -38,7 +38,7 @@ export const togglePasswordRegister1 = (
 };
 
 export const togglePasswordRegister2 = (
-	e: React.MouseEvent<HTMLButtonElement>
+	e: React.MouseEvent<HTMLButtonElement>,
 ): void => {
 	const password2 = document.querySelector("#password2");
 	if (password2) {

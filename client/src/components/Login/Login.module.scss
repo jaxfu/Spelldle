@@ -2,21 +2,21 @@
 @import "../../styles/vars";
 
 .root {
-    @include full-size-percent;
+	@include full-size-percent;
 
-    @include flex-center;
+	@include flex-center;
 
-    .passwordBox {
-        @include flex-center;
+	.passwordBox {
+		@include flex-center;
 
-        position: relative;
-    }
+		position: relative;
+	}
 
-    .eye {
-        position: absolute;
-        top: 55%;
-        right: 2%;
-        cursor: pointer;
-        color: white;
-    }
+	.eye {
+		position: absolute;
+		top: 55%;
+		right: 2%;
+		cursor: pointer;
+		color: white;
+	}
 }

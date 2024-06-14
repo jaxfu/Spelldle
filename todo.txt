@@ -1,0 +1,5 @@
+In Progress
+- Parse spells.json into db
+
+DONE
+- Get current dbHandler working with schemas

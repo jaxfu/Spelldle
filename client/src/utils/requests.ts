@@ -20,14 +20,14 @@ const APIROUTE_VALIDATE: string = prefix + "/api/validateSession";
 const APIROUTE_MAKE_GUESS: string = prefix + "/api/makeGuess";
 
 export async function apiRequestLogin(
-	userInput: T_USERINPUT_LOGIN
+	userInput: T_USERINPUT_LOGIN,
 ): Promise<AxiosResponse<T_APIRESULT_LOGIN>> {
 	try {
 		return await axios<T_APIRESULT_LOGIN>({
 			method: "POST",
 			url: APIROUTE_LOGIN,
 			data: {
-				userInput,
+				...userInput,
 			},
 		});
 	} catch (err: any) {
@@ -36,7 +36,7 @@ export async function apiRequestLogin(
 }
 
 export async function apiRequestRegister(
-	userInput: T_USERINPUT_REGISTER
+	userInput: T_USERINPUT_REGISTER,
 ): Promise<AxiosResponse<T_APIRESULT_REGISTER>> {
 	try {
 		return await axios<T_APIRESULT_REGISTER>({
@@ -55,7 +55,7 @@ export async function apiRequestRegister(
 }
 
 export async function apiRequestValidateSession(
-	userDataTokens: T_USERDATA_TOKENS
+	userDataTokens: T_USERDATA_TOKENS,
 ): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> {
 	console.log("Running apiRequestValidateSession");
 	try {
@@ -63,7 +63,7 @@ export async function apiRequestValidateSession(
 			method: "POST",
 			url: APIROUTE_VALIDATE,
 			data: {
-				userDataTokens,
+				...userDataTokens,
 			},
 		});
 	} catch (err: any) {
@@ -73,12 +73,12 @@ export async function apiRequestValidateSession(
 
 export async function apiRequestMakeGuess(
 	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
-	categoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO
+	categoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
 ): Promise<AxiosResponse<string>> {
 	try {
 		const data = createRequestObjectFromCurrentGuessInfo(
 			allCurrentGuessInfo,
-			categoriesInfo
+			categoriesInfo,
 		);
 		return await axios<string>({
 			method: "POST",

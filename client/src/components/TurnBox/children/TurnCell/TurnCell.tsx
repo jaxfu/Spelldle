@@ -23,7 +23,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 				inputValue,
 				setInputValue,
 				setRecommendations,
-				props.allCurrentGuessInfo
+				props.allCurrentGuessInfo,
 			)}
 			<RecommendationBox
 				recommendations={recommendations}

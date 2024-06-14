@@ -63,7 +63,7 @@ const TurnBox: React.FC<IProps> = (props) => {
 				onClick={async () => {
 					await apiRequestMakeGuess(
 						props.allCurrentGuessInfo.current,
-						props.allCategoriesInfo.current
+						props.allCategoriesInfo.current,
 					);
 				}}
 			>
