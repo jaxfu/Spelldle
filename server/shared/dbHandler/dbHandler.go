@@ -155,15 +155,55 @@ func (dbHandler *DBHandler) InsertUserDataPersonal(userID types.UserID, personal
 
 // spell_info
 // GETS
+const QGetSpellBySpellId = `
+  SELECT name, school, casting_time, range, target, duration, components, class, effects
+  FROM spell_info.spells
+  WHERE spell_id=$1
+`
+
+const QGetSpellLevelBySpellId = `
+  SELECT level, is_ritual
+  FROM spell_info.spell_level_objects
+  WHERE spell_id=$1
+`
+
+func (dbHandler *DBHandler) GetSpellBySpellId(spellID uint) (types.SpellAllInfo, error) {
+	spell := types.SpellAllInfo{}
+
+	err := dbHandler.DB.QueryRow(context.Background(), QGetSpellBySpellId, spellID).Scan(
+		&spell.Name,
+		&spell.School,
+		&spell.CastingTime,
+		&spell.Range,
+		&spell.Target,
+		&spell.Duration,
+		&spell.Components,
+		&spell.Class,
+		&spell.Effects,
+	)
+	if err != nil {
+		return spell, err
+	}
+
+	err = dbHandler.DB.QueryRow(context.Background(), QGetSpellLevelBySpellId, spellID).Scan(
+		&spell.Level.Level,
+		&spell.Level.IsRitual,
+	)
+	if err != nil {
+		return spell, err
+	}
+
+	return spell, nil
+}
 
 const EInsertSpell = `
   INSERT INTO spell_info.spells(spell_id, name, school, casting_time, range, target, duration, components, class, effects)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 `
 
 const EInsertSpellLevel = `
   INSERT INTO spell_info.spell_level_objects(spell_id, level, is_ritual)
-  VALUES ($1, $2, $3);
+  VALUES ($1, $2, $3)
 `
 
 // Inserts
@@ -178,8 +218,8 @@ func (dbHandler *DBHandler) InsertSpell(spellInfo types.SpellAllInfo) error {
 		spellInfo.Target,
 		spellInfo.Duration,
 		spellInfo.Components,
-		spellInfo.Effects,
 		spellInfo.Class,
+		spellInfo.Effects,
 	)
 	if err != nil {
 		return err
