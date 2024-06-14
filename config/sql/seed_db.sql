@@ -11,3 +11,6 @@ VALUES (0, 'Fireball', 0, 0, 0, 0, 0, '{0, 1}', '{1, 2}', '{3, 4}');
 
 INSERT INTO spell_info.spell_level_objects(spell_id, level, is_ritual)
 VALUES (0, 1, false);
+
+INSERT INTO user_info.current_game_data(user_id, current_spell)
+VALUES (1, 0);
