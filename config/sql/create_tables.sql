@@ -40,3 +40,9 @@ CREATE TABLE spell_info.spell_level_objects
   level INTEGER,
   is_ritual BOOLEAN
 );
+
+CREATE TABLE user_info.current_game_data
+(
+  user_id    INTEGER PRIMARY KEY UNIQUE REFERENCES user_info.users(user_id),
+  current_spell INTEGER UNIQUE REFERENCES spell_info.spells(spell_id)
+);
