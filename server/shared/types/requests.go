@@ -13,5 +13,10 @@ type RequestPayloadRegister struct {
 }
 
 type RequestPayloadValidateSession struct {
-	AccessToken string `json:"access_token"`
+	AccessToken
+}
+
+type RequestPayloadMakeGuess struct {
+	AccessToken
+	GuessInfo SpellCategories `json:"guess_info"`
 }
