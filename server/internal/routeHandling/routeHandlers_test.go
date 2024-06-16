@@ -41,7 +41,8 @@ func TestRouteHandlers(t *testing.T) {
 
 	t.Run("Register", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			"/api/register",
 			&testUserRegisterPayload, &responseData,
 			routeHandler.Register,
 		); err != nil {
@@ -65,7 +66,8 @@ func TestRouteHandlers(t *testing.T) {
 
 	t.Run("LoginValid", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			"/api/login",
 			&testUserLoginPayload,
 			&responseData,
 			routeHandler.Login,
@@ -90,7 +92,8 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("LoginInvalidUsername", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			"/api/login",
 			&testHelpers.TestUserLoginPayloadInvalidUsername,
 			&responseData,
 			routeHandler.Login,
@@ -106,7 +109,8 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("LoginInvalidPassword", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			"/api/login",
 			&testHelpers.TestUserLoginPayloadInvalidPassword,
 			&responseData,
 			routeHandler.Login,
@@ -122,7 +126,8 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("ValidateSession", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			"/api/validateSession",
 			&testUserDataTokens,
 			&responseData,
 			routeHandler.ValidateSession,
@@ -150,7 +155,8 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("ValidateSessionInvalid", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			"/api/validateSession",
 			&types.AccessToken{
 				AccessToken: "test",
 			},
@@ -164,6 +170,20 @@ func TestRouteHandlers(t *testing.T) {
 			t.Errorf("Valid response, expected invalid: %+v\n", responseData)
 		}
 	})
+
+	// t.Run("ValidateJwtMiddlewareValid", func(t *testing.T) {
+	// 	gin.SetMode(gin.TestMode)
+	//
+	// 	w := httptest.NewRecorder()
+	// 	ctx, router := gin.CreateTestContext(w)
+	//
+	// 	r, err := http.NewRequest(http.MethodPost, "/api/makeGuess", bytes.NewReader(marshalled))
+	// 	if err != nil {
+	// 		return fmt.Errorf("error creating request: %+v", err)
+	// 	}
+	// 	router.POST("/api/makeGuess", routeHandler)
+	// 	router.ServeHTTP(w, r)
+	// })
 
 	t.Run("DropTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
