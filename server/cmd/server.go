@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"spelldle.com/server/internal/routeHandling"
+	"spelldle.com/server/internal/routeHandling/middleware"
 )
 
 func main() {
@@ -49,6 +50,8 @@ func main() {
 		config.AllowMethods = []string{"POST", "GET"}
 		router.Use(cors.New(config))
 	}
+
+	router.Use(middleware.ValidateAccessToken(db))
 
 	router.POST("/api/register", routeHandler.Register)
 	router.POST("/api/validateSession", routeHandler.ValidateSession)

@@ -3,13 +3,14 @@ package routeHandling
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"os"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/shared/types"
-	"strconv"
 )
 
 func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
@@ -26,7 +27,7 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	}
 	fmt.Printf("%+v\n", validationPayload)
 
-	token, err := auth.ParseAndValidateJWT(validationPayload.AccessToken, []byte(os.Getenv("JWT_SECRET")))
+	token, err := auth.ParseAndValidateJWT(validationPayload.AccessToken.AccessToken, []byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenMalformed) {
 			fmt.Printf("%+v\n", err)
@@ -45,6 +46,11 @@ func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
 	}
 	fmt.Printf("SUB: %+v\n", userIdAsString)
 	expiry, err := token.Claims.GetExpirationTime()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, validationResponse)
+		fmt.Printf("Error getting userId from token: %+v\n", err)
+		return
+	}
 	fmt.Printf("EXPIRY: %+v\n", expiry)
 
 	userID64, err := strconv.ParseUint(userIdAsString, 10, 64)

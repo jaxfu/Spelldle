@@ -3,16 +3,17 @@ package routeHandling
 import (
 	"errors"
 	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
-	"net/http"
 	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/shared/types"
 )
 
 func (r *RouteHandler) Login(ctx *gin.Context) {
 	var loginPayload types.RequestPayloadLogin
-	var loginResponse = types.ResponseRegisterLogin{
+	loginResponse := types.ResponseRegisterLogin{
 		Valid: false,
 	}
 
@@ -72,9 +73,9 @@ func (r *RouteHandler) Login(ctx *gin.Context) {
 		userID,
 		userDataAccount,
 		userDataPersonal,
-		types.UserDataTokens{
-			AccessToken:  accessToken,
-			RefreshToken: accessToken,
+		types.AllTokens{
+			AccessToken:  types.AccessToken{AccessToken: accessToken},
+			RefreshToken: types.RefreshToken{RefreshToken: accessToken},
 		},
 	)
 
