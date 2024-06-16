@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func TestHTTPRequest[P any, R any](payload *P, response *R, routeHandler func(ctx *gin.Context)) error {
+func TestPostRequest[P any, R any](route string, payload *P, response *R, routeHandler func(ctx *gin.Context)) error {
 	marshalled, err := json.Marshal(payload)
 	if err != nil {
 		return fmt.Errorf("error marshalling payload: %+vn", err)
@@ -21,11 +21,11 @@ func TestHTTPRequest[P any, R any](payload *P, response *R, routeHandler func(ct
 	w := httptest.NewRecorder()
 	_, router := gin.CreateTestContext(w)
 
-	r, err := http.NewRequest(http.MethodPost, "/api/register", bytes.NewReader(marshalled))
+	r, err := http.NewRequest(http.MethodPost, route, bytes.NewReader(marshalled))
 	if err != nil {
 		return fmt.Errorf("error creating request: %+v", err)
 	}
-	router.POST("/api/register", routeHandler)
+	router.POST(route, routeHandler)
 	router.ServeHTTP(w, r)
 
 	err = json.Unmarshal(w.Body.Bytes(), response)
