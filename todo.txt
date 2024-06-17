@@ -3,6 +3,7 @@ In Progress
 - Create JWT middleware test
 - Create type for parsed JWT
 - Create and use package for string consts
+- Create logging system for routeHandlers
 
 DONE
 - Get current dbHandler working with schemas
