@@ -1,6 +1,8 @@
 In Progress
 - Create tests for spell dbHandler routes
-- Create accessToken middleware
+- Create JWT middleware test
+- Create type for parsed JWT
+- Create and use package for string consts
 
 DONE
 - Get current dbHandler working with schemas
@@ -8,3 +10,4 @@ DONE
 - Create response type for /api/makeGuess
 - Implement /api/makeGuess routeHandler that tests for correctness
 - Create users.currentGameData with currentSpell
+- Create accessToken middleware

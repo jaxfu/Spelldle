@@ -32,7 +32,8 @@ func ValidateAccessToken() gin.HandlerFunc {
 		bodyBytes, err := io.ReadAll(ctx.Request.Body)
 		if err != nil {
 			fmt.Printf("error unmarshalling: %+v\n", err)
-			ctx.Abort()
+			ctx.Set(CTX_KEY_VALID, false)
+			ctx.Next()
 			return
 		}
 		ctx.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
@@ -52,7 +53,8 @@ func ValidateAccessToken() gin.HandlerFunc {
 		err = json.Unmarshal(bodyBytes, &validationPayload)
 		if err != nil {
 			fmt.Printf("error unmarshalling: %+v\n", err)
-			ctx.Abort()
+			ctx.Set(CTX_KEY_VALID, false)
+			ctx.Next()
 			return
 		}
 
