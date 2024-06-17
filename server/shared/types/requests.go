@@ -14,6 +14,7 @@ type RequestPayloadRegister struct {
 
 type RequestPayloadValidateSession struct {
 	AccessToken
+	RefreshToken
 }
 
 type RequestPayloadMakeGuess struct {

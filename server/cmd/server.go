@@ -51,7 +51,7 @@ func main() {
 		router.Use(cors.New(config))
 	}
 
-	router.Use(middleware.ValidateAccessToken(db))
+	router.Use(middleware.ValidateAccessToken())
 
 	router.POST("/api/register", routeHandler.Register)
 	router.POST("/api/validateSession", routeHandler.ValidateSession)

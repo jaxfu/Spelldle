@@ -14,7 +14,7 @@ import (
 )
 
 func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
-	var validationPayload types.RequestPayloadValidateSession
+	var validationPayload types.AllTokens
 	validationResponse := types.ResponseValidateSession{
 		Valid: false,
 	}

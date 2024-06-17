@@ -9,6 +9,10 @@ import (
 )
 
 func (r *RouteHandler) MakeGuessCategories(ctx *gin.Context) {
+	v, e := ctx.Get("user_id")
+	fmt.Printf("ctx exists: %+v\n", e)
+	fmt.Printf("ctx value: %+s\n", v)
+
 	var payload types.SpellCategories
 	var response types.ResponseMakeGuess
 	if err := ctx.BindJSON(&payload); err != nil {
