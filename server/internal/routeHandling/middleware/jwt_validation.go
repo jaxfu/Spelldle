@@ -1,22 +1,21 @@
 package middleware
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
+	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"spelldle.com/server/internal/auth"
-	"spelldle.com/server/shared/types"
 )
 
 var (
-	CTX_KEY_VALID  string = "valid"
-	CTX_KEY_USERID string = "user_id"
+	CTX_KEY_VALID       string = "valid"
+	CTX_KEY_USERID      string = "user_id"
+	BEARER_TOKEN_PREFIX string = "Bearer "
 )
 
 func ValidateAccessToken() gin.HandlerFunc {
@@ -29,36 +28,16 @@ func ValidateAccessToken() gin.HandlerFunc {
 			}
 		}
 
-		bodyBytes, err := io.ReadAll(ctx.Request.Body)
-		if err != nil {
-			fmt.Printf("error unmarshalling: %+v\n", err)
-			ctx.Set(CTX_KEY_VALID, false)
-			ctx.Next()
+		authHeader := ctx.GetHeader("Authorization")
+		fmt.Println(authHeader)
+		if !strings.HasPrefix(authHeader, BEARER_TOKEN_PREFIX) {
+			ctx.String(http.StatusUnauthorized, "No auth token found")
+			ctx.Abort()
 			return
 		}
-		ctx.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+		jwtString := trimTokenPrefix(BEARER_TOKEN_PREFIX, authHeader)
 
-		var validationPayload types.AccessToken
-
-		// Bind request body
-		//
-		// if err := ctx.BindJSON(&validationPayload); err != nil {
-		// 	fmt.Printf("Error binding validationPayload json: %+v\n", err)
-		// 	ctx.Set(CTX_KEY_VALID, false)
-		// 	ctx.Next()
-		// 	return
-		// }
-		// fmt.Printf("%+v\n", validationPayload)
-
-		err = json.Unmarshal(bodyBytes, &validationPayload)
-		if err != nil {
-			fmt.Printf("error unmarshalling: %+v\n", err)
-			ctx.Set(CTX_KEY_VALID, false)
-			ctx.Next()
-			return
-		}
-
-		token, err := auth.ParseAndValidateJWT(validationPayload.AccessToken, []byte(os.Getenv("JWT_SECRET")))
+		token, err := auth.ParseAndValidateJWT(jwtString, []byte(os.Getenv("JWT_SECRET")))
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenMalformed) {
 				fmt.Printf("%+v\n", err)
@@ -90,4 +69,8 @@ func ValidateAccessToken() gin.HandlerFunc {
 		ctx.Set(CTX_KEY_USERID, userIdAsString)
 		ctx.Next()
 	}
+}
+
+func trimTokenPrefix(prefix, authHeader string) string {
+	return strings.TrimSpace(strings.TrimPrefix(authHeader, prefix))
 }
