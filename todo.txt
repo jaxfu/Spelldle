@@ -2,6 +2,8 @@ In Progress
 - Create tests for spell dbHandler routes
 - Create JWT middleware test
 - Create type for parsed JWT
+- Create base validation response type
+- Remove jwt from all request types
 - Create and use package for string consts
 - Create logging system for routeHandlers
 
