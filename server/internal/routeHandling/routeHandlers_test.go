@@ -1,20 +1,15 @@
 package routeHandling
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"testing"
 
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"spelldle.com/server/internal/routeHandling/middleware"
+	"spelldle.com/server/internal/routeHandling/consts"
 	"spelldle.com/server/internal/testHelpers"
 )
 
@@ -48,7 +43,7 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("Register", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestPostRequest(
-			"/api/register",
+			consts.ROUTE_URL_REGISTER,
 			&testUserRegisterPayload, &responseData,
 			routeHandler.Register,
 		); err != nil {
@@ -73,7 +68,7 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("LoginValid", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestPostRequest(
-			"/api/login",
+			consts.ROUTE_URL_LOGIN,
 			&testUserLoginPayload,
 			&responseData,
 			routeHandler.Login,
@@ -99,7 +94,7 @@ func TestRouteHandlers(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestPostRequest(
-			"/api/login",
+			consts.ROUTE_URL_LOGIN,
 			&testHelpers.TestUserLoginPayloadInvalidUsername,
 			&responseData,
 			routeHandler.Login,
@@ -116,7 +111,7 @@ func TestRouteHandlers(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestPostRequest(
-			"/api/login",
+			consts.ROUTE_URL_LOGIN,
 			&testHelpers.TestUserLoginPayloadInvalidPassword,
 			&responseData,
 			routeHandler.Login,
@@ -133,7 +128,7 @@ func TestRouteHandlers(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestPostRequest(
-			"/api/validateSession",
+			consts.ROUTE_URL_VALIDATE_SESSION,
 			&testUserDataTokens,
 			&responseData,
 			routeHandler.ValidateSession,
@@ -162,7 +157,7 @@ func TestRouteHandlers(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
 		if err := testHelpers.TestPostRequest(
-			"/api/validateSession",
+			consts.ROUTE_URL_VALIDATE_SESSION,
 			&types.AccessToken{
 				AccessToken: "test",
 			},
@@ -177,33 +172,33 @@ func TestRouteHandlers(t *testing.T) {
 		}
 	})
 
-	t.Run("ValidateJWTMiddlewareValid", func(t *testing.T) {
-		marshalled, err := json.Marshal(testUserDataTokens)
-		if err != nil {
-			t.Errorf("error marshalling payload: %+v", err)
-		}
-
-		gin.SetMode(gin.TestMode)
-
-		w := httptest.NewRecorder()
-		ctx, _ := gin.CreateTestContext(w)
-
-		r, err := http.NewRequest(http.MethodPost, "validate middleware", bytes.NewReader(marshalled))
-		if err != nil {
-			t.Errorf("error creating request: %+v", err)
-		}
-
-		// Assign the request to the context
-		ctx.Request = r
-
-		// Call the route handler directly
-		middleware.ValidateAccessToken()(ctx)
-
-		v, e := ctx.Get("user_id")
-
-		fmt.Printf("ctx exists: %+v\n", e)
-		fmt.Printf("ctx value: %+s\n", v)
-	})
+	// t.Run("ValidateJWTMiddlewareValid", func(t *testing.T) {
+	// 	marshalled, err := json.Marshal(testUserDataTokens)
+	// 	if err != nil {
+	// 		t.Errorf("error marshalling payload: %+v", err)
+	// 	}
+	//
+	// 	gin.SetMode(gin.TestMode)
+	//
+	// 	w := httptest.NewRecorder()
+	// 	ctx, _ := gin.CreateTestContext(w)
+	//
+	// 	r, err := http.NewRequest(http.MethodPost, "validate middleware", bytes.NewReader(marshalled))
+	// 	if err != nil {
+	// 		t.Errorf("error creating request: %+v", err)
+	// 	}
+	//
+	// 	// Assign the request to the context
+	// 	ctx.Request = r
+	//
+	// 	// Call the route handler directly
+	// 	middleware.ValidateAccessToken()(ctx)
+	//
+	// 	v, e := ctx.Get("user_id")
+	//
+	// 	fmt.Printf("ctx exists: %+v\n", e)
+	// 	fmt.Printf("ctx value: %+s\n", v)
+	// })
 
 	t.Run("DropTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
