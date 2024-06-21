@@ -5,16 +5,13 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"spelldle.com/server/internal/auth"
-)
-
-var (
-	CTX_KEY_USERID      string = "user_id"
-	BEARER_TOKEN_PREFIX string = "Bearer "
+	"spelldle.com/server/internal/routeHandling/consts"
 )
 
 type invalidResponse struct {
@@ -36,13 +33,13 @@ func ValidateAccessToken() gin.HandlerFunc {
 
 		authHeader := ctx.GetHeader("Authorization")
 		fmt.Println(authHeader)
-		if !strings.HasPrefix(authHeader, BEARER_TOKEN_PREFIX) {
+		if !strings.HasPrefix(authHeader, consts.BEARER_TOKEN_PREFIX) {
 			fmt.Println("No bearer token")
 			ctx.JSON(http.StatusUnauthorized, invalidResponse)
 			ctx.Abort()
 			return
 		}
-		jwtString := trimTokenPrefix(BEARER_TOKEN_PREFIX, authHeader)
+		jwtString := trimTokenPrefix(consts.BEARER_TOKEN_PREFIX, authHeader)
 
 		token, err := auth.ParseAndValidateJWT(jwtString, []byte(os.Getenv("JWT_SECRET")))
 		if err != nil {
@@ -71,12 +68,30 @@ func ValidateAccessToken() gin.HandlerFunc {
 			fmt.Printf("EXPIRY: %+v\n", expiry)
 		}
 
+		userID, err := stringToUint(userIdAsString)
+		if err != nil {
+			fmt.Println("Error parsing userID to uint")
+			ctx.JSON(http.StatusUnauthorized, invalidResponse)
+			ctx.Abort()
+			return
+		}
+
 		fmt.Println("ValidateJWTMiddleware success")
-		ctx.Set(CTX_KEY_USERID, userIdAsString)
+		ctx.Set(consts.CTX_KEY_USERID, userID)
 		ctx.Next()
 	}
 }
 
 func trimTokenPrefix(prefix, authHeader string) string {
 	return strings.TrimSpace(strings.TrimPrefix(authHeader, prefix))
+}
+
+func stringToUint(s string) (uint, error) {
+	// Convert the string to an unsigned 64-bit integer
+	u64, err := strconv.ParseUint(s, 10, 0)
+	if err != nil {
+		return 0, err
+	}
+	// Convert the unsigned 64-bit integer to a uint
+	return uint(u64), nil
 }
