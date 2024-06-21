@@ -13,13 +13,19 @@ import (
 )
 
 var (
-	CTX_KEY_VALID       string = "valid"
 	CTX_KEY_USERID      string = "user_id"
 	BEARER_TOKEN_PREFIX string = "Bearer "
 )
 
+type invalidResponse struct {
+	Valid bool `json:"valid"`
+}
+
 func ValidateAccessToken() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		invalidResponse := invalidResponse{
+			Valid: false,
+		}
 		if ctx.Request.Method == "POST" {
 			if ctx.Request.URL.Path == "/api/login" || ctx.Request.URL.Path == "/api/register" {
 				fmt.Println("POST login or register detected, skipping middleware")
@@ -31,7 +37,8 @@ func ValidateAccessToken() gin.HandlerFunc {
 		authHeader := ctx.GetHeader("Authorization")
 		fmt.Println(authHeader)
 		if !strings.HasPrefix(authHeader, BEARER_TOKEN_PREFIX) {
-			ctx.String(http.StatusUnauthorized, "No auth token found")
+			fmt.Println("No bearer token")
+			ctx.JSON(http.StatusUnauthorized, invalidResponse)
 			ctx.Abort()
 			return
 		}
@@ -44,16 +51,16 @@ func ValidateAccessToken() gin.HandlerFunc {
 			} else {
 				fmt.Printf("Error parsing token: %+v\n", err)
 			}
-			ctx.Set(CTX_KEY_VALID, false)
-			ctx.Next()
+			ctx.JSON(http.StatusUnauthorized, invalidResponse)
+			ctx.Abort()
 			return
 		}
 
 		userIdAsString, err := token.Claims.GetSubject()
 		if err != nil {
-			ctx.Set(CTX_KEY_VALID, false)
 			fmt.Printf("Error getting subject claim from token: %+v\n", err)
-			ctx.Next()
+			ctx.JSON(http.StatusUnauthorized, invalidResponse)
+			ctx.Abort()
 			return
 		}
 		fmt.Printf("SUB: %+v\n", userIdAsString)
@@ -65,7 +72,6 @@ func ValidateAccessToken() gin.HandlerFunc {
 		}
 
 		fmt.Println("ValidateJWTMiddleware success")
-		ctx.Set(CTX_KEY_VALID, true)
 		ctx.Set(CTX_KEY_USERID, userIdAsString)
 		ctx.Next()
 	}
