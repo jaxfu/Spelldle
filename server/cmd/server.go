@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"spelldle.com/server/internal/routeHandling"
+	"spelldle.com/server/internal/routeHandling/consts"
 	"spelldle.com/server/internal/routeHandling/middleware"
 )
 
@@ -53,10 +54,10 @@ func main() {
 
 	router.Use(middleware.ValidateAccessToken())
 
-	router.POST("/api/register", routeHandler.Register)
-	router.POST("/api/validateSession", routeHandler.ValidateSession)
-	router.POST("/api/login", routeHandler.Login)
-	router.POST("/api/makeGuess", routeHandler.MakeGuessCategories)
+	router.POST(consts.ROUTE_URL_REGISTER, routeHandler.Register)
+	router.POST(consts.ROUTE_URL_VALIDATE_SESSION, routeHandler.ValidateSession)
+	router.POST(consts.ROUTE_URL_LOGIN, routeHandler.Login)
+	router.POST(consts.ROUTE_URL_MAKE_GUESS, routeHandler.MakeGuessCategories)
 
 	router.Use(spa.Middleware("/", "client"))
 

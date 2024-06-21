@@ -24,14 +24,14 @@ func ValidateAccessToken() gin.HandlerFunc {
 			Valid: false,
 		}
 		if ctx.Request.Method == "POST" {
-			if ctx.Request.URL.Path == "/api/login" || ctx.Request.URL.Path == "/api/register" {
+			if ctx.Request.URL.Path == consts.ROUTE_URL_LOGIN || ctx.Request.URL.Path == consts.ROUTE_URL_REGISTER {
 				fmt.Println("POST login or register detected, skipping middleware")
 				ctx.Next()
 				return
 			}
 		}
 
-		authHeader := ctx.GetHeader("Authorization")
+		authHeader := ctx.GetHeader(consts.HEADER_TYPE_AUTHORIZATION)
 		fmt.Println(authHeader)
 		if !strings.HasPrefix(authHeader, consts.BEARER_TOKEN_PREFIX) {
 			fmt.Println("No bearer token")
