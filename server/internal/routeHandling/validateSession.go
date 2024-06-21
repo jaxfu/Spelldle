@@ -1,65 +1,24 @@
 package routeHandling
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
-	"spelldle.com/server/internal/auth"
+	"spelldle.com/server/internal/routeHandling/utils"
 	"spelldle.com/server/shared/types"
 )
 
 func (r *RouteHandler) ValidateSession(ctx *gin.Context) {
-	var validationPayload types.AllTokens
-	validationResponse := types.ResponseValidateSession{
-		Valid: false,
-	}
+	var validationResponse types.ResponseValidateSession
 
-	// Bind request body
-	if err := ctx.BindJSON(&validationPayload); err != nil {
-		fmt.Printf("Error binding validationPayload json: %+v\n", err)
-		ctx.JSON(http.StatusOK, validationResponse)
-		return
-	}
-	fmt.Printf("%+v\n", validationPayload)
-
-	token, err := auth.ParseAndValidateJWT(validationPayload.AccessToken.AccessToken, []byte(os.Getenv("JWT_SECRET")))
+	userID, err := utils.GetJwtInfoFromCtx(ctx)
 	if err != nil {
-		if errors.Is(err, jwt.ErrTokenMalformed) {
-			fmt.Printf("%+v\n", err)
-		} else {
-			fmt.Printf("Error parsing token: %+v\n", err)
-		}
+		fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
 		ctx.JSON(http.StatusInternalServerError, validationResponse)
 		return
 	}
-
-	userIdAsString, err := token.Claims.GetSubject()
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, validationResponse)
-		fmt.Printf("Error getting subject claim from token: %+v\n", err)
-		return
-	}
-	fmt.Printf("SUB: %+v\n", userIdAsString)
-	expiry, err := token.Claims.GetExpirationTime()
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, validationResponse)
-		fmt.Printf("Error getting userId from token: %+v\n", err)
-		return
-	}
-	fmt.Printf("EXPIRY: %+v\n", expiry)
-
-	userID64, err := strconv.ParseUint(userIdAsString, 10, 64)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, validationResponse)
-		fmt.Printf("Error getting userId from token: %+v\n", err)
-		return
-	}
-	userID := types.UserID(uint(userID64))
+	fmt.Printf("userID: %d\n", userID)
 
 	// Get UserDataAccount
 	userDataAccount, err := r.dbHandler.GetUserDataAccountByUserID(userID)
