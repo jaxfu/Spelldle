@@ -1,4 +1,4 @@
-package routeHandling
+package utils
 
 import (
 	"spelldle.com/server/shared/types"

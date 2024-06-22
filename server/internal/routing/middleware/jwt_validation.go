@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"spelldle.com/server/internal/auth"
-	"spelldle.com/server/internal/routeHandling/consts"
+	"spelldle.com/server/internal/routing/consts"
 )
 
 type invalidResponse struct {
@@ -24,22 +24,22 @@ func ValidateAccessToken() gin.HandlerFunc {
 			Valid: false,
 		}
 		if ctx.Request.Method == "POST" {
-			if ctx.Request.URL.Path == consts.ROUTE_URL_LOGIN || ctx.Request.URL.Path == consts.ROUTE_URL_REGISTER {
+			if ctx.Request.URL.Path == consts.RouteUrlLogin || ctx.Request.URL.Path == consts.RouteUrlRegister {
 				fmt.Println("POST login or register detected, skipping middleware")
 				ctx.Next()
 				return
 			}
 		}
 
-		authHeader := ctx.GetHeader(consts.HEADER_TYPE_AUTHORIZATION)
+		authHeader := ctx.GetHeader(consts.HeaderTypeAuthorization)
 		fmt.Println(authHeader)
-		if !strings.HasPrefix(authHeader, consts.BEARER_TOKEN_PREFIX) {
+		if !strings.HasPrefix(authHeader, consts.BearerTokenPrefix) {
 			fmt.Println("No bearer token")
 			ctx.JSON(http.StatusUnauthorized, invalidResponse)
 			ctx.Abort()
 			return
 		}
-		jwtString := trimTokenPrefix(consts.BEARER_TOKEN_PREFIX, authHeader)
+		jwtString := trimTokenPrefix(consts.BearerTokenPrefix, authHeader)
 
 		token, err := auth.ParseAndValidateJWT(jwtString, []byte(os.Getenv("JWT_SECRET")))
 		if err != nil {
@@ -77,7 +77,7 @@ func ValidateAccessToken() gin.HandlerFunc {
 		}
 
 		fmt.Println("ValidateJWTMiddleware success")
-		ctx.Set(consts.CTX_KEY_USERID, userID)
+		ctx.Set(consts.CtxKeyUserid, userID)
 		ctx.Next()
 	}
 }
