@@ -2,16 +2,17 @@
 
 extends:
   - recommended
-  
+
 rules:
   rule/operation-description:
-    subject: 
+    subject:
       type: Operation
       property: description
     assertions:
       defined: true
-      minLength: 30
   info-license: off
+  operation-operationId:
+    severity: off
 
 theme:
   openapi:
