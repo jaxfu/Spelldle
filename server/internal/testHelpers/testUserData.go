@@ -16,10 +16,6 @@ var TestUserDataAll = types.UserDataAll{
 		Username: "poemmys",
 		Password: "pass",
 	},
-	UserDataTokens: types.UserDataTokens{
-		AccessToken:  "test_token",
-		RefreshToken: "test_token",
-	},
 }
 
 var TestUserRegisterPayload = types.RequestPayloadRegister{

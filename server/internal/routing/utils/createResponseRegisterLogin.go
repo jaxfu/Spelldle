@@ -1,4 +1,4 @@
-package routeHandling
+package utils
 
 import (
 	"spelldle.com/server/shared/types"
@@ -9,7 +9,7 @@ func CreateResponseRegisterLogin(
 	userID types.UserID,
 	userDataAccount types.UserDataAccount,
 	userDataPersonal types.UserDataPersonal,
-	userDataTokens types.UserDataTokens,
+	userDataTokens types.AllTokens,
 ) types.ResponseRegisterLogin {
 	return types.ResponseRegisterLogin{
 		Valid:  valid,

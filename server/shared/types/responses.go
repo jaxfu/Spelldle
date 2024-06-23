@@ -2,7 +2,7 @@ package types
 
 type ResponseRegisterLogin struct {
 	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
-	UserDataTokens   UserDataTokens          `json:"user_data_tokens"`
+	UserDataTokens   AllTokens               `json:"user_data_tokens"`
 	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
 	UserId           UserID                  `json:"user_id"`
 	Valid            bool                    `json:"valid"`
@@ -29,4 +29,8 @@ type ResponseMakeGuess struct {
 	Range       int `json:"range"`
 	Target      int `json:"target"`
 	Duration    int `json:"duration"`
+}
+
+type ResponseValidateToken struct {
+	Valid bool `json:"valid"`
 }

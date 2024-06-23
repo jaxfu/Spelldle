@@ -12,6 +12,6 @@ type RequestPayloadRegister struct {
 	LastName  string `json:"last_name"`
 }
 
-type RequestPayloadValidateSession struct {
-	AccessToken string `json:"access_token"`
+type RequestPayloadMakeGuess struct {
+	GuessInfo SpellCategories `json:"guess_info"`
 }

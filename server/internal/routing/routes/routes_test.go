@@ -1,32 +1,34 @@
-package routeHandling
+package routes
 
 import (
 	"fmt"
 	"os"
+	"spelldle.com/server/internal/routing/middleware"
+	"spelldle.com/server/internal/routing/utils"
 	"testing"
 
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
 
 	"github.com/joho/godotenv"
+	"spelldle.com/server/internal/routing/consts"
 	"spelldle.com/server/internal/testHelpers"
 )
 
-func TestRouteHandlers(t *testing.T) {
-	if err := godotenv.Load("../../../config/config.env"); err != nil {
+func TestRoutes(t *testing.T) {
+	if err := godotenv.Load("../../../../config/config.env"); err != nil {
 		fmt.Printf("Error loading env vars: %+v\n", err)
 		os.Exit(1)
 	}
 
 	// Init DBHandler
 	db := dbHandler.InitDBHandler(os.Getenv("DB_URL_TEST"))
-	routeHandler := InitRouteHandler(db)
-	defer routeHandler.dbHandler.DB.Close()
+	defer db.Conn.Close()
 
 	// Set up vars
 	testUserRegisterPayload := testHelpers.TestUserRegisterPayload
 	testUserLoginPayload := testHelpers.TestUserLoginPayload
-	var testUserDataTokens types.UserDataTokens
+	var testUserDataTokens types.AllTokens
 
 	t.Run("DropTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
@@ -41,9 +43,10 @@ func TestRouteHandlers(t *testing.T) {
 
 	t.Run("Register", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			consts.RouteUrlRegister,
 			&testUserRegisterPayload, &responseData,
-			routeHandler.Register,
+			Register(db),
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
@@ -65,10 +68,11 @@ func TestRouteHandlers(t *testing.T) {
 
 	t.Run("LoginValid", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			consts.RouteUrlLogin,
 			&testUserLoginPayload,
 			&responseData,
-			routeHandler.Login,
+			Login(db),
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
@@ -90,10 +94,11 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("LoginInvalidUsername", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			consts.RouteUrlLogin,
 			&testHelpers.TestUserLoginPayloadInvalidUsername,
 			&responseData,
-			routeHandler.Login,
+			Login(db),
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
@@ -106,10 +111,11 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("LoginInvalidPassword", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequest(
+			consts.RouteUrlLogin,
 			&testHelpers.TestUserLoginPayloadInvalidPassword,
 			&responseData,
-			routeHandler.Login,
+			Login(db),
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
@@ -122,10 +128,12 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("ValidateSession", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
+		if err := testHelpers.TestPostRequestWithAuthTokens(
+			consts.RouteUrlValidateSession,
 			&testUserDataTokens,
 			&responseData,
-			routeHandler.ValidateSession,
+			ValidateSession(db),
+			testUserDataTokens,
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
@@ -150,16 +158,47 @@ func TestRouteHandlers(t *testing.T) {
 	t.Run("ValidateSessionInvalid", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
-		if err := testHelpers.TestHTTPRequest(
-			&testHelpers.TestUserDataAll.UserDataTokens,
+		invalidTokens := types.AllTokens{
+			AccessToken: types.AccessToken{
+				AccessToken: "invalid",
+			},
+			RefreshToken: types.RefreshToken{
+				RefreshToken: "invalid",
+			},
+		}
+
+		if err := testHelpers.TestPostRequestWithAuthTokens(
+			consts.RouteUrlValidateSession,
+			&types.AccessToken{
+				AccessToken: "test",
+			},
 			&responseData,
-			routeHandler.ValidateSession,
+			ValidateSession(db),
+			invalidTokens,
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
 
 		if responseData.Valid {
 			t.Errorf("Valid response, expected invalid: %+v\n", responseData)
+		}
+	})
+
+	t.Run("ValidateJWTMiddlewareValid", func(t *testing.T) {
+		ctx, err := testHelpers.TestMiddleware(testUserDataTokens, middleware.ValidateAccessToken())
+		if err != nil {
+			t.Errorf("Error in middleware: %+v\n", err)
+			return
+		}
+
+		userID, err := utils.GetJwtInfoFromCtx(ctx)
+		if err != nil {
+			t.Errorf("Error in GetJwtInfoFromCtx: %+v\n", err)
+			return
+		}
+		if userID != testHelpers.TestUserDataAll.UserID {
+			t.Errorf("Incorrect userID from middleware, want %v got %d\n", testHelpers.TestUserDataAll.UserID, userID)
+			return
 		}
 	})
 

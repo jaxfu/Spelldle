@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"spelldle.com/server/internal/routing/routes"
 
 	"spelldle.com/server/shared/dbHandler"
 
@@ -12,7 +13,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"spelldle.com/server/internal/routeHandling"
+	"spelldle.com/server/internal/routing/consts"
+	"spelldle.com/server/internal/routing/middleware"
 )
 
 func main() {
@@ -35,12 +37,11 @@ func main() {
 	// 	log.Printf("Error backing up Postgres: %+v\n", err)
 	// }
 
-	// DB
+	// Conn
 	db := dbHandler.InitDBHandler(os.Getenv("DB_URL"))
-	defer db.DB.Close()
+	defer db.Conn.Close()
 
 	// ROUTING
-	routeHandler := routeHandling.InitRouteHandler(db)
 	router := gin.Default()
 	if os.Getenv("MODE") == "DEV" {
 		fmt.Println("**DEV MODE DETECTED, ENABLING CORS**")
@@ -50,10 +51,12 @@ func main() {
 		router.Use(cors.New(config))
 	}
 
-	router.POST("/api/register", routeHandler.Register)
-	router.POST("/api/validateSession", routeHandler.ValidateSession)
-	router.POST("/api/login", routeHandler.Login)
-	router.POST("/api/makeGuess", routeHandler.MakeGuessCategories)
+	router.Use(middleware.ValidateAccessToken())
+
+	router.POST(consts.RouteUrlRegister, routes.Register(db))
+	router.POST(consts.RouteUrlLogin, routes.Login(db))
+	router.POST(consts.RouteUrlValidateSession, routes.ValidateSession(db))
+	router.POST(consts.RouteUrlMakeGuess, routes.MakeGuess(db))
 
 	router.Use(spa.Middleware("/", "client"))
 
