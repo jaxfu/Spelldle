@@ -19,7 +19,8 @@ paths:
           description: successfully created
           content:
             application/json:
-              schema: {}
+              schema:
+                $ref: "#/components/schemas/response_register_login"
         "401":
           description: username already exists
         "404":
@@ -31,3 +32,43 @@ components:
     BasicAuth:
       type: http
       scheme: basic
+  schemas:
+    user_data_personal:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+    user_data_account:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    auth_data_all_tokens:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+    user_id:
+      type: number
+      minimum: 0
+    valid:
+      type: boolean
+    response_register_login:
+      type: object
+      properties:
+        user_data_personal:
+          $ref: "#/components/schemas/user_data_personal"
+        user_data_tokens:
+          $ref: "#/components/schemas/auth_data_all_tokens"
+        user_data_account:
+          $ref: "#/components/schemas/user_data_account"
+        user_id:
+          $ref: "#/components/schemas/user_id"
+        valid:
+          $ref: "#/components/schemas/valid"
