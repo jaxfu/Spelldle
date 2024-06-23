@@ -20,14 +20,14 @@ func TestDBHandler(t *testing.T) {
 	}
 
 	dbHandler := InitDBHandler(os.Getenv("DB_URL_TEST"))
-	defer dbHandler.DB.Close()
+	defer dbHandler.Conn.Close()
 
 	testUserID := testHelpers.TestUserDataAll.UserID
 	testUserDataAccount := testHelpers.TestUserDataAll.UserDataAccount
 	testUserDataPersonal := testHelpers.TestUserDataAll.UserDataPersonal
 
 	t.Run("Ping connection", func(t *testing.T) {
-		if err := dbHandler.DB.Ping(context.Background()); err != nil {
+		if err := dbHandler.Conn.Ping(context.Background()); err != nil {
 			t.Errorf("Error initializing database: %+v\n", err)
 		}
 	})
