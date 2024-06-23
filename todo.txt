@@ -1,9 +1,7 @@
 In Progress
 - Create tests for spell dbHandler routes
-- Create JWT middleware test
 - Create base validation response type
 - Remove jwt from all request types
-- Create and use package for string consts
 - Create logging system for routeHandlers
 
 DONE
@@ -13,3 +11,5 @@ DONE
 - Implement /api/makeGuess routeHandler that tests for correctness
 - Create users.currentGameData with currentSpell
 - Create accessToken middleware
+- Create JWT middleware test
+- Create and use package for string consts
