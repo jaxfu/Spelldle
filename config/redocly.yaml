@@ -1,0 +1,22 @@
+# See https://redocly.com/docs/cli/configuration/
+
+extends:
+  - recommended
+  
+rules:
+  rule/operation-description:
+    subject: 
+      type: Operation
+      property: description
+    assertions:
+      defined: true
+      minLength: 30
+  info-license: off
+
+theme:
+  openapi:
+    generateCodeSamples:
+      languages:
+        - lang: JavaScript
+        - lang: Node.js
+        - lang: Go
