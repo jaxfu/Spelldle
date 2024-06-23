@@ -3,6 +3,7 @@ In Progress
 - Create base validation response type
 - Remove jwt from all request types
 - Create logging system for routeHandlers
+- Create api documentation
 
 DONE
 - Get current dbHandler working with schemas
