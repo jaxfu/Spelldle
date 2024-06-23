@@ -3,8 +3,9 @@ package routes
 import (
 	"errors"
 	"fmt"
-	"github.com/jackc/pgx/v5"
 	"net/http"
+
+	"github.com/jackc/pgx/v5"
 	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/dbHandler"
@@ -40,7 +41,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			}
 		} else {
 			fmt.Printf("Username '%s' already exists", registerPayload.Username)
-			ctx.JSON(http.StatusOK, registerResponse)
+			ctx.JSON(http.StatusUnauthorized, registerResponse)
 			return
 		}
 
@@ -107,7 +108,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			},
 		)
 
-		ctx.JSON(http.StatusOK, registerResponse)
+		ctx.JSON(http.StatusCreated, registerResponse)
 
 		// Backup
 		//cmd := exec.Command("./backup.sh")
