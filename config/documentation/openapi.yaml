@@ -19,15 +19,131 @@ paths:
           description: successfully created
           content:
             application/json:
-              schema: {}
+              schema:
+                $ref: "#/components/schemas/response_register_login"
         "401":
           description: username already exists
         "404":
-          description: not found
+          description: endpoint not found
         "500":
-          description: server error
+          description: error creating new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/request_payload_register"
+  /login:
+    post:
+      security:
+        - BasicAuth: []
+      summary: attempt login
+      description: api recieves login information and attemps to verify
+      responses:
+        "200":
+          description: successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/response_register_login"
+        "401":
+          description: username not found
+        "404":
+          description: endpoint not found
+        "500":
+          description: error loggin user in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/request_payload_login"
+
 components:
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
+  schemas:
+    # USER_DATA
+    user_data_personal:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+        - first_name
+        - last_name
+    user_data_account:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    # AUTH_DATA
+    auth_data_all_tokens:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+      required:
+        - access_token
+        - refresh_token
+    user_id:
+      type: number
+      minimum: 0
+    valid:
+      type: boolean
+    # RESPONSES
+    response_register_login:
+      type: object
+      properties:
+        user_data_personal:
+          $ref: "#/components/schemas/user_data_personal"
+        user_data_tokens:
+          $ref: "#/components/schemas/auth_data_all_tokens"
+        user_data_account:
+          $ref: "#/components/schemas/user_data_account"
+        user_id:
+          $ref: "#/components/schemas/user_id"
+        valid:
+          $ref: "#/components/schemas/valid"
+      required:
+        - user_data_personal
+        - user_data_account
+        - user_data_tokens
+        - user_id
+        - valid
+    # REQUESTS
+    request_payload_register:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+        - username
+        - password
+        - first_name
+        - last_name
+    request_payload_login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
