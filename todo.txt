@@ -1,9 +1,8 @@
 In Progress
 - Create tests for spell dbHandler routes
 - Create base validation response type
-- Remove jwt from all request types
 - Create logging system for routeHandlers
-- Create api documentation
+- Adjust frontend to use bearer token
 
 DONE
 - Get current dbHandler working with schemas
@@ -14,3 +13,5 @@ DONE
 - Create accessToken middleware
 - Create JWT middleware test
 - Create and use package for string consts
+- Create api documentation
+- Remove jwt from all request types
