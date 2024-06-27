@@ -3,6 +3,7 @@ In Progress
 - Create base validation response type
 - Create logging system for routeHandlers
 - Adjust frontend to use bearer token
+- Encrypt password on storage
 
 DONE
 - Get current dbHandler working with schemas
