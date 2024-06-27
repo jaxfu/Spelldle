@@ -1,9 +1,14 @@
 In Progress
+
+SERVER
 - Create tests for spell dbHandler routes
 - Create base validation response type
 - Create logging system for routeHandlers
 - Adjust frontend to use bearer token
 - Encrypt password on storage
+
+CLIENT
+- Prevent adding empty spell guesses
 
 DONE
 - Get current dbHandler working with schemas
