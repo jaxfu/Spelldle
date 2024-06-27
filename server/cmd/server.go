@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	"spelldle.com/server/internal/routing/routes"
 
 	"spelldle.com/server/shared/dbHandler"
@@ -48,6 +49,7 @@ func main() {
 		config := cors.DefaultConfig()
 		config.AllowAllOrigins = true
 		config.AllowMethods = []string{"POST", "GET"}
+		config.AllowHeaders = []string{consts.HeaderTypeAuthorization}
 		router.Use(cors.New(config))
 	}
 
