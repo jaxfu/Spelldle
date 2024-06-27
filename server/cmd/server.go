@@ -49,7 +49,7 @@ func main() {
 		config := cors.DefaultConfig()
 		config.AllowAllOrigins = true
 		config.AllowMethods = []string{"POST", "GET"}
-		config.AllowHeaders = []string{consts.HeaderTypeAuthorization}
+		config.AllowHeaders = []string{consts.HeaderTypeAuthorization, "Content-Type"}
 		router.Use(cors.New(config))
 	}
 

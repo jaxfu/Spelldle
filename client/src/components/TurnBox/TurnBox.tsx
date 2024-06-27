@@ -5,6 +5,7 @@ import {
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../types";
 import { apiRequestMakeGuess } from "../../utils/requests";
+import { getUserSessionDataFromStorage } from "../../utils/methods";
 
 interface IProps {
 	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
@@ -61,10 +62,12 @@ const TurnBox: React.FC<IProps> = (props) => {
 			/>
 			<button
 				onClick={async () => {
-					await apiRequestMakeGuess(
+					const res = await apiRequestMakeGuess(
 						props.allCurrentGuessInfo.current,
 						props.allCategoriesInfo.current,
+						getUserSessionDataFromStorage().access_token,
 					);
+					console.log(`RES: ${res}`);
 				}}
 			>
 				Submit
