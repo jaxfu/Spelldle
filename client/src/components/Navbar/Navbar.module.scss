@@ -2,16 +2,17 @@
 @import "../../styles/vars";
 
 .root {
-	@include flex-center;
-	flex-direction: row;
-	height: 50px;
-	width: 100%;
-	position: fixed;
-	top: 0;
+  @include flex-center;
+  flex-direction: row;
+  height: 75px;
+  width: 100%;
+  background: red;
 
-	& > span {
-		border: $border;
-		height: 100%;
-		@include flex-center;
-	}
+  &>span {
+    border: $border;
+    height: 100%;
+    @include flex-center;
+  }
+
+  overflow: hidden;
 }
