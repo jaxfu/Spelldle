@@ -67,7 +67,7 @@ const TurnBox: React.FC<IProps> = (props) => {
 						props.allCategoriesInfo.current,
 						getUserSessionDataFromStorage().access_token,
 					);
-					console.log(`RES: ${res}`);
+					console.log(`RES: ${JSON.stringify(res.data)}`);
 				}}
 			>
 				Submit
