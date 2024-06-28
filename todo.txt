@@ -9,6 +9,7 @@ SERVER
 
 CLIENT
 - Prevent adding empty spell guesses
+- Create guess response box
 
 DONE
 - Get current dbHandler working with schemas
