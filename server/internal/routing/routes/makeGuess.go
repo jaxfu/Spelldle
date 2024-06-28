@@ -3,12 +3,18 @@ package routes
 import (
 	"fmt"
 	"net/http"
+
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-gonic/gin"
 	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/types"
 )
+
+// SPELL RESULTS:
+// 0 = Incorrect
+// 1 = Some Correct
+// 2 = Correct
 
 func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {

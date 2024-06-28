@@ -12,8 +12,7 @@ import { T_USERDATA_TOKENS } from "../types";
 import { createRequestObjectFromCurrentGuessInfo } from "./methods";
 
 // Routes
-const prefix: string =
-	import.meta.env.DEV == true ? "http://localhost:5000" : "";
+const prefix: string = import.meta.env.DEV ? "http://localhost:5000" : "";
 const APIROUTE_LOGIN: string = prefix + "/api/login";
 const APIROUTE_REGISTER: string = prefix + "/api/register";
 const APIROUTE_VALIDATE: string = prefix + "/api/validateSession";
@@ -62,8 +61,8 @@ export async function apiRequestValidateSession(
 		return await axios<T_APIRESULT_VALIDATE_ACCESS_TOKEN>({
 			method: "POST",
 			url: APIROUTE_VALIDATE,
-			data: {
-				...userDataTokens,
+			headers: {
+				Authorization: `Bearer ${userDataTokens.access_token}`,
 			},
 		});
 	} catch (err: any) {
@@ -74,6 +73,7 @@ export async function apiRequestValidateSession(
 export async function apiRequestMakeGuess(
 	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
 	categoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
+	accessToken: T_USERDATA_TOKENS["access_token"],
 ): Promise<AxiosResponse<string>> {
 	try {
 		const data = createRequestObjectFromCurrentGuessInfo(
@@ -84,6 +84,9 @@ export async function apiRequestMakeGuess(
 			method: "POST",
 			url: APIROUTE_MAKE_GUESS,
 			data,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
 		});
 	} catch (err: any) {
 		throw new Error(err);

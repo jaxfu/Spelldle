@@ -23,12 +23,15 @@ func ValidateAccessToken() gin.HandlerFunc {
 		invalidResponse := invalidResponse{
 			Valid: false,
 		}
-		if ctx.Request.Method == "POST" {
-			if ctx.Request.URL.Path == consts.RouteUrlLogin || ctx.Request.URL.Path == consts.RouteUrlRegister {
-				fmt.Println("POST login or register detected, skipping middleware")
-				ctx.Next()
-				return
-			}
+		if ctx.Request.Method != "POST" {
+			fmt.Println("Skipping middleware")
+			ctx.Next()
+			return
+		}
+		if ctx.Request.URL.Path != consts.RouteUrlValidateSession && ctx.Request.URL.Path != consts.RouteUrlMakeGuess {
+			fmt.Println("Skipping middleware")
+			ctx.Next()
+			return
 		}
 
 		authHeader := ctx.GetHeader(consts.HeaderTypeAuthorization)

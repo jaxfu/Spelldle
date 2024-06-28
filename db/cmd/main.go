@@ -18,7 +18,7 @@ func main() {
 	}
 
 	db := dbHandler.InitDBHandler(os.Getenv("DB_URL"))
-	defer db.DB.Close()
+	defer db.Conn.Close()
 
 	spells, err := parser.ParseSpellsFromJson("../config/spells.json")
 	if err != nil {
