@@ -7,7 +7,10 @@ interface IProps {
 const ContentBox: React.FC<IProps> = (props) => {
   return (
     <div className={styles.root}>
-      <div>{props.children}</div>
+      <div
+        style={{ height: "1000px", width: "400px", background: "black" }}
+      ></div>
+      {props.children}
     </div>
   );
 };
