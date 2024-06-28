@@ -337,3 +337,10 @@ export type T_APIRESULTS =
 export type T_QUERY_KEYS = {
 	userData: string;
 };
+
+// Spell Guess Results
+export enum E_SPELL_GUESS_RESULTS {
+	INCORRECT = 0,
+	SLIGHTLY_CORRECT,
+	CORRECT,
+}
