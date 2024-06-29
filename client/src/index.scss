@@ -1,6 +1,3 @@
-@import "./styles/vars";
-@import "./styles/mixins";
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,42 +10,27 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  // min-height: 100dvh;
-  // height: 100dvh;
-  // max-height: 100dvh;
-  // min-width: 100dvw;
-  // width: 100dvw;
-  // max-width: 100dvw;
-
 }
 
-body {
-  height: 100dvh;
-  width: 100dvw;
+body,
+html {
+  height: 100%;
+  width: 100%;
 
   overflow: hidden;
 }
 
 #root {
-  //min-height: 100dvh;
-  height: 100dvh;
-  //max-height: 100dvh;
-  //min-width: 100dvw;
-  width: 100dvw;
-  //max-width: 100dvw;
-
-  background: yellow;
-
-  overflow: hidden;
+  height: inherit;
+  width: inherit;
 }
 
-// * {
-//   box-sizing: border-box;
-//
-//   margin: 0px;
-//   padding: 0px;
-// }
+* {
+  box-sizing: border-box;
+
+  margin: 0px;
+  padding: 0px;
+}
 
 button {
   cursor: pointer;
