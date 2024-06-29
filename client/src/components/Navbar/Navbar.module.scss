@@ -2,20 +2,20 @@
 @import "../../styles/vars";
 
 .root {
-  @include flex-center;
-  flex-direction: row;
-  height: 75px;
-  width: 100%;
-  background: red;
-  position: fixed;
-  top: 0;
-  z-index: 1;
+	@include flex-center;
+	flex-direction: row;
+	height: 75px;
+	width: 100%;
+	background: red;
+	position: fixed;
+	top: 0;
+	z-index: 1;
 
-  &>span {
-    border: $border;
-    height: 100%;
-    @include flex-center;
-  }
+	& > span {
+		border: $border;
+		height: 100%;
+		@include flex-center;
+	}
 
-  overflow: hidden;
+	overflow: hidden;
 }
