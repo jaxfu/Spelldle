@@ -1,8 +1,8 @@
 import { useState } from "react";
-import styles from "./TurnCell.module.scss";
-import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../types";
+import styles from "./GuessCell.module.scss";
+import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../../../types";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
-import * as methods from "../../../../utils/methods";
+import * as methods from "../../../../../../utils/methods";
 
 interface IProps {
 	category_name: string;
@@ -10,7 +10,7 @@ interface IProps {
 	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
-const TurnCell: React.FC<IProps> = (props) => {
+const GuessCell: React.FC<IProps> = (props) => {
 	const [inputValue, setInputValue] = useState<string>("");
 	const [recommendations, setRecommendations] = useState<string[]>([]);
 
@@ -23,7 +23,7 @@ const TurnCell: React.FC<IProps> = (props) => {
 				inputValue,
 				setInputValue,
 				setRecommendations,
-				props.allCurrentGuessInfo,
+				props.allCurrentGuessInfo
 			)}
 			<RecommendationBox
 				recommendations={recommendations}
@@ -34,4 +34,4 @@ const TurnCell: React.FC<IProps> = (props) => {
 	);
 };
 
-export default TurnCell;
+export default GuessCell;

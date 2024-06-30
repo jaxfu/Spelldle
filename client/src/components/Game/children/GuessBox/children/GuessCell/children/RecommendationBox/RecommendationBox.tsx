@@ -1,5 +1,5 @@
 import styles from "./RecommendationBox.module.scss";
-import * as methods from "../../../../../../utils/methods";
+import * as methods from "../../../../../../../../utils/methods";
 
 interface IProps {
 	recommendations: string[];
@@ -21,7 +21,7 @@ const RecommendationBox: React.FC<IProps> = (props) => {
 									methods.onRecommendationClick(
 										option.toString(),
 										props.setInputValue,
-										props.setRecommendations,
+										props.setRecommendations
 									);
 								}}
 								// Keep focus on text input
