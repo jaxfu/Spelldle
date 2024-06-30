@@ -56,7 +56,7 @@ CREATE TABLE users.data
     password   VARCHAR(32),
     first_name VARCHAR(32),
     last_name  VARCHAR(32),
-    current_session INTEGER REFERENCES game_sessions.ids(game_session_id)
+    game_session_id INTEGER REFERENCES game_sessions.ids(game_session_id)
 );
 
 CREATE TABLE guesses.categories

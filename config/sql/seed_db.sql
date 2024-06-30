@@ -8,7 +8,7 @@ VALUES (1, 'Fireball', 0, 0, 0, 0, 0, '{0, 1}', '{1, 2}', '{3, 4}');
 INSERT INTO spells.level_objects(spell_id, level, is_ritual)
 VALUES (1, 1, false);
 
-INSERT INTO users.data(user_id, username, password, first_name, last_name, current_session)
+INSERT INTO users.data(user_id, username, password, first_name, last_name, game_session_id)
 VALUES (1, 'poemmys', 'pass', 'Jackson', 'Furr', 1);
 
 INSERT INTO game_sessions.data(game_session_id, user_id, spell_id, rounds)
