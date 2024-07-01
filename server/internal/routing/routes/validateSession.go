@@ -28,7 +28,7 @@ func ValidateSession(db *dbHandler.DBHandler) gin.HandlerFunc {
 		userDataAll, err := db.GetUserDataAllByUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, validationResponse)
-			fmt.Printf("Error getting UserDataAccount during POST->login: %+v\n", err)
+			fmt.Printf("Error getting UserDataAll during POST->login: %+v\n", err)
 			return
 		}
 
