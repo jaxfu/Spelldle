@@ -1,7 +1,7 @@
 package types
 
 type ResponseRegisterLogin struct {
-	UserDataTokens AllTokens `json:"user_data_tokens"`
+	Tokens AllTokens `json:"tokens"`
 	UserDataAll
 	Valid bool `json:"valid"`
 }

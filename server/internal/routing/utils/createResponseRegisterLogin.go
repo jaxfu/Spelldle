@@ -6,18 +6,12 @@ import (
 
 func CreateResponseRegisterLogin(
 	valid bool,
-	userID types.UserID,
-	userDataAccount types.UserDataAccount,
-	userDataPersonal types.UserDataPersonal,
-	userDataTokens types.AllTokens,
+	userData types.UserDataAll,
+	tokens types.AllTokens,
 ) types.ResponseRegisterLogin {
 	return types.ResponseRegisterLogin{
-		Valid:  valid,
-		UserId: userID,
-		UserDataAccount: types.ResponseUserDataAccount{
-			Username: userDataAccount.Username,
-		},
-		UserDataPersonal: userDataPersonal,
-		UserDataTokens:   userDataTokens,
+		Valid:       valid,
+		UserDataAll: userData,
+		Tokens:      tokens,
 	}
 }
