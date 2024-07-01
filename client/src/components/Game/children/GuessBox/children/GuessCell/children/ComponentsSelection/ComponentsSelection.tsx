@@ -9,21 +9,21 @@ const ComponentsSelection: React.FC<IProps> = (props) => {
 	function componentSelectionCheckboxStateHandler(
 		e: React.ChangeEvent<HTMLInputElement>,
 		component: string,
-		allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>
+		allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>,
 	) {
 		const COMPONENENTS_IDENTIFIER: string = "Components";
 		let currentComponentState: any = allCurrentGuessInfo.current.get(
-			COMPONENENTS_IDENTIFIER
+			COMPONENENTS_IDENTIFIER,
 		);
 		if (e.target.checked) currentComponentState.push(component);
 		else {
 			currentComponentState = currentComponentState.filter(
-				(c: string) => c !== component
+				(c: string) => c !== component,
 			);
 		}
 		allCurrentGuessInfo.current.set(
 			COMPONENENTS_IDENTIFIER,
-			currentComponentState
+			currentComponentState,
 		);
 	}
 
@@ -40,7 +40,7 @@ const ComponentsSelection: React.FC<IProps> = (props) => {
 							componentSelectionCheckboxStateHandler(
 								e,
 								"v",
-								props.allCurrentGuessInfo
+								props.allCurrentGuessInfo,
 							);
 						}}
 					/>
@@ -55,7 +55,7 @@ const ComponentsSelection: React.FC<IProps> = (props) => {
 							componentSelectionCheckboxStateHandler(
 								e,
 								"s",
-								props.allCurrentGuessInfo
+								props.allCurrentGuessInfo,
 							);
 						}}
 					/>
@@ -70,7 +70,7 @@ const ComponentsSelection: React.FC<IProps> = (props) => {
 							componentSelectionCheckboxStateHandler(
 								e,
 								"m",
-								props.allCurrentGuessInfo
+								props.allCurrentGuessInfo,
 							);
 						}}
 					/>
