@@ -73,16 +73,6 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// registerResponse = utils.CreateResponseRegisterLogin(
-		// 	true,
-		// 	userID,
-		// 	userDataAccount,
-		// 	userDataPersonal,
-		// types.AllTokens{
-		// 	AccessToken:  types.AccessToken{AccessToken: accessToken},
-		// 	RefreshToken: types.RefreshToken{RefreshToken: accessToken},
-		// },
-		// )
 		registerResponse = types.ResponseRegisterLogin{
 			Valid: true,
 			Tokens: types.AllTokens{

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"spelldle.com/server/internal/routing/utils"
+
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-gonic/gin"
@@ -48,8 +48,8 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// Get UserDataAccount
-		userDataAccount, err := db.GetUserDataAccountByUserID(userID)
+		// Get UserDataAll
+		userDataAll, err := db.GetUserDataAllByUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, loginResponse)
 			fmt.Printf("Error getting UserDataAccount during POST->login: %+v\n", err)
@@ -57,30 +57,20 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// Check password
-		if loginPayload.Password != userDataAccount.Password {
-			fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userDataAccount.Password)
+		if loginPayload.Password != userDataAll.Password {
+			fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userDataAll.Password)
 			ctx.JSON(http.StatusOK, loginResponse)
 			return
 		}
 
-		// Get UserDataPersonal
-		userDataPersonal, err := db.GetUserDataPersonalByUserID(userID)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, loginResponse)
-			fmt.Printf("Error getting GetUserDataPersonalByUserID during POST->login: %+v\n", err)
-			return
-		}
-
-		loginResponse = utils.CreateResponseRegisterLogin(
-			true,
-			userID,
-			userDataAccount,
-			userDataPersonal,
-			types.AllTokens{
+		loginResponse = types.ResponseRegisterLogin{
+			Valid: true,
+			Tokens: types.AllTokens{
 				AccessToken:  types.AccessToken{AccessToken: accessToken},
 				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
 			},
-		)
+			UserDataAll: userDataAll,
+		}
 
 		ctx.JSON(http.StatusOK, loginResponse)
 	}
