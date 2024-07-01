@@ -7,7 +7,6 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"spelldle.com/server/internal/auth"
-	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
 
@@ -53,25 +52,18 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// Insert UserDataAccount
-		if err := db.InsertUserDataAccount(userID,
-			types.UserDataAccount{
-				Username: registerPayload.Username,
-				Password: registerPayload.Password,
-			}); err != nil {
-			fmt.Printf("Error in InsertUserDataAccount during POST->register: %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
-			return
+		userDataAll := types.UserDataAll{
+			UserID:    userID,
+			Username:  registerPayload.Username,
+			Password:  registerPayload.Password,
+			FirstName: registerPayload.FirstName,
+			LastName:  registerPayload.LastName,
 		}
 
-		// Insert UserDataPersonal
-		if err := db.InsertUserDataPersonal(userID,
-			types.UserDataPersonal{
-				FirstName: registerPayload.FirstName,
-				LastName:  registerPayload.LastName,
-			}); err != nil {
-			fmt.Printf("Error in InsertUserDataPersonal during POST->register: %+v\n", err)
+		// Insert UserDataAll
+		if err := db.InsertUserDataAll(userDataAll); err != nil {
 			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			fmt.Printf("Error inserting user: %+v\n", err)
 			return
 		}
 
@@ -81,32 +73,14 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// Get UserDataAccount
-		userDataAccount, err := db.GetUserDataAccountByUserID(userID)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
-			fmt.Printf("Error getting UserDataAccount during POST->register: %+v\n", err)
-			return
-		}
-
-		// Get UserDataPersonal
-		userDataPersonal, err := db.GetUserDataPersonalByUserID(userID)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
-			fmt.Printf("Error getting GetUserDataPersonalByUserID during POST->register: %+v\n", err)
-			return
-		}
-
-		registerResponse = utils.CreateResponseRegisterLogin(
-			true,
-			userID,
-			userDataAccount,
-			userDataPersonal,
-			types.AllTokens{
+		registerResponse = types.ResponseRegisterLogin{
+			Valid: true,
+			Tokens: types.AllTokens{
 				AccessToken:  types.AccessToken{AccessToken: accessToken},
 				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
 			},
-		)
+			UserDataAll: userDataAll,
+		}
 
 		ctx.JSON(http.StatusCreated, registerResponse)
 

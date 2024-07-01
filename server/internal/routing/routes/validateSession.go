@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
+
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ func ValidateSession(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var validationResponse types.ResponseValidateSession
 
+		// Get userID from jwt
 		userID, err := utils.GetJwtInfoFromCtx(ctx)
 		if err != nil {
 			fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
@@ -22,28 +24,16 @@ func ValidateSession(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 		fmt.Printf("userID: %d\n", userID)
 
-		// Get UserDataAccount
-		userDataAccount, err := db.GetUserDataAccountByUserID(userID)
+		// Get UserDataAll
+		userDataAll, err := db.GetUserDataAllByUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, validationResponse)
-			fmt.Printf("Error getting UserDataAccount during POST->validateSession: %+v\n", err)
-			return
-		}
-
-		// Get UserDataPersonal
-		userDataPersonal, err := db.GetUserDataPersonalByUserID(userID)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, validationResponse)
-			fmt.Printf("Error getting GetUserDataPersonalByUserID during POST->validateSession: %+v\n", err)
+			fmt.Printf("Error getting UserDataAll during POST->login: %+v\n", err)
 			return
 		}
 
 		validationResponse.Valid = true
-		validationResponse.UserId = userID
-		validationResponse.UserDataAccount = types.ResponseUserDataAccount{
-			Username: userDataAccount.Username,
-		}
-		validationResponse.UserDataPersonal = userDataPersonal
+		validationResponse.UserDataAll = userDataAll
 		ctx.JSON(http.StatusOK, validationResponse)
 	}
 }
