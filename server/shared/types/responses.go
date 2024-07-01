@@ -1,11 +1,9 @@
 package types
 
 type ResponseRegisterLogin struct {
-	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
-	UserDataTokens   AllTokens               `json:"user_data_tokens"`
-	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
-	UserId           UserID                  `json:"user_id"`
-	Valid            bool                    `json:"valid"`
+	UserDataTokens AllTokens `json:"user_data_tokens"`
+	UserDataAll
+	Valid bool `json:"valid"`
 }
 
 type ResponseUserDataAccount struct {
@@ -13,10 +11,8 @@ type ResponseUserDataAccount struct {
 }
 
 type ResponseValidateSession struct {
-	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
-	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
-	UserId           UserID                  `json:"user_id"`
-	Valid            bool                    `json:"valid"`
+	UserDataAll
+	Valid bool `json:"valid"`
 }
 
 type ResponseMakeGuess struct {

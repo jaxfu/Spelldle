@@ -65,7 +65,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 					const res = await apiRequestMakeGuess(
 						props.allCurrentGuessInfo.current,
 						props.allCategoriesInfo.current,
-						getUserSessionDataFromStorage().access_token
+						getUserSessionDataFromStorage().access_token,
 					);
 					console.log(`RES: ${JSON.stringify(res.data)}`);
 				}}
