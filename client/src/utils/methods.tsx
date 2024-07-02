@@ -82,7 +82,6 @@ export function getUniqueComponents(
 		case CATEGORY_INFO.TARGET.name:
 		case CATEGORY_INFO.DURATION.name:
 			return singleInput;
-			break;
 		case CATEGORY_INFO.LEVEL.name:
 			return (
 				<>
@@ -90,14 +89,11 @@ export function getUniqueComponents(
 					{singleInput}
 				</>
 			);
-			break;
 		case CATEGORY_INFO.COMPONENTS.name:
 			return <ComponentsSelection allCurrentGuessInfo={allCurrentGuessInfo} />;
-			break;
 		case CATEGORY_INFO.CLASS.name:
 		case CATEGORY_INFO.EFFECTS.name:
 			return multiInput;
-			break;
 		default:
 			return <></>;
 	}
@@ -204,28 +200,14 @@ export function clearTokensFromLocalStorage() {
 }
 
 // Data
-export function createUserDataStateFromApiResult(
-	apiResult: T_APIRESULTS,
-): T_USERDATA_STATE {
-	return {
-		user_id: apiResult.user_id,
-		user_data_account: apiResult.user_data_account,
-		user_data_personal: apiResult.user_data_personal,
-	};
-}
-
 export function setUserDataFromAPIResult(
 	data: T_APIRESULTS,
 	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
 	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
 ): void {
-	console.log(
-		`Setting userData: ${JSON.stringify(
-			createUserDataStateFromApiResult(data),
-		)}`,
-	);
-	setUserData(createUserDataStateFromApiResult(data));
+	console.log(`Setting userData: ${JSON.stringify(data.user_data)}`);
+	setUserData(data.user_data);
 	setUserIsLoggedIn(true);
 	setEnableQueryFn(false);
 }

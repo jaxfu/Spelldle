@@ -237,10 +237,8 @@ export type T_APIRESULT_REGISTER = {
 
 export const INIT_APIRESULT_REGISTER: T_APIRESULT_REGISTER = {
 	valid: false,
-	user_id: 0,
-	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
-	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
-	user_data_tokens: deepCopyObject(INIT_TOKENS),
+	user_data: deepCopyObject(INIT_USERDATA_STATE),
+	tokens: deepCopyObject(INIT_TOKENS),
 };
 
 // LOGIN
@@ -256,34 +254,26 @@ export const INIT_USERINPUT_LOGIN: T_USERINPUT_LOGIN = {
 
 export type T_APIRESULT_LOGIN = {
 	valid: boolean;
-	user_id: number;
-	user_data_account: T_USERDATA_ACCOUNT;
-	user_data_personal: T_USERDATA_PERSONAL;
-	user_data_tokens: T_TOKENS;
+	user_data: T_USERDATA_STATE;
+	tokens: T_TOKENS;
 };
 
 export const INIT_APIRESULT_LOGIN: T_APIRESULT_LOGIN = {
 	valid: false,
-	user_id: 0,
-	user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
-	user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
-	user_data_tokens: deepCopyObject(INIT_TOKENS),
+	user_data: deepCopyObject(INIT_USERDATA_STATE),
+	tokens: deepCopyObject(INIT_TOKENS),
 };
 
 // VALIDATE
 export type T_APIRESULT_VALIDATE_ACCESS_TOKEN = {
 	valid: boolean;
-	user_id: number;
-	user_data_account: T_USERDATA_ACCOUNT;
-	user_data_personal: T_USERDATA_PERSONAL;
+	user_data: T_USERDATA_STATE;
 };
 
 export const INIT_APIRESULT_VALIDATE_ACCESS_TOKEN: T_APIRESULT_VALIDATE_ACCESS_TOKEN =
 	{
 		valid: false,
-		user_id: 0,
-		user_data_account: deepCopyObject(INIT_USERDATA_ACCOUNT),
-		user_data_personal: deepCopyObject(INIT_USERDATA_PERSONAL),
+		user_data: deepCopyObject(INIT_USERDATA_STATE),
 	};
 
 // MakeGuess
