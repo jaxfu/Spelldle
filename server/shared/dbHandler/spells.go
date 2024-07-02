@@ -28,9 +28,11 @@ const QGetSpellLevelBySpellId = `
 `
 
 func (dbHandler *DBHandler) GetSpellBySpellId(spellID uint) (types.SpellAllInfo, error) {
-	spell := types.SpellAllInfo{}
+	spell := types.SpellAllInfo{
+		SpellID: spellID,
+	}
 
-	err := dbHandler.Conn.QueryRow(context.Background(), QGetSpellBySpellId, spellID).Scan(
+	err := dbHandler.Conn.QueryRow(context.Background(), QGetSpellAllBySpellId, spellID).Scan(
 		&spell.Name,
 		&spell.School,
 		&spell.CastingTime,
