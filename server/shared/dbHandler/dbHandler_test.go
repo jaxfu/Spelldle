@@ -24,13 +24,15 @@ func TestDBHandler(t *testing.T) {
 
 	testUserData := testHelpers.TestUserData
 	testSpellData := testHelpers.TestSpell
+	testGuessData := testHelpers.TestGuess
+	testGameSessionData := testHelpers.TestGameSession
 
 	t.Run("Ping connection", func(t *testing.T) {
 		if err := dbHandler.Conn.Ping(context.Background()); err != nil {
 			t.Errorf("Error initializing database: %+v\n", err)
 		}
 	})
-	t.Run("DropTables", func(t *testing.T) {
+	t.Run("DropTablesStart", func(t *testing.T) {
 		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
 			t.Errorf("Error dropping tables: %+v\n", err)
 		}
@@ -95,10 +97,37 @@ func TestDBHandler(t *testing.T) {
 		if spellInfo.SpellID != testSpellData.SpellID {
 			t.Errorf("Mismatch in GetSpellBySpellID: got %+v, want %+v", spellInfo.SpellID, testSpellData.SpellID)
 		}
-		fmt.Printf("%+v\n", spellInfo)
 	})
 
-	t.Run("DropTables", func(t *testing.T) {
+	t.Run("InsertGameSession", func(t *testing.T) {
+		err := dbHandler.InsertGameSession(testGameSessionData)
+		if err != nil {
+			t.Errorf("Error inserting game session: %+v", err)
+		}
+	})
+	t.Run("GetGameSessionByGameID", func(t *testing.T) {
+		gameSession, err := dbHandler.GetGameSessionByGameSessionID(testGameSessionData.GameSessionID)
+		if err != nil {
+			t.Errorf("Error getting game session: %+v", err)
+		}
+		fmt.Printf("%+v\n", gameSession)
+	})
+
+	t.Run("InsertGuess", func(t *testing.T) {
+		err := dbHandler.InsertGuess(testGuessData)
+		if err != nil {
+			t.Errorf("Error in InsertGuess: %+v", err)
+		}
+	})
+	t.Run("GetGuessByGameSessionID", func(t *testing.T) {
+		guessInfo, err := dbHandler.GetGuessByGameSessionId(testGuessData.GameSessionID, testGuessData.Round)
+		if err != nil {
+			t.Errorf("Error getting guess: %+v", err)
+		}
+		fmt.Printf("%+v\n", guessInfo)
+	})
+
+	t.Run("DropTablesEnd", func(t *testing.T) {
 		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
 			t.Errorf("Error dropping tables: %+v\n", err)
 		}

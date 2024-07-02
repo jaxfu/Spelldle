@@ -53,7 +53,7 @@ const EInsertGuessCategories = `
 `
 
 const EInsertGuessLevel = `
-  INSERT INTO Guesss.level_objects(game_session_id, round, level, is_ritual)
+  INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
   VALUES ($1, $2, $3, $4)
 `
 
