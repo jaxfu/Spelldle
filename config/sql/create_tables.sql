@@ -96,20 +96,3 @@ CREATE TABLE guesses.level_objects
   PRIMARY KEY(game_session_id, round),
   FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
 );
-
-CREATE TABLE guesses.results
-(
-  game_session_id TEXT,
-  round SMALLINT,
-  school SMALLINT,
-  casting_time SMALLINT,
-  range SMALLINT,
-  target SMALLINT,
-  duration SMALLINT,
-  level SMALLINT,
-  components SMALLINT,
-  class SMALLINT,
-  effects SMALLINT,
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
-);

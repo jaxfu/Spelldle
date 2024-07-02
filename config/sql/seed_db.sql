@@ -27,6 +27,3 @@ VALUES ('TEST_ID', 1, 1, 0, 0, 0, 0, '{0, 1}', '{1, 2}', '{3, 4}');
 
 INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
 VALUES ('TEST_ID', 1, 1, false);
-
-INSERT INTO guesses.results(game_session_id, round, school, casting_time, range, target, duration, level, components, class, effects)
-VALUES ('TEST_ID', 1, 0, 2, 2, 2, 2, 2, 2, 2, 2);
