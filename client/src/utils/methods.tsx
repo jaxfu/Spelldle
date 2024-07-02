@@ -1,7 +1,7 @@
 import {
 	type T_ALL_CURRENT_GUESS_INFO,
-	type T_USERDATA_TOKENS,
-	INIT_USERDATA_TOKENS,
+	type T_TOKENS,
+	INIT_TOKENS,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
@@ -164,8 +164,8 @@ export function areTokensInLocalStorage(): boolean {
 	);
 }
 
-export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
-	const userDataTokens: T_USERDATA_TOKENS = { ...INIT_USERDATA_TOKENS };
+export function getUserSessionDataFromStorage(): T_TOKENS {
+	const userDataTokens: T_TOKENS = { ...INIT_TOKENS };
 
 	try {
 		userDataTokens.access_token =
@@ -178,7 +178,7 @@ export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
 	}
 }
 
-export function sendTokensToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
+export function sendTokensToLocalStorage(userDataTokens: T_TOKENS) {
 	localStorage.setItem(
 		LOCAL_STORAGE_TOKENS_KEYS.access_token,
 		userDataTokens.access_token,

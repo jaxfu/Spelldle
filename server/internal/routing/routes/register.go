@@ -52,7 +52,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		userDataAll := types.UserDataAll{
+		UserData := types.UserData{
 			UserID:    userID,
 			Username:  registerPayload.Username,
 			Password:  registerPayload.Password,
@@ -60,8 +60,8 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			LastName:  registerPayload.LastName,
 		}
 
-		// Insert UserDataAll
-		if err := db.InsertUserDataAll(userDataAll); err != nil {
+		// Insert UserData
+		if err := db.InsertUserData(UserData); err != nil {
 			ctx.JSON(http.StatusInternalServerError, registerResponse)
 			fmt.Printf("Error inserting user: %+v\n", err)
 			return
@@ -79,7 +79,12 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 				AccessToken:  types.AccessToken{AccessToken: accessToken},
 				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
 			},
-			UserDataAll: userDataAll,
+			UserData: types.ResponseUserData{
+				UserID:    UserData.UserID,
+				Username:  UserData.Username,
+				FirstName: UserData.FirstName,
+				LastName:  UserData.LastName,
+			},
 		}
 
 		ctx.JSON(http.StatusCreated, registerResponse)

@@ -24,16 +24,21 @@ func ValidateSession(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 		fmt.Printf("userID: %d\n", userID)
 
-		// Get UserDataAll
-		userDataAll, err := db.GetUserDataAllByUserID(userID)
+		// Get UserData
+		userData, err := db.GetUserDataByUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, validationResponse)
-			fmt.Printf("Error getting UserDataAll during POST->login: %+v\n", err)
+			fmt.Printf("Error getting UserData during POST->login: %+v\n", err)
 			return
 		}
 
 		validationResponse.Valid = true
-		validationResponse.UserDataAll = userDataAll
+		validationResponse.UserData = types.ResponseUserData{
+			FirstName: userData.FirstName,
+			LastName:  userData.LastName,
+			Username:  userData.Username,
+			UserID:    userID,
+		}
 		ctx.JSON(http.StatusOK, validationResponse)
 	}
 }

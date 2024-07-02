@@ -45,25 +45,25 @@ func (dbHandler *DBHandler) GetUserIDByUsername(username string) (types.UserID, 
 	return id, nil
 }
 
-const QGetUserDataAllByUserID = `
+const QGetUserDataByUserID = `
 	SELECT user_id, username, password, first_name, last_name
 	FROM users.data
 	WHERE user_id=$1
 `
 
-func (dbHandler *DBHandler) GetUserDataAllByUserID(UserID types.UserID) (types.UserDataAll, error) {
-	var userDataAll types.UserDataAll
-	err := dbHandler.Conn.QueryRow(context.Background(), QGetUserDataAllByUserID, UserID).Scan(
-		&userDataAll.UserID,
-		&userDataAll.Username,
-		&userDataAll.Password,
-		&userDataAll.FirstName,
-		&userDataAll.LastName,
+func (dbHandler *DBHandler) GetUserDataByUserID(UserID types.UserID) (types.UserData, error) {
+	var UserData types.UserData
+	err := dbHandler.Conn.QueryRow(context.Background(), QGetUserDataByUserID, UserID).Scan(
+		&UserData.UserID,
+		&UserData.Username,
+		&UserData.Password,
+		&UserData.FirstName,
+		&UserData.LastName,
 	)
 	if err != nil {
-		return userDataAll, err
+		return UserData, err
 	}
-	return userDataAll, nil
+	return UserData, nil
 }
 
 // const QGetUserDataAccountByUserID = `
@@ -118,13 +118,13 @@ func (dbHandler *DBHandler) InsertUser() (types.UserID, error) {
 	return userID, nil
 }
 
-const EInsertUserDataAll = `
+const EInsertUserData = `
 	INSERT INTO users.data (user_id, username, password, first_name, last_name)
 	VALUES ($1, $2, $3, $4, $5)
 `
 
-func (dbHandler *DBHandler) InsertUserDataAll(userData types.UserDataAll) error {
-	_, err := dbHandler.Conn.Exec(context.Background(), EInsertUserDataAll,
+func (dbHandler *DBHandler) InsertUserData(userData types.UserData) error {
+	_, err := dbHandler.Conn.Exec(context.Background(), EInsertUserData,
 		userData.UserID,
 		userData.Username,
 		userData.Password,

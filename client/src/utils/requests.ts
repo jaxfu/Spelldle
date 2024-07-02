@@ -8,7 +8,7 @@ import {
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../types";
-import { T_USERDATA_TOKENS } from "../types";
+import { T_TOKENS } from "../types";
 import { createRequestObjectFromCurrentGuessInfo } from "./methods";
 
 // Routes
@@ -54,7 +54,7 @@ export async function apiRequestRegister(
 }
 
 export async function apiRequestValidateSession(
-	userDataTokens: T_USERDATA_TOKENS,
+	userDataTokens: T_TOKENS,
 ): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> {
 	console.log("Running apiRequestValidateSession");
 	try {
@@ -73,7 +73,7 @@ export async function apiRequestValidateSession(
 export async function apiRequestMakeGuess(
 	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
 	categoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
-	accessToken: T_USERDATA_TOKENS["access_token"],
+	accessToken: T_TOKENS["access_token"],
 ): Promise<AxiosResponse<string>> {
 	try {
 		const data = createRequestObjectFromCurrentGuessInfo(

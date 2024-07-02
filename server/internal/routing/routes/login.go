@@ -48,17 +48,17 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// Get UserDataAll
-		userDataAll, err := db.GetUserDataAllByUserID(userID)
+		// Get UserData
+		userData, err := db.GetUserDataByUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, loginResponse)
-			fmt.Printf("Error getting UserDataAll during POST->login: %+v\n", err)
+			fmt.Printf("Error getting UserData during POST->login: %+v\n", err)
 			return
 		}
 
 		// Check password
-		if loginPayload.Password != userDataAll.Password {
-			fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userDataAll.Password)
+		if loginPayload.Password != userData.Password {
+			fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userData.Password)
 			ctx.JSON(http.StatusOK, loginResponse)
 			return
 		}
@@ -69,7 +69,12 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 				AccessToken:  types.AccessToken{AccessToken: accessToken},
 				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
 			},
-			UserDataAll: userDataAll,
+			UserData: types.ResponseUserData{
+				FirstName: userData.FirstName,
+				LastName:  userData.LastName,
+				Username:  userData.Username,
+				UserID:    userID,
+			},
 		}
 
 		ctx.JSON(http.StatusOK, loginResponse)
