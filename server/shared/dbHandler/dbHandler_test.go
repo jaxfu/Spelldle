@@ -93,8 +93,9 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("Error getting spell: %+v", err)
 		}
 		if spellInfo.SpellID != testSpellData.SpellID {
-			t.Errorf("Mismatch in GetSpellBySpellID: got %+v, want %+v", spellInfo, testSpellData)
+			t.Errorf("Mismatch in GetSpellBySpellID: got %+v, want %+v", spellInfo.SpellID, testSpellData.SpellID)
 		}
+		fmt.Printf("%+v\n", spellInfo)
 	})
 
 	t.Run("DropTables", func(t *testing.T) {
