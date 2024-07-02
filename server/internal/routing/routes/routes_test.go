@@ -53,14 +53,14 @@ func TestRoutes(t *testing.T) {
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-		if responseData.UserDataAll.FirstName != testUserRegisterPayload.FirstName {
-			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataAll.FirstName, testUserRegisterPayload.FirstName)
+		if responseData.UserData.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserData.FirstName, testUserRegisterPayload.FirstName)
 		}
-		if responseData.UserDataAll.LastName != testUserRegisterPayload.LastName {
-			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataAll.LastName, testUserRegisterPayload.LastName)
+		if responseData.UserData.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserData.LastName, testUserRegisterPayload.LastName)
 		}
-		if responseData.UserDataAll.Username != testUserRegisterPayload.Username {
-			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAll.Username, testUserRegisterPayload.Username)
+		if responseData.UserData.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserData.Username, testUserRegisterPayload.Username)
 		}
 	})
 
@@ -78,14 +78,14 @@ func TestRoutes(t *testing.T) {
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-		if responseData.UserDataAll.FirstName != testUserRegisterPayload.FirstName {
-			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataAll.FirstName, testUserRegisterPayload.FirstName)
+		if responseData.UserData.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserData.FirstName, testUserRegisterPayload.FirstName)
 		}
-		if responseData.UserDataAll.LastName != testUserRegisterPayload.LastName {
-			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataAll.LastName, testUserRegisterPayload.LastName)
+		if responseData.UserData.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserData.LastName, testUserRegisterPayload.LastName)
 		}
-		if responseData.UserDataAll.Username != testUserRegisterPayload.Username {
-			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAll.Username, testUserRegisterPayload.Username)
+		if responseData.UserData.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserData.Username, testUserRegisterPayload.Username)
 		}
 	})
 
@@ -139,17 +139,17 @@ func TestRoutes(t *testing.T) {
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-		if responseData.UserID != testHelpers.TestUserDataAll.UserID {
-			t.Errorf("First name is incorrect: got %d, want %d\n", responseData.UserID, testHelpers.TestUserDataAll.UserID)
+		if responseData.UserData.UserID != testHelpers.TestUserData.UserID {
+			t.Errorf("First name is incorrect: got %d, want %d\n", responseData.UserData.UserID, testHelpers.TestUserData.UserID)
 		}
-		if responseData.UserDataAll.FirstName != testUserRegisterPayload.FirstName {
-			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataAll.FirstName, testUserRegisterPayload.FirstName)
+		if responseData.UserData.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserData.FirstName, testUserRegisterPayload.FirstName)
 		}
-		if responseData.UserDataAll.LastName != testUserRegisterPayload.LastName {
-			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataAll.LastName, testUserRegisterPayload.LastName)
+		if responseData.UserData.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserData.LastName, testUserRegisterPayload.LastName)
 		}
-		if responseData.UserDataAll.Username != testUserRegisterPayload.Username {
-			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAll.Username, testUserRegisterPayload.Username)
+		if responseData.UserData.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserData.Username, testUserRegisterPayload.Username)
 		}
 	})
 
@@ -194,8 +194,8 @@ func TestRoutes(t *testing.T) {
 	// 		t.Errorf("Error in GetJwtInfoFromCtx: %+v\n", err)
 	// 		return
 	// 	}
-	// 	if userID != testHelpers.TestUserDataAll.UserID {
-	// 		t.Errorf("Incorrect userID from middleware, want %v got %d\n", testHelpers.TestUserDataAll.UserID, userID)
+	// 	if userID != testHelpers.TestUserData.UserID {
+	// 		t.Errorf("Incorrect userID from middleware, want %v got %d\n", testHelpers.TestUserData.UserID, userID)
 	// 		return
 	// 	}
 	// })

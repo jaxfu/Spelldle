@@ -22,7 +22,7 @@ func TestDBHandler(t *testing.T) {
 	dbHandler := InitDBHandler(os.Getenv("DB_URL_TEST"))
 	defer dbHandler.Conn.Close()
 
-	testUserDataAll := testHelpers.TestUserDataAll
+	testUserData := testHelpers.TestUserData
 
 	t.Run("Ping connection", func(t *testing.T) {
 		if err := dbHandler.Conn.Ping(context.Background()); err != nil {
@@ -46,31 +46,31 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("Error in InsertUser: %+v\n", err)
 		}
 		if userId != 1 {
-			t.Errorf("Inserted user id should be %d, but got %d\n", testUserDataAll.UserID, userId)
+			t.Errorf("Inserted user id should be %d, but got %d\n", testUserData.UserID, userId)
 		}
 	})
 
-	t.Run("InsertUserDataAll", func(t *testing.T) {
-		if err := dbHandler.InsertUserDataAll(testUserDataAll); err != nil {
-			t.Errorf("Error in InsertUserDataAll: %+v\n", err)
+	t.Run("InsertUserData", func(t *testing.T) {
+		if err := dbHandler.InsertUserData(testUserData); err != nil {
+			t.Errorf("Error in InsertUserData: %+v\n", err)
 		}
 	})
-	t.Run("GetUserDataAllByUserID", func(t *testing.T) {
-		userDataAll, err := dbHandler.GetUserDataAllByUserID(testUserDataAll.UserID)
+	t.Run("GetUserDataByUserID", func(t *testing.T) {
+		UserData, err := dbHandler.GetUserDataByUserID(testUserData.UserID)
 		if err != nil {
-			t.Errorf("Error in GetUserDataAllByUserID: %+v\n", err)
+			t.Errorf("Error in GetUserDataByUserID: %+v\n", err)
 		}
-		if userDataAll != testUserDataAll {
-			t.Errorf("Mismatch in GetUserDataAllByUserID: got %+v, want %+v", userDataAll, testUserDataAll)
+		if UserData != testUserData {
+			t.Errorf("Mismatch in GetUserDataByUserID: got %+v, want %+v", UserData, testUserData)
 		}
 	})
 	// t.Run("GetUserDataAccountByUserID", func(t *testing.T) {
-	// 	userDataAll, err := dbHandler.GetUserDataAllByUserID(testUserDataAll.UserID)
+	// 	UserData, err := dbHandler.GetUserDataByUserID(testUserData.UserID)
 	// 	if err != nil {
-	// 		t.Errorf("Error in GetUserDataAllByUserID: %+v\n", err)
+	// 		t.Errorf("Error in GetUserDataByUserID: %+v\n", err)
 	// 	}
-	// 	if userDataAll != testUserDataAll {
-	// 		t.Errorf("Mismatch in GetUserDataAccountByUserID: got %+v, want %+v", userDataAll, testUserDataAll)
+	// 	if UserData != testUserData {
+	// 		t.Errorf("Mismatch in GetUserDataAccountByUserID: got %+v, want %+v", UserData, testUserData)
 	// 	}
 	// })
 
@@ -90,12 +90,12 @@ func TestDBHandler(t *testing.T) {
 	// })
 
 	t.Run("GetUserIDByUsernameValid", func(t *testing.T) {
-		userID, err := dbHandler.GetUserIDByUsername(testUserDataAll.Username)
+		userID, err := dbHandler.GetUserIDByUsername(testUserData.Username)
 		if err != nil {
 			t.Errorf("Error in GetUserIDByUsername: %+v\n", err)
 		}
-		if userID != testUserDataAll.UserID {
-			t.Errorf("Invalid UserID: got %d, want %d", userID, testUserDataAll.UserID)
+		if userID != testUserData.UserID {
+			t.Errorf("Invalid UserID: got %d, want %d", userID, testUserData.UserID)
 		}
 	})
 	t.Run("GetUserIDByUsernameInvalid", func(t *testing.T) {

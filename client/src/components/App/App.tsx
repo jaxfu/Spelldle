@@ -22,8 +22,8 @@ import {
 	createNewSpellInfoMap,
 	areTokensInLocalStorage,
 	getUserSessionDataFromStorage,
-	setUserDataFromAPIResult,
 	getAllCategoriesInfo,
+	setUserDataFromAPIResult,
 } from "../../utils/methods";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import ContentBox from "../ContentBox/ContentBox";

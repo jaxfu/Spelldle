@@ -14,15 +14,15 @@ const Navbar: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<span>
-				{props.userIsLoggedIn
-					? props.userData.user_data_account.username
-					: "NOT LOGGED IN"}
+				{props.userIsLoggedIn ? props.userData.username : "NOT LOGGED IN"}
 			</span>
-			<button
-				onClick={() => logoutUser(props.setUserIsLoggedIn, props.setUserData)}
-			>
-				Logout
-			</button>
+			{props.userIsLoggedIn ? (
+				<button
+					onClick={() => logoutUser(props.setUserIsLoggedIn, props.setUserData)}
+				>
+					Logout
+				</button>
+			) : null}
 		</div>
 	);
 };

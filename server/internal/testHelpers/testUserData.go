@@ -6,7 +6,7 @@ import (
 	"spelldle.com/server/shared/types"
 )
 
-var TestUserDataAll = types.UserDataAll{
+var TestUserData = types.UserData{
 	UserID:    1,
 	FirstName: "Jackson",
 	LastName:  "Furr",
