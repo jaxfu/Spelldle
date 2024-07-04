@@ -12,7 +12,7 @@ func TestMethods(t *testing.T) {
 	testGuesses := testHelpers.TestGuesses
 	testResults := testHelpers.TestResults
 
-	t.Run("GetResultsValid", func(t *testing.T) {
+	t.Run("GetResults", func(t *testing.T) {
 		for i := range testGuesses {
 			guess1 := testGuesses[i]
 			results := guess1.GetResults(&testSpell.SpellCategories)
