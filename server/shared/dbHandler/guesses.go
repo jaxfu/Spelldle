@@ -8,20 +8,19 @@ import (
 
 // GETS
 
-const QGetGuessAllByGuessId = `
+const QGetGuessCategoriesByGuessId = `
   SELECT school, casting_time, range, target, duration, level, is_ritual, components, class, effects
   FROM guesses.categories
   NATURAL JOIN guesses.level_objects
   WHERE game_session_id=$1 AND round=$2
 `
 
-func (dbHandler *DBHandler) GetGuessByGameSessionId(gameSessionID types.GameSessionID, round uint) (types.GuessAllInfo, error) {
-	guess := types.GuessAllInfo{
-		GameSessionID: gameSessionID,
-		Round:         round,
+func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (types.GuessCategories, error) {
+	guess := types.GuessCategories{
+		GuessID: guessID,
 	}
 
-	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessAllByGuessId, gameSessionID, round).Scan(
+	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessCategoriesByGuessId, guessID.GameSessionID, guessID.Round).Scan(
 		&guess.School,
 		&guess.CastingTime,
 		&guess.Range,
@@ -38,6 +37,35 @@ func (dbHandler *DBHandler) GetGuessByGameSessionId(gameSessionID types.GameSess
 	}
 
 	return guess, nil
+}
+
+const QGetGuessResultsByGuessId = `
+  SELECT school, casting_time, range, target, duration, level, components, class, effects
+  FROM guesses.results
+  WHERE game_session_id=$1 AND round=$2
+`
+
+func (dbHandler *DBHandler) GetGuessResultsByGuessID(guessID types.GuessID) (types.GuessResults, error) {
+	results := types.GuessResults{
+		GuessID: guessID,
+	}
+
+	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessCategoriesByGuessId, guessID.GameSessionID, guessID.Round).Scan(
+		&results.School,
+		&results.CastingTime,
+		&results.Range,
+		&results.Target,
+		&results.Duration,
+		&results.Level,
+		&results.Components,
+		&results.Class,
+		&results.Effects,
+	)
+	if err != nil {
+		return results, err
+	}
+
+	return results, nil
 }
 
 // INSERTS
@@ -57,7 +85,7 @@ const EInsertGuessLevel = `
   VALUES ($1, $2, $3, $4)
 `
 
-func (dbHandler *DBHandler) InsertGuess(guess types.GuessAllInfo) error {
+func (dbHandler *DBHandler) InsertGuess(guess types.GuessCategories) error {
 	_, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessID,
 		guess.GameSessionID,
 		guess.Round,
