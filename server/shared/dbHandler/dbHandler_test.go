@@ -110,7 +110,9 @@ func TestDBHandler(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error getting game session: %+v", err)
 		}
-		fmt.Printf("%+v\n", gameSession)
+		if gameSession.GameSessionID != testGameSessionData.GameSessionID {
+			t.Errorf("Mismatch in GetGameSessionByGameID: got %+v, want %+v", gameSession.GameSessionID, testGameSessionData.GameSessionID)
+		}
 	})
 
 	t.Run("InsertGuess", func(t *testing.T) {
@@ -124,7 +126,9 @@ func TestDBHandler(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error getting guess: %+v", err)
 		}
-		fmt.Printf("%+v\n", guessInfo)
+		if guessInfo.GameSessionID != testGuessData.GameSessionID {
+			t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", guessInfo.GameSessionID, testGuessData.GameSessionID)
+		}
 	})
 
 	t.Run("DropTablesEnd", func(t *testing.T) {
