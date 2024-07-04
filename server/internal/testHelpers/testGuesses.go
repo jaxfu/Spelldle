@@ -14,9 +14,9 @@ var TestGuesses = [3]types.GuessCategories{
 			Round:         1,
 		},
 		SpellCategories: types.SpellCategories{
-			Components: []int{10, 11},
-			Class:      []int{12, 13, 14},
-			Effects:    []int{15, 16, 17},
+			Components: []uint{10, 11},
+			Class:      []uint{12, 13, 14},
+			Effects:    []uint{15, 16, 17},
 			Level: types.SpellLevel{
 				Level:    0,
 				IsRitual: true,
@@ -34,9 +34,9 @@ var TestGuesses = [3]types.GuessCategories{
 			Round:         2,
 		},
 		SpellCategories: types.SpellCategories{
-			Components: []int{1, 3, 4},
-			Class:      []int{3, 4, 10},
-			Effects:    []int{7, 10, 13, 14},
+			Components: []uint{1, 3, 4},
+			Class:      []uint{3, 4, 10},
+			Effects:    []uint{7, 10, 13, 14},
 			Level: types.SpellLevel{
 				Level:    1,
 				IsRitual: true,
@@ -54,9 +54,9 @@ var TestGuesses = [3]types.GuessCategories{
 			Round:         3,
 		},
 		SpellCategories: types.SpellCategories{
-			Components: []int{1, 2},
-			Class:      []int{3, 4, 5},
-			Effects:    []int{6, 7, 8, 9},
+			Components: []uint{1, 2},
+			Class:      []uint{3, 4, 5},
+			Effects:    []uint{6, 7, 8, 9},
 			Level: types.SpellLevel{
 				Level:    1,
 				IsRitual: false,
