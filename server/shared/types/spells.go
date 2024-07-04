@@ -7,18 +7,18 @@ type SpellAllInfo struct {
 }
 
 type SpellCategories struct {
-	Components  []int      `json:"components"`
-	Class       []int      `json:"class"`
-	Effects     []int      `json:"effects"`
+	Components  []uint     `json:"components"`
+	Class       []uint     `json:"class"`
+	Effects     []uint     `json:"effects"`
 	Level       SpellLevel `json:"level"`
-	School      int        `json:"school"`
-	CastingTime int        `json:"casting_time"`
-	Range       int        `json:"range"`
-	Target      int        `json:"target"`
-	Duration    int        `json:"duration"`
+	School      uint       `json:"school"`
+	CastingTime uint       `json:"casting_time"`
+	Range       uint       `json:"range"`
+	Target      uint       `json:"target"`
+	Duration    uint       `json:"duration"`
 }
 
 type SpellLevel struct {
-	Level    int  `json:"level"`
+	Level    uint `json:"level"`
 	IsRitual bool `json:"is_ritual"`
 }

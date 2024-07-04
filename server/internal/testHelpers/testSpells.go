@@ -5,9 +5,9 @@ import "spelldle.com/server/shared/types"
 var TestSpell = types.SpellAllInfo{
 	Name: "Fireball",
 	SpellCategories: types.SpellCategories{
-		Components: []int{1, 2},
-		Class:      []int{3, 4, 5},
-		Effects:    []int{6, 7, 8, 9},
+		Components: []uint{1, 2},
+		Class:      []uint{3, 4, 5},
+		Effects:    []uint{6, 7, 8, 9},
 		Level: types.SpellLevel{
 			Level:    1,
 			IsRitual: false,
