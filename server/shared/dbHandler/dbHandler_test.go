@@ -9,6 +9,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"spelldle.com/server/internal/testHelpers"
+	"spelldle.com/server/shared/types"
 
 	"github.com/joho/godotenv"
 )
@@ -24,7 +25,8 @@ func TestDBHandler(t *testing.T) {
 
 	testUserData := testHelpers.TestUserData
 	testSpellData := testHelpers.TestSpell
-	testGuessData := testHelpers.TestGuess
+	testGuessesData := testHelpers.TestGuesses
+	testResultsData := testHelpers.TestResults
 	testGameSessionData := testHelpers.TestGameSession
 
 	t.Run("Ping connection", func(t *testing.T) {
@@ -115,19 +117,51 @@ func TestDBHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("InsertGuess", func(t *testing.T) {
-		err := dbHandler.InsertGuess(testGuessData)
-		if err != nil {
-			t.Errorf("Error in InsertGuess: %+v", err)
+	t.Run("InsertGuessCategories", func(t *testing.T) {
+		for i := range testGuessesData {
+			if err := dbHandler.InsertGuessCategories(testGuessesData[i]); err != nil {
+				t.Errorf("Error in InsertGuess: %+v", err)
+			}
 		}
 	})
-	t.Run("GetGuessByGameSessionID", func(t *testing.T) {
-		guessInfo, err := dbHandler.GetGuessByGameSessionId(testGuessData.GameSessionID, testGuessData.Round)
-		if err != nil {
-			t.Errorf("Error getting guess: %+v", err)
+	t.Run("GetGuessCategoriesByGuessID", func(t *testing.T) {
+		for i := range testGuessesData {
+			guessInfo, err := dbHandler.GetGuessCategoriesByGuessID(
+				types.GuessID{
+					GameSessionID: testGuessesData[i].GameSessionID,
+					Round:         testGuessesData[i].Round,
+				},
+			)
+			if err != nil {
+				t.Errorf("Error getting guess: %+v", err)
+			}
+			if guessInfo.GuessID != testGuessesData[i].GuessID {
+				t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", guessInfo.GuessID, testGuessesData[i].GuessID)
+			}
 		}
-		if guessInfo.GameSessionID != testGuessData.GameSessionID {
-			t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", guessInfo.GameSessionID, testGuessData.GameSessionID)
+	})
+
+	t.Run("InsertGuessResults", func(t *testing.T) {
+		for i := range testResultsData {
+			if err := dbHandler.InsertGuessResults(testResultsData[i]); err != nil {
+				t.Errorf("Error in InsertGuess: %+v", err)
+			}
+		}
+	})
+	t.Run("GetGuessResultsByGuessID", func(t *testing.T) {
+		for i := range testResultsData {
+			resultsInfo, err := dbHandler.GetGuessCategoriesByGuessID(
+				types.GuessID{
+					GameSessionID: testResultsData[i].GameSessionID,
+					Round:         testResultsData[i].Round,
+				},
+			)
+			if err != nil {
+				t.Errorf("Error getting guess: %+v", err)
+			}
+			if resultsInfo.GuessID != testResultsData[i].GuessID {
+				t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", resultsInfo.GuessID, testResultsData[i].GuessID)
+			}
 		}
 	})
 
