@@ -2,12 +2,14 @@ package testHelpers
 
 import "spelldle.com/server/shared/types"
 
+const GameSessionID types.GameSessionID = "TEST"
+
 // ROUND 1: All incorrect
 // ROUND 2: Some correct
 // ROUND 3: All correct
-var TestGuesses = []types.GuessAllInfo{
+var TestGuesses = [3]types.GuessAllInfo{
 	{
-		GameSessionID: "TEST",
+		GameSessionID: GameSessionID,
 		Round:         1,
 		SpellCategories: types.SpellCategories{
 			Components: []int{10, 11},
@@ -25,7 +27,7 @@ var TestGuesses = []types.GuessAllInfo{
 		},
 	},
 	{
-		GameSessionID: "TEST",
+		GameSessionID: GameSessionID,
 		Round:         2,
 		SpellCategories: types.SpellCategories{
 			Components: []int{1, 3, 4},
@@ -43,7 +45,7 @@ var TestGuesses = []types.GuessAllInfo{
 		},
 	},
 	{
-		GameSessionID: "TEST",
+		GameSessionID: GameSessionID,
 		Round:         3,
 		SpellCategories: types.SpellCategories{
 			Components: []int{1, 2},
@@ -59,5 +61,47 @@ var TestGuesses = []types.GuessAllInfo{
 			Target:      3,
 			Duration:    4,
 		},
+	},
+}
+
+var TestResults = [3]types.GuessResults{
+	{
+		GameSessionID: GameSessionID,
+		Round:         1,
+		Components:    0,
+		Class:         0,
+		Effects:       0,
+		Level:         0,
+		School:        0,
+		CastingTime:   0,
+		Range:         0,
+		Target:        0,
+		Duration:      0,
+	},
+	{
+		GameSessionID: GameSessionID,
+		Round:         2,
+		Components:    1,
+		Class:         1,
+		Effects:       1,
+		Level:         1,
+		School:        2,
+		CastingTime:   0,
+		Range:         0,
+		Target:        0,
+		Duration:      0,
+	},
+	{
+		GameSessionID: GameSessionID,
+		Round:         3,
+		Components:    2,
+		Class:         2,
+		Effects:       2,
+		Level:         2,
+		School:        2,
+		CastingTime:   2,
+		Range:         2,
+		Target:        2,
+		Duration:      2,
 	},
 }
