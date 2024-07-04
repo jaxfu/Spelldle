@@ -8,7 +8,7 @@ INSERT INTO guesses.ids(game_session_id, round)
 VALUES ('TEST_ID', 1);
 
 INSERT INTO spells.categories(spell_id, name, school, casting_time, range, target, duration, components, class, effects)
-VALUES (1, 'Fireball', 0, 0, 0, 0, 0, '{0, 1}', '{1, 2}', '{3, 4}');
+VALUES (1, 'Fireball', 0, 1, 2, 3, 4, '{1, 2}', '{3, 4, 5}', '{6, 7, 8, 9}');
 
 INSERT INTO spells.level_objects(spell_id, level, is_ritual)
 VALUES (1, 1, false);
@@ -23,7 +23,10 @@ INSERT INTO game_sessions.data(game_session_id, user_id, spell_id, rounds)
 VALUES ('TEST_ID', 1, 1, 2);
 
 INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, components, class, effects)
-VALUES ('TEST_ID', 1, 1, 0, 0, 0, 0, '{0, 1}', '{1, 2}', '{3, 4}');
+VALUES ('TEST_ID', 1, 0, 1, 2, 3, 4, '{1, 2}', '{3, 4, 5}', '{6, 7, 8, 9}');
 
 INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
 VALUES ('TEST_ID', 1, 1, false);
+
+INSERT INTO guesses.results(game_session_id, round, school, casting_time, range, target, duration, level, components, class, effects)
+VALUES ('TEST_ID', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
