@@ -38,7 +38,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 		// Get spell to compare (hardwired for now)
 		// TODO: pull in currentSpell from users.currentGameData
-		spell, err := db.GetSpellBySpellId(0)
+		spell, err := db.GetSpellBySpellId(1)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
 			return
