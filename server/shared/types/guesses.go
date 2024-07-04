@@ -12,13 +12,13 @@ type GuessCategories struct {
 
 type GuessResults struct {
 	GuessID
-	Components  int `json:"components"`
-	Class       int `json:"class"`
-	Effects     int `json:"effects"`
-	Level       int `json:"level"`
-	School      int `json:"school"`
-	CastingTime int `json:"casting_time"`
-	Range       int `json:"range"`
-	Target      int `json:"target"`
-	Duration    int `json:"duration"`
+	Components  uint `json:"components"`
+	Class       uint `json:"class"`
+	Effects     uint `json:"effects"`
+	Level       uint `json:"level"`
+	School      uint `json:"school"`
+	CastingTime uint `json:"casting_time"`
+	Range       uint `json:"range"`
+	Target      uint `json:"target"`
+	Duration    uint `json:"duration"`
 }

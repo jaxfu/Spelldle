@@ -85,7 +85,7 @@ const EInsertGuessLevel = `
   VALUES ($1, $2, $3, $4)
 `
 
-func (dbHandler *DBHandler) InsertGuess(guess types.GuessCategories) error {
+func (dbHandler *DBHandler) InsertGuessCategories(guess types.GuessCategories) error {
 	_, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessID,
 		guess.GameSessionID,
 		guess.Round,
@@ -116,6 +116,31 @@ func (dbHandler *DBHandler) InsertGuess(guess types.GuessCategories) error {
 		guess.Level.IsRitual,
 	)
 	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+const EInsertGuessResults = `
+  INSERT INTO guesses.results(game_session_id, round, school, casting_time, range, target, duration, level, components, class, effects)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+`
+
+func (dbHandler *DBHandler) InsertGuessResults(results types.GuessResults) error {
+	if _, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessResults,
+		results.GameSessionID,
+		results.Round,
+		results.School,
+		results.CastingTime,
+		results.Range,
+		results.Target,
+		results.Duration,
+		results.Level,
+		results.Components,
+		results.Class,
+		results.Effects,
+	); err != nil {
 		return err
 	}
 

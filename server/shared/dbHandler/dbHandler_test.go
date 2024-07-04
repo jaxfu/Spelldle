@@ -26,7 +26,7 @@ func TestDBHandler(t *testing.T) {
 	testUserData := testHelpers.TestUserData
 	testSpellData := testHelpers.TestSpell
 	testGuessesData := testHelpers.TestGuesses
-	// testResultsData := testHelpers.TestResults
+	testResultsData := testHelpers.TestResults
 	testGameSessionData := testHelpers.TestGameSession
 
 	t.Run("Ping connection", func(t *testing.T) {
@@ -117,14 +117,14 @@ func TestDBHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("InsertGuesses", func(t *testing.T) {
+	t.Run("InsertGuessCategories", func(t *testing.T) {
 		for i := range testGuessesData {
-			if err := dbHandler.InsertGuess(testGuessesData[i]); err != nil {
+			if err := dbHandler.InsertGuessCategories(testGuessesData[i]); err != nil {
 				t.Errorf("Error in InsertGuess: %+v", err)
 			}
 		}
 	})
-	t.Run("GetGuessByGuessID", func(t *testing.T) {
+	t.Run("GetGuessCategoriesByGuessID", func(t *testing.T) {
 		for i := range testGuessesData {
 			guessInfo, err := dbHandler.GetGuessCategoriesByGuessID(
 				types.GuessID{
@@ -137,6 +137,30 @@ func TestDBHandler(t *testing.T) {
 			}
 			if guessInfo.GuessID != testGuessesData[i].GuessID {
 				t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", guessInfo.GuessID, testGuessesData[i].GuessID)
+			}
+		}
+	})
+
+	t.Run("InsertGuessResults", func(t *testing.T) {
+		for i := range testResultsData {
+			if err := dbHandler.InsertGuessResults(testResultsData[i]); err != nil {
+				t.Errorf("Error in InsertGuess: %+v", err)
+			}
+		}
+	})
+	t.Run("GetGuessResultsByGuessID", func(t *testing.T) {
+		for i := range testResultsData {
+			resultsInfo, err := dbHandler.GetGuessCategoriesByGuessID(
+				types.GuessID{
+					GameSessionID: testResultsData[i].GameSessionID,
+					Round:         testResultsData[i].Round,
+				},
+			)
+			if err != nil {
+				t.Errorf("Error getting guess: %+v", err)
+			}
+			if resultsInfo.GuessID != testResultsData[i].GuessID {
+				t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", resultsInfo.GuessID, testResultsData[i].GuessID)
 			}
 		}
 	})
