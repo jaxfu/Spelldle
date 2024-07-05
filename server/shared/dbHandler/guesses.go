@@ -39,6 +39,28 @@ func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (
 	return guess, nil
 }
 
+func (dbHandler *DBHandler) GetAllGuessCategoriesByUserID(userID types.UserID) ([]types.GuessCategories, error) {
+	var guesses []types.GuessCategories
+	gameSession, err := dbHandler.GetGameSessionByUserID(userID)
+	if err != nil {
+		return guesses, err
+	}
+
+	for i := range gameSession.Rounds {
+		guess, err := dbHandler.GetGuessCategoriesByGuessID(types.GuessID{
+			GameSessionID: gameSession.GameSessionID,
+			Round:         i + 1,
+		})
+		if err != nil {
+			return guesses, err
+		}
+
+		guesses = append(guesses, guess)
+	}
+
+	return guesses, nil
+}
+
 const QGetGuessResultsByGuessId = `
   SELECT school, casting_time, range, target, duration, level, components, class, effects
   FROM guesses.results
@@ -50,7 +72,7 @@ func (dbHandler *DBHandler) GetGuessResultsByGuessID(guessID types.GuessID) (typ
 		GuessID: guessID,
 	}
 
-	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessCategoriesByGuessId, guessID.GameSessionID, guessID.Round).Scan(
+	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessResultsByGuessId, guessID.GameSessionID, guessID.Round).Scan(
 		&results.School,
 		&results.CastingTime,
 		&results.Range,
@@ -63,6 +85,28 @@ func (dbHandler *DBHandler) GetGuessResultsByGuessID(guessID types.GuessID) (typ
 	)
 	if err != nil {
 		return results, err
+	}
+
+	return results, nil
+}
+
+func (dbHandler *DBHandler) GetAllGuessResultsByUserID(userID types.UserID) ([]types.GuessResults, error) {
+	var results []types.GuessResults
+	gameSession, err := dbHandler.GetGameSessionByUserID(userID)
+	if err != nil {
+		return results, err
+	}
+
+	for i := range gameSession.Rounds {
+		result, err := dbHandler.GetGuessResultsByGuessID(types.GuessID{
+			GameSessionID: gameSession.GameSessionID,
+			Round:         i + 1,
+		})
+		if err != nil {
+			return results, err
+		}
+
+		results = append(results, result)
 	}
 
 	return results, nil

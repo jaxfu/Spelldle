@@ -2,8 +2,9 @@ package types
 
 type GameSessionID string
 
-type GameSessionAll struct {
+type GameSession struct {
 	GameSessionID GameSessionID `json:"game_session_id"`
+	UserID        UserID        `json:"user_id"`
 	SpellID       uint          `json:"spell_id"`
 	Rounds        uint          `json:"rounds"`
 }

@@ -18,6 +18,7 @@ import (
 
 func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		// TODO: get current game_session_id for user
 		// get userID from jwt
 		// userId, err := utils.GetJwtInfoFromCtx(ctx)
 		// if err != nil {
@@ -45,7 +46,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// insert results
-		results := payload.SpellCategories.GetResults(&testHelpers.TestSpell.SpellCategories)
+		results := payload.GetResults(&testHelpers.TestSpell.SpellCategories)
 		results.GuessID = payload.GuessID
 		err = db.InsertGuessResults(results)
 		if err != nil {

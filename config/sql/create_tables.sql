@@ -48,8 +48,8 @@ CREATE TABLE spells.level_objects
 
 CREATE TABLE game_sessions.data
 (
+  game_session_id TEXT PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
   user_id INTEGER REFERENCES users.ids(user_id),
-  game_session_id TEXT REFERENCES game_sessions.ids(game_session_id),
   spell_id INTEGER REFERENCES spells.ids(spell_id),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP,
