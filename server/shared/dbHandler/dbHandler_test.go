@@ -198,21 +198,22 @@ func TestDBHandler(t *testing.T) {
 		fmt.Printf("%+v\n", results)
 	})
 
-	// t.Run("UpdateGameSessionRounds", func(t *testing.T) {
-	// 	err := dbHandler.UpdateGameSessionRounds(testUserData.UserID, testGameSessionData.Rounds+1)
-	// 	if err != nil {
-	// 		t.Errorf("error updating rounds: %+v", err)
-	// 	}
-	//
-	// 	gameSession, err := dbHandler.GetGameSessionByUserID(testUserData.UserID)
-	// 	if err != nil {
-	// 		t.Errorf("error getting game session: %+v\n", err)
-	// 	}
-	//
-	// 	if gameSession.Rounds+1 != testGameSessionData.Rounds+1 {
-	// 		t.Errorf("rounds mismatch: got %d, want %d", gameSession.Rounds+1, testGameSessionData.Rounds+1)
-	// 	}
-	// })
+	t.Run("UpdateGameSessionRounds", func(t *testing.T) {
+		updatedRounds := testGameSessionData.Rounds + 1
+		err := dbHandler.UpdateGameSessionRounds(testUserData.UserID, updatedRounds)
+		if err != nil {
+			t.Errorf("error updating rounds: %+v", err)
+		}
+
+		gameSession, err := dbHandler.GetGameSessionByUserID(testUserData.UserID)
+		if err != nil {
+			t.Errorf("error getting game session: %+v\n", err)
+		}
+
+		if gameSession.Rounds != updatedRounds {
+			t.Errorf("rounds mismatch: got %d, want %d", gameSession.Rounds, updatedRounds)
+		}
+	})
 
 	t.Run("DropTablesEnd", func(t *testing.T) {
 		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
