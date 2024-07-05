@@ -57,14 +57,18 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		// insert results
 		results := payload.GetResults(&testHelpers.TestSpell.SpellCategories)
 		results.GuessID = payload.GuessID
-		err = db.InsertGuessResults(results)
-		if err != nil {
+		if err := db.InsertGuessResults(results); err != nil {
 			fmt.Printf("Error inserting guess results: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 
 		// update gameSession
+		if err := db.UpdateGameSessionRounds(userID, payload.Round); err != nil {
+			fmt.Printf("error updating gameSession: %v\n", err)
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
 
 		ctx.Status(http.StatusOK)
 	}
