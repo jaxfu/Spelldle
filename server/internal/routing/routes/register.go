@@ -67,6 +67,20 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
+		// create and insert game session
+		// TODO: randomly select spellID, currently hardcoded
+		gameSession := types.GameSession{
+			GameSessionID: types.GameSessionID(fmt.Sprintf("%d", userID)),
+			UserID:        userID,
+			SpellID:       1,
+			Rounds:        0,
+		}
+		if err := db.InsertGameSession(gameSession); err != nil {
+			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			fmt.Printf("error inserting game session: %+v", err)
+			return
+		}
+
 		accessToken, err := auth.CreateJWTFromUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, registerResponse)
