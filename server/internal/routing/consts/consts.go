@@ -9,4 +9,5 @@ const (
 	RouteUrlRegister               = RouteUrlBase + "/register"
 	RouteUrlMakeGuess              = RouteUrlBase + "/makeGuess"
 	RouteUrlValidateSession        = RouteUrlBase + "/validateSession"
+	RouteUrlGetGuesses             = RouteUrlBase + "/getGuesses"
 )
