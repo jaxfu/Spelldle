@@ -1,5 +1,6 @@
 package types
 
+// gameSessionID format userID-count
 type GameSessionID string
 
 type GameSession struct {
