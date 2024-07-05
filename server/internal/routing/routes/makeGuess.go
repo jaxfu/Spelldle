@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/internal/testHelpers"
 	"spelldle.com/server/shared/dbHandler"
 
@@ -18,24 +19,32 @@ import (
 
 func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// TODO: get current game_session_id for user
 		// get userID from jwt
-		// userId, err := utils.GetJwtInfoFromCtx(ctx)
-		// if err != nil {
-		// 	fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
-		// 	ctx.Status(http.StatusInternalServerError)
-		// 	return
-		// }
+		userID, err := utils.GetJwtInfoFromCtx(ctx)
+		if err != nil {
+			fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
 
 		// bind payload
 		var payload types.GuessCategories
-		err := ctx.BindJSON(&payload)
+		err = ctx.BindJSON(&payload)
 		if err != nil {
 			fmt.Printf("Error binding payload: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 		fmt.Printf("PAYLOAD: %v\n", payload)
+
+		// get gameSession
+		gameSession, err := db.GetGameSessionByUserID(userID)
+		if err != nil {
+			fmt.Printf("Error getting gameSession: %v\n", err)
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+		fmt.Printf("%+v\n", gameSession)
 
 		// insert guess
 		err = db.InsertGuessCategories(payload)
@@ -54,6 +63,8 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
+
+		// update gameSession
 
 		ctx.Status(http.StatusOK)
 	}

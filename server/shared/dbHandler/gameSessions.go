@@ -98,3 +98,21 @@ func (dbHandler *DBHandler) InsertGameSession(session types.GameSession) error {
 
 	return nil
 }
+
+const EUpdateRoundsByGame = `
+  UPDATE game_sessions.data
+  SET rounds = $1, updated_at = NOW()
+  WHERE user_id = $2
+`
+
+func (dbHandler *DBHandler) UpdateGameSessionRounds(userID types.UserID, rounds uint) error {
+	_, err := dbHandler.Conn.Exec(context.Background(), EUpdateRoundsByGame,
+		rounds,
+		userID,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
