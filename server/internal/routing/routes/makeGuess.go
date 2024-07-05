@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"spelldle.com/server/internal/testHelpers"
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-gonic/gin"
-	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/types"
 )
 
@@ -18,32 +18,42 @@ import (
 
 func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var response types.GuessResults
+		// get userID from jwt
+		// userId, err := utils.GetJwtInfoFromCtx(ctx)
+		// if err != nil {
+		// 	fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
+		// 	ctx.Status(http.StatusInternalServerError)
+		// 	return
+		// }
 
-		userId, err := utils.GetJwtInfoFromCtx(ctx)
+		// bind payload
+		var payload types.GuessCategories
+		err := ctx.BindJSON(&payload)
 		if err != nil {
-			fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, response)
-			return
-		}
-		fmt.Printf("userID: %d\n", userId)
-
-		var payload types.SpellCategories
-		if err := ctx.BindJSON(&payload); err != nil {
 			fmt.Printf("Error binding payload: %v\n", err)
-			ctx.String(http.StatusInternalServerError, "Invalid payload")
+			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 		fmt.Printf("PAYLOAD: %v\n", payload)
 
-		// Get spell to compare (hardwired for now)
-		// TODO: pull in currentSpell from users.currentGameData
-		spell, err := db.GetSpellBySpellId(1)
+		// insert guess
+		err = db.InsertGuessCategories(payload)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("Error inserting payload: %v\n", err)
+			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 
-		response = ctx.JSON(http.StatusOK, response)
+		// insert results
+		results := payload.SpellCategories.GetResults(&testHelpers.TestSpell.SpellCategories)
+		results.GuessID = payload.GuessID
+		err = db.InsertGuessResults(results)
+		if err != nil {
+			fmt.Printf("Error inserting guess results: %v\n", err)
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+
+		ctx.Status(http.StatusOK)
 	}
 }
