@@ -21,3 +21,8 @@ type ResponseValidateSession struct {
 type ResponseValidateToken struct {
 	Valid bool `json:"valid"`
 }
+
+type ResponseGetGuesses struct {
+	GameSessionID
+	Guesses []GuessAll `json:"guesses"`
+}

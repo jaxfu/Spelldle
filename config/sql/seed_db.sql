@@ -24,7 +24,7 @@ INSERT INTO users.game_sessions(user_id, game_session_id)
 VALUES (1, 'TEST_ID');
 
 INSERT INTO game_sessions.data(game_session_id, user_id, spell_id, rounds)
-VALUES ('TEST_ID', 1, 1, 2);
+VALUES ('TEST_ID', 1, 1, 3);
 
 -- GUESS 1: ALL INCORRECT
 INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, components, class, effects)

@@ -1,5 +1,11 @@
 package types
 
+type GuessAll struct {
+	GuessID
+	Categories SpellCategories `json:"categories"`
+	Results    GuessResults    `json:"results"`
+}
+
 type GuessID struct {
 	GameSessionID GameSessionID `json:"game_session_id"`
 	Round         uint          `json:"round"`
