@@ -7,16 +7,20 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+	type T_PAST_GUESSES,
 } from "../types";
 import { T_TOKENS } from "../types";
 import { createRequestObjectFromCurrentGuessInfo } from "./methods";
 
 // Routes
-const prefix: string = import.meta.env.DEV ? "http://localhost:5000" : "";
-const APIROUTE_LOGIN: string = prefix + "/api/login";
-const APIROUTE_REGISTER: string = prefix + "/api/register";
-const APIROUTE_VALIDATE: string = prefix + "/api/validateSession";
-const APIROUTE_MAKE_GUESS: string = prefix + "/api/makeGuess";
+const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";
+const API_ROUTES = {
+	LOGIN: ROUTE_PREFIX + "/api/login",
+	REGISTER: ROUTE_PREFIX + "/api/register",
+	VALIDATE: ROUTE_PREFIX + "/api/validateSession",
+	MAKE_GUESS: ROUTE_PREFIX + "/api/makeGuess",
+	GET_PAST_GUESSES: ROUTE_PREFIX + "/api/getPastGuesses",
+};
 
 export async function apiRequestLogin(
 	userInput: T_USERINPUT_LOGIN,
@@ -24,7 +28,7 @@ export async function apiRequestLogin(
 	try {
 		return await axios<T_APIRESULT_LOGIN>({
 			method: "POST",
-			url: APIROUTE_LOGIN,
+			url: API_ROUTES.LOGIN,
 			data: {
 				...userInput,
 			},
@@ -40,7 +44,7 @@ export async function apiRequestRegister(
 	try {
 		return await axios<T_APIRESULT_REGISTER>({
 			method: "POST",
-			url: APIROUTE_REGISTER,
+			url: API_ROUTES.REGISTER,
 			data: {
 				username: userInput.username,
 				password: userInput.password,
@@ -60,7 +64,7 @@ export async function apiRequestValidateSession(
 	try {
 		return await axios<T_APIRESULT_VALIDATE_ACCESS_TOKEN>({
 			method: "POST",
-			url: APIROUTE_VALIDATE,
+			url: API_ROUTES.VALIDATE,
 			headers: {
 				Authorization: `Bearer ${userDataTokens.access_token}`,
 			},
@@ -70,20 +74,40 @@ export async function apiRequestValidateSession(
 	}
 }
 
+interface I_APIREQUEST_MAKE_GUESS {
+	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO;
+	allCategoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO;
+	accessToken: string;
+}
+
 export async function apiRequestMakeGuess(
-	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
-	categoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
-	accessToken: T_TOKENS["access_token"],
-): Promise<AxiosResponse<string>> {
+	paramObject: I_APIREQUEST_MAKE_GUESS,
+): Promise<AxiosResponse<string, any>> {
 	try {
 		const data = createRequestObjectFromCurrentGuessInfo(
-			allCurrentGuessInfo,
-			categoriesInfo,
+			paramObject.allCurrentGuessInfo,
+			paramObject.allCategoriesInfo,
 		);
 		return await axios<string>({
 			method: "POST",
-			url: APIROUTE_MAKE_GUESS,
+			url: API_ROUTES.MAKE_GUESS,
 			data,
+			headers: {
+				Authorization: `Bearer ${paramObject.accessToken}`,
+			},
+		});
+	} catch (err: any) {
+		throw new Error(err);
+	}
+}
+
+export async function apiRequestGetPastGuesses(
+	accessToken: string,
+): Promise<AxiosResponse<T_PAST_GUESSES, any>> {
+	try {
+		return await axios<T_PAST_GUESSES>({
+			method: "POST",
+			url: API_ROUTES.GET_PAST_GUESSES,
 			headers: {
 				Authorization: `Bearer ${accessToken}`,
 			},

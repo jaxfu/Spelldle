@@ -4,7 +4,9 @@ import {
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../../../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../utils/requests";
+import { QUERY_KEYS } from "../../../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
@@ -13,6 +15,15 @@ interface IProps {
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: apiRequestMakeGuess,
+		onSuccess: (data) => {
+			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
+		},
+	});
+
 	return (
 		<div className={styles.root}>
 			<GuessCell
@@ -61,13 +72,12 @@ const GuessBox: React.FC<IProps> = (props) => {
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
 			/>
 			<button
-				onClick={async () => {
-					const res = await apiRequestMakeGuess(
-						props.allCurrentGuessInfo.current,
-						props.allCategoriesInfo.current,
-						getUserSessionDataFromStorage().access_token,
-					);
-					console.log(`RES: ${JSON.stringify(res.data)}`);
+				onClick={() => {
+					mutation.mutate({
+						allCurrentGuessInfo: props.allCurrentGuessInfo.current,
+						allCategoriesInfo: props.allCategoriesInfo.current,
+						accessToken: getUserSessionDataFromStorage().access_token,
+					});
 				}}
 			>
 				Submit

@@ -1,10 +1,20 @@
-import type { T_QUERY_KEYS, T_TOKENS } from "../types";
+type T_KEYS_TOKENS = {
+	access_token: string;
+	refresh_token: string;
+};
 
-export const LOCAL_STORAGE_TOKENS_KEYS: T_TOKENS = {
+export const LOCAL_STORAGE_TOKENS_KEYS: T_KEYS_TOKENS = {
 	access_token: "ACCESS_TOKEN",
 	refresh_token: "REFRESH_TOKEN",
 };
 
-export const QUERY_KEYS: T_QUERY_KEYS = {
+// React-Query
+type T_KEYS_QUERY = {
+	userData: string;
+	pastGuesses: string;
+};
+
+export const QUERY_KEYS: T_KEYS_QUERY = {
 	userData: "user_data",
+	pastGuesses: "past_guesses",
 };
