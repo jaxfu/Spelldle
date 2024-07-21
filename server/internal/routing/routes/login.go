@@ -21,14 +21,14 @@ type responseLogin struct {
 func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var loginPayload types.RequestPayloadLogin
-		loginResponse := responseLogin{
+		response := responseLogin{
 			Valid: false,
 		}
 
 		// Bind loginPayload
 		if err := ctx.BindJSON(&loginPayload); err != nil {
 			fmt.Printf("Error binding json: %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, loginResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
 		fmt.Printf("Login Payload: %+v\n", loginPayload)
@@ -38,10 +38,10 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 		if err != nil {
 			if errors.Is(err, pgx.ErrNoRows) {
 				fmt.Printf("Username does not exist: %+v\n", err)
-				ctx.JSON(http.StatusOK, loginResponse)
+				ctx.JSON(http.StatusOK, response)
 			} else {
 				fmt.Printf("Error in GetUserIDByUsername during POST->login: %+v\n", err)
-				ctx.JSON(http.StatusInternalServerError, loginResponse)
+				ctx.JSON(http.StatusInternalServerError, response)
 			}
 
 			return
@@ -50,7 +50,7 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 		// Get UserData
 		userData, err := db.GetUserDataByUserID(userID)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, loginResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			fmt.Printf("Error getting UserData during POST->login: %+v\n", err)
 			return
 		}
@@ -58,21 +58,21 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 		// Check password
 		if loginPayload.Password != userData.Password {
 			fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userData.Password)
-			ctx.JSON(http.StatusOK, loginResponse)
+			ctx.JSON(http.StatusOK, response)
 			return
 		}
 
 		accessToken, err := auth.CreateJWTFromUserID(userID)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, loginResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
-		loginResponse.Tokens = types.AllTokens{
+		response.Tokens = types.AllTokens{
 			AccessToken:  accessToken,
 			RefreshToken: accessToken,
 		}
-		loginResponse.Valid = true
+		response.Valid = true
 
-		ctx.JSON(http.StatusOK, loginResponse)
+		ctx.JSON(http.StatusOK, response)
 	}
 }
