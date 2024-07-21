@@ -90,8 +90,8 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		registerResponse = types.ResponseRegisterLogin{
 			Valid: true,
 			Tokens: types.AllTokens{
-				AccessToken:  types.AccessToken{AccessToken: accessToken},
-				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
+				AccessToken:  accessToken,
+				RefreshToken: accessToken,
 			},
 			UserData: types.ResponseUserData{
 				UserID:    UserData.UserID,

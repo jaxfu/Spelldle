@@ -1,14 +1,10 @@
 package types
 
-type AccessToken struct {
-	AccessToken string `json:"access_token"`
-}
+type AccessToken = string
 
-type RefreshToken struct {
-	RefreshToken string `json:"refresh_token"`
-}
+type RefreshToken = string
 
 type AllTokens struct {
-	AccessToken
-	RefreshToken
+	AccessToken  AccessToken  `json:"access_token"`
+	RefreshToken RefreshToken `json:"refresh_token"`
 }

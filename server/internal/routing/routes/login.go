@@ -13,10 +13,15 @@ import (
 	"spelldle.com/server/shared/types"
 )
 
+type responseLogin struct {
+	Tokens types.AllTokens `json:"tokens"`
+	Valid  bool            `json:"valid"`
+}
+
 func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var loginPayload types.RequestPayloadLogin
-		loginResponse := types.ResponseRegisterLogin{
+		loginResponse := responseLogin{
 			Valid: false,
 		}
 
@@ -42,12 +47,6 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		accessToken, err := auth.CreateJWTFromUserID(userID)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, loginResponse)
-			return
-		}
-
 		// Get UserData
 		userData, err := db.GetUserDataByUserID(userID)
 		if err != nil {
@@ -63,19 +62,16 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		loginResponse = types.ResponseRegisterLogin{
-			Valid: true,
-			Tokens: types.AllTokens{
-				AccessToken:  types.AccessToken{AccessToken: accessToken},
-				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
-			},
-			UserData: types.ResponseUserData{
-				FirstName: userData.FirstName,
-				LastName:  userData.LastName,
-				Username:  userData.Username,
-				UserID:    userID,
-			},
+		accessToken, err := auth.CreateJWTFromUserID(userID)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, loginResponse)
+			return
 		}
+		loginResponse.Tokens = types.AllTokens{
+			AccessToken:  accessToken,
+			RefreshToken: accessToken,
+		}
+		loginResponse.Valid = true
 
 		ctx.JSON(http.StatusOK, loginResponse)
 	}
