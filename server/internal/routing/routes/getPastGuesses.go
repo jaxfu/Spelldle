@@ -29,7 +29,8 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
-		response.GameSessionID = game_session.GameSessionID
+		response.GameSession.GameSessionID = game_session.GameSessionID
+		response.GameSession.CurrentRound = game_session.Rounds + 1
 
 		// get guesses
 		guesses, err := db.GetAllGuessCategoriesByUserID(userID)

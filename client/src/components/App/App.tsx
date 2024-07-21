@@ -24,15 +24,16 @@ import {
   getUserSessionDataFromStorage,
   getAllCategoriesInfo,
   setUserDataFromAPIResult,
-  clearTokensFromLocalStorage
+  clearTokensFromLocalStorage,
 } from "../../utils/methods";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import ContentBox from "../ContentBox/ContentBox";
 
 const App: React.FC = () => {
-  const [userData, setUserData] = useState<T_USERDATA_STATE>(
-    deepCopyObject(INIT_USERDATA_STATE),
-  );
+  // const [userData, setUserData] = useState<T_USERDATA_STATE>(
+  //   deepCopyObject(INIT_USERDATA_STATE),
+  // );
+  //const userData = useRef<T_USERDATA_STATE>(deepCopyObject(INIT_USERDATA_STATE));
   const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
   const [enableInitialQueryFn, setEnableInitialQueryFn] =
     useState<boolean>(false);
@@ -67,38 +68,29 @@ const App: React.FC = () => {
     clearTokensFromLocalStorage();
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      console.log(`ISSUCCESS USEEFFECT: ${JSON.stringify(data.data)}`);
-      setUserDataFromAPIResult(
-        data.data,
-        setUserData,
-        setUserIsLoggedIn,
-        setEnableInitialQueryFn,
-      );
-    }
-  }, [isSuccess]);
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
-  return (
-    <div className={styles.root}>
-      {/* DEBUG */}
-      <ReactQueryDevtools initialIsOpen={false} />
-      <GuessInfoButton
-        allCurrentGuessInfo={allCurrentGuessInfo.current}
-        categoryInfo={allCategoriesInfo.current}
-      />
+  if (isSuccess) {
+    return (
+      <div className={styles.root}>
+        {/* DEBUG */}
+        <ReactQueryDevtools initialIsOpen={false} />
+        <GuessInfoButton
+          allCurrentGuessInfo={allCurrentGuessInfo.current}
+          categoryInfo={allCategoriesInfo.current}
+        />
 
-      {/* CORE */}
-      <Navbar
-        userData={userData}
-        setUserData={setUserData}
-        userIsLoggedIn={userIsLoggedIn}
-        setUserIsLoggedIn={setUserIsLoggedIn}
-      />
-      {/* <div style={{ height: "50px" }}></div> */}
-      <ContentBox>
-        {
-          isPending ? (
+        {/* CORE */}
+        <Navbar
+          userData={data.data.user_data}
+          userIsLoggedIn={userIsLoggedIn}
+          setUserIsLoggedIn={setUserIsLoggedIn}
+        />
+        {/* <div style={{ height: "50px" }}></div> */}
+        <ContentBox>
+          {isPending ? (
             <div>LOADING...</div>
           ) : (
             <Routes>
@@ -115,7 +107,6 @@ const App: React.FC = () => {
                 path="/register"
                 element={
                   <Register
-                    setUserData={setUserData}
                     setUserIsLoggedIn={setUserIsLoggedIn}
                     setEnableQueryFn={setEnableInitialQueryFn}
                   />
@@ -125,19 +116,29 @@ const App: React.FC = () => {
                 path="/login"
                 element={
                   <Login
-                    setUserData={setUserData}
                     setUserIsLoggedIn={setUserIsLoggedIn}
                     setEnableQueryFn={setEnableInitialQueryFn}
                   />
                 }
               />
             </Routes>
-
-          )
-        }
-      </ContentBox>
-    </div>
-  );
+          )}
+        </ContentBox>
+      </div>
+    );
+  }
 };
+
+// useEffect(() => {
+//   if (isSuccess) {
+//     console.log(`ISSUCCESS USEEFFECT: ${JSON.stringify(data.data)}`);
+//     setUserDataFromAPIResult(
+//       data.data,
+//       setUserData,
+//       setUserIsLoggedIn,
+//       setEnableInitialQueryFn,
+//     );
+//   }
+// }, [isSuccess]);
 
 export default App;

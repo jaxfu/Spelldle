@@ -70,6 +70,6 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		ctx.Status(http.StatusOK)
+		ctx.String(http.StatusOK, "Success")
 	}
 }

@@ -28,6 +28,6 @@ type ResponseValidateToken struct {
 }
 
 type ResponseGetGuesses struct {
-	GameSessionID GameSessionID `json:"game_session_id"`
-	Guesses       []GuessAll    `json:"guesses"`
+	GameSession ResponseGameSessionData `json:"game_session"`
+	Guesses     []GuessAll              `json:"guesses"`
 }
