@@ -1,42 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import styles from "./App.module.scss";
 import Game from "../Game/Game";
 import {
   type T_ALL_CURRENT_GUESS_INFO,
-  type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
-  type T_USERDATA_STATE,
-  INIT_USERDATA_STATE,
   type T_ALL_POSSIBLE_CATEGORIES_INFO,
 } from "../../types";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
-import Register from "../Register/Register";
 import Login from "../Login/Login";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useQuery } from "@tanstack/react-query";
-import { apiRequestValidateSession } from "../../utils/requests";
 import { QUERY_KEYS } from "../../utils/consts";
-import { AxiosResponse } from "axios";
 import {
-  deepCopyObject,
   createNewSpellInfoMap,
-  areTokensInLocalStorage,
-  getUserSessionDataFromStorage,
   getAllCategoriesInfo,
-  setUserDataFromAPIResult,
   clearTokensFromLocalStorage,
+  getAuthStatus,
 } from "../../utils/methods";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import ContentBox from "../ContentBox/ContentBox";
+import Register from "../Register/Register";
 
 const App: React.FC = () => {
-  // const [userData, setUserData] = useState<T_USERDATA_STATE>(
-  //   deepCopyObject(INIT_USERDATA_STATE),
-  // );
-  //const userData = useRef<T_USERDATA_STATE>(deepCopyObject(INIT_USERDATA_STATE));
-  const [userIsLoggedIn, setUserIsLoggedIn] = useState<boolean>(false);
-  const [enableInitialQueryFn, setEnableInitialQueryFn] =
-    useState<boolean>(false);
   const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
     createNewSpellInfoMap(),
   );
@@ -44,89 +29,47 @@ const App: React.FC = () => {
     getAllCategoriesInfo(),
   );
 
-  useEffect(() => {
-    const tokensAreInStorage = areTokensInLocalStorage();
-    if (!tokensAreInStorage) {
-      console.log("NO TOKENS DETECTED");
-    } else {
-      console.log("TOKENS DETECTED");
-      setEnableInitialQueryFn(true);
-    }
-  }, []);
-
-  const { isPending, isSuccess, error, data } = useQuery({
+  const { isSuccess, error, data } = useQuery({
     queryKey: [QUERY_KEYS.userData],
-    queryFn: (): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> => {
-      console.log("RUNNING QUERYFN");
-      return apiRequestValidateSession(getUserSessionDataFromStorage());
-    },
-    enabled: enableInitialQueryFn,
+    queryFn: getAuthStatus,
   });
 
   if (error) {
-    console.log(`VALIDATE TOKEN ERROR: ${error}`);
+    console.log(`GET_AUTH_STATUS ERROR: ${error}`);
     clearTokensFromLocalStorage();
   }
 
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (isSuccess) {
-    return (
-      <div className={styles.root}>
-        {/* DEBUG */}
-        <ReactQueryDevtools initialIsOpen={false} />
-        <GuessInfoButton
-          allCurrentGuessInfo={allCurrentGuessInfo.current}
-          categoryInfo={allCategoriesInfo.current}
-        />
-
-        {/* CORE */}
-        <Navbar
-          userData={data.data.user_data}
-          userIsLoggedIn={userIsLoggedIn}
-          setUserIsLoggedIn={setUserIsLoggedIn}
-        />
-        {/* <div style={{ height: "50px" }}></div> */}
-        <ContentBox>
-          {isPending ? (
-            <div>LOADING...</div>
+  return (
+    <div className={styles.root}>
+      {/* DEBUG */}
+      <ReactQueryDevtools initialIsOpen={false} />
+      <GuessInfoButton
+        allCurrentGuessInfo={allCurrentGuessInfo.current}
+        categoryInfo={allCategoriesInfo.current}
+      />
+      {/* CORE */}
+      <Navbar />
+      <ContentBox>
+        <Routes>
+          {isSuccess && data.valid ? (
+            <Route
+              path="/"
+              element={
+                <Game
+                  allCategoriesInfo={allCategoriesInfo}
+                  allCurrentGuessInfo={allCurrentGuessInfo}
+                />
+              }
+            />
           ) : (
-            <Routes>
-              <Route
-                path="/game"
-                element={
-                  <Game
-                    allCategoriesInfo={allCategoriesInfo}
-                    allCurrentGuessInfo={allCurrentGuessInfo}
-                  />
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <Register
-                    setUserIsLoggedIn={setUserIsLoggedIn}
-                    setEnableQueryFn={setEnableInitialQueryFn}
-                  />
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <Login
-                    setUserIsLoggedIn={setUserIsLoggedIn}
-                    setEnableQueryFn={setEnableInitialQueryFn}
-                  />
-                }
-              />
-            </Routes>
+            <Route path="/" element={<div>Please Log In</div>} />
           )}
-        </ContentBox>
-      </div>
-    );
-  }
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </ContentBox>
+    </div>
+  );
 };
 
 // useEffect(() => {

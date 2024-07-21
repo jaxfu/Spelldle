@@ -377,3 +377,16 @@ export type T_APIRESULT_GETGUESSES = {
 	game_session_id: string;
 	guesses: T_PAST_GUESSES[];
 };
+
+// VALIDATION
+export type T_AUTH_STATUS = {
+	has_tokens: boolean;
+	valid: boolean;
+	user_data: T_USERDATA_STATE;
+};
+
+export const INIT_AUTH_STATUS: T_AUTH_STATUS = {
+	has_tokens: false,
+	valid: false,
+	user_data: deepCopyObject(INIT_USERDATA_STATE),
+};
