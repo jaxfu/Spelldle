@@ -12,7 +12,8 @@ import (
 
 func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var response types.ResponseGetGuesses
+		// var response types.ResponseGetGuesses
+		var response []types.GuessAll
 
 		// get userID from jwt
 		userID, err := utils.GetJwtInfoFromCtx(ctx)
@@ -22,53 +23,13 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// get game_session
-		game_session, err := db.GetGameSessionByUserID(userID)
+		allGuessAll, err := db.GetAllGuessAllByUserID(userID)
 		if err != nil {
-			fmt.Printf("error in GetGameSessionByUserID %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, response)
-			return
-		}
-		response.GameSession.GameSessionID = game_session.GameSessionID
-		response.GameSession.CurrentRound = game_session.Rounds + 1
-
-		// get guesses
-		guesses, err := db.GetAllGuessCategoriesByUserID(userID)
-		if err != nil {
-			fmt.Printf("error getting guesses %+v\n", err)
+			fmt.Printf("error getting all guesses %+v\n", err)
 			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
 
-		// get results
-		results, err := db.GetAllGuessResultsByUserID(userID)
-		if err != nil {
-			fmt.Printf("error getting results %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, response)
-			return
-		}
-
-		// sanity check
-		if len(guesses) != len(results) || len(guesses) != int(game_session.Rounds) || len(results) != int(game_session.Rounds) {
-			fmt.Printf("length equality check failed: rounds: %d, guesses: %+v, results: %+v\n", game_session.Rounds, guesses, results)
-			ctx.JSON(http.StatusInternalServerError, response)
-			return
-		}
-
-		for i := range int(game_session.Rounds) {
-			fmt.Printf("round %d\n", i)
-			guessAll := types.GuessAll{
-				GuessID: types.GuessID{
-					GameSessionID: game_session.GameSessionID,
-					Round:         uint(i + 1),
-				},
-				Categories: guesses[i].SpellCategories,
-				Results:    results[i],
-			}
-
-			response.Guesses = append(response.Guesses, guessAll)
-		}
-
-		ctx.JSON(http.StatusOK, response)
+		ctx.JSON(http.StatusOK, allGuessAll)
 	}
 }

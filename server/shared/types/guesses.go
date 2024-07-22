@@ -11,13 +11,7 @@ type GuessID struct {
 	Round         uint          `json:"round"`
 }
 
-type GuessCategories struct {
-	GuessID
-	SpellCategories
-}
-
 type GuessResults struct {
-	GuessID
 	Components  uint `json:"components"`
 	Class       uint `json:"class"`
 	Effects     uint `json:"effects"`

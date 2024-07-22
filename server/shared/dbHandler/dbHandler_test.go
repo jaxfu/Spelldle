@@ -137,7 +137,11 @@ func TestDBHandler(t *testing.T) {
 
 	t.Run("InsertGuessCategories", func(t *testing.T) {
 		for i := range testGuessesData {
-			if err := dbHandler.InsertGuessCategories(testGuessesData[i]); err != nil {
+			guessID := types.GuessID{
+				GameSessionID: testGameSessionData.GameSessionID,
+				Round:         uint(i + 1),
+			}
+			if err := dbHandler.InsertGuessCategories(testGuessesData[i], guessID); err != nil {
 				t.Errorf("Error in InsertGuess: %+v", err)
 			}
 		}
@@ -146,15 +150,15 @@ func TestDBHandler(t *testing.T) {
 		for i := range testGuessesData {
 			guessInfo, err := dbHandler.GetGuessCategoriesByGuessID(
 				types.GuessID{
-					GameSessionID: testGuessesData[i].GameSessionID,
-					Round:         testGuessesData[i].Round,
+					GameSessionID: testGameSessionData.GameSessionID,
+					Round:         uint(i + 1),
 				},
 			)
 			if err != nil {
 				t.Errorf("Error getting guess: %+v", err)
 			}
-			if guessInfo.GuessID != testGuessesData[i].GuessID {
-				t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", guessInfo.GuessID, testGuessesData[i].GuessID)
+			if guessInfo.Level != testGuessesData[i].Level {
+				t.Errorf("mismatch in GetGuessCategoriesByGuessID: got %+v, want %+v", guessInfo.Level, testGuessesData[i].Level)
 			}
 		}
 	})
@@ -168,7 +172,11 @@ func TestDBHandler(t *testing.T) {
 
 	t.Run("InsertGuessResults", func(t *testing.T) {
 		for i := range testResultsData {
-			if err := dbHandler.InsertGuessResults(testResultsData[i]); err != nil {
+			guessID := types.GuessID{
+				GameSessionID: testGameSessionData.GameSessionID,
+				Round:         uint(i + 1),
+			}
+			if err := dbHandler.InsertGuessResults(testResultsData[i], guessID); err != nil {
 				t.Errorf("Error in InsertGuess: %+v", err)
 			}
 		}
@@ -177,17 +185,17 @@ func TestDBHandler(t *testing.T) {
 		for i := range testResultsData {
 			results, err := dbHandler.GetGuessResultsByGuessID(
 				types.GuessID{
-					GameSessionID: testResultsData[i].GameSessionID,
-					Round:         testResultsData[i].Round,
+					GameSessionID: testGameSessionData.GameSessionID,
+					Round:         uint(i + 1),
 				},
 			)
 			if err != nil {
 				t.Errorf("Error getting guess: %+v", err)
 			}
-			if results.GuessID != testResultsData[i].GuessID {
-				t.Errorf("Mismatch in GetGuessByGameSessionID: got %+v, want %+v", results.GuessID, testResultsData[i].GuessID)
+			equals, msg := results.Equals(&testResultsData[i])
+			if !equals {
+				t.Errorf("Mismatch in GetGuessResultsByGuessID: %s", msg)
 			}
-			fmt.Printf("%+v\n", results)
 		}
 	})
 	t.Run("GetAllGuessResultsByUserID", func(t *testing.T) {
@@ -196,6 +204,23 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("error getting all results: %+v", err)
 		}
 		fmt.Printf("%+v\n", results)
+
+		for i := range results {
+			equals, msg := results[i].Equals(&testResultsData[i])
+			if !equals {
+				t.Errorf("mismatch in GetAllGuessResultsByUserID: %s", msg)
+			}
+		}
+	})
+	t.Run("GetAllGuessAllByUserID", func(t *testing.T) {
+		allGuessAll, err := dbHandler.GetAllGuessAllByUserID(testUserData.UserID)
+		if err != nil {
+			t.Errorf("error getting all guesses: %+v", err)
+		}
+
+		if len(allGuessAll) != len(testGuessesData) {
+			t.Errorf("length mismath in GetAllGuessAllByUserID: got %d, want %d", len(allGuessAll), len(testGuessesData))
+		}
 	})
 
 	t.Run("UpdateGameSessionRounds", func(t *testing.T) {
