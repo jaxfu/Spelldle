@@ -13,19 +13,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type responseRegister struct {
+	Valid  bool            `json:"valid"`
+	Tokens types.AllTokens `json:"tokens"`
+}
+
 // Register recieves a RequestPayloadRegister, then checks if the username is valid,
 // inserts into user_info, generates UserDataSession, then sends a ResponseRegisterLogin
 func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var registerPayload types.RequestPayloadRegister
-		registerResponse := types.ResponseRegisterLogin{
+		response := responseRegister{
 			Valid: false,
 		}
 
 		// Bind request body
 		if err := ctx.BindJSON(&registerPayload); err != nil {
 			fmt.Printf("Error binding json: %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
 		fmt.Printf("%+v\n", registerPayload)
@@ -35,19 +40,19 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		if err != nil {
 			if !errors.Is(err, pgx.ErrNoRows) {
 				fmt.Printf("Error checking username validity: %+v\n", err)
-				ctx.JSON(http.StatusInternalServerError, registerResponse)
+				ctx.JSON(http.StatusInternalServerError, response)
 				return
 			}
 		} else {
 			fmt.Printf("Username '%s' already exists", registerPayload.Username)
-			ctx.JSON(http.StatusUnauthorized, registerResponse)
+			ctx.JSON(http.StatusUnauthorized, response)
 			return
 		}
 
 		// Insert User
 		userID, err := db.InsertUser()
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			fmt.Printf("Error inserting user: %+v\n", err)
 			return
 		}
@@ -62,7 +67,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 		// Insert UserData
 		if err := db.InsertUserData(UserData); err != nil {
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			fmt.Printf("Error inserting user: %+v\n", err)
 			return
 		}
@@ -76,32 +81,24 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			Rounds:        0,
 		}
 		if err := db.InsertGameSession(gameSession); err != nil {
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			fmt.Printf("error inserting game session: %+v", err)
 			return
 		}
 
 		accessToken, err := auth.CreateJWTFromUserID(userID)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, registerResponse)
+			ctx.JSON(http.StatusInternalServerError, response)
 			return
 		}
 
-		registerResponse = types.ResponseRegisterLogin{
-			Valid: true,
-			Tokens: types.AllTokens{
-				AccessToken:  types.AccessToken{AccessToken: accessToken},
-				RefreshToken: types.RefreshToken{RefreshToken: accessToken},
-			},
-			UserData: types.ResponseUserData{
-				UserID:    UserData.UserID,
-				Username:  UserData.Username,
-				FirstName: UserData.FirstName,
-				LastName:  UserData.LastName,
-			},
+		response.Valid = true
+		response.Tokens = types.AllTokens{
+			AccessToken:  accessToken,
+			RefreshToken: accessToken,
 		}
 
-		ctx.JSON(http.StatusCreated, registerResponse)
+		ctx.JSON(http.StatusCreated, response)
 
 		// Backup
 		//cmd := exec.Command("./backup.sh")

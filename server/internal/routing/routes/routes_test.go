@@ -26,6 +26,7 @@ func TestRoutes(t *testing.T) {
 	// Set up vars
 	testUserRegisterPayload := testHelpers.TestUserRegisterPayload
 	testUserLoginPayload := testHelpers.TestUserLoginPayload
+	testSpellData := testHelpers.TestSpell
 	var testUserDataTokens types.AllTokens
 
 	t.Run("DropTables", func(t *testing.T) {
@@ -38,12 +39,19 @@ func TestRoutes(t *testing.T) {
 			t.Errorf("Error initializing tables: %+v\n", err)
 		}
 	})
+	t.Run("InsertSpell", func(t *testing.T) {
+		err := db.InsertSpell(testSpellData)
+		if err != nil {
+			t.Errorf("Error inserting spell: %+v", err)
+		}
+	})
 
 	t.Run("Register", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestPostRequest(
 			consts.RouteUrlRegister,
-			&testUserRegisterPayload, &responseData,
+			&testUserRegisterPayload,
+			&responseData,
 			Register(db),
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)

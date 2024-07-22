@@ -15,10 +15,8 @@ const QGetGuessCategoriesByGuessId = `
   WHERE game_session_id=$1 AND round=$2
 `
 
-func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (types.GuessCategories, error) {
-	guess := types.GuessCategories{
-		GuessID: guessID,
-	}
+func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (types.SpellCategories, error) {
+	var guess types.SpellCategories
 
 	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessCategoriesByGuessId, guessID.GameSessionID, guessID.Round).Scan(
 		&guess.School,
@@ -39,8 +37,8 @@ func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (
 	return guess, nil
 }
 
-func (dbHandler *DBHandler) GetAllGuessCategoriesByUserID(userID types.UserID) ([]types.GuessCategories, error) {
-	var guesses []types.GuessCategories
+func (dbHandler *DBHandler) GetAllGuessCategoriesByUserID(userID types.UserID) ([]types.SpellCategories, error) {
+	var guesses []types.SpellCategories
 	gameSession, err := dbHandler.GetGameSessionByUserID(userID)
 	if err != nil {
 		return guesses, err
@@ -68,9 +66,7 @@ const QGetGuessResultsByGuessId = `
 `
 
 func (dbHandler *DBHandler) GetGuessResultsByGuessID(guessID types.GuessID) (types.GuessResults, error) {
-	results := types.GuessResults{
-		GuessID: guessID,
-	}
+	var results types.GuessResults
 
 	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessResultsByGuessId, guessID.GameSessionID, guessID.Round).Scan(
 		&results.School,
@@ -112,6 +108,38 @@ func (dbHandler *DBHandler) GetAllGuessResultsByUserID(userID types.UserID) ([]t
 	return results, nil
 }
 
+func (dbHandler *DBHandler) GetAllGuessAllByUserID(userID types.UserID) ([]types.GuessAll, error) {
+	var allGuessAll []types.GuessAll
+	gameSession, err := dbHandler.GetGameSessionByUserID(userID)
+	if err != nil {
+		return allGuessAll, err
+	}
+
+	for i := range gameSession.Rounds {
+		guessID := types.GuessID{
+			GameSessionID: gameSession.GameSessionID,
+			Round:         i + 1,
+		}
+		guessAll := types.GuessAll{
+			GuessID: guessID,
+		}
+		categories, err := dbHandler.GetGuessCategoriesByGuessID(guessID)
+		if err != nil {
+			return allGuessAll, err
+		}
+		results, err := dbHandler.GetGuessResultsByGuessID(guessID)
+		if err != nil {
+			return allGuessAll, err
+		}
+
+		guessAll.Categories = categories
+		guessAll.Results = results
+		allGuessAll = append(allGuessAll, guessAll)
+	}
+
+	return allGuessAll, nil
+}
+
 // INSERTS
 
 const EInsertGuessID = `
@@ -129,18 +157,18 @@ const EInsertGuessLevel = `
   VALUES ($1, $2, $3, $4)
 `
 
-func (dbHandler *DBHandler) InsertGuessCategories(guess types.GuessCategories) error {
+func (dbHandler *DBHandler) InsertGuessCategories(guess types.SpellCategories, guessID types.GuessID) error {
 	_, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessID,
-		guess.GameSessionID,
-		guess.Round,
+		guessID.GameSessionID,
+		guessID.Round,
 	)
 	if err != nil {
 		return err
 	}
 
 	_, err = dbHandler.Conn.Exec(context.Background(), EInsertGuessCategories,
-		guess.GameSessionID,
-		guess.Round,
+		guessID.GameSessionID,
+		guessID.Round,
 		guess.School,
 		guess.CastingTime,
 		guess.Range,
@@ -154,8 +182,8 @@ func (dbHandler *DBHandler) InsertGuessCategories(guess types.GuessCategories) e
 		return err
 	}
 	_, err = dbHandler.Conn.Exec(context.Background(), EInsertGuessLevel,
-		guess.GameSessionID,
-		guess.Round,
+		guessID.GameSessionID,
+		guessID.Round,
 		guess.Level.Level,
 		guess.Level.IsRitual,
 	)
@@ -171,10 +199,10 @@ const EInsertGuessResults = `
   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 `
 
-func (dbHandler *DBHandler) InsertGuessResults(results types.GuessResults) error {
+func (dbHandler *DBHandler) InsertGuessResults(results types.GuessResults, guessID types.GuessID) error {
 	if _, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessResults,
-		results.GameSessionID,
-		results.Round,
+		guessID.GameSessionID,
+		guessID.Round,
 		results.School,
 		results.CastingTime,
 		results.Range,

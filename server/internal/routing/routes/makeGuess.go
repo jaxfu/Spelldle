@@ -28,7 +28,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// bind payload
-		var payload types.GuessCategories
+		var payload types.SpellCategories
 		err = ctx.BindJSON(&payload)
 		if err != nil {
 			fmt.Printf("Error binding payload: %v\n", err)
@@ -44,10 +44,13 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
-		fmt.Printf("%+v\n", gameSession)
+		guessID := types.GuessID{
+			GameSessionID: gameSession.GameSessionID,
+			Round:         gameSession.Rounds + 1,
+		}
 
 		// insert guess
-		err = db.InsertGuessCategories(payload)
+		err = db.InsertGuessCategories(payload, guessID)
 		if err != nil {
 			fmt.Printf("Error inserting payload: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
@@ -56,20 +59,19 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 		// insert results
 		results := payload.GetResults(&testHelpers.TestSpell.SpellCategories)
-		results.GuessID = payload.GuessID
-		if err := db.InsertGuessResults(results); err != nil {
+		if err := db.InsertGuessResults(results, guessID); err != nil {
 			fmt.Printf("Error inserting guess results: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 
 		// update gameSession
-		if err := db.UpdateGameSessionRounds(userID, payload.Round); err != nil {
+		if err := db.UpdateGameSessionRounds(userID, guessID.Round); err != nil {
 			fmt.Printf("error updating gameSession: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 
-		ctx.Status(http.StatusOK)
+		ctx.String(http.StatusOK, "Success")
 	}
 }

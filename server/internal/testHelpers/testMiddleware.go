@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
+
+	"github.com/gin-gonic/gin"
 	"spelldle.com/server/internal/routing/consts"
 	"spelldle.com/server/shared/types"
 )
@@ -29,7 +30,7 @@ func TestMiddleware(tokens types.AllTokens, middleware gin.HandlerFunc) (*gin.Co
 	if err != nil {
 		return ctx, fmt.Errorf("error creating request: %+v", err)
 	}
-	r.Header.Set(consts.HeaderTypeAuthorization, fmt.Sprintf("%s%s", consts.BearerTokenPrefix, tokens.AccessToken.AccessToken))
+	r.Header.Set(consts.HeaderTypeAuthorization, fmt.Sprintf("%s%s", consts.BearerTokenPrefix, tokens.AccessToken))
 	fmt.Printf("HEADER: %+v\n", r.Header.Get(consts.HeaderTypeAuthorization))
 	router.Use(middleware)
 	router.POST(consts.RouteUrlBase, func(c *gin.Context) {

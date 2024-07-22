@@ -7,6 +7,11 @@ type ResponseUserData struct {
 	UserID    UserID `json:"user_id"`
 }
 
+type ResponseGameSessionData struct {
+	GameSessionID GameSessionID `json:"game_session_id"`
+	CurrentRound  uint          `json:"current_round"`
+}
+
 type ResponseRegisterLogin struct {
 	Tokens   AllTokens        `json:"tokens"`
 	UserData ResponseUserData `json:"user_data"`
@@ -23,6 +28,6 @@ type ResponseValidateToken struct {
 }
 
 type ResponseGetGuesses struct {
-	GameSessionID GameSessionID `json:"game_session_id"`
-	Guesses       []GuessAll    `json:"guesses"`
+	GameSession ResponseGameSessionData `json:"game_session"`
+	Guesses     []GuessAll              `json:"guesses"`
 }

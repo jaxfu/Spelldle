@@ -5,15 +5,19 @@ import {
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
-	type T_APIREQUEST_MAKE_GUESS,
-	INIT_APIREQUEST_MAKE_GUESS,
+	type T_GUESS_CATEGORIES,
+	INIT_GUESS_CATEGORIES,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+	T_AUTH_STATUS,
+	INIT_AUTH_STATUS,
 } from "../types";
 import TextInput from "../components/Game/children/GuessBox/children/GuessCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/Game/children/GuessBox/children/GuessCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/Game/children/GuessBox/children/GuessCell/children/ComponentsSelection/ComponentsSelection";
 import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
 import CATEGORY_INFO from "../CATEGORY_INFO.json";
+import { apiRequestValidateSession } from "./requests";
+import { AxiosResponse } from "axios";
 
 // Multi
 export function getRecommendations(e: any, values: string[]): string[] {
@@ -146,7 +150,6 @@ export function logoutUser(
 ): void {
 	clearTokensFromLocalStorage();
 	setUserIsLoggedIn(false);
-	setUserData(deepCopyObject(INIT_USERDATA_STATE));
 }
 
 // Storage
@@ -200,24 +203,25 @@ export function clearTokensFromLocalStorage() {
 }
 
 // Data
-export function setUserDataFromAPIResult(
-	data: T_APIRESULTS,
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
-	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
-): void {
-	console.log(`Setting userData: ${JSON.stringify(data.user_data)}`);
-	setUserData(data.user_data);
-	setUserIsLoggedIn(true);
-	setEnableQueryFn(false);
-}
+// export function setUserDataFromAPIResult(
+//   data: T_APIRESULTS,
+//   userDataRef: React.MutableRefObject(T_USERDATA_STATE),
+//     setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
+//       setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+//         setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
+// ): void {
+//   console.log(`Setting userData: ${JSON.stringify(data.user_data)}`);
+//   setUserData(data.user_data);
+//   setUserIsLoggedIn(true);
+// 	setEnableQueryFn(false);
+// }
 
 export function createRequestObjectFromCurrentGuessInfo(
 	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
 	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
-): T_APIREQUEST_MAKE_GUESS {
-	const requestObject: T_APIREQUEST_MAKE_GUESS = deepCopyObject(
-		INIT_APIREQUEST_MAKE_GUESS,
+): T_GUESS_CATEGORIES {
+	const requestObject: T_GUESS_CATEGORIES = deepCopyObject(
+		INIT_GUESS_CATEGORIES,
 	);
 
 	// SCHOOOL
@@ -344,4 +348,27 @@ export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
 	infoObj.EFFECTS.id_map = createMapFromValues(infoObj.EFFECTS.values);
 
 	return infoObj;
+}
+
+export async function getAuthStatus(): Promise<T_AUTH_STATUS> {
+	console.log("running getAuthStatus");
+
+	const authStatus = deepCopyObject(INIT_AUTH_STATUS);
+
+	try {
+		if (!areTokensInLocalStorage()) return authStatus;
+
+		const res = await apiRequestValidateSession(
+			getUserSessionDataFromStorage(),
+		);
+
+		console.log("tokens found");
+		authStatus.has_tokens = true;
+		authStatus.valid = res.data.valid;
+		authStatus.user_data = res.data.user_data;
+	} catch (error) {
+		throw error;
+	}
+
+	return authStatus;
 }

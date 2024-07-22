@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+
 	"spelldle.com/server/internal/routing/consts"
 	"spelldle.com/server/internal/routing/middleware"
 	"spelldle.com/server/shared/types"
@@ -54,7 +55,7 @@ func TestPostRequestWithAuthTokens[P any, R any](route string, payload *P, respo
 	if err != nil {
 		return fmt.Errorf("error creating request: %+v", err)
 	}
-	r.Header.Set(consts.HeaderTypeAuthorization, fmt.Sprintf("%s%s", consts.BearerTokenPrefix, tokens.AccessToken.AccessToken))
+	r.Header.Set(consts.HeaderTypeAuthorization, fmt.Sprintf("%s%s", consts.BearerTokenPrefix, tokens.AccessToken))
 	fmt.Printf("HEADER: %+v\n", r.Header.Get(consts.HeaderTypeAuthorization))
 	router.Use(middleware.ValidateAccessToken())
 	router.POST(route, routeHandler)
