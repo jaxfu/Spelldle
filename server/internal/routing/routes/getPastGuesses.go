@@ -12,7 +12,6 @@ import (
 
 func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// var response types.ResponseGetGuesses
 		var response []types.GuessAll
 
 		// get userID from jwt

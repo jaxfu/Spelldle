@@ -320,11 +320,6 @@ export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
 	effects: [0],
 };
 
-export type T_PAST_GUESSES = {
-	categories: T_GUESS_CATEGORIES;
-	results: T_GUESS_RESULTS;
-};
-
 export type T_GUESS_CATEGORIES = {
 	school: number;
 	level: { level: number; is_ritual: boolean };
@@ -371,6 +366,30 @@ export const INIT_GUESS_RESULTS: T_GUESS_RESULTS = {
 	components: 0,
 	class: 0,
 	effects: 0,
+};
+
+export type T_PAST_GUESSES = {
+	categories: T_GUESS_CATEGORIES;
+	results: T_GUESS_RESULTS;
+};
+
+export const INIT_PAST_GUESSES: T_PAST_GUESSES = {
+	categories: deepCopyObject(INIT_GUESS_CATEGORIES),
+	results: deepCopyObject(INIT_GUESS_RESULTS),
+};
+
+export type T_GUESS_ALL = {
+	game_session_id: string;
+	round: number;
+	categories: T_GUESS_CATEGORIES;
+	results: T_GUESS_RESULTS;
+};
+
+export const INIT_GUESS_ALL: T_GUESS_ALL = {
+	game_session_id: "",
+	round: 0,
+	categories: deepCopyObject(INIT_GUESS_CATEGORIES),
+	results: deepCopyObject(INIT_GUESS_RESULTS),
 };
 
 export type T_APIRESULT_GETGUESSES = {

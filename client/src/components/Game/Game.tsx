@@ -8,7 +8,14 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import { useRef } from "react";
-import { deepCopyObject } from "../../utils/methods";
+import {
+	deepCopyObject,
+	getUserSessionDataFromStorage,
+} from "../../utils/methods";
+import {
+	apiRequestGetPastGuesses,
+	apiRequestMakeGuess,
+} from "../../utils/requests";
 
 interface IProps {
 	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
@@ -16,20 +23,17 @@ interface IProps {
 }
 
 const Game: React.FC<IProps> = (props) => {
-	const query = useQuery({
+	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
-		queryFn: () => console.log("RUNNING GET_PAST_GUESSES"),
+		queryFn: () =>
+			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
 	});
-	const gameSession = useRef<T_GAME_SESSION>(
-		deepCopyObject(INIT_GAME_SESSION_DATA),
-	);
 
 	return (
 		<>
 			<GuessBox
 				allCategoriesInfo={props.allCategoriesInfo}
 				allCurrentGuessInfo={props.allCurrentGuessInfo}
-				gameSession={gameSession.current}
 			/>
 		</>
 	);

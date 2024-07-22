@@ -7,9 +7,9 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_ALL_POSSIBLE_CATEGORIES_INFO,
-	type T_PAST_GUESSES,
 	type T_GAME_SESSION,
 	type T_APIREQUEST_MAKE_GUESS,
+	type T_GUESS_ALL,
 } from "../types";
 import { T_TOKENS } from "../types";
 import { createRequestObjectFromCurrentGuessInfo } from "./methods";
@@ -85,7 +85,7 @@ interface I_APIREQUEST_MAKE_GUESS {
 
 export async function apiRequestMakeGuess(
 	paramObject: I_APIREQUEST_MAKE_GUESS,
-): Promise<AxiosResponse<string, any>> {
+): Promise<AxiosResponse<string>> {
 	try {
 		const guessCategories = createRequestObjectFromCurrentGuessInfo(
 			paramObject.allCurrentGuessInfo,
@@ -110,9 +110,10 @@ export async function apiRequestMakeGuess(
 
 export async function apiRequestGetPastGuesses(
 	accessToken: string,
-): Promise<AxiosResponse<T_PAST_GUESSES, any>> {
+): Promise<AxiosResponse<T_GUESS_ALL[]>> {
+	console.log("Running apiRequestGetPastGuesses");
 	try {
-		return await axios<T_PAST_GUESSES>({
+		return await axios<T_GUESS_ALL[]>({
 			method: "POST",
 			url: API_ROUTES.GET_PAST_GUESSES,
 			headers: {
