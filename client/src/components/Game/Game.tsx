@@ -1,42 +1,43 @@
 import GuessBox from "./children/GuessBox/GuessBox";
 import {
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
-	type T_ALL_CURRENT_GUESS_INFO,
-	type T_GAME_SESSION,
-	INIT_GAME_SESSION_DATA,
+  type T_ALL_POSSIBLE_CATEGORIES_INFO,
+  type T_ALL_CURRENT_GUESS_INFO,
 } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
-import { useRef } from "react";
 import {
-	deepCopyObject,
-	getUserSessionDataFromStorage,
+  getUserSessionDataFromStorage,
 } from "../../utils/methods";
 import {
-	apiRequestGetPastGuesses,
-	apiRequestMakeGuess,
+  apiRequestGetPastGuesses,
 } from "../../utils/requests";
 
 interface IProps {
-	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
+  allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
+  allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
 }
 
 const Game: React.FC<IProps> = (props) => {
-	const { data, isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.pastGuesses],
-		queryFn: () =>
-			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
-	});
+  const { data, isSuccess } = useQuery({
+    queryKey: [QUERY_KEYS.pastGuesses],
+    queryFn: () =>
+      apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
+  });
 
-	return (
-		<>
-			<GuessBox
-				allCategoriesInfo={props.allCategoriesInfo}
-				allCurrentGuessInfo={props.allCurrentGuessInfo}
-			/>
-		</>
-	);
+  if (isSuccess) {
+    for (const guess of data.data) {
+      console.log(`guess ${guess.round}: ${JSON.stringify(guess)}`);
+    }
+  }
+
+  return (
+    <>
+      <GuessBox
+        allCategoriesInfo={props.allCategoriesInfo}
+        allCurrentGuessInfo={props.allCurrentGuessInfo}
+      />
+    </>
+  );
 };
 
 export default Game;
