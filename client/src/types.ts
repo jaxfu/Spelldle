@@ -1,21 +1,5 @@
 import { deepCopyObject } from "./utils/methods";
 
-// SPELLS
-export enum E_CATEGORY_COMPONENT_TYPE {
-	SINGLE_TEXT = 0,
-	MULTI_TEXT,
-	COMPONENTS,
-	LEVEL
-}
-export type T_CATEGORY_INFO_ALL = T_CATEGORY_INFO_SINGLE[];
-export type T_CATEGORY_INFO_SINGLE = {
-	name: string;
-	values: string[];
-	id_map: Map<string, number>;
-	component_type: E_CATEGORY_COMPONENT_TYPE;
-	has_modifiers: boolean;
-};
-
 // GUESSES
 export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;

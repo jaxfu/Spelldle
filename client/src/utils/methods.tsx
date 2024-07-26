@@ -332,8 +332,7 @@ function createMapFromValues(arr: string[]) {
 }
 
 export function getAllCategoriesInfo(): T_CATEGORY_INFO_ALL {
-	const infoObj: T_CATEGORY_INFO_ALL =
-		CATEGORY_INFO as T_CATEGORY_INFO_ALL;
+	const infoObj: T_CATEGORY_INFO_ALL = CATEGORY_INFO as T_CATEGORY_INFO_ALL;
 
 	infoObj.SCHOOL.id_map = createMapFromValues(infoObj.SCHOOL.values);
 	infoObj.LEVEL.id_map = createMapFromValues(infoObj.LEVEL.values);

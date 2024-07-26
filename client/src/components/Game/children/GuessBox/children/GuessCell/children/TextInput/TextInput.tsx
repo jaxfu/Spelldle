@@ -1,5 +1,8 @@
 import styles from "./TextInput.module.scss";
-import { type T_ALL_CURRENT_GUESS_INFO, type T_GUESS_CATEGORIES } from "../../../../../../../../types";
+import {
+	type T_ALL_CURRENT_GUESS_INFO,
+	type T_GUESS_CATEGORIES,
+} from "../../../../../../../../types";
 import * as methods from "../../../../../../../../utils/methods";
 import { handleInput } from "../../../../../../../../utils/inputHandlers";
 import { useState, useEffect } from "react";
@@ -38,7 +41,7 @@ const TextInput: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			{(props.multi && guessesForMulti.length == 0) && (
+			{props.multi && guessesForMulti.length == 0 && (
 				<div className={styles.guessesForMulti_root}>
 					{guessesForMulti.map((guess) => {
 						return (
