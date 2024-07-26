@@ -7,7 +7,7 @@ import {
 	type T_APIRESULTS,
 	type T_GUESS_CATEGORIES,
 	INIT_GUESS_CATEGORIES,
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+	type T_CATEGORY_INFO_ALL,
 	T_AUTH_STATUS,
 	INIT_AUTH_STATUS,
 } from "../types";
@@ -218,7 +218,7 @@ export function clearTokensFromLocalStorage() {
 
 export function createRequestObjectFromCurrentGuessInfo(
 	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
-	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
+	categoryInfo: T_CATEGORY_INFO_ALL,
 ): T_GUESS_CATEGORIES {
 	const requestObject: T_GUESS_CATEGORIES = deepCopyObject(
 		INIT_GUESS_CATEGORIES,
@@ -331,9 +331,9 @@ function createMapFromValues(arr: string[]) {
 	return map;
 }
 
-export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
-	const infoObj: T_ALL_POSSIBLE_CATEGORIES_INFO =
-		CATEGORY_INFO as T_ALL_POSSIBLE_CATEGORIES_INFO;
+export function getAllCategoriesInfo(): T_CATEGORY_INFO_ALL {
+	const infoObj: T_CATEGORY_INFO_ALL =
+		CATEGORY_INFO as T_CATEGORY_INFO_ALL;
 
 	infoObj.SCHOOL.id_map = createMapFromValues(infoObj.SCHOOL.values);
 	infoObj.LEVEL.id_map = createMapFromValues(infoObj.LEVEL.values);

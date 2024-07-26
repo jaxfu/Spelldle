@@ -1,10 +1,10 @@
 import GuessBox from "./children/GuessBox/GuessBox";
 import {
 	INIT_GUESS_CATEGORIES,
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+	type T_CATEGORY_INFO_ALL,
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_GUESS_CATEGORIES,
-	type T_SPELL_CATEGORY_VALUE_MAP,
+	type T_CATEGORY_VALUE_MAP,
 } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";

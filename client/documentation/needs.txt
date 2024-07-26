@@ -1,0 +1,8 @@
+- list of category names
+	- SPELL_CATEGORY_NAMES: string[]
+
+- list of values for each category
+	- CATEGORY_VALUES: string[]
+
+- map of category values to number
+	- CAGEGORY_VALUES_MAP: Map<string, number>

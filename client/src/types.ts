@@ -1,186 +1,120 @@
 import { deepCopyObject } from "./utils/methods";
 
-export enum E_CATEGORIES {
-	SCHOOL = 0,
-	LEVEL,
-	CASTING,
-	RANGE,
-	TARGET,
+// SPELLS
+export enum E_CATEGORY_COMPONENT_TYPE {
+	SINGLE_TEXT = 0,
+	MULTI_TEXT,
 	COMPONENTS,
-	DURATION,
-	CLASS,
-	EFFECTS,
+	LEVEL
 }
-
-export enum E_SCHOOL_VALUES {
-	ABJURATION = 0,
-	CONJURATION,
-	DIVINATION,
-	DUNAMANCY,
-	ENCHANTMENT,
-	EVOCATION,
-	ILLUSION,
-	NECROMANCY,
-	TRANSMUTATION,
-}
-
-export enum E_LEVEL_VALUES {
-	FIRST = 0,
-	SECOND,
-	THIRD,
-	FOURTH,
-	FIFTH,
-	SIXTH,
-	SEVENTH,
-	EIGTH,
-	NINTH,
-	CANTRIP,
-}
-
-export enum E_CASTING_TIME_VALUES {
-	ONE_ACTION = 0,
-	ONE_REACTION,
-	BONUS_ACTION,
-	ONE_MINUTE,
-	TEN_MINUTES,
-	ONE_HOUR,
-	ONE_PLUS_HOUR,
-}
-
-export enum E_RANGE_VALUES {
-	TOUCH = 0,
-	SELF,
-	FIVE_FEET,
-	TEN_FEET,
-	THIRTY_FEET,
-	SIXTY_FEET,
-	ONE_HUNDRED_TWENTY_FEET,
-	ONE_HUNDRED_TWENTY_PLUS_FEET,
-}
-
-export enum E_TARGET_VALUES {
-	NULL = 0,
-	CREATURE,
-	OBJECT,
-	AREA,
-	POINT,
-	UNNOCUPIED_SPACE,
-}
-
-export enum E_COMPONENT_VALUES {
-	V = 0,
-	S,
-	M,
-}
-
-export enum E_DURATION_VALUES {
-	INSTANTANEOUS = 0,
-	ONE_ROUND,
-	ONE_MINUTE,
-	TEN_MINUTES,
-	ONE_HOUR,
-	EIGHT_HOURS,
-	EIGHT_PLUS_HOURS,
-	UNTIL_DISPELLED,
-}
-
-export const enum E_CLASS_VALUES {
-	ARTIFICER = 0,
-	BARD,
-	CLERIC,
-	DRUID,
-	PALADIN,
-	RANGER,
-	SORCERER,
-	WARLOCK,
-	WIZARD,
-}
-
-export enum E_EFFECT_VALUES {
-	Damage = 0,
-	Healing,
-	HP,
-	AC,
-	AoE,
-	Condition,
-	Buff,
-	Debuff,
-	Ability_Score,
-	Check,
-	Saving_Throw,
-	Advantage,
-	Disadvantage,
-	Resistance,
-	Terrain,
-	Living,
-	Non_Living,
-	Utility,
-	Location,
-	Movement,
-	Find,
-	Hide,
-	Send,
-	Control,
-	Create,
-	Summon,
-	Ask,
-	Creature_Type,
-	Options,
-	Change,
-	Choose,
-	Multiple,
-	Upcast,
-	Leveling,
-	Melee,
-	Weapon,
-	Acid,
-	Bludgeoning,
-	Cold,
-	Fire,
-	Force,
-	Lightning,
-	Necrotic,
-	Piercing,
-	Poison,
-	Psychic,
-	Radiant,
-	Slashing,
-	Thunder,
-}
-
-export type T_ALL_POSSIBLE_CATEGORIES_INFO = {
-	SCHOOL: T_SINGLE_CATEGORY_POSSIBILITIES;
-	LEVEL: T_SINGLE_CATEGORY_POSSIBILITIES;
-	CASTING_TIME: T_SINGLE_CATEGORY_POSSIBILITIES;
-	RANGE: T_SINGLE_CATEGORY_POSSIBILITIES;
-	TARGET: T_SINGLE_CATEGORY_POSSIBILITIES;
-	DURATION: T_SINGLE_CATEGORY_POSSIBILITIES;
-	COMPONENTS: T_SINGLE_CATEGORY_POSSIBILITIES;
-	CLASS: T_SINGLE_CATEGORY_POSSIBILITIES;
-	EFFECTS: T_SINGLE_CATEGORY_POSSIBILITIES;
-};
-
-export type T_SINGLE_CATEGORY_POSSIBILITIES = {
+export type T_CATEGORY_INFO_ALL = T_CATEGORY_INFO_SINGLE[];
+export type T_CATEGORY_INFO_SINGLE = {
 	name: string;
 	values: string[];
 	id_map: Map<string, number>;
-	has_multi: boolean;
+	component_type: E_CATEGORY_COMPONENT_TYPE;
 	has_modifiers: boolean;
 };
 
-// export type T_SPELL_CATEGORY_VALUE_MAP = {
-//   SCHOOL: Map<string, number>;
-//   LEVEL: Map<string, number>;
-//   CASTING_TIME: Map<string, number>;
-//   RANGE: Map<string, number>;
-//   TARGET: Map<string, number>;
-//   COMPONENTS: Map<string, number>;
-//   DURATION: Map<string, number>;
-//   CLASS: Map<string, number>;
-//   EFFECTS: Map<string, number>;
-// };
+// GUESSES
+export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
+export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 
-export type T_SPELL_CATEGORY_VALUE_MAP = Map<string, Map<string, number>>;
+export type T_APIREQUEST_MAKE_GUESS = T_GAME_SESSION & T_GUESS_CATEGORIES;
+export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
+	game_session_id: "",
+	current_round: 0,
+	school: 0,
+	level: {
+		level: 0,
+		is_ritual: false,
+	},
+	casting_time: 0,
+	range: 0,
+	target: 0,
+	duration: 0,
+	components: [0],
+	class: [0],
+	effects: [0],
+};
+
+export type T_GUESS_CATEGORIES = {
+	school: number;
+	level: { level: number; is_ritual: boolean };
+	casting_time: number;
+	range: number;
+	target: number;
+	duration: number;
+	components: number[];
+	class: number[];
+	effects: number[];
+};
+export const INIT_GUESS_CATEGORIES: T_GUESS_CATEGORIES = {
+	school: -1,
+	level: { level: -1, is_ritual: false },
+	casting_time: -1,
+	range: -1,
+	target: -1,
+	duration: -1,
+	components: [],
+	class: [],
+	effects: [],
+};
+
+export enum E_GUESS_RESULT_OPTIONS {
+	INCORRECT = 0,
+	SLIGHTLY_CORRECT,
+	CORRECT,
+}
+export type T_GUESS_RESULTS = {
+	school: number;
+	level: number;
+	casting_time: number;
+	range: number;
+	target: number;
+	duration: number;
+	components: number;
+	class: number;
+	effects: number;
+};
+export const INIT_GUESS_RESULTS: T_GUESS_RESULTS = {
+	school: 0,
+	level: 0,
+	casting_time: 0,
+	range: 0,
+	target: 0,
+	duration: 0,
+	components: 0,
+	class: 0,
+	effects: 0,
+};
+
+export type T_PAST_GUESSES = {
+	categories: T_GUESS_CATEGORIES;
+	results: T_GUESS_RESULTS;
+};
+export const INIT_PAST_GUESSES: T_PAST_GUESSES = {
+	categories: deepCopyObject(INIT_GUESS_CATEGORIES),
+	results: deepCopyObject(INIT_GUESS_RESULTS),
+};
+
+export type T_GUESS_ALL = {
+	game_session_id: string;
+	round: number;
+	categories: T_GUESS_CATEGORIES;
+	results: T_GUESS_RESULTS;
+};
+export const INIT_GUESS_ALL: T_GUESS_ALL = {
+	game_session_id: "",
+	round: 0,
+	categories: deepCopyObject(INIT_GUESS_CATEGORIES),
+	results: deepCopyObject(INIT_GUESS_RESULTS),
+};
+
+export type T_APIRESULT_GET_GUESSES = {
+	game_session_id: string;
+	guesses: T_PAST_GUESSES[];
+};
 
 // USERDATA
 export type T_TOKENS = {
@@ -295,108 +229,6 @@ export type T_APIRESULTS =
 	| T_APIRESULT_LOGIN
 	| T_APIRESULT_REGISTER
 	| T_APIRESULT_VALIDATE_ACCESS_TOKEN;
-
-// Spell Guess Results
-export enum E_GUESS_RESULTS {
-	INCORRECT = 0,
-	SLIGHTLY_CORRECT,
-	CORRECT,
-}
-
-// GUESSES
-export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
-export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
-
-export type T_APIREQUEST_MAKE_GUESS = T_GAME_SESSION & T_GUESS_CATEGORIES;
-export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
-	game_session_id: "",
-	current_round: 0,
-	school: 0,
-	level: {
-		level: 0,
-		is_ritual: false,
-	},
-	casting_time: 0,
-	range: 0,
-	target: 0,
-	duration: 0,
-	components: [0],
-	class: [0],
-	effects: [0],
-};
-
-export type T_GUESS_CATEGORIES = {
-	school: number;
-	level: { level: number; is_ritual: boolean };
-	casting_time: number;
-	range: number;
-	target: number;
-	duration: number;
-	components: number[];
-	class: number[];
-	effects: number[];
-};
-export const INIT_GUESS_CATEGORIES: T_GUESS_CATEGORIES = {
-	school: -1,
-	level: { level: -1, is_ritual: false },
-	casting_time: -1,
-	range: -1,
-	target: -1,
-	duration: -1,
-	components: [],
-	class: [],
-	effects: [],
-};
-
-export type T_GUESS_RESULTS = {
-	school: number;
-	level: number;
-	casting_time: number;
-	range: number;
-	target: number;
-	duration: number;
-	components: number;
-	class: number;
-	effects: number;
-};
-export const INIT_GUESS_RESULTS: T_GUESS_RESULTS = {
-	school: 0,
-	level: 0,
-	casting_time: 0,
-	range: 0,
-	target: 0,
-	duration: 0,
-	components: 0,
-	class: 0,
-	effects: 0,
-};
-
-export type T_PAST_GUESSES = {
-	categories: T_GUESS_CATEGORIES;
-	results: T_GUESS_RESULTS;
-};
-export const INIT_PAST_GUESSES: T_PAST_GUESSES = {
-	categories: deepCopyObject(INIT_GUESS_CATEGORIES),
-	results: deepCopyObject(INIT_GUESS_RESULTS),
-};
-
-export type T_GUESS_ALL = {
-	game_session_id: string;
-	round: number;
-	categories: T_GUESS_CATEGORIES;
-	results: T_GUESS_RESULTS;
-};
-export const INIT_GUESS_ALL: T_GUESS_ALL = {
-	game_session_id: "",
-	round: 0,
-	categories: deepCopyObject(INIT_GUESS_CATEGORIES),
-	results: deepCopyObject(INIT_GUESS_RESULTS),
-};
-
-export type T_APIRESULT_GET_GUESSES = {
-	game_session_id: string;
-	guesses: T_PAST_GUESSES[];
-};
 
 // VALIDATION
 export type T_AUTH_STATUS = {

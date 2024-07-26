@@ -1,6 +1,6 @@
-import { T_SPELL_CATEGORY_VALUE_MAP } from "./types";
+import { T_CATEGORY_VALUE_MAP } from "./types";
 
-export const SPELL_CATEGORY_MAP: T_SPELL_CATEGORY_VALUE_MAP = new Map([
+export const SPELL_CATEGORY_MAP: T_CATEGORY_VALUE_MAP = new Map([
 	[
 		"SCHOOL",
 		new Map([

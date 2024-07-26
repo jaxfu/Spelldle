@@ -6,7 +6,7 @@ import {
 	type T_USERINPUT_REGISTER,
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 	type T_ALL_CURRENT_GUESS_INFO,
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+	type T_CATEGORY_INFO_ALL,
 	type T_GUESS_ALL,
 	type T_GUESS_CATEGORIES,
 } from "../types";
@@ -77,7 +77,7 @@ export async function apiRequestValidateSession(
 
 interface I_APIREQUEST_MAKE_GUESS {
 	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO;
-	allCategoriesInfo: T_ALL_POSSIBLE_CATEGORIES_INFO;
+	allCategoriesInfo: T_CATEGORY_INFO_ALL;
 	accessToken: string;
 }
 

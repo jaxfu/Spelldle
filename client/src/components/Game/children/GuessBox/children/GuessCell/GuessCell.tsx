@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./GuessCell.module.scss";
 import {
 	type T_GUESS_CATEGORIES,
-	type T_SPELL_CATEGORY_VALUE_MAP,
+	type T_CATEGORY_VALUE_MAP,
 	type T_ALL_CURRENT_GUESS_INFO,
 } from "../../../../../../types";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
