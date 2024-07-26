@@ -54,7 +54,7 @@ export function getUniqueComponents(
 	inputValue: string,
 	setInputValue: React.Dispatch<React.SetStateAction<string>>,
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>,
+	allCurrentGuessInfo: React.MutableRefObject<T_GUESS_CATEGORIES>,
 ): JSX.Element {
 	const singleInput = (
 		<TextInput
@@ -80,23 +80,23 @@ export function getUniqueComponents(
 	);
 
 	switch (category_name) {
-		case CATEGORY_INFO.SCHOOL.name:
-		case CATEGORY_INFO.CASTING_TIME.name:
-		case CATEGORY_INFO.RANGE.name:
-		case CATEGORY_INFO.TARGET.name:
-		case CATEGORY_INFO.DURATION.name:
+		case "SCHOOL":
+		case "CASTING_TIME":
+		case "RANGE":
+		case "TARGET":
+		case "DURATION":
 			return singleInput;
-		case CATEGORY_INFO.LEVEL.name:
+		case "LEVEL":
 			return (
 				<>
 					<LevelRitualToggle allCurrentGuessInfo={allCurrentGuessInfo} />
 					{singleInput}
 				</>
 			);
-		case CATEGORY_INFO.COMPONENTS.name:
+		case "COMPONENTS":
 			return <ComponentsSelection allCurrentGuessInfo={allCurrentGuessInfo} />;
-		case CATEGORY_INFO.CLASS.name:
-		case CATEGORY_INFO.EFFECTS.name:
+		case "CLASS":
+		case "EFFECTS":
 			return multiInput;
 		default:
 			return <></>;

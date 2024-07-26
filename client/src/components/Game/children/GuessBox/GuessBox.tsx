@@ -29,17 +29,28 @@ const GuessBox: React.FC<IProps> = (props) => {
     },
   });
 
+	const guessCells =  (): JSX.Element[] => {
+		const elements: JSX.Element[] = []
+
+		for (const outerMapKeys of props.SPELL_CATEGORY_MAP.keys()) {
+			const innerMap = props.SPELL_CATEGORY_MAP.get(outerMapKeys);
+			const innerMapKeysArr: string[] = []
+			if (innerMap !== undefined) {
+				for (const innerMapKeys of innerMap.keys())
+					innerMapKeysArr.push(innerMapKeys)
+			}
+			elements.push(<GuessCell 
+				category_name={outerMapKeys}
+				category_values={innerMapKeysArr}
+				allCurrentGuessInfo={props.allCurrentGuessInfo}/>)
+		}
+
+		return elements
+	}
+
   return (
     <div className={styles.root}>
-      {
-        props.SPELL_CATEGORY_MAP.keys().map((key: string) => {
-          <GuessCell
-            category_name={key}
-            category_values={props.SPELL_CATEGORY_MAP.get(key).values()}
-            allCurrentGuessInfo={props.allCurrentGuessInfo}
-          />
-        }
-    }
+			{guessCells()}
       {/* <GuessCell */}
       {/*   category_name={props.allCategoriesInfo.current.SCHOOL.name} */}
       {/*   category_values={props.allCategoriesInfo.current.SCHOOL.values} */}
@@ -85,13 +96,13 @@ const GuessBox: React.FC<IProps> = (props) => {
       {/*   allCurrentGuessInfo={props.allCurrentGuessInfo} */}
       {/* /> */}
       <button
-        onClick={() => {
-          mutation.mutate({
-            allCurrentGuessInfo: props.allCurrentGuessInfo.current,
-            allCategoriesInfo: props.allCategoriesInfo.current,
-            accessToken: getUserSessionDataFromStorage().access_token,
-          });
-        }}
+        // onClick={() => {
+        //   mutation.mutate({
+        //     allCurrentGuessInfo: props.allCurrentGuessInfo.current,
+        //     allCategoriesInfo: props.allCategoriesInfo.current,
+        //     accessToken: getUserSessionDataFromStorage().access_token,
+        //   });
+        // }}
       >
         Submit
       </button>

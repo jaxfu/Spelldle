@@ -1,5 +1,5 @@
 import styles from "./TextInput.module.scss";
-import { type T_ALL_CURRENT_GUESS_INFO } from "../../../../../../../../types";
+import { type T_ALL_CURRENT_GUESS_INFO, type T_GUESS_CATEGORIES } from "../../../../../../../../types";
 import * as methods from "../../../../../../../../utils/methods";
 import { handleInput } from "../../../../../../../../utils/inputHandlers";
 import { useState, useEffect } from "react";
@@ -11,14 +11,14 @@ interface IProps {
 	setInputValue: React.Dispatch<React.SetStateAction<string>>;
 	recommendationValues: string[];
 	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
+	allCurrentGuessInfo: React.MutableRefObject<T_GUESS_CATEGORIES>;
 }
 
 const TextInput: React.FC<IProps> = (props) => {
 	const [guessesForMulti, setGuessesForMulti] = useState<string[]>([]);
 
 	useEffect(() => {
-		const LEVEL_IDENTIFIER: string = "Level";
+		const LEVEL_IDENTIFIER: string = "LEVEL";
 		if (props.multi) {
 			props.allCurrentGuessInfo.current.set(props.category_name, [
 				...guessesForMulti,
@@ -38,7 +38,7 @@ const TextInput: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			{props.multi && guessesForMulti.length == 0 ? null : (
+			{(props.multi && guessesForMulti.length == 0) && (
 				<div className={styles.guessesForMulti_root}>
 					{guessesForMulti.map((guess) => {
 						return (
@@ -75,7 +75,7 @@ const TextInput: React.FC<IProps> = (props) => {
 					}
 					onBlur={() => props.setRecommendations([])}
 				/>
-				{props.multi ? (
+				{props.multi && (
 					<button
 						onClick={() =>
 							methods.onAddGuessClick(
@@ -87,7 +87,7 @@ const TextInput: React.FC<IProps> = (props) => {
 					>
 						+
 					</button>
-				) : null}
+				)}
 			</div>
 		</div>
 	);
