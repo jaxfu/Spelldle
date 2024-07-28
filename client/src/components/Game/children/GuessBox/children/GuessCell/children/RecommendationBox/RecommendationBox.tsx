@@ -1,33 +1,51 @@
 import styles from "./RecommendationBox.module.scss";
-import * as methods from "../../../../../../../../utils/methods";
+import { useMemo } from "react";
 
 interface IProps {
-	recommendations: string[];
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>;
-	setInputValue: React.Dispatch<React.SetStateAction<string>>;
+	values: string[];
+	input: string;
+	setInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const RecommendationBox: React.FC<IProps> = (props) => {
+	const recommendations: string[] = useMemo(() => {
+		let matches: string[] = [];
+
+		if (props.input === "") matches = [];
+		else {
+			matches = props.values.filter((value) =>
+				value.toLowerCase().includes(props.input.toLowerCase()),
+			);
+			
+			if (matches.length == 1 && matches[0].toLowerCase() === props.input.toLowerCase()) {
+				matches = []
+			}
+		}
+
+		return matches;
+	}, [props.values, props.input]);
+
 	return (
 		<>
-			{props.recommendations.length == 0 ? null : (
+			{recommendations.length !== 0 && (
 				<div className={styles.root}>
-					{props.recommendations.map((option) => {
+					{recommendations.map((value) => {
 						return (
 							<div
 								className={styles.cell}
-								key={option.toString()}
+								key={value}
 								onClick={() => {
-									methods.onRecommendationClick(
-										option.toString(),
-										props.setInputValue,
-										props.setRecommendations,
-									);
+									// onRecommendationClick(
+									// 	value.toString(),
+									// 	props.setInputValue,
+									// 	props.setRecommendations,
+									// );
+									props.setInput((input) => value)
 								}}
 								// Keep focus on text input
 								onMouseDown={(e) => e.preventDefault()}
 							>
-								{option.toString()}
+								{value.toString()}
 							</div>
 						);
 					})}

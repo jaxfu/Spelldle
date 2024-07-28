@@ -29,14 +29,14 @@ const Game: React.FC = () => {
 	// const spellsInfo: T_CATEGORIES_INFO = generateSpellsInfoFromJSON(
 	// 	CATEGORY_INFO_JSON as T_CATEGORY_INFO[],
 	// );
-	const categoriesInfoArr: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
+	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
 		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
 	);
 	const allCurrentGuessInfo = useRef<T_GUESS_CATEGORIES>(
 		deepCopyObject(INIT_GUESS_CATEGORIES),
 	);
 
-	console.log(categoriesInfoArr);
+	console.log(categoriesInfo);
 
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
@@ -52,12 +52,12 @@ const Game: React.FC = () => {
 
 	return (
 		<>
-			{/* <GuessInfoButton */}
-			{/*   allCurrentGuessInfo={allCurrentGuessInfo.current} */}
-			{/*   categoryInfo={allCategoriesInfo.current} */}
-			{/* /> */}
+			{/* <GuessInfoButton
+			  allCurrentGuessInfo={allCurrentGuessInfo.current}
+			  categoryInfo={categoriesInfo}
+			/> */}
 			<GuessBox
-				categoriesInfoArr={categoriesInfoArr}
+				categoriesInfoArr={categoriesInfo}
 				allCurrentGuessInfo={allCurrentGuessInfo}
 			/>
 		</>

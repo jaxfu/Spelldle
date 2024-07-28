@@ -1,13 +1,11 @@
 import styles from "./GuessInfoButton.module.scss";
-import {
-	type T_ALL_CURRENT_GUESS_INFO,
-	type T_CATEGORY_INFO_ALL,
-} from "../../../types";
+import { type T_GUESS_CATEGORIES } from "../../../methods/guesses";
 import { createRequestObjectFromCurrentGuessInfo } from "../../../utils/methods";
+import { type T_CATEGORY_INFO } from "../../../methods/categories";
 
 interface IProps {
-	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO;
-	categoryInfo: T_CATEGORY_INFO_ALL;
+	allCurrentGuessInfo: T_GUESS_CATEGORIES;
+	categoryInfo: T_CATEGORY_INFO[];
 }
 
 const GuessInfoButton: React.FC<IProps> = (props) => {

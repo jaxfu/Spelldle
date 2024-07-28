@@ -1,27 +1,58 @@
 import { useState } from "react";
 import styles from "./GuessCell.module.scss";
-import {
-	type T_GUESS_CATEGORIES,
-	type T_ALL_CURRENT_GUESS_INFO,
-} from "../../../../../../methods/guesses";
+import { type T_GUESS_CATEGORIES } from "../../../../../../methods/guesses";
 import RecommendationBox from "./children/RecommendationBox/RecommendationBox";
 import * as methods from "../../../../../../utils/methods";
-import type { T_CATEGORY_INFO } from "../../../../../../methods/categories";
+import TextInput from "./children/TextInput/TextInput";
+import {
+	type T_CATEGORY_INFO,
+	E_CATEGORY_COMPONENT_TYPE,
+} from "../../../../../../methods/categories";
+import SingleText from "./children/SingleText/SingleText";
 
 interface IProps {
-	// category_name: string;
-	// category_values: string[];
-	category_info: T_CATEGORY_INFO;
+	categoryInfo: T_CATEGORY_INFO;
 	allCurrentGuessInfo: React.MutableRefObject<T_GUESS_CATEGORIES>;
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
-	const [inputValue, setInputValue] = useState<string>("");
-	const [recommendations, setRecommendations] = useState<string[]>([]);
+	const [input, setInput] = useState<string>("");
+
+	const component = (): JSX.Element => {
+		switch (props.categoryInfo.component_type) {
+			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+				return (
+					<>
+						{/* // <TextInput
+					// 	category_name={category_name}
+					// 	recommendationValues={category_values}
+					// 	setRecommendations={setRecommendations}
+					// 	multi={false}
+					// 	inputValue={inputValue}
+					// 	setInputValue={setInputValue}
+					// 	allCurrentGuessInfo={allCurrentGuessInfo}
+					// /> */}
+						<SingleText input={input} setInput={setInput} />
+						<RecommendationBox
+							values={Array.from(props.categoryInfo.values_map.keys())}
+							input={input}
+							setInput={setInput}
+						/>
+					</>
+				);
+			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+				return <div></div>;
+			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+				return <div></div>;
+			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+				return <div></div>;
+		}
+	};
 
 	return (
 		<div className={styles.root}>
-			<h4>{props.category_info.name}</h4>
+			<h4>{props.categoryInfo.name}</h4>
+			{component()}
 			{/* {methods.getUniqueComponents(
 				props.category_name,
 				props.category_values,
@@ -29,12 +60,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 				setInputValue,
 				setRecommendations,
 				props.allCurrentGuessInfo,
-			)}
-			<RecommendationBox
-				recommendations={recommendations}
-				setRecommendations={setRecommendations}
-				setInputValue={setInputValue}
-			/> */}
+			)} */}
 		</div>
 	);
 };

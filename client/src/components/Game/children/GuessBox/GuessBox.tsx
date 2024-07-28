@@ -32,7 +32,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 			elements.push(
 				<GuessCell
 					key={category.name}
-					category_info={category}
+					categoryInfo={category}
 					allCurrentGuessInfo={props.allCurrentGuessInfo}
 				/>,
 			);

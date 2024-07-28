@@ -35,15 +35,6 @@ export function getRecommendations(e: any, values: string[]): string[] {
 	return output;
 }
 
-export function onRecommendationClick(
-	key: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-): void {
-	setInputValue(key);
-	setRecommendations([]);
-}
-
 export function deepCopyObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
@@ -202,20 +193,6 @@ export function clearTokensFromLocalStorage() {
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.access_token);
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
 }
-
-// Data
-// export function setUserDataFromAPIResult(
-//   data: T_APIRESULTS,
-//   userDataRef: React.MutableRefObject(T_USERDATA_STATE),
-//     setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
-//       setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-//         setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
-// ): void {
-//   console.log(`Setting userData: ${JSON.stringify(data.user_data)}`);
-//   setUserData(data.user_data);
-//   setUserIsLoggedIn(true);
-// 	setEnableQueryFn(false);
-// }
 
 export function createRequestObjectFromCurrentGuessInfo(
 	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
