@@ -1,4 +1,4 @@
-import CATEGORY_INFO from "../TEST_INFO.json";
+import CATEGORY_INFO from "../data/CATEGORY_INFO.json";
 
 // TYPES
 export type T_SPELLS_INFO = {
@@ -37,7 +37,7 @@ export type T_CATEGORY_VALUE_MAP = {
 // FUNCTIONS
 function generateAndSetAllIDMapsFromJSON(categoryInfoJson: T_CATEGORY_INFO[]) {
 	for (const category of categoryInfoJson) {
-		category.id_map = generateIdMapFromValues(category.values)
+		category.id_map = generateIdMapFromValues(category.values);
 	}
 }
 

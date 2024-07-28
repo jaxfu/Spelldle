@@ -5,13 +5,14 @@ import {
 	type T_APIRESULT_REGISTER,
 	type T_USERINPUT_REGISTER,
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
+} from "../types";
+import {
 	type T_ALL_CURRENT_GUESS_INFO,
-	type T_CATEGORY_INFO_ALL,
 	type T_GUESS_ALL,
 	type T_GUESS_CATEGORIES,
-} from "../types";
+} from "../methods/guesses";
 import { T_TOKENS } from "../types";
-import { createRequestObjectFromCurrentGuessInfo } from "./methods";
+import { createRequestObjectFromCurrentGuessInfo } from "../utils/methods";
 
 // Routes
 const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";

@@ -1,22 +1,23 @@
 import {
-	type T_ALL_CURRENT_GUESS_INFO,
 	type T_TOKENS,
 	INIT_TOKENS,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
-	type T_GUESS_CATEGORIES,
-	INIT_GUESS_CATEGORIES,
-	type T_CATEGORY_INFO_ALL,
 	T_AUTH_STATUS,
 	INIT_AUTH_STATUS,
 } from "../types";
+import {
+	type T_ALL_CURRENT_GUESS_INFO,
+	type T_GUESS_CATEGORIES,
+	INIT_GUESS_CATEGORIES,
+} from "../methods/guesses";
 import TextInput from "../components/Game/children/GuessBox/children/GuessCell/children/TextInput/TextInput";
 import LevelRitualToggle from "../components/Game/children/GuessBox/children/GuessCell/children/LevelRitualToggle/LevelRitualToggle";
 import ComponentsSelection from "../components/Game/children/GuessBox/children/GuessCell/children/ComponentsSelection/ComponentsSelection";
 import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
-import CATEGORY_INFO from "../CATEGORY_INFO.json";
-import { apiRequestValidateSession } from "./requests";
+import CATEGORY_INFO from "../data/CATEGORY_INFO.json";
+import { apiRequestValidateSession } from "../methods/requests";
 import { AxiosResponse } from "axios";
 
 // Multi

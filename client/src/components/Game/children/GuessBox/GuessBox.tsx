@@ -7,7 +7,7 @@ import {
 	type T_CATEGORY_INFO_ALL,
 } from "../../../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../../utils/requests";
+import { apiRequestMakeGuess } from "../../../../methods/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 

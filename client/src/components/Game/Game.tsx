@@ -3,14 +3,14 @@ import {
 	INIT_GUESS_CATEGORIES,
 	type T_ALL_CURRENT_GUESS_INFO,
 	type T_GUESS_CATEGORIES,
-} from "../../types";
+} from "../../methods/guesses";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import {
 	getUserSessionDataFromStorage,
 	deepCopyObject,
 } from "../../utils/methods";
-import { apiRequestGetPastGuesses } from "../../utils/requests";
+import { apiRequestGetPastGuesses } from "../../methods/requests";
 import { useRef } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
@@ -18,7 +18,7 @@ import {
 	type T_CATEGORY_INFO,
 	type T_SPELLS_INFO,
 } from "../../methods/spells";
-import CATEGORY_INFO_JSON from "../../TEST_INFO.json";
+import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 
 const Game: React.FC = () => {
 	// const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
