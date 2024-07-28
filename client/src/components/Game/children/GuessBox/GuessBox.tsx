@@ -1,15 +1,13 @@
 import GuessCell from "./children/GuessCell/GuessCell";
 import styles from "./GuessBox.module.scss";
 import {
-	T_GUESS_CATEGORIES,
-	T_CATEGORY_VALUE_MAP,
+	type T_GUESS_CATEGORIES,
 	type T_ALL_CURRENT_GUESS_INFO,
-	type T_CATEGORY_INFO_ALL,
-} from "../../../../types";
+} from "../../../../methods/guesses";
+import { type T_CATEGORY_VALUE_MAP } from "../../../../methods/spells";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../methods/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
-import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
 	//allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;

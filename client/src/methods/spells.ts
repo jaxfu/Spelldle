@@ -3,7 +3,7 @@ import CATEGORY_INFO from "../data/CATEGORY_INFO.json";
 // TYPES
 export type T_SPELLS_INFO = {
 	CATEGORY_KEYS: string[];
-	CATEGORY_INFO_MAP: T_CATEGORY_INFO_ALL_MAP;
+	CATEGORY_INFO_MAP: T_CATEGORY_INFO_ALL;
 };
 
 export enum E_CATEGORY_COMPONENT_TYPE {
@@ -13,7 +13,7 @@ export enum E_CATEGORY_COMPONENT_TYPE {
 	LEVEL,
 }
 
-export type T_CATEGORY_INFO_ALL_MAP = Map<string, T_CATEGORY_INFO>;
+export type T_CATEGORY_INFO_ALL = Map<string, T_CATEGORY_INFO>;
 export type T_CATEGORY_INFO = {
 	name: string;
 	values: string[];
@@ -51,8 +51,8 @@ function generateIdMapFromValues(arr: string[]) {
 
 function generateCategoryInfoAllMapFromJSON(
 	categoryInfoJson: T_CATEGORY_INFO[],
-): T_CATEGORY_INFO_ALL_MAP {
-	const map: T_CATEGORY_INFO_ALL_MAP = new Map();
+): T_CATEGORY_INFO_ALL {
+	const map: T_CATEGORY_INFO_ALL = new Map();
 
 	for (const category of categoryInfoJson) {
 		map.set(category.name, category);
