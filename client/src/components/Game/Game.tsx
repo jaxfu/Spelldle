@@ -1,7 +1,6 @@
 import GuessBox from "./children/GuessBox/GuessBox";
 import {
 	INIT_GUESS_CATEGORIES,
-	type T_ALL_CURRENT_GUESS_INFO,
 	type T_GUESS_CATEGORIES,
 } from "../../methods/guesses";
 import { useQuery } from "@tanstack/react-query";
@@ -14,10 +13,10 @@ import { apiRequestGetPastGuesses } from "../../methods/requests";
 import { useRef } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
-	generateSpellsInfoFromJSON,
 	type T_CATEGORY_INFO,
-	type T_SPELLS_INFO,
-} from "../../methods/spells";
+	type T_CATEGORY_INFO_JSON,
+	generateCategoryInfoFromJSON,
+} from "../../methods/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 
 const Game: React.FC = () => {
@@ -27,14 +26,17 @@ const Game: React.FC = () => {
 	// const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
 	//   getAllCategoriesInfo(),
 	// );
-	const spellInfo: T_SPELLS_INFO = generateSpellsInfoFromJSON(
-		CATEGORY_INFO_JSON as T_CATEGORY_INFO[],
+	// const spellsInfo: T_CATEGORIES_INFO = generateSpellsInfoFromJSON(
+	// 	CATEGORY_INFO_JSON as T_CATEGORY_INFO[],
+	// );
+	const categoriesInfoArr: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
+		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
 	);
 	const allCurrentGuessInfo = useRef<T_GUESS_CATEGORIES>(
 		deepCopyObject(INIT_GUESS_CATEGORIES),
 	);
 
-	console.log(spellInfo);
+	console.log(categoriesInfoArr);
 
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
@@ -54,10 +56,10 @@ const Game: React.FC = () => {
 			{/*   allCurrentGuessInfo={allCurrentGuessInfo.current} */}
 			{/*   categoryInfo={allCategoriesInfo.current} */}
 			{/* /> */}
-			{/* <GuessBox
-				SPELL_CATEGORY_MAP={SPELL_CATEGORY_MAP}
+			<GuessBox
+				categoriesInfoArr={categoriesInfoArr}
 				allCurrentGuessInfo={allCurrentGuessInfo}
-			/> */}
+			/>
 		</>
 	);
 };

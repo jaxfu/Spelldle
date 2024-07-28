@@ -1,18 +1,16 @@
 import GuessCell from "./children/GuessCell/GuessCell";
 import styles from "./GuessBox.module.scss";
+import { type T_GUESS_CATEGORIES } from "../../../../methods/guesses";
 import {
-	type T_GUESS_CATEGORIES,
-	type T_ALL_CURRENT_GUESS_INFO,
-} from "../../../../methods/guesses";
-import { type T_CATEGORY_VALUE_MAP } from "../../../../methods/spells";
+	T_CATEGORIES_INFO,
+	type T_CATEGORY_INFO,
+} from "../../../../methods/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../methods/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 
 interface IProps {
-	//allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
-	//allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
-	SPELL_CATEGORY_MAP: T_CATEGORY_VALUE_MAP;
+	categoriesInfoArr: T_CATEGORY_INFO[];
 	allCurrentGuessInfo: React.MutableRefObject<T_GUESS_CATEGORIES>;
 }
 
@@ -30,17 +28,11 @@ const GuessBox: React.FC<IProps> = (props) => {
 	const guessCells = (): JSX.Element[] => {
 		const elements: JSX.Element[] = [];
 
-		for (const outerMapKeys of props.SPELL_CATEGORY_MAP.keys()) {
-			const innerMap = props.SPELL_CATEGORY_MAP.get(outerMapKeys);
-			const innerMapKeysArr: string[] = [];
-			if (innerMap !== undefined) {
-				for (const innerMapKeys of innerMap.keys())
-					innerMapKeysArr.push(innerMapKeys);
-			}
+		for (const category of props.categoriesInfoArr) {
 			elements.push(
 				<GuessCell
-					category_name={outerMapKeys}
-					category_values={innerMapKeysArr}
+					key={category.name}
+					category_info={category}
 					allCurrentGuessInfo={props.allCurrentGuessInfo}
 				/>,
 			);
