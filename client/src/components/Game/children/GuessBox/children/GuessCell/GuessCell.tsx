@@ -33,7 +33,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 					// 	setInputValue={setInputValue}
 					// 	allCurrentGuessInfo={allCurrentGuessInfo}
 					// /> */}
-						<SingleText
+						<TextInput
 							input={input}
 							setInput={setInput}
 							show={show}
