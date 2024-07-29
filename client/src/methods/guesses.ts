@@ -1,27 +1,8 @@
 import { deepCopyObject } from "../utils/methods";
 import { type T_GAME_SESSION } from "../types";
 
-// GUESSES
 export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
 export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
-
-export type T_APIREQUEST_MAKE_GUESS = T_GAME_SESSION & T_GUESS_CATEGORIES;
-export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
-	game_session_id: "",
-	current_round: 0,
-	school: 0,
-	level: {
-		level: 0,
-		is_ritual: false,
-	},
-	casting_time: 0,
-	range: 0,
-	target: 0,
-	duration: 0,
-	components: [0],
-	class: [0],
-	effects: [0],
-};
 
 export type T_GUESS_CATEGORIES = {
 	school: number;
@@ -74,6 +55,18 @@ export const INIT_GUESS_RESULTS: T_GUESS_RESULTS = {
 	effects: 0,
 };
 
+export type T_GUESS_CATEGORIES_MAP = Map<
+	string,
+	| T_GUESS_CATEGORIES_SINGLE_TEXT
+	| T_GUESS_CATEGORIES_MULTI_TEXT
+	| T_GUESS_CATEGORIES_COMPONENTS
+	| T_GUESS_CATEGORIES_LEVEL
+>;
+export type T_GUESS_CATEGORIES_SINGLE_TEXT = number;
+export type T_GUESS_CATEGORIES_MULTI_TEXT = number[];
+export type T_GUESS_CATEGORIES_COMPONENTS = number[];
+export type T_GUESS_CATEGORIES_LEVEL = { level: number; is_ritual: boolean };
+
 export type T_PAST_GUESSES = {
 	categories: T_GUESS_CATEGORIES;
 	results: T_GUESS_RESULTS;
@@ -99,4 +92,22 @@ export const INIT_GUESS_ALL: T_GUESS_ALL = {
 export type T_APIRESULT_GET_GUESSES = {
 	game_session_id: string;
 	guesses: T_PAST_GUESSES[];
+};
+
+export type T_APIREQUEST_MAKE_GUESS = T_GAME_SESSION & T_GUESS_CATEGORIES;
+export const INIT_APIREQUEST_MAKE_GUESS: T_APIREQUEST_MAKE_GUESS = {
+	game_session_id: "",
+	current_round: 0,
+	school: 0,
+	level: {
+		level: 0,
+		is_ritual: false,
+	},
+	casting_time: 0,
+	range: 0,
+	target: 0,
+	duration: 0,
+	components: [0],
+	class: [0],
+	effects: [0],
 };

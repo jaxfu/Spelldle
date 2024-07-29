@@ -5,6 +5,7 @@ interface IProps {
 	setInput: React.Dispatch<React.SetStateAction<string>>;
 	show: boolean;
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
+	validInput: boolean;
 }
 
 const TextInput: React.FC<IProps> = (props) => {
@@ -18,6 +19,7 @@ const TextInput: React.FC<IProps> = (props) => {
 			onBlur={() => props.show && props.setShow(false)}
 			autoComplete="false"
 			className={styles.root}
+			style={props.validInput ? { background: "green" } : { background: "red" }}
 		/>
 	);
 };

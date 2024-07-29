@@ -5,6 +5,7 @@ interface IProps {
 	values: string[];
 	input: string;
 	setInput: React.Dispatch<React.SetStateAction<string>>;
+	setValidInput: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RecommendationBox: React.FC<IProps> = (props) => {
@@ -17,6 +18,7 @@ const RecommendationBox: React.FC<IProps> = (props) => {
 			matches.length == 1 &&
 			matches[0].toLowerCase() === props.input.toLowerCase()
 		) {
+			props.setValidInput(true);
 			return [];
 		}
 

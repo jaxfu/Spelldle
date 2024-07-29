@@ -12,6 +12,7 @@ interface IProps {
 const SingleText: React.FC<IProps> = (props) => {
 	const [input, setInput] = useState<string>("");
 	const [show, setShow] = useState<boolean>(false);
+	const [validInput, setValidInput] = useState<boolean>(false);
 
 	return (
 		<>
@@ -20,12 +21,14 @@ const SingleText: React.FC<IProps> = (props) => {
 				setInput={setInput}
 				show={show}
 				setShow={setShow}
+				validInput={validInput}
 			/>
 			{show && (
 				<RecommendationBox
 					values={Array.from(props.categoryInfo.values_map.keys())}
 					input={input}
 					setInput={setInput}
+					setValidInput={setValidInput}
 				/>
 			)}
 		</>

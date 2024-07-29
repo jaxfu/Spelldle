@@ -1,6 +1,7 @@
 import GuessBox from "./children/GuessBox/GuessBox";
 import {
 	INIT_GUESS_CATEGORIES,
+	T_GUESS_CATEGORIES_MAP,
 	type T_GUESS_CATEGORIES,
 } from "../../methods/guesses";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +17,7 @@ import {
 	type T_CATEGORY_INFO,
 	type T_CATEGORY_INFO_JSON,
 	generateCategoryInfoFromJSON,
+	generateGuessCategoriesMapFromJSON,
 } from "../../methods/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 import GuessDataContext from "../../Contexts/GuessDataContext";
@@ -24,8 +26,10 @@ const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
 		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
 	);
-	const allCurrentGuessInfo = useRef<T_GUESS_CATEGORIES>(
-		deepCopyObject(INIT_GUESS_CATEGORIES),
+	const currentGuessInfo = useRef<T_GUESS_CATEGORIES_MAP>(
+		generateGuessCategoriesMapFromJSON(
+			CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
+		),
 	);
 
 	const { data, isSuccess } = useQuery({
@@ -46,10 +50,8 @@ const Game: React.FC = () => {
 			  allCurrentGuessInfo={allCurrentGuessInfo.current}
 			  categoryInfo={categoriesInfo}
 			/> */}
-			<GuessDataContext.Provider value={allCurrentGuessInfo}>
-				<GuessBox
-					categoriesInfoArr={categoriesInfo}
-				/>
+			<GuessDataContext.Provider value={currentGuessInfo}>
+				<GuessBox categoriesInfoArr={categoriesInfo} />
 			</GuessDataContext.Provider>
 		</>
 	);
