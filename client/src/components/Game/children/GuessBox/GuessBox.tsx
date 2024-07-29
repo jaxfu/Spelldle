@@ -1,17 +1,14 @@
 import GuessCell from "./children/GuessCell/GuessCell";
 import styles from "./GuessBox.module.scss";
 import { type T_GUESS_CATEGORIES } from "../../../../methods/guesses";
-import {
-	T_CATEGORIES_INFO,
-	type T_CATEGORY_INFO,
-} from "../../../../methods/categories";
+import { type T_CATEGORY_INFO } from "../../../../methods/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../methods/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 
+
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
-	allCurrentGuessInfo: React.MutableRefObject<T_GUESS_CATEGORIES>;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -33,7 +30,6 @@ const GuessBox: React.FC<IProps> = (props) => {
 				<GuessCell
 					key={category.name}
 					categoryInfo={category}
-					allCurrentGuessInfo={props.allCurrentGuessInfo}
 				/>,
 			);
 		}

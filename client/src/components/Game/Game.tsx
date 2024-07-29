@@ -10,7 +10,7 @@ import {
 	deepCopyObject,
 } from "../../utils/methods";
 import { apiRequestGetPastGuesses } from "../../methods/requests";
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
 	type T_CATEGORY_INFO,
@@ -18,25 +18,15 @@ import {
 	generateCategoryInfoFromJSON,
 } from "../../methods/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
+import GuessDataContext from "../../Contexts/GuessDataContext";
 
 const Game: React.FC = () => {
-	// const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
-	//   createNewSpellInfoMap(),
-	// );
-	// const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
-	//   getAllCategoriesInfo(),
-	// );
-	// const spellsInfo: T_CATEGORIES_INFO = generateSpellsInfoFromJSON(
-	// 	CATEGORY_INFO_JSON as T_CATEGORY_INFO[],
-	// );
 	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
 		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
 	);
 	const allCurrentGuessInfo = useRef<T_GUESS_CATEGORIES>(
 		deepCopyObject(INIT_GUESS_CATEGORIES),
 	);
-
-	console.log(categoriesInfo);
 
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
@@ -56,10 +46,11 @@ const Game: React.FC = () => {
 			  allCurrentGuessInfo={allCurrentGuessInfo.current}
 			  categoryInfo={categoriesInfo}
 			/> */}
-			<GuessBox
-				categoriesInfoArr={categoriesInfo}
-				allCurrentGuessInfo={allCurrentGuessInfo}
-			/>
+			<GuessDataContext.Provider value={allCurrentGuessInfo}>
+				<GuessBox
+					categoriesInfoArr={categoriesInfo}
+				/>
+			</GuessDataContext.Provider>
 		</>
 	);
 };

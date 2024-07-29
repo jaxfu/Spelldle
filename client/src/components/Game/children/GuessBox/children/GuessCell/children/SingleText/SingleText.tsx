@@ -7,7 +7,6 @@ import { type T_GUESS_CATEGORIES } from "../../../../../../../../methods/guesses
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
-	allCurrentGuessInfo: React.MutableRefObject<T_GUESS_CATEGORIES>;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
