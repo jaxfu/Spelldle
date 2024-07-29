@@ -38,7 +38,7 @@ const RecommendationBox: React.FC<IProps> = (props) => {
 								// Keep focus on text input
 								onMouseDown={(e) => e.preventDefault()}
 							>
-								{value.toString()}
+								{value}
 							</div>
 						);
 					})}
