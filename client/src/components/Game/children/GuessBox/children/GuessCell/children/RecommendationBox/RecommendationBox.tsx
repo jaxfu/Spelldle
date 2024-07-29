@@ -9,17 +9,15 @@ interface IProps {
 
 const RecommendationBox: React.FC<IProps> = (props) => {
 	const recommendations: string[] = useMemo(() => {
-		let matches: string[] = [];
+		const matches = props.values.filter((value) =>
+			value.toLowerCase().includes(props.input.toLowerCase()),
+		);
 
-		if (props.input === "") matches = [];
-		else {
-			matches = props.values.filter((value) =>
-				value.toLowerCase().includes(props.input.toLowerCase()),
-			);
-			
-			if (matches.length == 1 && matches[0].toLowerCase() === props.input.toLowerCase()) {
-				matches = []
-			}
+		if (
+			matches.length == 1 &&
+			matches[0].toLowerCase() === props.input.toLowerCase()
+		) {
+			return [];
 		}
 
 		return matches;
@@ -35,12 +33,7 @@ const RecommendationBox: React.FC<IProps> = (props) => {
 								className={styles.cell}
 								key={value}
 								onClick={() => {
-									// onRecommendationClick(
-									// 	value.toString(),
-									// 	props.setInputValue,
-									// 	props.setRecommendations,
-									// );
-									props.setInput((input) => value)
+									props.setInput((input) => value);
 								}}
 								// Keep focus on text input
 								onMouseDown={(e) => e.preventDefault()}

@@ -17,6 +17,7 @@ interface IProps {
 
 const GuessCell: React.FC<IProps> = (props) => {
 	const [input, setInput] = useState<string>("");
+	const [show, setShow] = useState<boolean>(false);
 
 	const component = (): JSX.Element => {
 		switch (props.categoryInfo.component_type) {
@@ -32,12 +33,19 @@ const GuessCell: React.FC<IProps> = (props) => {
 					// 	setInputValue={setInputValue}
 					// 	allCurrentGuessInfo={allCurrentGuessInfo}
 					// /> */}
-						<SingleText input={input} setInput={setInput} />
-						<RecommendationBox
-							values={Array.from(props.categoryInfo.values_map.keys())}
+						<SingleText
 							input={input}
 							setInput={setInput}
+							show={show}
+							setShow={setShow}
 						/>
+						{show && (
+							<RecommendationBox
+								values={Array.from(props.categoryInfo.values_map.keys())}
+								input={input}
+								setInput={setInput}
+							/>
+						)}
 					</>
 				);
 			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
