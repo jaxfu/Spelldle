@@ -16,6 +16,7 @@ export enum E_CATEGORY_COMPONENT_TYPE {
 export type T_CATEGORY_INFO = {
   name: string;
   values_map: Map<string, number>;
+  values: string[];
   component_type: E_CATEGORY_COMPONENT_TYPE;
   has_modifiers: boolean;
 };
@@ -55,6 +56,7 @@ export function generateCategoryInfoFromJSON(
       name,
       component_type,
       has_modifiers,
+      values,
       values_map: generateValuesMapFromValues(values),
     });
   }
@@ -90,7 +92,7 @@ export function generateGuessCategoriesMapFromJSON(
         break;
     }
 
-    map.set(name.toLowerCase(), value);
+    map.set(name, value);
   }
 
   return map;

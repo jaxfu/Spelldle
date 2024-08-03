@@ -25,14 +25,9 @@ const GuessCell: React.FC<IProps> = (props) => {
     }
   };
 
-  function upperCaseFirstLetter(name: string): string {
-    return name.charAt(0).toUpperCase()
-      + name.slice(1)
-  }
-
   return (
     <div className={styles.root}>
-      <h4>{upperCaseFirstLetter(props.categoryInfo.name)}</h4>
+      <h4>{props.categoryInfo.name}</h4>
       {component()}
     </div>
   );

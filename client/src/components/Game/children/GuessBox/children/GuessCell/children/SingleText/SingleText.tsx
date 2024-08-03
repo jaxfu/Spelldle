@@ -1,9 +1,7 @@
-import styles from "./SingleText.module.scss";
 import TextInput from "./children/TextInput/TextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { type T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
-import { type T_GUESS_CATEGORIES } from "../../../../../../../../methods/guesses";
 
 interface IProps {
   categoryInfo: T_CATEGORY_INFO;
@@ -15,7 +13,7 @@ const SingleText: React.FC<IProps> = (props) => {
   const [validInput, setValidInput] = useState<boolean>(false);
 
   if (props.categoryInfo.values_map.has(input.toLowerCase())) {
-    setValidInput(true);
+    if (!validInput) setValidInput(true);
   } else {
     if (validInput) setValidInput(false);
   }
@@ -31,7 +29,7 @@ const SingleText: React.FC<IProps> = (props) => {
       />
       {show && (
         <RecommendationBox
-          values={Array.from(props.categoryInfo.values_map.keys())}
+          values={props.categoryInfo.values}
           input={input}
           setInput={setInput}
         />
