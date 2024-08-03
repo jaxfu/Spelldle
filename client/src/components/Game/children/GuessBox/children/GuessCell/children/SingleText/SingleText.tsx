@@ -6,33 +6,38 @@ import { type T_CATEGORY_INFO } from "../../../../../../../../methods/categories
 import { type T_GUESS_CATEGORIES } from "../../../../../../../../methods/guesses";
 
 interface IProps {
-	categoryInfo: T_CATEGORY_INFO;
+  categoryInfo: T_CATEGORY_INFO;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
-	const [input, setInput] = useState<string>("");
-	const [show, setShow] = useState<boolean>(false);
-	const [validInput, setValidInput] = useState<boolean>(false);
+  const [input, setInput] = useState<string>("");
+  const [show, setShow] = useState<boolean>(false);
+  const [validInput, setValidInput] = useState<boolean>(false);
 
-	return (
-		<>
-			<TextInput
-				input={input}
-				setInput={setInput}
-				show={show}
-				setShow={setShow}
-				validInput={validInput}
-			/>
-			{show && (
-				<RecommendationBox
-					values={Array.from(props.categoryInfo.values_map.keys())}
-					input={input}
-					setInput={setInput}
-					setValidInput={setValidInput}
-				/>
-			)}
-		</>
-	);
+  if (props.categoryInfo.values_map.has(input.toLowerCase())) {
+    setValidInput(true);
+  } else {
+    if (validInput) setValidInput(false);
+  }
+
+  return (
+    <>
+      <TextInput
+        input={input}
+        setInput={setInput}
+        show={show}
+        setShow={setShow}
+        validInput={validInput}
+      />
+      {show && (
+        <RecommendationBox
+          values={Array.from(props.categoryInfo.values_map.keys())}
+          input={input}
+          setInput={setInput}
+        />
+      )}
+    </>
+  );
 };
 
 export default SingleText;
