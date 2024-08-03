@@ -46,11 +46,8 @@ const Game: React.FC = () => {
 
 	return (
 		<>
-			{/* <GuessInfoButton
-			  allCurrentGuessInfo={allCurrentGuessInfo.current}
-			  categoryInfo={categoriesInfo}
-			/> */}
 			<GuessDataContext.Provider value={currentGuessInfo}>
+				<GuessInfoButton />
 				<GuessBox categoriesInfoArr={categoriesInfo} />
 			</GuessDataContext.Provider>
 		</>
