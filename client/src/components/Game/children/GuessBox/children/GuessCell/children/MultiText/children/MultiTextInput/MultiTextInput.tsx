@@ -3,11 +3,19 @@ import styles from "./MultiTextInput.module.scss";
 interface IProps {
 	input: string;
 	setInput: React.Dispatch<React.SetStateAction<string>>;
-	show: boolean;
-	setShow: React.Dispatch<React.SetStateAction<boolean>>;
+	showRecommendationBox: boolean;
+	setShowRecommendationBox: React.Dispatch<React.SetStateAction<boolean>>;
+	setGuesses: React.Dispatch<React.SetStateAction<string[]>>;
+	hasValidInput: boolean;
+	removeGuessFromRemainingValues: (guess: string) => void;
 }
 
 const MultiTextInput: React.FC<IProps> = (props) => {
+	function addGuessToGuessesBox(guess: string) {
+		props.setGuesses((guesses) => [...guesses, guess]);
+		props.setInput("");
+	}
+
 	return (
 		<span className={styles.root}>
 			<input
@@ -15,11 +23,24 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 				name="guess"
 				value={props.input}
 				onChange={(e) => props.setInput(e.target.value)}
-				onClick={() => !props.show && props.setShow(true)}
-				onBlur={() => props.show && props.setShow(false)}
+				onClick={() =>
+					!props.showRecommendationBox && props.setShowRecommendationBox(true)
+				}
+				onBlur={() =>
+					props.showRecommendationBox && props.setShowRecommendationBox(false)
+				}
 				autoComplete="false"
 			/>
-			<button>+</button>
+			{props.hasValidInput && (
+				<button
+					onClick={() => {
+						addGuessToGuessesBox(props.input);
+						props.removeGuessFromRemainingValues(props.input);
+					}}
+				>
+					+
+				</button>
+			)}
 		</span>
 	);
 };

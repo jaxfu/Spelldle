@@ -11,22 +11,12 @@ interface IProps {
 const SingleText: React.FC<IProps> = (props) => {
 	const [input, setInput] = useState<string>("");
 	const [show, setShow] = useState<boolean>(false);
-	const [validInput, setValidInput] = useState<boolean>(false);
 
 	const guessData = useContext(GuessDataContext);
 
 	const hasValidInput: boolean = useMemo(() => {
 		return props.categoryInfo.values_map.has(input.toLowerCase());
 	}, [input]);
-
-	function updateValidInput(hasValidInput: boolean): void {
-		if (!validInput && hasValidInput) {
-			setValidInput(true);
-		}
-		if (validInput && !hasValidInput) {
-			setValidInput(false);
-		}
-	}
 
 	function updateGuessCategoriesMap(hasValidInput: boolean): void {
 		if (guessData !== null) {
@@ -43,7 +33,6 @@ const SingleText: React.FC<IProps> = (props) => {
 	}
 
 	useEffect(() => {
-		updateValidInput(hasValidInput);
 		updateGuessCategoriesMap(hasValidInput);
 	}, [hasValidInput]);
 
