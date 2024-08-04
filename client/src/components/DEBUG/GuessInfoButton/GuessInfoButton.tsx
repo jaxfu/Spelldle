@@ -11,19 +11,19 @@ import GuessDataContext from "../../../Contexts/GuessDataContext";
 // }
 
 const GuessInfoButton: React.FC = () => {
-	const currentGuessInfo = useContext(GuessDataContext);
+  const currentGuessInfo = useContext(GuessDataContext);
 
-	return (
-		<div
-			className={styles.root}
-			onClick={() => {
-				console.log("CURRENT GUESSINFO: ");
-				console.log(currentGuessInfo);
-			}}
-		>
-			<h1>GI</h1>
-		</div>
-	);
+  return (
+    <div
+      className={styles.root}
+      onClick={() => {
+        console.log("CURRENT GUESSINFO: ");
+        currentGuessInfo && console.log(currentGuessInfo?.current);
+      }}
+    >
+      <h1>GI</h1>
+    </div>
+  );
 };
 
 export default GuessInfoButton;
