@@ -9,46 +9,46 @@ import GuessDataContext from "../../../../Contexts/GuessDataContext";
 import { useContext } from "react";
 
 interface IProps {
-  categoriesInfoArr: T_CATEGORY_INFO[];
+	categoriesInfoArr: T_CATEGORY_INFO[];
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
-  const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: apiRequestMakeGuess,
-    onSuccess: (data) => {
-      console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
-    },
-  });
+	const mutation = useMutation({
+		mutationFn: apiRequestMakeGuess,
+		onSuccess: (data) => {
+			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
+		},
+	});
 
-  const guessCells = (): JSX.Element[] => {
-    const elements: JSX.Element[] = [];
+	const guessCells = (): JSX.Element[] => {
+		const elements: JSX.Element[] = [];
 
-    for (const category of props.categoriesInfoArr) {
-      elements.push(<GuessCell key={category.name} categoryInfo={category} />);
-    }
+		for (const category of props.categoriesInfoArr) {
+			elements.push(<GuessCell key={category.name} categoryInfo={category} />);
+		}
 
-    return elements;
-  };
+		return elements;
+	};
 
-  return (
-    <div className={styles.root}>
-      {guessCells()}
-      <button
-      // onClick={() => {
-      //   mutation.mutate({
-      //     allCurrentGuessInfo: props.allCurrentGuessInfo.current,
-      //     allCategoriesInfo: props.allCategoriesInfo.current,
-      //     accessToken: getUserSessionDataFromStorage().access_token,
-      //   });
-      // }}
-      >
-        Submit
-      </button>
-    </div>
-  );
+	return (
+		<div className={styles.root}>
+			{guessCells()}
+			<button
+			// onClick={() => {
+			//   mutation.mutate({
+			//     allCurrentGuessInfo: props.allCurrentGuessInfo.current,
+			//     allCategoriesInfo: props.allCategoriesInfo.current,
+			//     accessToken: getUserSessionDataFromStorage().access_token,
+			//   });
+			// }}
+			>
+				Submit
+			</button>
+		</div>
+	);
 };
 
 export default GuessBox;
