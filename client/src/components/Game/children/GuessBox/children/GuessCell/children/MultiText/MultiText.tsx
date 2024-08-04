@@ -17,9 +17,11 @@ const MultiText: React.FC<IProps> = (props) => {
 
   const remainingValues = useRef<string[]>([...props.categoryInfo.values]);
 
+  const guessData = useContext(GuessDataContext);
+
   const hasValidInput: boolean = useMemo(() => {
     for (const guess of guesses) {
-      if (guess.toLowerCase() === input.toLowerCase()) return false
+      if (guess.toLowerCase() === input.toLowerCase()) return false;
     }
 
     return props.categoryInfo.values_map.has(input.toLowerCase());
@@ -35,18 +37,43 @@ const MultiText: React.FC<IProps> = (props) => {
     remainingValues.current.push(guess);
   }
 
+  function updateGuessCategoriesMap(): void {
+    if (guessData !== null) {
+      const mapArr: number[] = [];
+
+      for (const guess of guesses) {
+        const valueId = props.categoryInfo.values_map.get(guess.toLowerCase());
+        if (valueId !== undefined) {
+          mapArr.push(valueId);
+        }
+      }
+
+      guessData.current.set(props.categoryInfo.name, mapArr.sort());
+    }
+  }
+
+  useEffect(() => {
+    updateGuessCategoriesMap();
+  }, [guesses]);
+
   return (
     <div className={styles.root}>
       <div>
         {guesses.map((guess) => {
-          {/*TODO: remove to own component and style*/ }
+          {
+            /*TODO: remove to own component and style*/
+          }
           return (
             <div key={guess}>
               {guess}
-              <button onClick={() => {
-                setGuesses(guesses.filter((g) => g !== guess));
-                addGuessToRemainingValues(guess);
-              }}>-</button>
+              <button
+                onClick={() => {
+                  setGuesses(guesses.filter((g) => g !== guess));
+                  addGuessToRemainingValues(guess);
+                }}
+              >
+                -
+              </button>
             </div>
           );
         })}
