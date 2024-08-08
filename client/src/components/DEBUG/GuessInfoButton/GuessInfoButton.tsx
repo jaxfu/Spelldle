@@ -1,30 +1,24 @@
 import styles from "./GuessInfoButton.module.scss";
-import {
-	type T_ALL_CURRENT_GUESS_INFO,
-	type T_CATEGORY_INFO_ALL,
-} from "../../../types";
+import { type T_GUESS_CATEGORIES } from "../../../methods/guesses";
 import { createRequestObjectFromCurrentGuessInfo } from "../../../utils/methods";
+import { type T_CATEGORY_INFO } from "../../../methods/categories";
+import { useContext } from "react";
+import GuessDataContext from "../../../Contexts/GuessDataContext";
 
-interface IProps {
-	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO;
-	categoryInfo: T_CATEGORY_INFO_ALL;
-}
+// interface IProps {
+// 	allCurrentGuessInfo: T_GUESS_CATEGORIES;
+// 	categoryInfo: T_CATEGORY_INFO[];
+// }
 
-const GuessInfoButton: React.FC<IProps> = (props) => {
+const GuessInfoButton: React.FC = () => {
+	const currentGuessInfo = useContext(GuessDataContext);
+
 	return (
 		<div
 			className={styles.root}
 			onClick={() => {
-				console.log("CURRENT GUESSINFO: {");
-				props.allCurrentGuessInfo.forEach((value: any, key: any) => {
-					console.log(`${key}: ${value}`);
-				});
-				console.log("}");
-
-				createRequestObjectFromCurrentGuessInfo(
-					props.allCurrentGuessInfo,
-					props.categoryInfo,
-				);
+				console.log("CURRENT GUESSINFO: ");
+				currentGuessInfo && console.log(currentGuessInfo?.current);
 			}}
 		>
 			<h1>GI</h1>

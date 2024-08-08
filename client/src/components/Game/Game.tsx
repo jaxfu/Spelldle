@@ -1,40 +1,36 @@
 import GuessBox from "./children/GuessBox/GuessBox";
 import {
 	INIT_GUESS_CATEGORIES,
-	type T_ALL_CURRENT_GUESS_INFO,
+	T_GUESS_CATEGORIES_MAP,
 	type T_GUESS_CATEGORIES,
-} from "../../types";
+} from "../../methods/guesses";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import {
 	getUserSessionDataFromStorage,
 	deepCopyObject,
 } from "../../utils/methods";
-import { apiRequestGetPastGuesses } from "../../utils/requests";
-import { useRef } from "react";
+import { apiRequestGetPastGuesses } from "../../methods/requests";
+import { useRef, useContext } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
-	generateSpellsInfoFromJSON,
 	type T_CATEGORY_INFO,
-	type T_SPELLS_INFO,
-} from "../../methods/spells";
-import CATEGORY_INFO_JSON from "../../TEST_INFO.json";
+	type T_CATEGORY_INFO_JSON,
+	generateCategoryInfoFromJSON,
+	generateGuessCategoriesMapFromJSON,
+} from "../../methods/categories";
+import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
+import GuessDataContext from "../../Contexts/GuessDataContext";
 
 const Game: React.FC = () => {
-	// const allCurrentGuessInfo = useRef<T_ALL_CURRENT_GUESS_INFO>(
-	//   createNewSpellInfoMap(),
-	// );
-	// const allCategoriesInfo = useRef<T_ALL_POSSIBLE_CATEGORIES_INFO>(
-	//   getAllCategoriesInfo(),
-	// );
-	const spellInfo: T_SPELLS_INFO = generateSpellsInfoFromJSON(
-		CATEGORY_INFO_JSON as T_CATEGORY_INFO[],
+	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
+		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
 	);
-	const allCurrentGuessInfo = useRef<T_GUESS_CATEGORIES>(
-		deepCopyObject(INIT_GUESS_CATEGORIES),
+	const currentGuessInfo = useRef<T_GUESS_CATEGORIES_MAP>(
+		generateGuessCategoriesMapFromJSON(
+			CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
+		),
 	);
-
-	console.log(spellInfo);
 
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
@@ -50,14 +46,10 @@ const Game: React.FC = () => {
 
 	return (
 		<>
-			{/* <GuessInfoButton */}
-			{/*   allCurrentGuessInfo={allCurrentGuessInfo.current} */}
-			{/*   categoryInfo={allCategoriesInfo.current} */}
-			{/* /> */}
-			{/* <GuessBox
-				SPELL_CATEGORY_MAP={SPELL_CATEGORY_MAP}
-				allCurrentGuessInfo={allCurrentGuessInfo}
-			/> */}
+			<GuessDataContext.Provider value={currentGuessInfo}>
+				<GuessInfoButton />
+				<GuessBox categoriesInfoArr={categoriesInfo} />
+			</GuessDataContext.Provider>
 		</>
 	);
 };
