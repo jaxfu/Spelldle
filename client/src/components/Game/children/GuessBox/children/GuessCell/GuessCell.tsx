@@ -7,6 +7,7 @@ import {
 import SingleText from "./children/SingleText/SingleText";
 import MultiText from "./children/MultiText/MultiText";
 import Components from "./children/Components/Components";
+import Level from "./children/Level/Level";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -22,7 +23,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
 				return <Components {...props} />;
 			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
-				return <div>lvl</div>;
+				return <Level {...props} />;
 		}
 	};
 

@@ -1,8 +1,12 @@
 import TextInput from "./children/TextInput/TextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { useState, useMemo, useContext, useEffect } from "react";
-import { type T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
+import {
+	E_CATEGORY_COMPONENT_TYPE,
+	type T_CATEGORY_INFO,
+} from "../../../../../../../../methods/categories";
 import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
+import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../methods/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -18,7 +22,7 @@ const SingleText: React.FC<IProps> = (props) => {
 		return props.categoryInfo.values_map.has(input.toLowerCase());
 	}, [input]);
 
-	function updateGuessCategoriesMap(hasValidInput: boolean): void {
+	function updateGuessCategoriesMapSingleText(hasValidInput: boolean): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
 				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
@@ -32,8 +36,41 @@ const SingleText: React.FC<IProps> = (props) => {
 		}
 	}
 
+	function updateGuessCategoriesMapLevelText(hasValidInput: boolean): void {
+		if (guessData !== null) {
+			const currentValue = guessData.current.get(
+				props.categoryInfo.name,
+			) as T_GUESS_CATEGORIES_LEVEL;
+
+			if (hasValidInput) {
+				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
+
+				if (valueId !== undefined && currentValue !== undefined) {
+					guessData.current.set(props.categoryInfo.name, {
+						level: valueId,
+						is_ritual: currentValue.is_ritual,
+					});
+				}
+			} else {
+				guessData.current.set(props.categoryInfo.name, {
+					level: -1,
+					is_ritual: currentValue.is_ritual,
+				});
+			}
+		}
+	}
+
 	useEffect(() => {
-		updateGuessCategoriesMap(hasValidInput);
+		if (
+			props.categoryInfo.component_type ===
+			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT
+		) {
+			updateGuessCategoriesMapSingleText(hasValidInput);
+		} else if (
+			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
+		) {
+			updateGuessCategoriesMapLevelText(hasValidInput);
+		}
 	}, [hasValidInput]);
 
 	return (
