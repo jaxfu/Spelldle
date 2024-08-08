@@ -38,23 +38,23 @@ const SingleText: React.FC<IProps> = (props) => {
 
 	function updateGuessCategoriesMapLevelText(hasValidInput: boolean): void {
 		if (guessData !== null) {
-			const currentValue = guessData.current.get(
+			const currentData = guessData.current.get(
 				props.categoryInfo.name,
 			) as T_GUESS_CATEGORIES_LEVEL;
 
 			if (hasValidInput) {
 				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
 
-				if (valueId !== undefined && currentValue !== undefined) {
+				if (valueId !== undefined && currentData !== undefined) {
 					guessData.current.set(props.categoryInfo.name, {
 						level: valueId,
-						is_ritual: currentValue.is_ritual,
+						is_ritual: currentData.is_ritual,
 					});
 				}
 			} else {
 				guessData.current.set(props.categoryInfo.name, {
 					level: -1,
-					is_ritual: currentValue.is_ritual,
+					is_ritual: currentData.is_ritual,
 				});
 			}
 		}

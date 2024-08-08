@@ -42,6 +42,7 @@ const Components: React.FC<IProps> = (props) => {
 								<input
 									type="checkbox"
 									name={lowerCase}
+									id={lowerCase}
 									onChange={(e) => {
 										updateGuessCategoriesMap(e, valueId);
 									}}
