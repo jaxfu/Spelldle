@@ -1,17 +1,10 @@
 import GuessBox from "./children/GuessBox/GuessBox";
-import {
-	INIT_GUESS_CATEGORIES,
-	T_GUESS_CATEGORIES_MAP,
-	type T_GUESS_CATEGORIES,
-} from "../../methods/guesses";
+import { T_GUESS_CATEGORIES_MAP } from "../../methods/guesses";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
-import {
-	getUserSessionDataFromStorage,
-	deepCopyObject,
-} from "../../utils/methods";
+import { getUserSessionDataFromStorage } from "../../utils/methods";
 import { apiRequestGetPastGuesses } from "../../methods/requests";
-import { useRef, useContext } from "react";
+import { useRef } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
 	type T_CATEGORY_INFO,

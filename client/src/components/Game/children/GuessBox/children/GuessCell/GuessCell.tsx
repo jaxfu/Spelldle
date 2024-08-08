@@ -1,5 +1,4 @@
 import styles from "./GuessCell.module.scss";
-import { type T_GUESS_CATEGORIES } from "../../../../../../methods/guesses";
 import {
 	type T_CATEGORY_INFO,
 	E_CATEGORY_COMPONENT_TYPE,

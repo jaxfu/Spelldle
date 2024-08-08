@@ -1,115 +1,101 @@
 import axios, { AxiosResponse } from "axios";
 import {
-  type T_APIRESULT_LOGIN,
-  type T_USERINPUT_LOGIN,
-  type T_APIRESULT_REGISTER,
-  type T_USERINPUT_REGISTER,
-  type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
+	type T_APIRESULT_LOGIN,
+	type T_USERINPUT_LOGIN,
+	type T_APIRESULT_REGISTER,
+	type T_USERINPUT_REGISTER,
+	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-  T_GUESS_CATEGORIES_MAP,
-  type T_ALL_CURRENT_GUESS_INFO,
-  type T_GUESS_ALL,
-  type T_GUESS_CATEGORIES,
+	T_GUESS_CATEGORIES,
+	T_GUESS_CATEGORIES_MAP,
+	type T_GUESS_ALL,
 } from "../methods/guesses";
 import { T_TOKENS } from "../types";
-import { createRequestObjectFromCurrentGuessInfo } from "../utils/methods";
 
 // Routes
 const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";
 const API_ROUTES = {
-  LOGIN: ROUTE_PREFIX + "/api/login",
-  REGISTER: ROUTE_PREFIX + "/api/register",
-  VALIDATE: ROUTE_PREFIX + "/api/validateSession",
-  MAKE_GUESS: ROUTE_PREFIX + "/api/makeGuess",
-  GET_PAST_GUESSES: ROUTE_PREFIX + "/api/getPastGuesses",
+	LOGIN: ROUTE_PREFIX + "/api/login",
+	REGISTER: ROUTE_PREFIX + "/api/register",
+	VALIDATE: ROUTE_PREFIX + "/api/validateSession",
+	MAKE_GUESS: ROUTE_PREFIX + "/api/makeGuess",
+	GET_PAST_GUESSES: ROUTE_PREFIX + "/api/getPastGuesses",
 };
 
 export async function apiRequestLogin(
-  userInput: T_USERINPUT_LOGIN,
+	userInput: T_USERINPUT_LOGIN,
 ): Promise<AxiosResponse<T_APIRESULT_LOGIN>> {
-  try {
-    return await axios<T_APIRESULT_LOGIN>({
-      method: "POST",
-      url: API_ROUTES.LOGIN,
-      data: {
-        ...userInput,
-      },
-    });
-  } catch (err: any) {
-    throw new Error(err);
-  }
+	return await axios<T_APIRESULT_LOGIN>({
+		method: "POST",
+		url: API_ROUTES.LOGIN,
+		data: {
+			...userInput,
+		},
+	});
 }
 
 export async function apiRequestRegister(
-  userInput: T_USERINPUT_REGISTER,
+	userInput: T_USERINPUT_REGISTER,
 ): Promise<AxiosResponse<T_APIRESULT_REGISTER>> {
-  try {
-    return await axios<T_APIRESULT_REGISTER>({
-      method: "POST",
-      url: API_ROUTES.REGISTER,
-      data: {
-        username: userInput.username,
-        password: userInput.password,
-        first_name: userInput.first_name,
-        last_name: userInput.last_name,
-      },
-    });
-  } catch (err: any) {
-    throw new Error(err);
-  }
+	return await axios<T_APIRESULT_REGISTER>({
+		method: "POST",
+		url: API_ROUTES.REGISTER,
+		data: {
+			username: userInput.username,
+			password: userInput.password,
+			first_name: userInput.first_name,
+			last_name: userInput.last_name,
+		},
+	});
 }
 
 export async function apiRequestValidateSession(
-  userDataTokens: T_TOKENS,
+	userDataTokens: T_TOKENS,
 ): Promise<AxiosResponse<T_APIRESULT_VALIDATE_ACCESS_TOKEN>> {
-  console.log("Running apiRequestValidateSession");
-  try {
-    return await axios<T_APIRESULT_VALIDATE_ACCESS_TOKEN>({
-      method: "POST",
-      url: API_ROUTES.VALIDATE,
-      headers: {
-        Authorization: `Bearer ${userDataTokens.access_token}`,
-      },
-    });
-  } catch (err: any) {
-    throw new Error(err);
-  }
+	console.log("Running apiRequestValidateSession");
+	return await axios<T_APIRESULT_VALIDATE_ACCESS_TOKEN>({
+		method: "POST",
+		url: API_ROUTES.VALIDATE,
+		headers: {
+			Authorization: `Bearer ${userDataTokens.access_token}`,
+		},
+	});
 }
 
 interface T_ARG_APIREQUEST_MAKE_GUESS {
-  accessToken: string;
-  guessData: T_GUESS_CATEGORIES_MAP;
+	accessToken: string;
+	guessData: T_GUESS_CATEGORIES_MAP;
 }
 
 export async function apiRequestMakeGuess(
-  paramObject: T_ARG_APIREQUEST_MAKE_GUESS,
+	paramObject: T_ARG_APIREQUEST_MAKE_GUESS,
 ): Promise<AxiosResponse<string>> {
-  return await axios<string>({
-    method: "POST",
-    url: API_ROUTES.MAKE_GUESS,
-    data: {
-      ...Object.fromEntries(paramObject.guessData),
-    },
-    headers: {
-      Authorization: `Bearer ${paramObject.accessToken}`,
-    },
-  });
+	return await axios<string>({
+		method: "POST",
+		url: API_ROUTES.MAKE_GUESS,
+		data: {
+			...Object.fromEntries(paramObject.guessData),
+		},
+		headers: {
+			Authorization: `Bearer ${paramObject.accessToken}`,
+		},
+	});
 }
 
 export async function apiRequestGetPastGuesses(
-  accessToken: string,
+	accessToken: string,
 ): Promise<AxiosResponse<T_GUESS_ALL[]>> {
-  console.log("Running apiRequestGetPastGuesses");
-  try {
-    return await axios<T_GUESS_ALL[]>({
-      method: "POST",
-      url: API_ROUTES.GET_PAST_GUESSES,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-  } catch (err: any) {
-    throw new Error(err);
-  }
+	console.log("Running apiRequestGetPastGuesses");
+	try {
+		return await axios<T_GUESS_ALL[]>({
+			method: "POST",
+			url: API_ROUTES.GET_PAST_GUESSES,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+	} catch (err: any) {
+		throw new Error(err);
+	}
 }

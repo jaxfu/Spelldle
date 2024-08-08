@@ -165,19 +165,13 @@ func TestRoutes(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
 		invalidTokens := types.AllTokens{
-			AccessToken: types.AccessToken{
-				AccessToken: "invalid",
-			},
-			RefreshToken: types.RefreshToken{
-				RefreshToken: "invalid",
-			},
+			AccessToken:  "invalid",
+			RefreshToken: "invalid",
 		}
 
 		if err := testHelpers.TestPostRequestWithAuthTokens(
 			consts.RouteUrlValidateSession,
-			&types.AccessToken{
-				AccessToken: "test",
-			},
+			&invalidTokens.AccessToken,
 			&responseData,
 			ValidateSession(db),
 			invalidTokens,
