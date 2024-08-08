@@ -10,12 +10,11 @@
 	position: fixed;
 	top: 0;
 	z-index: 1;
+	overflow: hidden;
 
 	& > span {
 		border: $border;
 		height: 100%;
 		@include flex-center;
 	}
-
-	overflow: hidden;
 }
