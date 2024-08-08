@@ -35,7 +35,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
-		fmt.Printf("PAYLOAD: %v\n", payload)
+		fmt.Printf("PAYLOAD: %+v\n", payload)
 
 		// get gameSession
 		gameSession, err := db.GetGameSessionByUserID(userID)

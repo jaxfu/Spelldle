@@ -7,6 +7,7 @@ import { apiRequestMakeGuess } from "../../../../methods/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import GuessDataContext from "../../../../Contexts/GuessDataContext";
 import { useContext } from "react";
+import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
@@ -23,6 +24,8 @@ const GuessBox: React.FC<IProps> = (props) => {
 		},
 	});
 
+	const guessData = useContext(GuessDataContext);
+
 	const guessCells = (): JSX.Element[] => {
 		const elements: JSX.Element[] = [];
 
@@ -37,13 +40,14 @@ const GuessBox: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			{guessCells()}
 			<button
-			// onClick={() => {
-			//   mutation.mutate({
-			//     allCurrentGuessInfo: props.allCurrentGuessInfo.current,
-			//     allCategoriesInfo: props.allCategoriesInfo.current,
-			//     accessToken: getUserSessionDataFromStorage().access_token,
-			//   });
-			// }}
+				onClick={() => {
+					if (guessData !== null) {
+						mutation.mutate({
+							accessToken: getUserSessionDataFromStorage().access_token,
+							guessData: guessData?.current,
+						});
+					}
+				}}
 			>
 				Submit
 			</button>
