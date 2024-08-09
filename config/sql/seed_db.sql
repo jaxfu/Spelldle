@@ -20,9 +20,6 @@ VALUES (1, 1, false);
 INSERT INTO users.data(user_id, username, password, first_name, last_name)
 VALUES (1, 'poemmys', 'pass', 'Jackson', 'Furr');
 
-INSERT INTO users.game_sessions(user_id, game_session_id)
-VALUES (1, 'TEST_ID');
-
 INSERT INTO game_sessions.data(game_session_id, user_id, spell_id, rounds)
 VALUES ('TEST_ID', 1, 1, 3);
 
