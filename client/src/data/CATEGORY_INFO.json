@@ -1,5 +1,5 @@
-{
-	"SCHOOL": {
+[
+	{
 		"name": "School",
 		"values": [
 			"Abjuration",
@@ -12,10 +12,10 @@
 			"Necromancy",
 			"Transmutation"
 		],
-		"has_multi": false,
+		"component_type": 0,
 		"has_modifiers": false
 	},
-	"LEVEL": {
+	{
 		"name": "Level",
 		"values": [
 			"1st",
@@ -29,10 +29,10 @@
 			"9th",
 			"Cantrip"
 		],
-		"has_multi": false,
+		"component_type": 3,
 		"has_modifiers": true
 	},
-	"CASTING_TIME": {
+	{
 		"name": "Casting Time",
 		"values": [
 			"1 Action",
@@ -43,10 +43,10 @@
 			"1 hour",
 			"1+ hours"
 		],
-		"has_multi": false,
+		"component_type": 0,
 		"has_modifiers": false
 	},
-	"RANGE": {
+	{
 		"name": "Range",
 		"values": [
 			"Touch",
@@ -58,22 +58,22 @@
 			"120 Feet",
 			"120+ Feet"
 		],
-		"has_multi": false,
+		"component_type": 0,
 		"has_modifiers": false
 	},
-	"TARGET": {
+	{
 		"name": "Target",
 		"values": ["Creature", "Object", "Area", "Point", "Unnocupied Space"],
-		"has_multi": false,
+		"component_type": 0,
 		"has_modifiers": false
 	},
-	"COMPONENTS": {
+	{
 		"name": "Components",
 		"values": ["V", "S", "M"],
-		"has_multi": true,
+		"component_type": 2,
 		"has_modifiers": false
 	},
-	"DURATION": {
+	{
 		"name": "Duration",
 		"values": [
 			"Instantaneous",
@@ -85,10 +85,10 @@
 			"8+ Hours",
 			"Until Dispelled"
 		],
-		"has_multi": false,
+		"component_type": 0,
 		"has_modifiers": true
 	},
-	"CLASS": {
+	{
 		"name": "Class",
 		"values": [
 			"Artificer",
@@ -101,10 +101,10 @@
 			"Warlock",
 			"Wizard"
 		],
-		"has_multi": true,
+		"component_type": 1,
 		"has_modifiers": false
 	},
-	"EFFECTS": {
+	{
 		"name": "Effects",
 		"values": [
 			"Damage",
@@ -157,7 +157,7 @@
 			"Slashing",
 			"Thunder"
 		],
-		"has_multi": true,
+		"component_type": 1,
 		"has_modifiers": false
 	}
-}
+]

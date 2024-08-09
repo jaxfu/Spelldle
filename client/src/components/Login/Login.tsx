@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Login.module.scss";
-import { apiRequestLogin } from "../../utils/requests.ts";
+import { apiRequestLogin } from "../../methods/requests.ts";
 import {
 	INIT_USERINPUT_LOGIN,
 	type T_APIRESULT_LOGIN,

@@ -1,40 +1,48 @@
 import GuessBox from "./children/GuessBox/GuessBox";
-import {
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
-	type T_ALL_CURRENT_GUESS_INFO,
-	type T_GAME_SESSION,
-	INIT_GAME_SESSION_DATA,
-} from "../../types";
+import { T_GUESS_CATEGORIES_MAP } from "../../methods/guesses";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
+import { getUserSessionDataFromStorage } from "../../utils/methods";
+import { apiRequestGetPastGuesses } from "../../methods/requests";
 import { useRef } from "react";
+import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
-	deepCopyObject,
-	getUserSessionDataFromStorage,
-} from "../../utils/methods";
-import {
-	apiRequestGetPastGuesses,
-	apiRequestMakeGuess,
-} from "../../utils/requests";
+	type T_CATEGORY_INFO,
+	type T_CATEGORY_INFO_JSON,
+	generateCategoryInfoFromJSON,
+	generateGuessCategoriesMapFromJSON,
+} from "../../methods/categories";
+import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
+import GuessDataContext from "../../Contexts/GuessDataContext";
 
-interface IProps {
-	allCategoriesInfo: React.MutableRefObject<T_ALL_POSSIBLE_CATEGORIES_INFO>;
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>;
-}
+const Game: React.FC = () => {
+	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
+		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
+	);
+	const currentGuessInfo = useRef<T_GUESS_CATEGORIES_MAP>(
+		generateGuessCategoriesMapFromJSON(
+			CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
+		),
+	);
 
-const Game: React.FC<IProps> = (props) => {
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
 		queryFn: () =>
 			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
 	});
 
+	if (isSuccess) {
+		// for (const guess of data.data) {
+		// 	console.log(`guess ${guess.round}: ${JSON.stringify(guess)}`);
+		// }
+	}
+
 	return (
 		<>
-			<GuessBox
-				allCategoriesInfo={props.allCategoriesInfo}
-				allCurrentGuessInfo={props.allCurrentGuessInfo}
-			/>
+			<GuessDataContext.Provider value={currentGuessInfo}>
+				<GuessInfoButton />
+				<GuessBox categoriesInfoArr={categoriesInfo} />
+			</GuessDataContext.Provider>
 		</>
 	);
 };

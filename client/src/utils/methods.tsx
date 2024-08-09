@@ -1,121 +1,24 @@
 import {
-	type T_ALL_CURRENT_GUESS_INFO,
 	type T_TOKENS,
 	INIT_TOKENS,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
-	type T_GUESS_CATEGORIES,
-	INIT_GUESS_CATEGORIES,
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
 	T_AUTH_STATUS,
 	INIT_AUTH_STATUS,
 } from "../types";
-import TextInput from "../components/Game/children/GuessBox/children/GuessCell/children/TextInput/TextInput";
-import LevelRitualToggle from "../components/Game/children/GuessBox/children/GuessCell/children/LevelRitualToggle/LevelRitualToggle";
-import ComponentsSelection from "../components/Game/children/GuessBox/children/GuessCell/children/ComponentsSelection/ComponentsSelection";
+import {
+	type T_ALL_CURRENT_GUESS_INFO,
+	type T_GUESS_CATEGORIES,
+	INIT_GUESS_CATEGORIES,
+} from "../methods/guesses";
 import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
-import CATEGORY_INFO from "../CATEGORY_INFO.json";
-import { apiRequestValidateSession } from "./requests";
+import CATEGORY_INFO from "../data/CATEGORY_INFO.json";
+import { apiRequestValidateSession } from "../methods/requests";
 import { AxiosResponse } from "axios";
-
-// Multi
-export function getRecommendations(e: any, values: string[]): string[] {
-	const output: string[] = [];
-
-	for (const option of values) {
-		if (option.toLowerCase() === e.target.value.toLowerCase()) {
-			return [];
-		} else if (option.toLowerCase().includes(e.target.value.toLowerCase())) {
-			output.push(option);
-		}
-	}
-
-	return output;
-}
-
-export function onRecommendationClick(
-	key: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-): void {
-	setInputValue(key);
-	setRecommendations([]);
-}
 
 export function deepCopyObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
-}
-
-// TurnCell
-export function getUniqueComponents(
-	category_name: string,
-	category_values: string[],
-	inputValue: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>,
-): JSX.Element {
-	const singleInput = (
-		<TextInput
-			category_name={category_name}
-			recommendationValues={category_values}
-			setRecommendations={setRecommendations}
-			multi={false}
-			inputValue={inputValue}
-			setInputValue={setInputValue}
-			allCurrentGuessInfo={allCurrentGuessInfo}
-		/>
-	);
-	const multiInput = (
-		<TextInput
-			category_name={category_name}
-			recommendationValues={category_values}
-			setRecommendations={setRecommendations}
-			multi={true}
-			inputValue={inputValue}
-			setInputValue={setInputValue}
-			allCurrentGuessInfo={allCurrentGuessInfo}
-		/>
-	);
-
-	switch (category_name) {
-		case CATEGORY_INFO.SCHOOL.name:
-		case CATEGORY_INFO.CASTING_TIME.name:
-		case CATEGORY_INFO.RANGE.name:
-		case CATEGORY_INFO.TARGET.name:
-		case CATEGORY_INFO.DURATION.name:
-			return singleInput;
-		case CATEGORY_INFO.LEVEL.name:
-			return (
-				<>
-					<LevelRitualToggle allCurrentGuessInfo={allCurrentGuessInfo} />
-					{singleInput}
-				</>
-			);
-		case CATEGORY_INFO.COMPONENTS.name:
-			return <ComponentsSelection allCurrentGuessInfo={allCurrentGuessInfo} />;
-		case CATEGORY_INFO.CLASS.name:
-		case CATEGORY_INFO.EFFECTS.name:
-			return multiInput;
-		default:
-			return <></>;
-	}
-}
-
-// TurnBox
-export function createNewSpellInfoMap(): T_ALL_CURRENT_GUESS_INFO {
-	const map = new Map();
-	map.set("School", "");
-	map.set("Level", ["", false]);
-	map.set("Casting Time", "");
-	map.set("Range", "");
-	map.set("Target", "");
-	map.set("Duration", "");
-	map.set("Components", []);
-	map.set("Class", []);
-	map.set("Effects", []);
-	return map;
 }
 
 // TextInput
@@ -202,23 +105,9 @@ export function clearTokensFromLocalStorage() {
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
 }
 
-// Data
-// export function setUserDataFromAPIResult(
-//   data: T_APIRESULTS,
-//   userDataRef: React.MutableRefObject(T_USERDATA_STATE),
-//     setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
-//       setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-//         setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
-// ): void {
-//   console.log(`Setting userData: ${JSON.stringify(data.user_data)}`);
-//   setUserData(data.user_data);
-//   setUserIsLoggedIn(true);
-// 	setEnableQueryFn(false);
-// }
-
 export function createRequestObjectFromCurrentGuessInfo(
 	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
-	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
+	categoryInfo: T_CATEGORY_INFO_ALL,
 ): T_GUESS_CATEGORIES {
 	const requestObject: T_GUESS_CATEGORIES = deepCopyObject(
 		INIT_GUESS_CATEGORIES,
@@ -321,33 +210,6 @@ export function createRequestObjectFromCurrentGuessInfo(
 	console.log(JSON.stringify(requestObject));
 
 	return requestObject;
-}
-
-function createMapFromValues(arr: string[]) {
-	const map = new Map();
-	arr.forEach((item: string, index: number) => {
-		map.set(item.toLowerCase(), index);
-	});
-	return map;
-}
-
-export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
-	const infoObj: T_ALL_POSSIBLE_CATEGORIES_INFO =
-		CATEGORY_INFO as T_ALL_POSSIBLE_CATEGORIES_INFO;
-
-	infoObj.SCHOOL.id_map = createMapFromValues(infoObj.SCHOOL.values);
-	infoObj.LEVEL.id_map = createMapFromValues(infoObj.LEVEL.values);
-	infoObj.CASTING_TIME.id_map = createMapFromValues(
-		infoObj.CASTING_TIME.values,
-	);
-	infoObj.RANGE.id_map = createMapFromValues(infoObj.RANGE.values);
-	infoObj.TARGET.id_map = createMapFromValues(infoObj.TARGET.values);
-	infoObj.DURATION.id_map = createMapFromValues(infoObj.DURATION.values);
-	infoObj.COMPONENTS.id_map = createMapFromValues(infoObj.COMPONENTS.values);
-	infoObj.CLASS.id_map = createMapFromValues(infoObj.CLASS.values);
-	infoObj.EFFECTS.id_map = createMapFromValues(infoObj.EFFECTS.values);
-
-	return infoObj;
 }
 
 export async function getAuthStatus(): Promise<T_AUTH_STATUS> {

@@ -1,33 +1,50 @@
 import styles from "./GuessInfoButton.module.scss";
-import {
-	type T_ALL_CURRENT_GUESS_INFO,
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
-} from "../../../types";
-import { createRequestObjectFromCurrentGuessInfo } from "../../../utils/methods";
+import { useContext } from "react";
+import GuessDataContext from "../../../Contexts/GuessDataContext";
+import * as testGuesses from "./TEST_GUESSES";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { apiRequestMakeGuess } from "../../../methods/requests";
+import { QUERY_KEYS } from "../../../utils/consts";
+import { getUserSessionDataFromStorage } from "../../../utils/methods";
+import { T_GUESS_CATEGORIES_MAP } from "../../../methods/guesses";
 
-interface IProps {
-	allCurrentGuessInfo: T_ALL_CURRENT_GUESS_INFO;
-	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO;
-}
+const GuessInfoButton: React.FC = () => {
+	const queryClient = useQueryClient();
 
-const GuessInfoButton: React.FC<IProps> = (props) => {
+	const mutation = useMutation({
+		mutationFn: apiRequestMakeGuess,
+		onSuccess: (data) => {
+			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
+		},
+	});
+
+	const guessData = useContext(GuessDataContext);
+
+	const testGuess: T_GUESS_CATEGORIES_MAP = new Map(
+		Object.entries(testGuesses.TEST_GUESS_SOME_CORRECT),
+	);
+
 	return (
-		<div
-			className={styles.root}
-			onClick={() => {
-				console.log("CURRENT GUESSINFO: {");
-				props.allCurrentGuessInfo.forEach((value: any, key: any) => {
-					console.log(`${key}: ${value}`);
-				});
-				console.log("}");
-
-				createRequestObjectFromCurrentGuessInfo(
-					props.allCurrentGuessInfo,
-					props.categoryInfo,
-				);
-			}}
-		>
-			<h1>GI</h1>
+		<div className={styles.root}>
+			<button
+				onClick={() => {
+					console.log("CURRENT GUESSINFO: ");
+					guessData && console.log(guessData?.current);
+				}}
+			>
+				Log
+			</button>
+			<button
+				onClick={() => {
+					mutation.mutate({
+						accessToken: getUserSessionDataFromStorage().access_token,
+						guessData: testGuess,
+					});
+				}}
+			>
+				Guess
+			</button>
 		</div>
 	);
 };

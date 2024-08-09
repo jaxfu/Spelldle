@@ -1,16 +1,21 @@
+@import "../../../styles/mixins";
+
 .root {
-	width: 50px;
-	height: 50px;
-	border-radius: 100%;
+	@include flex-center;
+	flex-direction: row;
 	position: fixed;
 	bottom: 100px;
 	right: 25px;
 	background: black;
+	border-radius: 1rem;
 	color: white;
-	text-align: center;
 	cursor: pointer;
 
 	&:hover {
 		background: grey;
+	}
+
+	button {
+		margin: 5px;
 	}
 }
