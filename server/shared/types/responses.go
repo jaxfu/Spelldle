@@ -1,36 +1,33 @@
 package types
 
-type ResponseRegisterLogin struct {
-	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
-	UserDataTokens   AllTokens               `json:"user_data_tokens"`
-	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
-	UserId           UserID                  `json:"user_id"`
-	Valid            bool                    `json:"valid"`
+type ResponseUserData struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Username  string `json:"username"`
+	UserID    UserID `json:"user_id"`
 }
 
-type ResponseUserDataAccount struct {
-	Username string `json:"username"`
+type ResponseGameSessionData struct {
+	GameSessionID GameSessionID `json:"game_session_id"`
+	CurrentRound  uint          `json:"current_round"`
+}
+
+type ResponseRegisterLogin struct {
+	Tokens   AllTokens        `json:"tokens"`
+	UserData ResponseUserData `json:"user_data"`
+	Valid    bool             `json:"valid"`
 }
 
 type ResponseValidateSession struct {
-	UserDataPersonal UserDataPersonal        `json:"user_data_personal"`
-	UserDataAccount  ResponseUserDataAccount `json:"user_data_account"`
-	UserId           UserID                  `json:"user_id"`
-	Valid            bool                    `json:"valid"`
-}
-
-type ResponseMakeGuess struct {
-	Components  int `json:"components"`
-	Class       int `json:"class"`
-	Effects     int `json:"effects"`
-	Level       int `json:"level"`
-	School      int `json:"school"`
-	CastingTime int `json:"casting_time"`
-	Range       int `json:"range"`
-	Target      int `json:"target"`
-	Duration    int `json:"duration"`
+	UserData ResponseUserData `json:"user_data"`
+	Valid    bool             `json:"valid"`
 }
 
 type ResponseValidateToken struct {
 	Valid bool `json:"valid"`
+}
+
+type ResponseGetGuesses struct {
+	GameSession ResponseGameSessionData `json:"game_session"`
+	Guesses     []GuessAll              `json:"guesses"`
 }

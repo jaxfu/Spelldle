@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Login.module.scss";
-import { apiRequestLogin } from "../../utils/requests.ts";
+import { apiRequestLogin } from "../../methods/requests.ts";
 import {
 	INIT_USERINPUT_LOGIN,
 	type T_APIRESULT_LOGIN,
@@ -10,24 +10,17 @@ import {
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
 import { AxiosResponse } from "axios";
-import { useMutation } from "@tanstack/react-query";
-import {
-	sendTokensToLocalStorage,
-	setUserDataFromAPIResult,
-} from "../../utils/methods.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
+import { QUERY_KEYS } from "../../utils/consts.ts";
 
-interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>;
-	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Login: React.FC<IProps> = (props) => {
+const Login: React.FC = () => {
 	const [userInput, setUserInuput] =
 		useState<T_USERINPUT_LOGIN>(INIT_USERINPUT_LOGIN);
 	const [error, setError] = useState<boolean>(false);
 	const [incorrectInfo, setIncorrectInfo] = useState<boolean>(false);
 
+	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: (
 			userInput: T_USERINPUT_LOGIN,
@@ -39,15 +32,8 @@ const Login: React.FC<IProps> = (props) => {
 			console.log(err);
 		},
 		onSuccess(data) {
-			sendTokensToLocalStorage(data.data.user_data_tokens);
-			if (data.data.valid) {
-				setUserDataFromAPIResult(
-					data.data,
-					props.setUserData,
-					props.setUserIsLoggedIn,
-					props.setEnableQueryFn,
-				);
-			}
+			sendTokensToLocalStorage(data.data.tokens);
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
 		},
 	});
 

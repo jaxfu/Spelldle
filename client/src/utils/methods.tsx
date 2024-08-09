@@ -1,121 +1,24 @@
 import {
-	type T_ALL_CURRENT_GUESS_INFO,
-	type T_USERDATA_TOKENS,
-	INIT_USERDATA_TOKENS,
+	type T_TOKENS,
+	INIT_TOKENS,
 	type T_USERDATA_STATE,
 	INIT_USERDATA_STATE,
 	type T_APIRESULTS,
-	type T_APIREQUEST_MAKE_GUESS,
-	INIT_APIREQUEST_MAKE_GUESS,
-	type T_ALL_POSSIBLE_CATEGORIES_INFO,
+	T_AUTH_STATUS,
+	INIT_AUTH_STATUS,
 } from "../types";
-import TextInput from "../components/TurnBox/children/TurnCell/children/TextInput/TextInput";
-import LevelRitualToggle from "../components/TurnBox/children/TurnCell/children/LevelRitualToggle/LevelRitualToggle";
-import ComponentsSelection from "../components/TurnBox/children/TurnCell/children/ComponentsSelection/ComponentsSelection";
+import {
+	type T_ALL_CURRENT_GUESS_INFO,
+	type T_GUESS_CATEGORIES,
+	INIT_GUESS_CATEGORIES,
+} from "../methods/guesses";
 import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
-import CATEGORY_INFO from "../CATEGORY_INFO.json";
-
-// Multi
-export function getRecommendations(e: any, values: string[]): string[] {
-	const output: string[] = [];
-
-	for (const option of values) {
-		if (option.toLowerCase() === e.target.value.toLowerCase()) {
-			return [];
-		} else if (option.toLowerCase().includes(e.target.value.toLowerCase())) {
-			output.push(option);
-		}
-	}
-
-	return output;
-}
-
-export function onRecommendationClick(
-	key: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-): void {
-	setInputValue(key);
-	setRecommendations([]);
-}
+import CATEGORY_INFO from "../data/CATEGORY_INFO.json";
+import { apiRequestValidateSession } from "../methods/requests";
+import { AxiosResponse } from "axios";
 
 export function deepCopyObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
-}
-
-// TurnCell
-export function getUniqueComponents(
-	category_name: string,
-	category_values: string[],
-	inputValue: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-	setRecommendations: React.Dispatch<React.SetStateAction<string[]>>,
-	allCurrentGuessInfo: React.MutableRefObject<T_ALL_CURRENT_GUESS_INFO>,
-): JSX.Element {
-	const singleInput = (
-		<TextInput
-			category_name={category_name}
-			recommendationValues={category_values}
-			setRecommendations={setRecommendations}
-			multi={false}
-			inputValue={inputValue}
-			setInputValue={setInputValue}
-			allCurrentGuessInfo={allCurrentGuessInfo}
-		/>
-	);
-	const multiInput = (
-		<TextInput
-			category_name={category_name}
-			recommendationValues={category_values}
-			setRecommendations={setRecommendations}
-			multi={true}
-			inputValue={inputValue}
-			setInputValue={setInputValue}
-			allCurrentGuessInfo={allCurrentGuessInfo}
-		/>
-	);
-
-	switch (category_name) {
-		case CATEGORY_INFO.SCHOOL.name:
-		case CATEGORY_INFO.CASTING_TIME.name:
-		case CATEGORY_INFO.RANGE.name:
-		case CATEGORY_INFO.TARGET.name:
-		case CATEGORY_INFO.DURATION.name:
-			return singleInput;
-			break;
-		case CATEGORY_INFO.LEVEL.name:
-			return (
-				<>
-					<LevelRitualToggle allCurrentGuessInfo={allCurrentGuessInfo} />
-					{singleInput}
-				</>
-			);
-			break;
-		case CATEGORY_INFO.COMPONENTS.name:
-			return <ComponentsSelection allCurrentGuessInfo={allCurrentGuessInfo} />;
-			break;
-		case CATEGORY_INFO.CLASS.name:
-		case CATEGORY_INFO.EFFECTS.name:
-			return multiInput;
-			break;
-		default:
-			return <></>;
-	}
-}
-
-// TurnBox
-export function createNewSpellInfoMap(): T_ALL_CURRENT_GUESS_INFO {
-	const map = new Map();
-	map.set("School", "");
-	map.set("Level", ["", false]);
-	map.set("Casting Time", "");
-	map.set("Range", "");
-	map.set("Target", "");
-	map.set("Duration", "");
-	map.set("Components", []);
-	map.set("Class", []);
-	map.set("Effects", []);
-	return map;
 }
 
 // TextInput
@@ -150,7 +53,6 @@ export function logoutUser(
 ): void {
 	clearTokensFromLocalStorage();
 	setUserIsLoggedIn(false);
-	setUserData(deepCopyObject(INIT_USERDATA_STATE));
 }
 
 // Storage
@@ -164,8 +66,8 @@ export function areTokensInLocalStorage(): boolean {
 	);
 }
 
-export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
-	const userDataTokens: T_USERDATA_TOKENS = { ...INIT_USERDATA_TOKENS };
+export function getUserSessionDataFromStorage(): T_TOKENS {
+	const userDataTokens: T_TOKENS = { ...INIT_TOKENS };
 
 	try {
 		userDataTokens.access_token =
@@ -178,7 +80,7 @@ export function getUserSessionDataFromStorage(): T_USERDATA_TOKENS {
 	}
 }
 
-export function sendTokensToLocalStorage(userDataTokens: T_USERDATA_TOKENS) {
+export function sendTokensToLocalStorage(userDataTokens: T_TOKENS) {
 	localStorage.setItem(
 		LOCAL_STORAGE_TOKENS_KEYS.access_token,
 		userDataTokens.access_token,
@@ -203,39 +105,12 @@ export function clearTokensFromLocalStorage() {
 	localStorage.removeItem(LOCAL_STORAGE_TOKENS_KEYS.refresh_token);
 }
 
-// Data
-export function createUserDataStateFromApiResult(
-	apiResult: T_APIRESULTS,
-): T_USERDATA_STATE {
-	return {
-		user_id: apiResult.user_id,
-		user_data_account: apiResult.user_data_account,
-		user_data_personal: apiResult.user_data_personal,
-	};
-}
-
-export function setUserDataFromAPIResult(
-	data: T_APIRESULTS,
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>,
-	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>,
-): void {
-	console.log(
-		`Setting userData: ${JSON.stringify(
-			createUserDataStateFromApiResult(data),
-		)}`,
-	);
-	setUserData(createUserDataStateFromApiResult(data));
-	setUserIsLoggedIn(true);
-	setEnableQueryFn(false);
-}
-
 export function createRequestObjectFromCurrentGuessInfo(
 	currentGuessInfo: T_ALL_CURRENT_GUESS_INFO,
-	categoryInfo: T_ALL_POSSIBLE_CATEGORIES_INFO,
-): T_APIREQUEST_MAKE_GUESS {
-	const requestObject: T_APIREQUEST_MAKE_GUESS = deepCopyObject(
-		INIT_APIREQUEST_MAKE_GUESS,
+	categoryInfo: T_CATEGORY_INFO_ALL,
+): T_GUESS_CATEGORIES {
+	const requestObject: T_GUESS_CATEGORIES = deepCopyObject(
+		INIT_GUESS_CATEGORIES,
 	);
 
 	// SCHOOOL
@@ -337,29 +212,25 @@ export function createRequestObjectFromCurrentGuessInfo(
 	return requestObject;
 }
 
-function createMapFromValues(arr: string[]) {
-	const map = new Map();
-	arr.forEach((item: string, index: number) => {
-		map.set(item.toLowerCase(), index);
-	});
-	return map;
-}
+export async function getAuthStatus(): Promise<T_AUTH_STATUS> {
+	console.log("running getAuthStatus");
 
-export function getAllCategoriesInfo(): T_ALL_POSSIBLE_CATEGORIES_INFO {
-	const infoObj: T_ALL_POSSIBLE_CATEGORIES_INFO =
-		CATEGORY_INFO as T_ALL_POSSIBLE_CATEGORIES_INFO;
+	const authStatus = deepCopyObject(INIT_AUTH_STATUS);
 
-	infoObj.SCHOOL.id_map = createMapFromValues(infoObj.SCHOOL.values);
-	infoObj.LEVEL.id_map = createMapFromValues(infoObj.LEVEL.values);
-	infoObj.CASTING_TIME.id_map = createMapFromValues(
-		infoObj.CASTING_TIME.values,
-	);
-	infoObj.RANGE.id_map = createMapFromValues(infoObj.RANGE.values);
-	infoObj.TARGET.id_map = createMapFromValues(infoObj.TARGET.values);
-	infoObj.DURATION.id_map = createMapFromValues(infoObj.DURATION.values);
-	infoObj.COMPONENTS.id_map = createMapFromValues(infoObj.COMPONENTS.values);
-	infoObj.CLASS.id_map = createMapFromValues(infoObj.CLASS.values);
-	infoObj.EFFECTS.id_map = createMapFromValues(infoObj.EFFECTS.values);
+	try {
+		if (!areTokensInLocalStorage()) return authStatus;
 
-	return infoObj;
+		const res = await apiRequestValidateSession(
+			getUserSessionDataFromStorage(),
+		);
+
+		console.log("tokens found");
+		authStatus.has_tokens = true;
+		authStatus.valid = res.data.valid;
+		authStatus.user_data = res.data.user_data;
+	} catch (error) {
+		throw error;
+	}
+
+	return authStatus;
 }

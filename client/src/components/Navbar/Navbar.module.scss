@@ -2,13 +2,15 @@
 @import "../../styles/vars";
 
 .root {
-	@include full-size-percent;
 	@include flex-center;
 	flex-direction: row;
-	height: 50px;
-	border: $border;
+	height: 75px;
+	width: 100%;
+	background: red;
 	position: fixed;
 	top: 0;
+	z-index: 1;
+	overflow: hidden;
 
 	& > span {
 		border: $border;

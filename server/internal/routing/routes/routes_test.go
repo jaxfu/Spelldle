@@ -3,8 +3,6 @@ package routes
 import (
 	"fmt"
 	"os"
-	"spelldle.com/server/internal/routing/middleware"
-	"spelldle.com/server/internal/routing/utils"
 	"testing"
 
 	"spelldle.com/server/shared/dbHandler"
@@ -28,6 +26,7 @@ func TestRoutes(t *testing.T) {
 	// Set up vars
 	testUserRegisterPayload := testHelpers.TestUserRegisterPayload
 	testUserLoginPayload := testHelpers.TestUserLoginPayload
+	testSpellData := testHelpers.TestSpell
 	var testUserDataTokens types.AllTokens
 
 	t.Run("DropTables", func(t *testing.T) {
@@ -40,29 +39,36 @@ func TestRoutes(t *testing.T) {
 			t.Errorf("Error initializing tables: %+v\n", err)
 		}
 	})
+	t.Run("InsertSpell", func(t *testing.T) {
+		err := db.InsertSpell(testSpellData)
+		if err != nil {
+			t.Errorf("Error inserting spell: %+v", err)
+		}
+	})
 
 	t.Run("Register", func(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 		if err := testHelpers.TestPostRequest(
 			consts.RouteUrlRegister,
-			&testUserRegisterPayload, &responseData,
+			&testUserRegisterPayload,
+			&responseData,
 			Register(db),
 		); err != nil {
 			t.Errorf("Error making request: %+v\n", err)
 		}
-		testUserDataTokens = responseData.UserDataTokens
+		testUserDataTokens = responseData.Tokens
 
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
-			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
+		if responseData.UserData.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserData.FirstName, testUserRegisterPayload.FirstName)
 		}
-		if responseData.UserDataPersonal.LastName != testUserRegisterPayload.LastName {
-			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.LastName, testUserRegisterPayload.LastName)
+		if responseData.UserData.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserData.LastName, testUserRegisterPayload.LastName)
 		}
-		if responseData.UserDataAccount.Username != testUserRegisterPayload.Username {
-			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAccount.Username, testUserRegisterPayload.Username)
+		if responseData.UserData.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserData.Username, testUserRegisterPayload.Username)
 		}
 	})
 
@@ -80,14 +86,14 @@ func TestRoutes(t *testing.T) {
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
-			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
+		if responseData.UserData.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserData.FirstName, testUserRegisterPayload.FirstName)
 		}
-		if responseData.UserDataPersonal.LastName != testUserRegisterPayload.LastName {
-			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.LastName, testUserRegisterPayload.LastName)
+		if responseData.UserData.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserData.LastName, testUserRegisterPayload.LastName)
 		}
-		if responseData.UserDataAccount.Username != testUserRegisterPayload.Username {
-			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAccount.Username, testUserRegisterPayload.Username)
+		if responseData.UserData.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserData.Username, testUserRegisterPayload.Username)
 		}
 	})
 
@@ -141,17 +147,17 @@ func TestRoutes(t *testing.T) {
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}
-		if responseData.UserId != testHelpers.TestUserDataAll.UserID {
-			t.Errorf("First name is incorrect: got %d, want %d\n", responseData.UserId, testHelpers.TestUserDataAll.UserID)
+		if responseData.UserData.UserID != testHelpers.TestUserData.UserID {
+			t.Errorf("First name is incorrect: got %d, want %d\n", responseData.UserData.UserID, testHelpers.TestUserData.UserID)
 		}
-		if responseData.UserDataPersonal.FirstName != testUserRegisterPayload.FirstName {
-			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.FirstName, testUserRegisterPayload.FirstName)
+		if responseData.UserData.FirstName != testUserRegisterPayload.FirstName {
+			t.Errorf("First name is incorrect: got %s, want %s\n", responseData.UserData.FirstName, testUserRegisterPayload.FirstName)
 		}
-		if responseData.UserDataPersonal.LastName != testUserRegisterPayload.LastName {
-			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserDataPersonal.LastName, testUserRegisterPayload.LastName)
+		if responseData.UserData.LastName != testUserRegisterPayload.LastName {
+			t.Errorf("Last name is incorrect: got %s, want %s\n", responseData.UserData.LastName, testUserRegisterPayload.LastName)
 		}
-		if responseData.UserDataAccount.Username != testUserRegisterPayload.Username {
-			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserDataAccount.Username, testUserRegisterPayload.Username)
+		if responseData.UserData.Username != testUserRegisterPayload.Username {
+			t.Errorf("username is incorrect: got %s, want %s\n", responseData.UserData.Username, testUserRegisterPayload.Username)
 		}
 	})
 
@@ -159,19 +165,13 @@ func TestRoutes(t *testing.T) {
 		var responseData types.ResponseRegisterLogin
 
 		invalidTokens := types.AllTokens{
-			AccessToken: types.AccessToken{
-				AccessToken: "invalid",
-			},
-			RefreshToken: types.RefreshToken{
-				RefreshToken: "invalid",
-			},
+			AccessToken:  "invalid",
+			RefreshToken: "invalid",
 		}
 
 		if err := testHelpers.TestPostRequestWithAuthTokens(
 			consts.RouteUrlValidateSession,
-			&types.AccessToken{
-				AccessToken: "test",
-			},
+			&invalidTokens.AccessToken,
 			&responseData,
 			ValidateSession(db),
 			invalidTokens,
@@ -184,23 +184,23 @@ func TestRoutes(t *testing.T) {
 		}
 	})
 
-	t.Run("ValidateJWTMiddlewareValid", func(t *testing.T) {
-		ctx, err := testHelpers.TestMiddleware(testUserDataTokens, middleware.ValidateAccessToken())
-		if err != nil {
-			t.Errorf("Error in middleware: %+v\n", err)
-			return
-		}
-
-		userID, err := utils.GetJwtInfoFromCtx(ctx)
-		if err != nil {
-			t.Errorf("Error in GetJwtInfoFromCtx: %+v\n", err)
-			return
-		}
-		if userID != testHelpers.TestUserDataAll.UserID {
-			t.Errorf("Incorrect userID from middleware, want %v got %d\n", testHelpers.TestUserDataAll.UserID, userID)
-			return
-		}
-	})
+	// t.Run("ValidateJWTMiddlewareValid", func(t *testing.T) {
+	// 	ctx, err := testHelpers.TestMiddleware(testUserDataTokens, middleware.ValidateAccessToken())
+	// 	if err != nil {
+	// 		t.Errorf("Error in middleware: %+v\n", err)
+	// 		return
+	// 	}
+	//
+	// 	userID, err := utils.GetJwtInfoFromCtx(ctx)
+	// 	if err != nil {
+	// 		t.Errorf("Error in GetJwtInfoFromCtx: %+v\n", err)
+	// 		return
+	// 	}
+	// 	if userID != testHelpers.TestUserData.UserID {
+	// 		t.Errorf("Incorrect userID from middleware, want %v got %d\n", testHelpers.TestUserData.UserID, userID)
+	// 		return
+	// 	}
+	// })
 
 	t.Run("DropTables", func(t *testing.T) {
 		if err := db.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {

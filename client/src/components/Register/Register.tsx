@@ -1,31 +1,24 @@
 import React, { useState } from "react";
 import styles from "./Register.module.scss";
 import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
-import { apiRequestRegister } from "../../utils/requests.ts";
+import { apiRequestRegister } from "../../methods/requests.ts";
 import {
 	INIT_USERINPUT_REGISTER,
 	T_USERINPUT_REGISTER,
 	type T_APIRESULT_REGISTER,
-	type T_USERDATA_STATE,
 } from "../../types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-import { setUserDataFromAPIResult } from "../../utils/methods.tsx";
+import { QUERY_KEYS } from "../../utils/consts.ts";
 
-interface IProps {
-	setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>;
-	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-	setEnableQueryFn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Register: React.FC<IProps> = (props) => {
-	//STATE
+const Register: React.FC = () => {
 	const [userInput, setUserInput] = useState<T_USERINPUT_REGISTER>({
 		...INIT_USERINPUT_REGISTER,
 	});
 	const [taken, setTaken] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
 
+	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: (
 			userInput: T_USERINPUT_REGISTER,
@@ -36,15 +29,8 @@ const Register: React.FC<IProps> = (props) => {
 			console.log(err);
 		},
 		onSuccess(data) {
-			sendTokensToLocalStorage(data.data.user_data_tokens);
-			if (data.data.valid) {
-				setUserDataFromAPIResult(
-					data.data,
-					props.setUserData,
-					props.setUserIsLoggedIn,
-					props.setEnableQueryFn,
-				);
-			}
+			sendTokensToLocalStorage(data.data.tokens);
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
 		},
 	});
 

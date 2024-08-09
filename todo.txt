@@ -1,14 +1,15 @@
 In Progress
 
 SERVER
-- Create tests for spell dbHandler routes
-- Create base validation response type
 - Create logging system for routeHandlers
-- Adjust frontend to use bearer token
 - Encrypt password on storage
+- Tests for getGuess route
+- Spawn game_session on register
+- Game_session_id generator
 
 CLIENT
 - Prevent adding empty spell guesses
+- Create guess response box
 
 DONE
 - Get current dbHandler working with schemas
@@ -21,3 +22,5 @@ DONE
 - Create and use package for string consts
 - Create api documentation
 - Remove jwt from all request types
+- Create tests for spell dbHandler routes
+- Adjust frontend to use bearer token

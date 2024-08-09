@@ -6,16 +6,12 @@ import (
 	"spelldle.com/server/shared/types"
 )
 
-var TestUserDataAll = types.UserDataAll{
-	UserID: 1,
-	UserDataPersonal: types.UserDataPersonal{
-		FirstName: "Jackson",
-		LastName:  "Furr",
-	},
-	UserDataAccount: types.UserDataAccount{
-		Username: "poemmys",
-		Password: "pass",
-	},
+var TestUserData = types.UserData{
+	UserID:    1,
+	FirstName: "Jackson",
+	LastName:  "Furr",
+	Username:  "poemmys",
+	Password:  "pass",
 }
 
 var TestUserRegisterPayload = types.RequestPayloadRegister{
