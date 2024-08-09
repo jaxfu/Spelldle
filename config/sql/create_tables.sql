@@ -65,12 +65,6 @@ CREATE TABLE users.data
     last_name  VARCHAR(32)
 );
 
-CREATE TABLE users.game_sessions
-(
-  user_id INTEGER PRIMARY KEY REFERENCES users.ids(user_id),
-  game_session_id TEXT REFERENCES game_sessions.ids(game_session_id)
-);
-
 CREATE TABLE guesses.categories
 (
   game_session_id TEXT,
