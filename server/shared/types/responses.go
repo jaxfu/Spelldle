@@ -31,3 +31,8 @@ type ResponseGetGuesses struct {
 	GameSession ResponseGameSessionData `json:"game_session"`
 	Guesses     []GuessAll              `json:"guesses"`
 }
+
+type ResponsePastGuesses struct {
+	GameSession ResponseGameSessionData `json:"game_session"`
+	Guesses     []PastGuessesAll        `json:"guesses"`
+}
