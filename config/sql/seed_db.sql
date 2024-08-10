@@ -25,7 +25,7 @@ VALUES ('TEST_ID', 1, 1, 3);
 
 -- GUESS 1: ALL INCORRECT
 INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, components, class, effects)
-VALUES ('TEST_ID', 1, 9, 10, 11, 12, 13, '{10, 11}', '{12, 13, 14}', '{15, 16, 17}');
+VALUES ('TEST_ID', 1, 4, 3, 2, 1, 0, '{0}', '{1, 2}', '{15, 16, 17}');
 
 INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
 VALUES ('TEST_ID', 1, 0, true);
@@ -35,7 +35,7 @@ VALUES ('TEST_ID', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- GUESS 2: SOME CORRECT
 INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, components, class, effects)
-VALUES ('TEST_ID', 2, 0, 10, 11, 12, 13, '{1, 3, 4}', '{3, 4, 10}', '{7, 10, 13, 14}');
+VALUES ('TEST_ID', 2, 0, 6, 7, 8, 9, '{1, 3, 4}', '{3, 4, 10}', '{7, 10, 13, 14}');
 
 INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
 VALUES ('TEST_ID', 2, 1, true);
