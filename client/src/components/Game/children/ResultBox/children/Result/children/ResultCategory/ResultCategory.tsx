@@ -1,11 +1,13 @@
 import styles from "./ResultCategory.module.scss";
 import {
+  E_GUESS_RESULT_OPTIONS,
   T_CATEGORY_GUESS_STATE_VALUES,
   T_GUESS_CATEGORIES_LEVEL,
   type T_CATEGORY_GUESS_STATE,
   type T_GUESS_CATEGORIES,
 } from "../../../../../../../../methods/guesses";
 import { E_CATEGORY_COMPONENT_TYPE } from "../../../../../../../../methods/categories";
+import { useMemo } from "react";
 
 export interface IProps {
   name: string;
@@ -35,11 +37,25 @@ const ResultCategory: React.FC<IProps> = (props) => {
     return [];
   }
 
+  const colorClass: string = useMemo((): string => {
+    switch (props.result) {
+      case E_GUESS_RESULT_OPTIONS.INCORRECT:
+        return "red";
+      case E_GUESS_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+        return "orange"
+      case E_GUESS_RESULT_OPTIONS.CORRECT:
+        return "green"
+    }
+    return ""
+  }, [props.result])
+
   return (
-    <div className={styles.root}>
-      {props.name}: {props.result}
+    <div className={styles.root} style={{ background: colorClass }}>
+      <b>{props.name}</b>
       <br />
-      Value: {translateValuesToStrings()}
+      {translateValuesToStrings().map((value) => {
+        return <span>{value}</span>
+      })}
     </div>
   );
 };

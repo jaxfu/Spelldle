@@ -2,5 +2,9 @@
 @import "../../../../../../../../styles/_mixins";
 
 .root {
-	border: $border;
+  @include flex-center;
+  border: $border;
+  text-align: center;
+
+  color: black;
 }
