@@ -1,7 +1,10 @@
 import { deepCopyObject } from "../utils/methods";
 import { type T_GAME_SESSION } from "../types";
 
-export type T_CATEGORY_GUESS_STATE = string | string[] | [string, boolean];
+export type T_CATEGORY_GUESS_STATE =
+	| string
+	| string[]
+	| T_GUESS_CATEGORIES_LEVEL;
 export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
 export type T_CATEGORY_GUESS_STATE_VALUES =
 	| number

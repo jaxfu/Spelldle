@@ -49,7 +49,7 @@ const Result: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			Round {props.guess.round}
-			<div>{resultCategories}</div>
+			<div className={styles.categories}>{resultCategories}</div>
 		</div>
 	);
 };

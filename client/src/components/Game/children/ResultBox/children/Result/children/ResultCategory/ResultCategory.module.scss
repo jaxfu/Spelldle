@@ -1,2 +1,6 @@
+@import "../../../../../../../../styles/_vars";
+@import "../../../../../../../../styles/_mixins";
+
 .root {
+	border: $border;
 }

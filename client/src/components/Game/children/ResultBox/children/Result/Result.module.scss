@@ -1,2 +1,11 @@
+@import "../../../../../../styles/_mixins";
+@import "../../../../../../styles/_vars";
+
 .root {
+	border: $border;
+
+	.categories {
+		@include flex-center;
+		flex-direction: row;
+	}
 }
