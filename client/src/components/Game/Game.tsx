@@ -14,6 +14,7 @@ import {
 } from "../../methods/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 import GuessDataContext from "../../Contexts/GuessDataContext";
+import ResultBox from "./children/ResultBox/ResultBox";
 
 const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
@@ -32,15 +33,18 @@ const Game: React.FC = () => {
 	});
 
 	if (isSuccess) {
-		// for (const guess of data.data) {
-		// 	console.log(`guess ${guess.round}: ${JSON.stringify(guess)}`);
-		// }
+		for (const guess of data.data.guesses) {
+			console.log(`guess ${guess.round}: ${JSON.stringify(guess)}`);
+		}
 	}
 
 	return (
 		<>
 			<GuessDataContext.Provider value={currentGuessInfo}>
 				<GuessInfoButton />
+				{data != undefined && data.data.guesses.length > 0 && (
+					<ResultBox pastGuesses={data.data.guesses} />
+				)}
 				<GuessBox categoriesInfoArr={categoriesInfo} />
 			</GuessDataContext.Provider>
 		</>

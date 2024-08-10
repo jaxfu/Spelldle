@@ -7,6 +7,7 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
+	T_APIRESULT_GET_PAST_GUESSES,
 	T_GUESS_CATEGORIES,
 	T_GUESS_CATEGORIES_MAP,
 	type T_GUESS_ALL,
@@ -85,17 +86,13 @@ export async function apiRequestMakeGuess(
 
 export async function apiRequestGetPastGuesses(
 	accessToken: string,
-): Promise<AxiosResponse<T_GUESS_ALL[]>> {
+): Promise<AxiosResponse<T_APIRESULT_GET_PAST_GUESSES>> {
 	console.log("Running apiRequestGetPastGuesses");
-	try {
-		return await axios<T_GUESS_ALL[]>({
-			method: "POST",
-			url: API_ROUTES.GET_PAST_GUESSES,
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
-	} catch (err: any) {
-		throw new Error(err);
-	}
+	return await axios<T_APIRESULT_GET_PAST_GUESSES>({
+		method: "POST",
+		url: API_ROUTES.GET_PAST_GUESSES,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
 }
