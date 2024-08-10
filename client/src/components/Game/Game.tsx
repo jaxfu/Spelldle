@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../utils/methods";
 import { apiRequestGetPastGuesses } from "../../methods/requests";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
 	type T_CATEGORY_INFO,
@@ -17,9 +17,11 @@ import GuessDataContext from "../../Contexts/GuessDataContext";
 import ResultBox from "./children/ResultBox/ResultBox";
 
 const Game: React.FC = () => {
-	const categoriesInfo: T_CATEGORY_INFO[] = generateCategoryInfoFromJSON(
-		CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
-	);
+	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
+		return generateCategoryInfoFromJSON(
+			CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
+		);
+	}, []);
 	const currentGuessInfo = useRef<T_GUESS_CATEGORIES_MAP>(
 		generateGuessCategoriesMapFromJSON(
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_JSON,
@@ -43,7 +45,10 @@ const Game: React.FC = () => {
 			<GuessDataContext.Provider value={currentGuessInfo}>
 				<GuessInfoButton />
 				{data != undefined && data.data.guesses.length > 0 && (
-					<ResultBox pastGuesses={data.data.guesses} />
+					<ResultBox
+						pastGuesses={data.data.guesses}
+						categoriesInfoArr={categoriesInfo}
+					/>
 				)}
 				<GuessBox categoriesInfoArr={categoriesInfo} />
 			</GuessDataContext.Provider>

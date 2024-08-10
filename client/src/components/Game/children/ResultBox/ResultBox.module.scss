@@ -1,2 +1,7 @@
+@import "../../../../styles/mixins";
+@import "../../../../styles/vars";
+
 .root {
+	@include flex-center;
+	border: $border;
 }

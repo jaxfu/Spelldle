@@ -26,19 +26,11 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	const guessData = useContext(GuessDataContext);
 
-	const guessCells = (): JSX.Element[] => {
-		const elements: JSX.Element[] = [];
-
-		for (const category of props.categoriesInfoArr) {
-			elements.push(<GuessCell key={category.name} categoryInfo={category} />);
-		}
-
-		return elements;
-	};
-
 	return (
 		<div className={styles.root}>
-			{guessCells()}
+			{props.categoriesInfoArr.map((category) => {
+				return <GuessCell key={category.name} categoryInfo={category} />;
+			})}
 			<button
 				onClick={() => {
 					if (guessData !== null) {

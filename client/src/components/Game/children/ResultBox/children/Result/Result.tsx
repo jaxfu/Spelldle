@@ -1,17 +1,19 @@
 import styles from "./Result.module.scss";
 import {
-  T_GUESS_AND_RESULT,
-  T_GUESS_AND_RESULT_VALUE,
+  type T_GUESS_AND_RESULT,
+  type T_GUESS_AND_RESULT_VALUE,
 } from "../../../../../../methods/guesses";
 import ResultCategory from "./children/ResultCategory/ResultCategory";
 import { useMemo } from "react";
+import { type T_CATEGORY_INFO } from "../../../../../../methods/categories";
 
 interface IProps {
   guess: T_GUESS_AND_RESULT;
+	categoriesInfoArr: T_CATEGORY_INFO[];
 }
 
 const Result: React.FC<IProps> = (props) => {
-  const categoryMap = useMemo((): Map<string, T_GUESS_AND_RESULT_VALUE> => {
+  const categoryMap: Map<string, T_GUESS_AND_RESULT_VALUE> = useMemo(() => {
     const map: Map<string, T_GUESS_AND_RESULT_VALUE> = new Map();
 
     for (const [key, value] of Object.entries(props.guess)) {
@@ -25,22 +27,21 @@ const Result: React.FC<IProps> = (props) => {
     return map;
   }, [])
 
-  const resultCategories = (): JSX.Element[] => {
-    const resultCategories: JSX.Element[] = [];
+	const resultCategories = props.categoriesInfoArr.map(({name, component_type}) => {
+		const categoryInfo = categoryMap.get(name.toLowerCase());
 
-    for (const [key, value] of categoryMap.entries()) {
-      resultCategories.push(<ResultCategory key={key} name={key} result={value.result} value={value.value} />);
-    }
-
-
-    return resultCategories;
-  }
+		if (categoryInfo !== undefined) {
+			return (
+				<ResultCategory key={name} name={name} result={categoryInfo.result} value={categoryInfo.value} categoryType={component_type} />
+			)
+		}
+	})
 
   return (
     <div className={styles.root}>
       Round {props.guess.round}
       <div>
-        {resultCategories()}
+        {resultCategories}
       </div>
     </div>
   );
