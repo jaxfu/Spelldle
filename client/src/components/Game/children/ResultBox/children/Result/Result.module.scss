@@ -4,6 +4,13 @@
 .root {
   white-space: nowrap;
 
+  .round {
+    display: inline-block;
+    border: $border;
+    width: 75px;
+    text-align: center;
+  }
+
   .cell {
     display: inline-block;
     border: $border;

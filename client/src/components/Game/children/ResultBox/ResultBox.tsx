@@ -12,7 +12,7 @@ const ResultBox: React.FC<IProps> = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.row}>
-        <span className={styles.cell}><b>Round</b></span>
+        <span className={styles.round}><b>Round</b></span>
 
         {props.categoriesInfoArr.map((category) => {
           return (
