@@ -12,9 +12,10 @@ const ResultBox: React.FC<IProps> = (props) => {
   return (
     <div className={styles.root}>
       <span className={styles.cell}><b>Round</b></span>
+
       {props.categoriesInfoArr.map((category) => {
         return (
-          <span className={styles.cell}><b>{category.name}</b></span>
+          <span className={styles.cell} key={category.name}><b>{category.name}</b></span>
         )
       })}
       {/* {props.pastGuesses.map((guess) => { */}
