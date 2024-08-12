@@ -4,15 +4,17 @@
 .root {
   overflow: scroll;
   max-width: 90dvw;
-  white-space: nowrap;
 
   border: 1px solid yellow;
 
-  .cell {
-    display: inline-block;
-    border: $border;
-    margin-bottom: 20px;
-    width: 125px;
-    text-align: center;
+  .row {
+    white-space: nowrap;
+
+    .cell {
+      display: inline-block;
+      border: $border;
+      width: 125px;
+      text-align: center;
+    }
   }
 }

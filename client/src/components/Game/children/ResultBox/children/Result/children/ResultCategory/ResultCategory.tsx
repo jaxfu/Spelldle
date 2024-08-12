@@ -50,13 +50,13 @@ const ResultCategory: React.FC<IProps> = (props) => {
   }, [props.result])
 
   return (
-    <div className={styles.root} style={{ background: colorClass }}>
+    <span className={styles.root} style={{ background: colorClass }}>
       <b>{props.name}</b>
-      <br />
-      {translateValuesToStrings().map((value) => {
-        return <span>{value}</span>
-      })}
-    </div>
+      {/* <br /> */}
+      {/* {translateValuesToStrings().map((value) => { */}
+      {/*   return <span>{value}</span> */}
+      {/* })} */}
+    </span>
   );
 };
 

@@ -2,10 +2,12 @@
 @import "../../../../../../styles/_vars";
 
 .root {
-	border: $border;
+  white-space: nowrap;
 
-	.categories {
-		@include flex-center;
-		flex-direction: row;
-	}
+  .cell {
+    display: inline-block;
+    border: $border;
+    width: 125px;
+    text-align: center;
+  }
 }

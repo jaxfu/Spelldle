@@ -11,22 +11,24 @@ interface IProps {
 const ResultBox: React.FC<IProps> = (props) => {
   return (
     <div className={styles.root}>
-      <span className={styles.cell}><b>Round</b></span>
+      <div className={styles.row}>
+        <span className={styles.cell}><b>Round</b></span>
 
-      {props.categoriesInfoArr.map((category) => {
+        {props.categoriesInfoArr.map((category) => {
+          return (
+            <span className={styles.cell} key={category.name}><b>{category.name}</b></span>
+          )
+        })}
+      </div>
+      {props.pastGuesses.map((guess) => {
         return (
-          <span className={styles.cell} key={category.name}><b>{category.name}</b></span>
-        )
+          <Result
+            guess={guess}
+            key={guess.round}
+            categoriesInfoArr={props.categoriesInfoArr}
+          />
+        );
       })}
-      {/* {props.pastGuesses.map((guess) => { */}
-      {/* 	return ( */}
-      {/* 		<Result */}
-      {/* 			guess={guess} */}
-      {/* 			key={guess.round} */}
-      {/* 			categoriesInfoArr={props.categoriesInfoArr} */}
-      {/* 		/> */}
-      {/* 	); */}
-      {/* })} */}
     </div>
   );
 };
