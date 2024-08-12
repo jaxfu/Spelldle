@@ -2,6 +2,17 @@
 @import "../../../../styles/vars";
 
 .root {
-	@include flex-center;
-	border: $border;
+  overflow: scroll;
+  max-width: 90dvw;
+  white-space: nowrap;
+
+  border: 1px solid yellow;
+
+  .cell {
+    display: inline-block;
+    border: $border;
+    margin-bottom: 20px;
+    width: 125px;
+    text-align: center;
+  }
 }
