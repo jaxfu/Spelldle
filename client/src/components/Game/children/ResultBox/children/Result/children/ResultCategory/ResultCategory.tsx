@@ -51,11 +51,14 @@ const ResultCategory: React.FC<IProps> = (props) => {
 
   return (
     <span className={styles.root} style={{ background: colorClass }}>
-      <b>{props.name}</b>
-      {/* <br /> */}
-      {/* {translateValuesToStrings().map((value) => { */}
-      {/*   return <span>{value}</span> */}
-      {/* })} */}
+      {translateValuesToStrings().map((value) => {
+        return (
+          <>
+            <span>{value}</span>
+            <br />
+          </>
+        )
+      })}
     </span>
   );
 };
