@@ -19,8 +19,8 @@ const Result: React.FC<IProps> = (props) => {
     for (const [key, value] of Object.entries(props.guess)) {
       if (key === "round") {
         continue;
-      } else if (key.toLowerCase() === "casting time") {
-        map.set("casting_time", value as T_GUESS_AND_RESULT_VALUE);
+      } else if (key === "casting_time") {
+        map.set("casting time", value as T_GUESS_AND_RESULT_VALUE);
       } else {
         map.set(key, value as T_GUESS_AND_RESULT_VALUE);
       }
