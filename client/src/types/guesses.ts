@@ -1,68 +1,18 @@
 import { deepCopyObject } from "../utils/methods";
 import { type T_GAME_SESSION } from "../types";
 
-export type T_CATEGORY_GUESSES_AS_STRINGS =
+export type T_GUESS_STATES_STRINGS =
 	| string
 	| string[]
 	| T_GUESS_CATEGORIES_LEVEL;
-export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESSES_AS_STRINGS>;
-export type T_CATEGORY_GUESSES_AS_IDS =
+
+export type T_GUESS_STATES_IDS =
 	| number
 	| number[]
 	| T_GUESS_CATEGORIES_LEVEL;
 
-export type T_GUESS_CATEGORIES = {
-	school: number;
-	level: { level: number; is_ritual: boolean };
-	casting_time: number;
-	range: number;
-	target: number;
-	duration: number;
-	components: number[];
-	class: number[];
-	effects: number[];
-};
-export const INIT_GUESS_CATEGORIES: T_GUESS_CATEGORIES = {
-	school: -1,
-	level: { level: -1, is_ritual: false },
-	casting_time: -1,
-	range: -1,
-	target: -1,
-	duration: -1,
-	components: [],
-	class: [],
-	effects: [],
-};
-
-export type T_GUESS_RESULT_MAP = Map<string, number | number[]>;
-
-export enum E_GUESS_RESULT_OPTIONS {
-	INCORRECT = 0,
-	SLIGHTLY_CORRECT,
-	CORRECT,
-}
-export type T_GUESS_RESULTS = {
-	school: number;
-	level: number;
-	casting_time: number;
-	range: number;
-	target: number;
-	duration: number;
-	components: number;
-	class: number;
-	effects: number;
-};
-export const INIT_GUESS_RESULTS: T_GUESS_RESULTS = {
-	school: 0,
-	level: 0,
-	casting_time: 0,
-	range: 0,
-	target: 0,
-	duration: 0,
-	components: 0,
-	class: 0,
-	effects: 0,
-};
+export type T_GUESSES_AS_STRINGS = Map<string, T_GUESS_STATES_STRINGS>;
+export type T_GUESSES_AS_IDS = Map<string, T_GUESS_STATES_IDS>
 
 export type T_APIRESULT_GET_PAST_GUESSES = {
 	game_session: {
@@ -85,20 +35,10 @@ export type T_GUESS_AND_RESULT = {
 	effects: T_GUESS_AND_RESULT_VALUE;
 };
 export type T_GUESS_AND_RESULT_VALUE = {
-	value: T_CATEGORY_GUESSES_AS_IDS;
+	value: T_GUESS_STATES_IDS;
 	result: number;
 };
 
-export type T_GUESS_CATEGORIES_MAP = Map<
-	string,
-	| T_GUESS_CATEGORIES_SINGLE_TEXT
-	| T_GUESS_CATEGORIES_MULTI_TEXT
-	| T_GUESS_CATEGORIES_COMPONENTS
-	| T_GUESS_CATEGORIES_LEVEL
->;
-export type T_GUESS_CATEGORIES_SINGLE_TEXT = number;
-export type T_GUESS_CATEGORIES_MULTI_TEXT = number[];
-export type T_GUESS_CATEGORIES_COMPONENTS = number[];
 export type T_GUESS_CATEGORIES_LEVEL = { level: number; is_ritual: boolean };
 
 export type T_PAST_GUESSES = {

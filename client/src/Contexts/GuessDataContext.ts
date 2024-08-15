@@ -1,7 +1,7 @@
 import { createContext } from "react";
-import { T_GUESS_CATEGORIES_MAP } from "../methods/guesses";
+import { T_GUESSES_AS_IDS } from "../types/guesses";
 
 const GuessDataContext =
-	createContext<React.MutableRefObject<T_GUESS_CATEGORIES_MAP> | null>(null);
+	createContext<React.MutableRefObject<T_GUESSES_AS_IDS> | null>(null);
 
 export default GuessDataContext;

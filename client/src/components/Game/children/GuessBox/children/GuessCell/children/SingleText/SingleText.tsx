@@ -4,9 +4,9 @@ import { useState, useMemo, useContext, useEffect } from "react";
 import {
 	E_CATEGORY_COMPONENT_TYPE,
 	type T_CATEGORY_INFO,
-} from "../../../../../../../../methods/categories";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
-import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../methods/guesses";
+} from "../../../../../../../../types/categories";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;

@@ -1,7 +1,7 @@
 import styles from "./Components.module.scss";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
 import { useContext } from "react";
-import { T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
+import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;

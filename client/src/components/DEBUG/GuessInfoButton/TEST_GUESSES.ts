@@ -1,6 +1,6 @@
-import { T_GUESS_CATEGORIES } from "../../../methods/guesses";
+import { type T_GUESSES_AS_IDS } from "../../../types/guesses";
 
-export const TEST_GUESS_CORRECT: T_GUESS_CATEGORIES = {
+export const TEST_GUESS_CORRECT: T_GUESSES_AS_IDS = {
 	school: 0,
 	level: { level: 1, is_ritual: false },
 	casting_time: 1,
@@ -12,7 +12,7 @@ export const TEST_GUESS_CORRECT: T_GUESS_CATEGORIES = {
 	effects: [6, 7, 8, 9],
 };
 
-export const TEST_GUESS_INCORRECT: T_GUESS_CATEGORIES = {
+export const TEST_GUESS_INCORRECT: T_GUESSES_AS_IDS = {
 	school: 1,
 	level: { level: 0, is_ritual: true },
 	casting_time: 2,
@@ -24,7 +24,7 @@ export const TEST_GUESS_INCORRECT: T_GUESS_CATEGORIES = {
 	effects: [1, 2, 3, 4],
 };
 
-export const TEST_GUESS_SOME_CORRECT: T_GUESS_CATEGORIES = {
+export const TEST_GUESS_SOME_CORRECT: T_GUESSES_AS_IDS = {
 	school: 1,
 	level: { level: 1, is_ritual: true },
 	casting_time: 1,

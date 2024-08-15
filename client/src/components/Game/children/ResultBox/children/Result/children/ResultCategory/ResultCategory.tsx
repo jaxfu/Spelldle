@@ -1,15 +1,15 @@
 import styles from "./ResultCategory.module.scss";
 import {
-  E_GUESS_RESULT_OPTIONS,
-  T_CATEGORY_GUESSES_AS_IDS,
+  T_GUESSES_AS_IDS,
   T_GUESS_CATEGORIES_LEVEL,
-} from "../../../../../../../../methods/guesses";
-import { E_CATEGORY_COMPONENT_TYPE } from "../../../../../../../../methods/categories";
+} from "../../../../../../../../types/guesses";
+import { E_RESULT_OPTIONS } from "../../../../../../../../types/results";
+import { E_CATEGORY_COMPONENT_TYPE } from "../../../../../../../../types/categories";
 import { useMemo } from "react";
 
 export interface IProps {
   name: string;
-  value: T_CATEGORY_GUESSES_AS_IDS;
+  value: T_GUESSES_AS_IDS;
   result: number;
   categoryType: E_CATEGORY_COMPONENT_TYPE;
   values: string[];
@@ -37,11 +37,11 @@ const ResultCategory: React.FC<IProps> = (props) => {
 
   const colorClass: string = useMemo((): string => {
     switch (props.result) {
-      case E_GUESS_RESULT_OPTIONS.INCORRECT:
+      case E_RESULT_OPTIONS.INCORRECT:
         return "red";
-      case E_GUESS_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+      case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
         return "orange"
-      case E_GUESS_RESULT_OPTIONS.CORRECT:
+      case E_RESULT_OPTIONS.CORRECT:
         return "green"
     }
     return ""

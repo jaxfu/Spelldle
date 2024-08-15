@@ -1,12 +1,12 @@
 import styles from "./GuessInfoButton.module.scss";
 import { useContext } from "react";
-import GuessDataContext from "../../../Contexts/GuessDataContext";
+import GuessDataContext from "../../../contexts/GuessDataContext";
 import * as testGuesses from "./TEST_GUESSES";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../methods/requests";
+import { apiRequestMakeGuess } from "../../../types/requests";
 import { QUERY_KEYS } from "../../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../../utils/methods";
-import { T_GUESS_CATEGORIES_MAP } from "../../../methods/guesses";
+import { type T_GUESSES_AS_IDS } from "../../../types/guesses";
 
 const GuessInfoButton: React.FC = () => {
 	const queryClient = useQueryClient();
@@ -21,7 +21,7 @@ const GuessInfoButton: React.FC = () => {
 
 	const guessData = useContext(GuessDataContext);
 
-	const testGuess: T_GUESS_CATEGORIES_MAP = new Map(
+	const testGuess: T_GUESSES_AS_IDS = new Map(
 		Object.entries(testGuesses.TEST_GUESS_SOME_CORRECT),
 	);
 

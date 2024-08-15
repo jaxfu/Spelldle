@@ -1,9 +1,9 @@
 import styles from "./Level.module.scss";
-import { T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
+import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
 import { useContext } from "react";
-import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../methods/guesses";
+import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;

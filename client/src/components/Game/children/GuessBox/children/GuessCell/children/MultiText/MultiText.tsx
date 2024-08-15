@@ -2,8 +2,8 @@ import { useState, useContext, useMemo, useRef, useEffect } from "react";
 import styles from "./MultiText.module.scss";
 import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
-import { type T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
+import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;

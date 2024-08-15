@@ -1,4 +1,4 @@
-import { T_GUESS_CATEGORIES_MAP } from "./guesses";
+import { type T_GUESSES_AS_IDS } from "./guesses";
 
 // TYPES
 export type T_CATEGORIES_INFO = {
@@ -21,7 +21,7 @@ export type T_CATEGORY_INFO = {
 	has_modifiers: boolean;
 };
 
-export type T_CATEGORY_INFO_JSON = {
+export type T_CATEGORY_INFO_SEED_JSON = {
 	name: string;
 	values: string[];
 	component_type: E_CATEGORY_COMPONENT_TYPE;
@@ -30,7 +30,7 @@ export type T_CATEGORY_INFO_JSON = {
 
 // FUNCTIONS
 export function generateCategoryInfoFromJSON(
-	categoryInfoJson: T_CATEGORY_INFO_JSON,
+	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
 ): T_CATEGORY_INFO[] {
 	const info: T_CATEGORY_INFO[] = [];
 
@@ -59,10 +59,10 @@ function generateValuesMapFromValues(arr: string[]): Map<string, number> {
 	return map;
 }
 
-export function generateGuessCategoriesMapFromJSON(
-	categoryInfoJson: T_CATEGORY_INFO_JSON,
-): T_GUESS_CATEGORIES_MAP {
-	const map: Map<string, any> = new Map();
+export function generateGuessesStateFromJSON(
+	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
+): T_GUESSES_AS_IDS {
+	const map: T_GUESSES_AS_IDS = new Map();
 
 	for (const { name, component_type } of categoryInfoJson) {
 		let value;
