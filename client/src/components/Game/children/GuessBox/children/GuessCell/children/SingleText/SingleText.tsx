@@ -19,13 +19,13 @@ const SingleText: React.FC<IProps> = (props) => {
 	const guessData = useContext(GuessDataContext);
 
 	const hasValidInput: boolean = useMemo(() => {
-		return props.categoryInfo.values_map.has(input.toLowerCase());
+		return props.categoryInfo.value_id_map.has(input.toLowerCase());
 	}, [input]);
 
 	function updateGuessCategoriesMapSingleText(hasValidInput: boolean): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
-				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(input.toLowerCase());
 
 				if (valueId !== undefined) {
 					guessData.current.set(props.categoryInfo.name, valueId);
@@ -43,7 +43,7 @@ const SingleText: React.FC<IProps> = (props) => {
 			) as T_GUESS_CATEGORIES_LEVEL;
 
 			if (hasValidInput) {
-				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(input.toLowerCase());
 
 				if (valueId !== undefined && currentData !== undefined) {
 					guessData.current.set(props.categoryInfo.name, {

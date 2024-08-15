@@ -24,7 +24,7 @@ const MultiText: React.FC<IProps> = (props) => {
 			if (guess.toLowerCase() === input.toLowerCase()) return false;
 		}
 
-		return props.categoryInfo.values_map.has(input.toLowerCase());
+		return props.categoryInfo.value_id_map.has(input.toLowerCase());
 	}, [input]);
 
 	function removeGuessFromRemainingValues(guess: string): void {
@@ -42,7 +42,7 @@ const MultiText: React.FC<IProps> = (props) => {
 			const mapArr: number[] = [];
 
 			for (const guess of guesses) {
-				const valueId = props.categoryInfo.values_map.get(guess.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(guess.toLowerCase());
 				if (valueId !== undefined) {
 					mapArr.push(valueId);
 				}

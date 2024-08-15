@@ -15,7 +15,7 @@ export enum E_CATEGORY_COMPONENT_TYPE {
 
 export type T_CATEGORY_INFO = {
 	name: string;
-	values_map: Map<string, number>;
+	value_id_map: Map<string, number>;
 	values: string[];
 	component_type: E_CATEGORY_COMPONENT_TYPE;
 	has_modifiers: boolean;
@@ -27,18 +27,6 @@ export type T_CATEGORY_INFO_JSON = {
 	component_type: E_CATEGORY_COMPONENT_TYPE;
 	has_modifiers: boolean;
 }[];
-
-export type T_CATEGORY_VALUE_MAP = {
-	SCHOOL: Map<string, number>;
-	LEVEL: Map<string, number>;
-	CASTING_TIME: Map<string, number>;
-	RANGE: Map<string, number>;
-	TARGET: Map<string, number>;
-	COMPONENTS: Map<string, number>;
-	DURATION: Map<string, number>;
-	CLASS: Map<string, number>;
-	EFFECTS: Map<string, number>;
-};
 
 // FUNCTIONS
 export function generateCategoryInfoFromJSON(
@@ -57,7 +45,7 @@ export function generateCategoryInfoFromJSON(
 			component_type,
 			has_modifiers,
 			values,
-			values_map: generateValuesMapFromValues(values),
+			value_id_map: generateValuesMapFromValues(values),
 		});
 	}
 
