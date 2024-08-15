@@ -1,12 +1,12 @@
 import { deepCopyObject } from "../utils/methods";
 import { type T_GAME_SESSION } from "../types";
 
-export type T_CATEGORY_GUESS_STATE =
+export type T_CATEGORY_GUESSES_AS_STRINGS =
 	| string
 	| string[]
 	| T_GUESS_CATEGORIES_LEVEL;
-export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESS_STATE>;
-export type T_CATEGORY_GUESS_STATE_VALUES =
+export type T_ALL_CURRENT_GUESS_INFO = Map<string, T_CATEGORY_GUESSES_AS_STRINGS>;
+export type T_CATEGORY_GUESSES_AS_IDS =
 	| number
 	| number[]
 	| T_GUESS_CATEGORIES_LEVEL;
@@ -85,7 +85,7 @@ export type T_GUESS_AND_RESULT = {
 	effects: T_GUESS_AND_RESULT_VALUE;
 };
 export type T_GUESS_AND_RESULT_VALUE = {
-	value: T_CATEGORY_GUESS_STATE_VALUES;
+	value: T_CATEGORY_GUESSES_AS_IDS;
 	result: number;
 };
 

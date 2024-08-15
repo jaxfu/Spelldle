@@ -1,17 +1,15 @@
 import styles from "./ResultCategory.module.scss";
 import {
   E_GUESS_RESULT_OPTIONS,
-  T_CATEGORY_GUESS_STATE_VALUES,
+  T_CATEGORY_GUESSES_AS_IDS,
   T_GUESS_CATEGORIES_LEVEL,
-  type T_CATEGORY_GUESS_STATE,
-  type T_GUESS_CATEGORIES,
 } from "../../../../../../../../methods/guesses";
 import { E_CATEGORY_COMPONENT_TYPE } from "../../../../../../../../methods/categories";
 import { useMemo } from "react";
 
 export interface IProps {
   name: string;
-  value: T_CATEGORY_GUESS_STATE_VALUES;
+  value: T_CATEGORY_GUESSES_AS_IDS;
   result: number;
   categoryType: E_CATEGORY_COMPONENT_TYPE;
   values: string[];
