@@ -17,11 +17,11 @@ const Level: React.FC<IProps> = (props) => {
 	) {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(
-				props.categoryInfo.name,
+				props.categoryInfo.id,
 			) as T_GUESS_CATEGORIES_LEVEL;
 
 			if (currentData !== undefined) {
-				guessData.current.set(props.categoryInfo.name, {
+				guessData.current.set(props.categoryInfo.id, {
 					level: currentData.level,
 					is_ritual: e.target.checked,
 				});

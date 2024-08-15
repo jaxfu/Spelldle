@@ -28,7 +28,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<h4>{props.categoryInfo.name}</h4>
+			<h4>{props.categoryInfo.display_name}</h4>
 			{component()}
 		</div>
 	);

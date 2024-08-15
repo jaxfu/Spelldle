@@ -28,7 +28,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			{props.categoriesInfoArr.map((category) => {
-				return <GuessCell key={category.name} categoryInfo={category} />;
+				return <GuessCell key={category.id} categoryInfo={category} />;
 			})}
 			<button
 				onClick={() => {

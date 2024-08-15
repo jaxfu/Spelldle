@@ -1,10 +1,22 @@
 import { type T_GUESSES_AS_IDS } from "./guesses";
 
 // TYPES
-export type T_CATEGORIES_INFO = {
-	CATEGORY_KEYS: string[];
-	CATEGORY_INFO_MAP: T_CATEGORY_INFO[];
+export type T_CATEGORY_INFO = {
+	id: string;
+	display_name: string;
+	value_id_map: Map<string, number>;
+	values: string[];
+	component_type: E_CATEGORY_COMPONENT_TYPE;
+	has_modifiers: boolean;
 };
+
+export type T_CATEGORY_INFO_SEED_JSON = {
+	id: string;
+	display_name: string;
+	values: string[];
+	component_type: E_CATEGORY_COMPONENT_TYPE;
+	has_modifiers: boolean;
+}[];
 
 export enum E_CATEGORY_COMPONENT_TYPE {
 	SINGLE_TEXT = 0,
@@ -13,35 +25,22 @@ export enum E_CATEGORY_COMPONENT_TYPE {
 	LEVEL,
 }
 
-export type T_CATEGORY_INFO = {
-	name: string;
-	value_id_map: Map<string, number>;
-	values: string[];
-	component_type: E_CATEGORY_COMPONENT_TYPE;
-	has_modifiers: boolean;
-};
-
-export type T_CATEGORY_INFO_SEED_JSON = {
-	name: string;
-	values: string[];
-	component_type: E_CATEGORY_COMPONENT_TYPE;
-	has_modifiers: boolean;
-}[];
-
 // FUNCTIONS
-export function generateCategoryInfoFromJSON(
+export function generateCategoryInfoFromSeedJSON(
 	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
 ): T_CATEGORY_INFO[] {
 	const info: T_CATEGORY_INFO[] = [];
 
 	for (const {
-		name,
+		id,
+		display_name,
 		component_type,
 		has_modifiers,
 		values,
 	} of categoryInfoJson) {
 		info.push({
-			name,
+			id,
+			display_name,
 			component_type,
 			has_modifiers,
 			values,
@@ -64,7 +63,7 @@ export function generateGuessesStateFromJSON(
 ): T_GUESSES_AS_IDS {
 	const map: T_GUESSES_AS_IDS = new Map();
 
-	for (const { name, component_type } of categoryInfoJson) {
+	for (const { id, component_type } of categoryInfoJson) {
 		let value;
 
 		switch (component_type) {
@@ -80,7 +79,7 @@ export function generateGuessesStateFromJSON(
 				break;
 		}
 
-		map.set(name, value);
+		map.set(id, value);
 	}
 
 	return map;

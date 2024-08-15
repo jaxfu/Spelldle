@@ -25,13 +25,15 @@ const SingleText: React.FC<IProps> = (props) => {
 	function updateGuessCategoriesMapSingleText(hasValidInput: boolean): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
-				const valueId = props.categoryInfo.value_id_map.get(input.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(
+					input.toLowerCase(),
+				);
 
 				if (valueId !== undefined) {
-					guessData.current.set(props.categoryInfo.name, valueId);
+					guessData.current.set(props.categoryInfo.id, valueId);
 				}
 			} else {
-				guessData.current.set(props.categoryInfo.name, -1);
+				guessData.current.set(props.categoryInfo.id, -1);
 			}
 		}
 	}
@@ -39,20 +41,22 @@ const SingleText: React.FC<IProps> = (props) => {
 	function updateGuessCategoriesMapLevelText(hasValidInput: boolean): void {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(
-				props.categoryInfo.name,
+				props.categoryInfo.id,
 			) as T_GUESS_CATEGORIES_LEVEL;
 
 			if (hasValidInput) {
-				const valueId = props.categoryInfo.value_id_map.get(input.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(
+					input.toLowerCase(),
+				);
 
 				if (valueId !== undefined && currentData !== undefined) {
-					guessData.current.set(props.categoryInfo.name, {
+					guessData.current.set(props.categoryInfo.id, {
 						level: valueId,
 						is_ritual: currentData.is_ritual,
 					});
 				}
 			} else {
-				guessData.current.set(props.categoryInfo.name, {
+				guessData.current.set(props.categoryInfo.id, {
 					level: -1,
 					is_ritual: currentData.is_ritual,
 				});

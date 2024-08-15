@@ -6,13 +6,10 @@ export type T_GUESS_STATES_STRINGS =
 	| string[]
 	| T_GUESS_CATEGORIES_LEVEL;
 
-export type T_GUESS_STATES_IDS =
-	| number
-	| number[]
-	| T_GUESS_CATEGORIES_LEVEL;
+export type T_GUESS_STATES_IDS = number | number[] | T_GUESS_CATEGORIES_LEVEL;
 
 export type T_GUESSES_AS_STRINGS = Map<string, T_GUESS_STATES_STRINGS>;
-export type T_GUESSES_AS_IDS = Map<string, T_GUESS_STATES_IDS>
+export type T_GUESSES_AS_IDS = Map<string, T_GUESS_STATES_IDS>;
 
 export type T_APIRESULT_GET_PAST_GUESSES = {
 	game_session: {

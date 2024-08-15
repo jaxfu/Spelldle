@@ -15,7 +15,7 @@ const Components: React.FC<IProps> = (props) => {
 		valueId: number,
 	) {
 		if (guessData !== null) {
-			const currentArr = guessData.current.get(props.categoryInfo.name);
+			const currentArr = guessData.current.get(props.categoryInfo.id);
 			if (currentArr !== undefined) {
 				let newArr = [...(currentArr as number[])];
 
@@ -23,7 +23,7 @@ const Components: React.FC<IProps> = (props) => {
 					newArr.push(valueId);
 				} else newArr = newArr.filter((comp) => comp !== valueId);
 
-				guessData.current.set(props.categoryInfo.name, newArr.sort());
+				guessData.current.set(props.categoryInfo.id, newArr.sort());
 			}
 		}
 	}

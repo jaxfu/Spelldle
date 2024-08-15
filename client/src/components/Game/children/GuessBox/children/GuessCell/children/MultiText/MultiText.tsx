@@ -42,13 +42,15 @@ const MultiText: React.FC<IProps> = (props) => {
 			const mapArr: number[] = [];
 
 			for (const guess of guesses) {
-				const valueId = props.categoryInfo.value_id_map.get(guess.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(
+					guess.toLowerCase(),
+				);
 				if (valueId !== undefined) {
 					mapArr.push(valueId);
 				}
 			}
 
-			guessData.current.set(props.categoryInfo.name, mapArr.sort());
+			guessData.current.set(props.categoryInfo.id, mapArr.sort());
 		}
 	}
 

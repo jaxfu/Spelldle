@@ -8,7 +8,7 @@ import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
 	type T_CATEGORY_INFO,
 	type T_CATEGORY_INFO_SEED_JSON,
-	generateCategoryInfoFromJSON,
+	generateCategoryInfoFromSeedJSON,
 	generateGuessesStateFromJSON,
 } from "../../types/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
@@ -18,7 +18,7 @@ import type { T_GUESSES_AS_IDS } from "../../types/guesses";
 
 const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
-		return generateCategoryInfoFromJSON(
+		return generateCategoryInfoFromSeedJSON(
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
 		);
 	}, []);

@@ -1,6 +1,7 @@
 [
 	{
-		"name": "School",
+		"id": "school",
+		"display_name": "School",
 		"values": [
 			"Abjuration",
 			"Conjuration",
@@ -16,7 +17,8 @@
 		"has_modifiers": false
 	},
 	{
-		"name": "Level",
+		"id": "level",
+		"display_name": "Level",
 		"values": [
 			"1st",
 			"2nd",
@@ -33,7 +35,8 @@
 		"has_modifiers": true
 	},
 	{
-		"name": "Casting Time",
+		"id": "casting_time",
+		"display_name": "Casting Time",
 		"values": [
 			"1 Action",
 			"1 Reaction",
@@ -47,7 +50,8 @@
 		"has_modifiers": false
 	},
 	{
-		"name": "Range",
+		"id": "range",
+		"display_name": "Range",
 		"values": [
 			"Touch",
 			"Self",
@@ -62,19 +66,22 @@
 		"has_modifiers": false
 	},
 	{
-		"name": "Target",
+		"id": "target",
+		"display_name": "Target",
 		"values": ["Creature", "Object", "Area", "Point", "Unnocupied Space"],
 		"component_type": 0,
 		"has_modifiers": false
 	},
 	{
-		"name": "Components",
+		"id": "components",
+		"display_name": "Components",
 		"values": ["V", "S", "M"],
 		"component_type": 2,
 		"has_modifiers": false
 	},
 	{
-		"name": "Duration",
+		"id": "duration",
+		"display_name": "Duration",
 		"values": [
 			"Instantaneous",
 			"1 Round",
@@ -89,7 +96,8 @@
 		"has_modifiers": true
 	},
 	{
-		"name": "Class",
+		"id": "class",
+		"display_name": "Class",
 		"values": [
 			"Artificer",
 			"Bard",
@@ -105,7 +113,8 @@
 		"has_modifiers": false
 	},
 	{
-		"name": "Effects",
+		"id": "effects",
+		"display_name": "Effects",
 		"values": [
 			"Damage",
 			"Healing",

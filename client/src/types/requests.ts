@@ -7,11 +7,10 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-	T_APIRESULT_GET_PAST_GUESSES,
-	T_GUESS_CATEGORIES,
-	T_GUESS_CATEGORIES_MAP,
+	type T_APIRESULT_GET_PAST_GUESSES,
+	type T_GUESSES_AS_IDS,
 	type T_GUESS_ALL,
-} from "../methods/guesses";
+} from "../types/guesses";
 import { T_TOKENS } from "../types";
 
 // Routes
@@ -66,12 +65,13 @@ export async function apiRequestValidateSession(
 
 interface T_ARG_APIREQUEST_MAKE_GUESS {
 	accessToken: string;
-	guessData: T_GUESS_CATEGORIES_MAP;
+	guessData: T_GUESSES_AS_IDS;
 }
 
 export async function apiRequestMakeGuess(
 	paramObject: T_ARG_APIREQUEST_MAKE_GUESS,
 ): Promise<AxiosResponse<string>> {
+	console.log(paramObject.guessData);
 	return await axios<string>({
 		method: "POST",
 		url: API_ROUTES.MAKE_GUESS,
