@@ -35,21 +35,19 @@ const Game: React.FC = () => {
 	});
 
 	if (isSuccess) {
-		for (const guess of data.data.guesses) {
-			console.log(`guess ${guess.round}: ${JSON.stringify(guess)}`);
-		}
+		console.log(JSON.stringify(data.data))
 	}
 
 	return (
 		<>
 			<GuessDataContext.Provider value={currentGuessInfo}>
 				<GuessInfoButton />
-				{/* {data != undefined && data.data.guesses.length > 0 && (
+				{data != undefined && data.data.guesses.length > 0 && (
 					<ResultBox
 						pastGuesses={data.data.guesses}
 						categoriesInfoArr={categoriesInfo}
 					/>
-				)} */}
+				)}
 				<GuessBox categoriesInfoArr={categoriesInfo} />
 			</GuessDataContext.Provider>
 		</>

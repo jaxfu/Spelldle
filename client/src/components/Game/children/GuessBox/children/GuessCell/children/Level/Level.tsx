@@ -3,7 +3,7 @@ import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
 import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
 import { useContext } from "react";
-import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../types/guesses";
+import { T_GUESS_STATES_IDS_LEVEL } from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -18,7 +18,7 @@ const Level: React.FC<IProps> = (props) => {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(
 				props.categoryInfo.id,
-			) as T_GUESS_CATEGORIES_LEVEL;
+			) as T_GUESS_STATES_IDS_LEVEL;
 
 			if (currentData !== undefined) {
 				guessData.current.set(props.categoryInfo.id, {

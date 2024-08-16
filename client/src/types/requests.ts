@@ -7,9 +7,8 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-	type T_APIRESULT_GET_PAST_GUESSES,
+	type T_APIRESPONSE_GET_PAST_GUESSES,
 	type T_GUESSES_AS_IDS,
-	type T_GUESS_ALL,
 } from "../types/guesses";
 import { T_TOKENS } from "../types";
 
@@ -86,9 +85,9 @@ export async function apiRequestMakeGuess(
 
 export async function apiRequestGetPastGuesses(
 	accessToken: string,
-): Promise<AxiosResponse<T_APIRESULT_GET_PAST_GUESSES>> {
+): Promise<AxiosResponse<T_APIRESPONSE_GET_PAST_GUESSES>> {
 	console.log("Running apiRequestGetPastGuesses");
-	return await axios<T_APIRESULT_GET_PAST_GUESSES>({
+	return await axios<T_APIRESPONSE_GET_PAST_GUESSES>({
 		method: "POST",
 		url: API_ROUTES.GET_PAST_GUESSES,
 		headers: {

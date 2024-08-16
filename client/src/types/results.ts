@@ -1,5 +1,1 @@
-export enum E_RESULT_OPTIONS {
-	INCORRECT = 0,
-	SLIGHTLY_CORRECT,
-	CORRECT,
-}
+
