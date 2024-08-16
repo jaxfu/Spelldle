@@ -4,7 +4,7 @@ import {
 	type T_GUESS_STATES_IDS_LEVEL,
 } from "../../../../../../../../types/guesses";
 import { E_CATEGORY_COMPONENT_TYPE } from "../../../../../../../../types/categories";
-import { useMemo } from "react";
+import { useMemo, Fragment } from "react";
 import { E_RESULT_OPTIONS } from "../../../../../../../../types/guesses";
 
 export interface IProps {
@@ -14,9 +14,12 @@ export interface IProps {
 	result: number;
 	categoryType: E_CATEGORY_COMPONENT_TYPE;
 	values: string[];
+	round: number;
 }
 
 const ResultCategory: React.FC<IProps> = (props) => {
+	console.log(`${props.id}${props.round}`)
+
 	function translateValuesToStrings(): string[] {
 		switch (props.categoryType) {
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
@@ -52,10 +55,10 @@ const ResultCategory: React.FC<IProps> = (props) => {
 		<span className={styles.root} style={{ background: colorClass }}>
 			{translateValuesToStrings().map((value) => {
 				return (
-					<>
+					<Fragment key={`${props.round}-${value}`}>
 						<span>{value}</span>
 						<br />
-					</>
+					</Fragment>
 				);
 			})}
 		</span>
