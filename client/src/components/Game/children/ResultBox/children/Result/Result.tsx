@@ -22,6 +22,8 @@ const Result: React.FC<IProps> = (props) => {
       if (categoryInfo !== undefined) {
         return (
           <ResultCategory
+					key={`${props.round}-${id}`}
+					round={props.round}
             id={id}
 						display_name={display_name}
             result={categoryInfo.result}
