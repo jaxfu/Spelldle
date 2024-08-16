@@ -1,9 +1,9 @@
 import styles from "./Level.module.scss";
-import { T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
+import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
 import { useContext } from "react";
-import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../methods/guesses";
+import { T_GUESS_STATES_IDS_LEVEL } from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -17,11 +17,11 @@ const Level: React.FC<IProps> = (props) => {
 	) {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(
-				props.categoryInfo.name,
-			) as T_GUESS_CATEGORIES_LEVEL;
+				props.categoryInfo.id,
+			) as T_GUESS_STATES_IDS_LEVEL;
 
 			if (currentData !== undefined) {
-				guessData.current.set(props.categoryInfo.name, {
+				guessData.current.set(props.categoryInfo.id, {
 					level: currentData.level,
 					is_ritual: e.target.checked,
 				});

@@ -1,2 +1,27 @@
+@import "../../../../styles/mixins";
+@import "../../../../styles/vars";
+
 .root {
+	overflow: auto;
+	max-width: 90dvw;
+
+	border: 1px solid yellow;
+
+	.row {
+		white-space: nowrap;
+
+		.round {
+			display: inline-block;
+			border: $border;
+			width: 75px;
+			text-align: center;
+		}
+
+		.cell {
+			display: inline-block;
+			border: $border;
+			width: 125px;
+			text-align: center;
+		}
+	}
 }

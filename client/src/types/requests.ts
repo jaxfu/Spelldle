@@ -7,10 +7,9 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-	T_GUESS_CATEGORIES,
-	T_GUESS_CATEGORIES_MAP,
-	type T_GUESS_ALL,
-} from "../methods/guesses";
+	type T_APIRESPONSE_GET_PAST_GUESSES,
+	type T_GUESSES_AS_IDS,
+} from "../types/guesses";
 import { T_TOKENS } from "../types";
 
 // Routes
@@ -65,12 +64,13 @@ export async function apiRequestValidateSession(
 
 interface T_ARG_APIREQUEST_MAKE_GUESS {
 	accessToken: string;
-	guessData: T_GUESS_CATEGORIES_MAP;
+	guessData: T_GUESSES_AS_IDS;
 }
 
 export async function apiRequestMakeGuess(
 	paramObject: T_ARG_APIREQUEST_MAKE_GUESS,
 ): Promise<AxiosResponse<string>> {
+	console.log(paramObject.guessData);
 	return await axios<string>({
 		method: "POST",
 		url: API_ROUTES.MAKE_GUESS,
@@ -85,17 +85,13 @@ export async function apiRequestMakeGuess(
 
 export async function apiRequestGetPastGuesses(
 	accessToken: string,
-): Promise<AxiosResponse<T_GUESS_ALL[]>> {
+): Promise<AxiosResponse<T_APIRESPONSE_GET_PAST_GUESSES>> {
 	console.log("Running apiRequestGetPastGuesses");
-	try {
-		return await axios<T_GUESS_ALL[]>({
-			method: "POST",
-			url: API_ROUTES.GET_PAST_GUESSES,
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
-	} catch (err: any) {
-		throw new Error(err);
-	}
+	return await axios<T_APIRESPONSE_GET_PAST_GUESSES>({
+		method: "POST",
+		url: API_ROUTES.GET_PAST_GUESSES,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
 }

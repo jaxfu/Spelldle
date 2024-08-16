@@ -22,3 +22,31 @@ type GuessResults struct {
 	Target      uint `json:"target"`
 	Duration    uint `json:"duration"`
 }
+
+type PastGuessesAll struct {
+	Components  PastGuessesMulti  `json:"components"`
+	Class       PastGuessesMulti  `json:"class"`
+	Effects     PastGuessesMulti  `json:"effects"`
+	Level       PastGuessesLevel  `json:"level"`
+	School      PastGuessesSingle `json:"school"`
+	CastingTime PastGuessesSingle `json:"casting_time"`
+	Range       PastGuessesSingle `json:"range"`
+	Target      PastGuessesSingle `json:"target"`
+	Duration    PastGuessesSingle `json:"duration"`
+	Round       uint              `json:"round"`
+}
+
+type PastGuessesSingle struct {
+	Value  uint `json:"value"`
+	Result uint `json:"result"`
+}
+
+type PastGuessesMulti struct {
+	Value  []uint `json:"value"`
+	Result uint   `json:"result"`
+}
+
+type PastGuessesLevel struct {
+	Value  SpellLevel `json:"value"`
+	Result uint       `json:"result"`
+}

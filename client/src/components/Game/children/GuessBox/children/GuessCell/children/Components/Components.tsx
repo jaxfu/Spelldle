@@ -1,7 +1,7 @@
 import styles from "./Components.module.scss";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
 import { useContext } from "react";
-import { T_CATEGORY_INFO } from "../../../../../../../../methods/categories";
+import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -15,7 +15,7 @@ const Components: React.FC<IProps> = (props) => {
 		valueId: number,
 	) {
 		if (guessData !== null) {
-			const currentArr = guessData.current.get(props.categoryInfo.name);
+			const currentArr = guessData.current.get(props.categoryInfo.id);
 			if (currentArr !== undefined) {
 				let newArr = [...(currentArr as number[])];
 
@@ -23,7 +23,7 @@ const Components: React.FC<IProps> = (props) => {
 					newArr.push(valueId);
 				} else newArr = newArr.filter((comp) => comp !== valueId);
 
-				guessData.current.set(props.categoryInfo.name, newArr.sort());
+				guessData.current.set(props.categoryInfo.id, newArr.sort());
 			}
 		}
 	}
@@ -33,7 +33,7 @@ const Components: React.FC<IProps> = (props) => {
 			<div className={styles.checkbox_root}>
 				{props.categoryInfo.values.map((value) => {
 					const lowerCase = value.toLowerCase();
-					const valueId = props.categoryInfo.values_map.get(lowerCase);
+					const valueId = props.categoryInfo.value_id_map.get(lowerCase);
 
 					if (valueId !== undefined) {
 						return (

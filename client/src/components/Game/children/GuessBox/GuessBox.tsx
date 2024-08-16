@@ -1,11 +1,10 @@
 import GuessCell from "./children/GuessCell/GuessCell";
 import styles from "./GuessBox.module.scss";
-import { type T_GUESS_CATEGORIES } from "../../../../methods/guesses";
-import { type T_CATEGORY_INFO } from "../../../../methods/categories";
+import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../../methods/requests";
+import { apiRequestMakeGuess } from "../../../../types/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
-import GuessDataContext from "../../../../Contexts/GuessDataContext";
+import GuessDataContext from "../../../../contexts/GuessDataContext";
 import { useContext } from "react";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
@@ -26,19 +25,11 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	const guessData = useContext(GuessDataContext);
 
-	const guessCells = (): JSX.Element[] => {
-		const elements: JSX.Element[] = [];
-
-		for (const category of props.categoriesInfoArr) {
-			elements.push(<GuessCell key={category.name} categoryInfo={category} />);
-		}
-
-		return elements;
-	};
-
 	return (
 		<div className={styles.root}>
-			{guessCells()}
+			{props.categoriesInfoArr.map((category) => {
+				return <GuessCell key={category.id} categoryInfo={category} />;
+			})}
 			<button
 				onClick={() => {
 					if (guessData !== null) {

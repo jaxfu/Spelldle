@@ -4,9 +4,9 @@ import { useState, useMemo, useContext, useEffect } from "react";
 import {
 	E_CATEGORY_COMPONENT_TYPE,
 	type T_CATEGORY_INFO,
-} from "../../../../../../../../methods/categories";
-import GuessDataContext from "../../../../../../../../Contexts/GuessDataContext";
-import { T_GUESS_CATEGORIES_LEVEL } from "../../../../../../../../methods/guesses";
+} from "../../../../../../../../types/categories";
+import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import { T_GUESS_STATES_IDS_LEVEL } from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -19,19 +19,21 @@ const SingleText: React.FC<IProps> = (props) => {
 	const guessData = useContext(GuessDataContext);
 
 	const hasValidInput: boolean = useMemo(() => {
-		return props.categoryInfo.values_map.has(input.toLowerCase());
+		return props.categoryInfo.value_id_map.has(input.toLowerCase());
 	}, [input]);
 
 	function updateGuessCategoriesMapSingleText(hasValidInput: boolean): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
-				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(
+					input.toLowerCase(),
+				);
 
 				if (valueId !== undefined) {
-					guessData.current.set(props.categoryInfo.name, valueId);
+					guessData.current.set(props.categoryInfo.id, valueId);
 				}
 			} else {
-				guessData.current.set(props.categoryInfo.name, -1);
+				guessData.current.set(props.categoryInfo.id, -1);
 			}
 		}
 	}
@@ -39,20 +41,22 @@ const SingleText: React.FC<IProps> = (props) => {
 	function updateGuessCategoriesMapLevelText(hasValidInput: boolean): void {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(
-				props.categoryInfo.name,
-			) as T_GUESS_CATEGORIES_LEVEL;
+				props.categoryInfo.id,
+			) as T_GUESS_STATES_IDS_LEVEL;
 
 			if (hasValidInput) {
-				const valueId = props.categoryInfo.values_map.get(input.toLowerCase());
+				const valueId = props.categoryInfo.value_id_map.get(
+					input.toLowerCase(),
+				);
 
 				if (valueId !== undefined && currentData !== undefined) {
-					guessData.current.set(props.categoryInfo.name, {
+					guessData.current.set(props.categoryInfo.id, {
 						level: valueId,
 						is_ritual: currentData.is_ritual,
 					});
 				}
 			} else {
-				guessData.current.set(props.categoryInfo.name, {
+				guessData.current.set(props.categoryInfo.id, {
 					level: -1,
 					is_ritual: currentData.is_ritual,
 				});

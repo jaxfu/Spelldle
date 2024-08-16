@@ -2,7 +2,7 @@ import styles from "./GuessCell.module.scss";
 import {
 	type T_CATEGORY_INFO,
 	E_CATEGORY_COMPONENT_TYPE,
-} from "../../../../../../methods/categories";
+} from "../../../../../../types/categories";
 import SingleText from "./children/SingleText/SingleText";
 import MultiText from "./children/MultiText/MultiText";
 import Components from "./children/Components/Components";
@@ -28,7 +28,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<h4>{props.categoryInfo.name}</h4>
+			<h4>{props.categoryInfo.display_name}</h4>
 			{component()}
 		</div>
 	);

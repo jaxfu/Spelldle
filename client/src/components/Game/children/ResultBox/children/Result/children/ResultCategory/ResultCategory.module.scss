@@ -1,0 +1,12 @@
+@import "../../../../../../../../styles/_vars";
+@import "../../../../../../../../styles/_mixins";
+
+.root {
+	display: inline-block;
+	border: $border;
+	width: 125px;
+	height: 50px;
+	text-align: center;
+
+	overflow-y: auto;
+}

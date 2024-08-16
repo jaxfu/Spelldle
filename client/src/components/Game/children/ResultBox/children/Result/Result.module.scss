@@ -1,0 +1,20 @@
+@import "../../../../../../styles/_mixins";
+@import "../../../../../../styles/_vars";
+
+.root {
+	white-space: nowrap;
+
+	.round {
+		display: inline-block;
+		border: $border;
+		width: 75px;
+		text-align: center;
+	}
+
+	.cell {
+		display: inline-block;
+		border: $border;
+		width: 125px;
+		text-align: center;
+	}
+}

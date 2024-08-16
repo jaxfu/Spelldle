@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Register.module.scss";
 import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
-import { apiRequestRegister } from "../../methods/requests.ts";
+import { apiRequestRegister } from "../../types/requests.ts";
 import {
 	INIT_USERINPUT_REGISTER,
 	T_USERINPUT_REGISTER,
