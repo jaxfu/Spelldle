@@ -3,7 +3,7 @@ import styles from "./MultiText.module.scss";
 import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -17,7 +17,7 @@ const MultiText: React.FC<IProps> = (props) => {
 
 	const remainingValues = useRef<string[]>([...props.categoryInfo.values]);
 
-	const guessData = useContext(GuessDataContext);
+	const guessData = useContext(CtxGuessData);
 
 	const hasValidInput: boolean = useMemo(() => {
 		for (const guess of guesses) {

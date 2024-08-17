@@ -9,8 +9,10 @@ import Components from "./children/Components/Components";
 import Level from "./children/Level/Level";
 import {
   E_RESULT_OPTIONS,
-  T_GUESS_STATES_STRINGS,
+  type T_GUESS_STATES_STRINGS,
 } from "../../../../../../types/guesses";
+import CtxGuessCellsState from "../../../../../../contexts/CtxGuessCellsState";
+import { useContext } from "react";
 
 export interface I_GUESS_CELL_STATE {
   input: T_GUESS_STATES_STRINGS;
@@ -22,6 +24,8 @@ interface IProps {
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
+  const cellState = useContext(CtxGuessCellsState);
+
   const component = (): JSX.Element => {
     switch (props.categoryInfo.component_type) {
       case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
@@ -35,8 +39,27 @@ const GuessCell: React.FC<IProps> = (props) => {
     }
   };
 
+  const colorClass = (): string => {
+    if (cellState !== null) {
+      const { result } = cellState.state.get(props.categoryInfo.id)!
+
+      switch (result) {
+        case E_RESULT_OPTIONS.INCORRECT:
+          return "red";
+        case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+          return "orange";
+        case E_RESULT_OPTIONS.CORRECT:
+          return "green";
+        default:
+          return ""
+      }
+    }
+    return "";
+  };
+
+
   return (
-    <div className={styles.root}>
+    <div className={styles.root} style={{ backgroundColor: colorClass() }}>
       <h4>{props.categoryInfo.display_name}</h4>
       {component()}
     </div>

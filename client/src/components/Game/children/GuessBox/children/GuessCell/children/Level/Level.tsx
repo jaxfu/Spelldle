@@ -1,7 +1,7 @@
 import styles from "./Level.module.scss";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
-import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext } from "react";
 import { T_GUESS_STATES_IDS_LEVEL } from "../../../../../../../../types/guesses";
 
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const Level: React.FC<IProps> = (props) => {
-	const guessData = useContext(GuessDataContext);
+	const guessData = useContext(CtxGuessData);
 
 	function updateGuessCategoriesMapRitualToggle(
 		e: React.ChangeEvent<HTMLInputElement>,

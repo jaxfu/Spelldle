@@ -5,9 +5,9 @@ import {
   E_CATEGORY_COMPONENT_TYPE,
   type T_CATEGORY_INFO,
 } from "../../../../../../../../types/categories";
-import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { T_GUESS_STATES_IDS_LEVEL } from "../../../../../../../../types/guesses";
-import { I_GUESS_CELL_STATE } from "../../GuessCell";
+import CtxGuessCellsState, { I_CTX_GUESS_CELLS_STATE } from "../../../../../../../../contexts/CtxGuessCellsState";
 
 interface IProps {
   categoryInfo: T_CATEGORY_INFO;
@@ -17,7 +17,8 @@ const SingleText: React.FC<IProps> = (props) => {
   const [input, setInput] = useState<string>("");
   const [show, setShow] = useState<boolean>(false);
 
-  const guessData = useContext(GuessDataContext);
+  const guessData = useContext(CtxGuessData);
+  const cellState = useContext(CtxGuessCellsState);
 
   const hasValidInput: boolean = useMemo(() => {
     return props.categoryInfo.value_id_map.has(input.toLowerCase());

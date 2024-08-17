@@ -13,8 +13,8 @@ import {
   generateGuessesStateFromJSON,
 } from "../../types/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
-import GuessDataContext from "../../contexts/GuessDataContext";
-import GuessCellsStateContext from "../../contexts/GuessCellsStateContext";
+import CtxGuessData from "../../contexts/CtxGuessData";
+import CtxGuessCellsState from "../../contexts/CtxGuessCellsState";
 import ResultBox from "./children/ResultBox/ResultBox";
 import { E_RESULT_OPTIONS, T_GUESSES_AS_IDS } from "../../types/guesses";
 import { I_GUESS_CELL_STATE } from "./children/GuessBox/children/GuessCell/GuessCell";
@@ -40,7 +40,7 @@ const Game: React.FC = () => {
       CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
     ),
   );
-  const guessCellsState = useRef<
+  const [guessCellsState, setGuessCellsState] = useState<
     Map<string, I_GUESS_CELL_STATE>
   >(initGuessCellsStateMap(CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON));
 
@@ -82,8 +82,10 @@ const Game: React.FC = () => {
 
   return (
     <>
-      <GuessCellsStateContext.Provider value={guessCellsState}>
-        <GuessDataContext.Provider value={currentGuessInfo}>
+      <CtxGuessData.Provider value={currentGuessInfo}>
+        <CtxGuessCellsState.Provider
+          value={{ state: guessCellsState, setState: setGuessCellsState }}
+        >
           <GuessInfoButton />
           {data != undefined && data.data.guesses.length > 0 && (
             <ResultBox
@@ -91,11 +93,9 @@ const Game: React.FC = () => {
               categoriesInfoArr={categoriesInfo}
             />
           )}
-          <GuessBox
-            categoriesInfoArr={categoriesInfo}
-          />
-        </GuessDataContext.Provider>
-      </GuessCellsStateContext.Provider >
+          <GuessBox categoriesInfoArr={categoriesInfo} />
+        </CtxGuessCellsState.Provider>
+      </CtxGuessData.Provider>
     </>
   );
 };

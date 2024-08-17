@@ -1,5 +1,5 @@
 import styles from "./Components.module.scss";
-import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 
@@ -8,7 +8,7 @@ interface IProps {
 }
 
 const Components: React.FC<IProps> = (props) => {
-	const guessData = useContext(GuessDataContext);
+	const guessData = useContext(CtxGuessData);
 
 	function updateGuessCategoriesMap(
 		e: React.ChangeEvent<HTMLInputElement>,
