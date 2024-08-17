@@ -7,9 +7,16 @@ import SingleText from "./children/SingleText/SingleText";
 import MultiText from "./children/MultiText/MultiText";
 import Components from "./children/Components/Components";
 import Level from "./children/Level/Level";
+import { E_RESULT_OPTIONS } from "../../../../../../types/guesses";
+
+export interface GuessCellState {
+	input: string[];
+	result: E_RESULT_OPTIONS;
+}
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
+	state: GuessCellState;
 }
 
 const GuessCell: React.FC<IProps> = (props) => {

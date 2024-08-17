@@ -14,9 +14,19 @@ import {
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 import GuessDataContext from "../../contexts/GuessDataContext";
 import ResultBox from "./children/ResultBox/ResultBox";
-import type { T_GUESSES_AS_IDS } from "../../types/guesses";
+import type { E_RESULT_OPTIONS, T_GUESSES_AS_IDS } from "../../types/guesses";
 
 const Game: React.FC = () => {
+	const { data, isSuccess } = useQuery({
+		queryKey: [QUERY_KEYS.pastGuesses],
+		queryFn: () =>
+			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
+	});
+
+	if (isSuccess) {
+		console.log(JSON.stringify(data.data));
+	}
+
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
 		return generateCategoryInfoFromSeedJSON(
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
@@ -28,15 +38,7 @@ const Game: React.FC = () => {
 		),
 	);
 
-	const { data, isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.pastGuesses],
-		queryFn: () =>
-			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
-	});
-
-	if (isSuccess) {
-		console.log(JSON.stringify(data.data))
-	}
+	function initGuessCellsStateMap() {}
 
 	return (
 		<>

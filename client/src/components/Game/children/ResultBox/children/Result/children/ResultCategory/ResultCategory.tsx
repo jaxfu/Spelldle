@@ -18,7 +18,7 @@ export interface IProps {
 }
 
 const ResultCategory: React.FC<IProps> = (props) => {
-	console.log(`${props.id}${props.round}`)
+	console.log(`${props.id}${props.round}`);
 
 	function translateValuesToStrings(): string[] {
 		switch (props.categoryType) {
@@ -33,7 +33,9 @@ const ResultCategory: React.FC<IProps> = (props) => {
 				}
 				break;
 			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
-				const v = { ...(props.guessAsIds as unknown as T_GUESS_STATES_IDS_LEVEL) };
+				const v = {
+					...(props.guessAsIds as unknown as T_GUESS_STATES_IDS_LEVEL),
+				};
 				return [props.values[v.level], v.is_ritual.toString()];
 		}
 		return [];

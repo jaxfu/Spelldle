@@ -25,9 +25,12 @@ export type T_APIRESPONSE_GET_PAST_GUESSES = {
 	guesses: T_PAST_GUESS[];
 };
 
-export type T_PAST_GUESS = Map<string, {
-	value: T_GUESSES_AS_IDS;
-	result: number
-}>
+export type T_PAST_GUESS = Map<
+	string,
+	{
+		value: T_GUESSES_AS_IDS;
+		result: number;
+	}
+>;
 
 export type T_GUESS_STATES_IDS_LEVEL = { level: number; is_ritual: boolean };
