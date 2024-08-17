@@ -16,7 +16,7 @@ import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 import GuessDataContext from "../../contexts/GuessDataContext";
 import ResultBox from "./children/ResultBox/ResultBox";
 import { E_RESULT_OPTIONS, T_GUESSES_AS_IDS } from "../../types/guesses";
-import { GuessCellState } from "./children/GuessBox/children/GuessCell/GuessCell";
+import { I_GUESS_CELL_STATE } from "./children/GuessBox/children/GuessCell/GuessCell";
 
 const Game: React.FC = () => {
 	const { data, isSuccess } = useQuery({
@@ -39,17 +39,17 @@ const Game: React.FC = () => {
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
 		),
 	);
-	const guessCellsState = useState<Map<string, GuessCellState>>(
-		initGuessCellsStateMap(CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON),
-	);
+	const [guessCellsState, setGuessCellsState] = useState<
+		Map<string, I_GUESS_CELL_STATE>
+	>(initGuessCellsStateMap(CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON));
 
 	function initGuessCellsStateMap(
 		categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
-	): Map<string, GuessCellState> {
+	): Map<string, I_GUESS_CELL_STATE> {
 		const map = new Map();
 
 		for (const { id, component_type } of categoryInfoJson) {
-			let guessCellState: GuessCellState;
+			let guessCellState: I_GUESS_CELL_STATE;
 
 			switch (component_type) {
 				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
@@ -76,7 +76,6 @@ const Game: React.FC = () => {
 			map.set(id, guessCellState);
 		}
 
-		console.log(map);
 		return map;
 	}
 
@@ -90,7 +89,11 @@ const Game: React.FC = () => {
 						categoriesInfoArr={categoriesInfo}
 					/>
 				)}
-				<GuessBox categoriesInfoArr={categoriesInfo} />
+				<GuessBox
+					categoriesInfoArr={categoriesInfo}
+					guessCellsState={guessCellsState}
+					setGuessCellsState={setGuessCellsState}
+				/>
 			</GuessDataContext.Provider>
 		</>
 	);

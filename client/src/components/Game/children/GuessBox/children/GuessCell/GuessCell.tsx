@@ -12,14 +12,14 @@ import {
 	T_GUESS_STATES_STRINGS,
 } from "../../../../../../types/guesses";
 
-export interface GuessCellState {
+export interface I_GUESS_CELL_STATE {
 	input: T_GUESS_STATES_STRINGS;
 	result: E_RESULT_OPTIONS;
 }
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
-	state: GuessCellState;
+	state: I_GUESS_CELL_STATE;
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
