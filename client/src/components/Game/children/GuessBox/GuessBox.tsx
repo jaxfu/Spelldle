@@ -10,10 +10,6 @@ import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
   categoriesInfoArr: T_CATEGORY_INFO[];
-  guessCellsState: Map<string, I_GUESS_CELL_STATE>;
-  setGuessCellsState: React.Dispatch<
-    React.SetStateAction<Map<string, I_GUESS_CELL_STATE>>
-  >;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -32,16 +28,12 @@ const GuessBox: React.FC<IProps> = (props) => {
   return (
     <div className={styles.root}>
       {props.categoriesInfoArr.map((category) => {
-        const guessCellState = props.guessCellsState.get(category.id);
-        if (guessCellState !== undefined) {
-          return (
-            <GuessCell
-              key={category.id}
-              categoryInfo={category}
-              state={guessCellState}
-            />
-          );
-        }
+        return (
+          <GuessCell
+            key={category.id}
+            categoryInfo={category}
+          />
+        );
       })}
       <button
         onClick={() => {
