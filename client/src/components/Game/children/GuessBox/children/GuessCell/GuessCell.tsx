@@ -7,10 +7,13 @@ import SingleText from "./children/SingleText/SingleText";
 import MultiText from "./children/MultiText/MultiText";
 import Components from "./children/Components/Components";
 import Level from "./children/Level/Level";
-import { E_RESULT_OPTIONS } from "../../../../../../types/guesses";
+import {
+	E_RESULT_OPTIONS,
+	T_GUESS_STATES_STRINGS,
+} from "../../../../../../types/guesses";
 
 export interface GuessCellState {
-	input: string[];
+	input: T_GUESS_STATES_STRINGS;
 	result: E_RESULT_OPTIONS;
 }
 

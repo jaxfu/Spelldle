@@ -1,10 +1,7 @@
-import { deepCopyObject } from "../utils/methods";
-import { type T_GAME_SESSION } from "../types";
-
 export type T_GUESS_STATES_STRINGS =
 	| string
 	| string[]
-	| T_GUESS_STATES_IDS_LEVEL;
+	| T_GUESS_STATES_STRINGS_LEVEL;
 
 export type T_GUESS_STATES_IDS = number | number[] | T_GUESS_STATES_IDS_LEVEL;
 
@@ -12,9 +9,10 @@ export type T_GUESSES_AS_STRINGS = Map<string, T_GUESS_STATES_STRINGS>;
 export type T_GUESSES_AS_IDS = Map<string, T_GUESS_STATES_IDS>;
 
 export enum E_RESULT_OPTIONS {
+	UNINITIALIZED = -1,
 	INCORRECT = 0,
-	SLIGHTLY_CORRECT,
-	CORRECT,
+	SLIGHTLY_CORRECT = 1,
+	CORRECT = 2,
 }
 
 export type T_APIRESPONSE_GET_PAST_GUESSES = {
@@ -34,3 +32,7 @@ export type T_PAST_GUESS = Map<
 >;
 
 export type T_GUESS_STATES_IDS_LEVEL = { level: number; is_ritual: boolean };
+export type T_GUESS_STATES_STRINGS_LEVEL = {
+	level: string;
+	is_ritual: boolean;
+};

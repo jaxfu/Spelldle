@@ -18,8 +18,6 @@ export interface IProps {
 }
 
 const ResultCategory: React.FC<IProps> = (props) => {
-	console.log(`${props.id}${props.round}`);
-
 	function translateValuesToStrings(): string[] {
 		switch (props.categoryType) {
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:

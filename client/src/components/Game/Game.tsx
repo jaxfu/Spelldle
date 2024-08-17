@@ -3,9 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../utils/methods";
 import { apiRequestGetPastGuesses } from "../../types/requests";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
+	E_CATEGORY_COMPONENT_TYPE,
 	type T_CATEGORY_INFO,
 	type T_CATEGORY_INFO_SEED_JSON,
 	generateCategoryInfoFromSeedJSON,
@@ -14,7 +15,8 @@ import {
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 import GuessDataContext from "../../contexts/GuessDataContext";
 import ResultBox from "./children/ResultBox/ResultBox";
-import type { E_RESULT_OPTIONS, T_GUESSES_AS_IDS } from "../../types/guesses";
+import { E_RESULT_OPTIONS, T_GUESSES_AS_IDS } from "../../types/guesses";
+import { GuessCellState } from "./children/GuessBox/children/GuessCell/GuessCell";
 
 const Game: React.FC = () => {
 	const { data, isSuccess } = useQuery({
@@ -37,8 +39,46 @@ const Game: React.FC = () => {
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
 		),
 	);
+	const guessCellsState = useState<Map<string, GuessCellState>>(
+		initGuessCellsStateMap(CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON),
+	);
 
-	function initGuessCellsStateMap() {}
+	function initGuessCellsStateMap(
+		categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
+	): Map<string, GuessCellState> {
+		const map = new Map();
+
+		for (const { id, component_type } of categoryInfoJson) {
+			let guessCellState: GuessCellState;
+
+			switch (component_type) {
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+					guessCellState = {
+						input: "",
+						result: E_RESULT_OPTIONS.UNINITIALIZED,
+					};
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+					guessCellState = {
+						input: [],
+						result: E_RESULT_OPTIONS.UNINITIALIZED,
+					};
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+					guessCellState = {
+						input: { level: "", is_ritual: false },
+						result: E_RESULT_OPTIONS.UNINITIALIZED,
+					};
+					break;
+			}
+
+			map.set(id, guessCellState);
+		}
+
+		console.log(map);
+		return map;
+	}
 
 	return (
 		<>
