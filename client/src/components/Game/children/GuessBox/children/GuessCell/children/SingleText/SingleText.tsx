@@ -7,8 +7,9 @@ import {
 } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
-  T_GUESS_STATES_IDS_LEVEL,
-  T_GUESSES_AS_IDS,
+  type T_GUESS_STATES_IDS_LEVEL,
+  type T_GUESSES_AS_IDS,
+  translateIdsToValues,
 } from "../../../../../../../../types/guesses";
 import CtxGuessCellsState, {
   I_CTX_GUESS_CELLS_STATE,
@@ -83,13 +84,32 @@ const SingleText: React.FC<IProps> = (props) => {
       props.categoryInfo.component_type ===
       E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT
     ) {
-      updateGuessCategoriesMapSingleText(input, hasValidInput, props.categoryInfo, guessData);
+      updateGuessCategoriesMapSingleText(
+        input,
+        hasValidInput,
+        props.categoryInfo,
+        guessData,
+      );
     } else if (
       props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
     ) {
-      updateGuessCategoriesMapLevelText(input, hasValidInput, props.categoryInfo, guessData);
+      updateGuessCategoriesMapLevelText(
+        input,
+        hasValidInput,
+        props.categoryInfo,
+        guessData,
+      );
     }
   }, [hasValidInput]);
+
+  useEffect(() => {
+    if (cellState !== null) {
+      const info = cellState.state.get(props.categoryInfo.id)
+      if (info !== undefined) {
+        setInput((input) => info.input.toString())
+      }
+    }
+  }, [])
 
   return (
     <>

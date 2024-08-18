@@ -22,7 +22,7 @@ export type T_APIRESPONSE_GET_PAST_GUESSES = {
 export type T_PAST_GUESS = Map<
 	string,
 	{
-		value: T_GUESSES_AS_IDS;
+		value: T_GUESS_STATES_IDS;
 		result: number;
 	}
 >;
