@@ -1,4 +1,5 @@
 import { I_GUESS_CELL_STATE } from "../components/Game/children/GuessBox/children/GuessCell/GuessCell";
+import { E_CATEGORY_COMPONENT_TYPE, T_CATEGORY_INFO } from "./categories";
 
 export type T_GUESS_STATES_STRINGS =
 	| string
@@ -39,4 +40,54 @@ export enum E_RESULT_OPTIONS {
 	INCORRECT = 0,
 	SLIGHTLY_CORRECT = 1,
 	CORRECT = 2,
+}
+
+export function translateValuesToStrings(
+	id: T_GUESS_STATES_IDS,
+	categoryInfo: T_CATEGORY_INFO,
+): string[] {
+	switch (categoryInfo.component_type) {
+		case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+			return [categoryInfo.values[id as unknown as number]];
+		case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+		case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+			if (Array.isArray(id)) {
+				return id.map((v: number) => {
+					return categoryInfo.values[v];
+				});
+			}
+			break;
+		case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+			const v = {
+				...(id as unknown as T_GUESS_STATES_IDS_LEVEL),
+			};
+			return [categoryInfo.values[v.level], v.is_ritual.toString()];
+	}
+
+	return [];
+}
+
+export function translateIdsToValues(
+	id: T_GUESS_STATES_IDS,
+	categoryInfo: T_CATEGORY_INFO,
+): T_GUESS_STATES_STRINGS {
+	switch (categoryInfo.component_type) {
+		case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+			return categoryInfo.values[id as unknown as number];
+		case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+		case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+			if (Array.isArray(id)) {
+				return id.map((v: number) => {
+					return categoryInfo.values[v];
+				});
+			}
+			break;
+		case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+			const v = {
+				...(id as unknown as T_GUESS_STATES_IDS_LEVEL),
+			};
+			return { level: categoryInfo.values[v.level], is_ritual: v.is_ritual };
+	}
+
+	return "";
 }
