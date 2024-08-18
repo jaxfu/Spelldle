@@ -41,7 +41,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 
   const colorClass = (): string => {
     if (cellState !== null) {
-      const { result } = cellState.state.get(props.categoryInfo.id)!
+      const { result } = cellState.state.get(props.categoryInfo.id)!;
 
       switch (result) {
         case E_RESULT_OPTIONS.INCORRECT:
@@ -51,12 +51,11 @@ const GuessCell: React.FC<IProps> = (props) => {
         case E_RESULT_OPTIONS.CORRECT:
           return "green";
         default:
-          return ""
+          return "";
       }
     }
     return "";
   };
-
 
   return (
     <div className={styles.root} style={{ backgroundColor: colorClass() }}>
