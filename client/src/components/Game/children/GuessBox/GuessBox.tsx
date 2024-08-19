@@ -7,7 +7,7 @@ import { QUERY_KEYS } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
 import { useContext } from "react";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
-import { T_PAST_GUESSES } from "../../../../types/guesses";
+import { type T_PAST_GUESSES } from "../../../../types/guesses";
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
@@ -26,6 +26,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 	});
 
 	const guessData = useContext(CtxGuessData);
+	console.log(props.mostRecentGuess);
 
 	return (
 		<div className={styles.root}>

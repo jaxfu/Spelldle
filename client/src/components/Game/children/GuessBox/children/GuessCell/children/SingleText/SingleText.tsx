@@ -105,7 +105,7 @@ const SingleText: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		if (cellState !== null) {
 			const info = cellState.state.get(props.categoryInfo.id);
-			console.log(info);
+			//console.log(info);
 			if (info !== undefined) {
 				setInput((input) => info.input.toString());
 			}
