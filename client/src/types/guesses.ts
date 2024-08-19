@@ -1,4 +1,3 @@
-import { I_GUESS_CELL_STATE } from "../components/Game/children/GuessBox/children/GuessCell/GuessCell";
 import { E_CATEGORY_COMPONENT_TYPE, T_CATEGORY_INFO } from "./categories";
 
 export type T_GUESS_STATES_STRINGS =
@@ -10,6 +9,13 @@ export type T_GUESS_STATES_IDS = number | number[] | T_GUESS_STATES_IDS_LEVEL;
 
 export type T_GUESSES_AS_STRINGS = Map<string, T_GUESS_STATES_STRINGS>;
 export type T_GUESSES_AS_IDS = Map<string, T_GUESS_STATES_IDS>;
+
+export enum E_RESULT_OPTIONS {
+	UNINITIALIZED = -1,
+	INCORRECT = 0,
+	SLIGHTLY_CORRECT = 1,
+	CORRECT = 2,
+}
 
 export type T_APIRESPONSE_GET_PAST_GUESSES = {
 	game_session: {
@@ -25,21 +31,16 @@ export type T_PAST_GUESS_CATEGORY = {
 	value: T_GUESS_STATES_IDS;
 	result: E_RESULT_OPTIONS;
 };
+export const INIT_PAST_GUESS_CATEGORY: T_PAST_GUESS_CATEGORY = {
+	value: -1,
+	result: E_RESULT_OPTIONS.UNINITIALIZED,
+};
 
 export type T_GUESS_STATES_IDS_LEVEL = { level: number; is_ritual: boolean };
 export type T_GUESS_STATES_STRINGS_LEVEL = {
 	level: string;
 	is_ritual: boolean;
 };
-
-export type T_GUESS_CELLS_STATE = Map<string, I_GUESS_CELL_STATE>;
-
-export enum E_RESULT_OPTIONS {
-	UNINITIALIZED = -1,
-	INCORRECT = 0,
-	SLIGHTLY_CORRECT = 1,
-	CORRECT = 2,
-}
 
 export function translateValuesToStrings(
 	id: T_GUESS_STATES_IDS,

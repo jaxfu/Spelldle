@@ -10,18 +10,11 @@ import Level from "./children/Level/Level";
 import {
 	E_RESULT_OPTIONS,
 	T_PAST_GUESS_CATEGORY,
-	type T_GUESS_STATES_STRINGS,
 } from "../../../../../../types/guesses";
-import { useContext } from "react";
-
-export interface I_GUESS_CELL_STATE {
-	input: T_GUESS_STATES_STRINGS;
-	result: E_RESULT_OPTIONS;
-}
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
-	mostRecentGuess: T_PAST_GUESS_CATEGORY | null;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
@@ -38,20 +31,17 @@ const GuessCell: React.FC<IProps> = (props) => {
 		}
 	};
 
-	const colorClass = (result: E_RESULT_OPTIONS | null): string => {
-		if (result !== null) {
-			switch (result) {
-				case E_RESULT_OPTIONS.INCORRECT:
-					return "red";
-				case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
-					return "orange";
-				case E_RESULT_OPTIONS.CORRECT:
-					return "green";
-				default:
-					return "";
-			}
+	const colorClass = (result: E_RESULT_OPTIONS): string => {
+		switch (result) {
+			case E_RESULT_OPTIONS.INCORRECT:
+				return "red";
+			case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+				return "orange";
+			case E_RESULT_OPTIONS.CORRECT:
+				return "green";
+			default:
+				return "";
 		}
-		return "";
 	};
 
 	return (

@@ -63,7 +63,7 @@ function updateGuessCategoriesMapLevelText(
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
-	mostRecentGuess: T_PAST_GUESS_CATEGORY | null;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
@@ -101,7 +101,7 @@ const SingleText: React.FC<IProps> = (props) => {
 	}, [hasValidInput]);
 
 	useEffect(() => {
-		if (props.mostRecentGuess !== null) {
+		if (props.mostRecentGuess.result !== -1) {
 			const displayValue = translateIdsToValues(
 				props.mostRecentGuess.value,
 				props.categoryInfo,
