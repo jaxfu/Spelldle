@@ -50,7 +50,7 @@ const Game: React.FC = () => {
   // }
 
   useEffect(() => {
-    console.log("Running useEffect");
+    console.log("updating guess cells state");
     if (isSuccess && data.data.guesses.length > 0) {
       setGuessCellsState((state) =>
         updateGuessCellsStateMap(

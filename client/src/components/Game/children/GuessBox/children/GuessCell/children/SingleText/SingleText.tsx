@@ -72,7 +72,7 @@ const SingleText: React.FC<IProps> = (props) => {
   const [show, setShow] = useState<boolean>(false);
 
   const guessData = useContext(CtxGuessData);
-  const cellState = useContext(CtxGuessCellsState);
+  const cellState = useContext(CtxGuessCellsState)
 
   const hasValidInput: boolean = useMemo(() => {
     return props.categoryInfo.value_id_map.has(input.toLowerCase());
@@ -105,11 +105,12 @@ const SingleText: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (cellState !== null) {
       const info = cellState.state.get(props.categoryInfo.id)
+      console.log(info)
       if (info !== undefined) {
         setInput((input) => info.input.toString())
       }
     }
-  }, [])
+  }, [cellState])
 
   return (
     <>
