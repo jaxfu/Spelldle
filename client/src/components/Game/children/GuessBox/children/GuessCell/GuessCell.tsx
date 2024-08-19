@@ -9,11 +9,9 @@ import Components from "./children/Components/Components";
 import Level from "./children/Level/Level";
 import {
 	E_RESULT_OPTIONS,
-	T_PAST_GUESS,
 	T_PAST_GUESS_CATEGORY,
 	type T_GUESS_STATES_STRINGS,
 } from "../../../../../../types/guesses";
-import CtxGuessCellsState from "../../../../../../contexts/CtxGuessCellsState";
 import { useContext } from "react";
 
 export interface I_GUESS_CELL_STATE {
@@ -27,12 +25,10 @@ interface IProps {
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
-	const cellState = useContext(CtxGuessCellsState);
-
 	const component = (): JSX.Element => {
 		switch (props.categoryInfo.component_type) {
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-				return <SingleText categoryInfo={props.categoryInfo} />;
+				return <SingleText {...props} />;
 			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
 				return <MultiText {...props} />;
 			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:

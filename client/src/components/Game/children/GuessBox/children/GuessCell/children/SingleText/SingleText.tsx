@@ -9,11 +9,9 @@ import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
 	type T_GUESS_STATES_IDS_LEVEL,
 	type T_GUESSES_AS_IDS,
+	T_PAST_GUESS_CATEGORY,
 	translateIdsToValues,
 } from "../../../../../../../../types/guesses";
-import CtxGuessCellsState, {
-	I_CTX_GUESS_CELLS_STATE,
-} from "../../../../../../../../contexts/CtxGuessCellsState";
 
 function updateGuessCategoriesMapSingleText(
 	input: string,
@@ -65,6 +63,7 @@ function updateGuessCategoriesMapLevelText(
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY | null;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
@@ -72,7 +71,6 @@ const SingleText: React.FC<IProps> = (props) => {
 	const [show, setShow] = useState<boolean>(false);
 
 	const guessData = useContext(CtxGuessData);
-	const cellState = useContext(CtxGuessCellsState);
 
 	const hasValidInput: boolean = useMemo(() => {
 		return props.categoryInfo.value_id_map.has(input.toLowerCase());
@@ -103,14 +101,14 @@ const SingleText: React.FC<IProps> = (props) => {
 	}, [hasValidInput]);
 
 	useEffect(() => {
-		if (cellState !== null) {
-			const info = cellState.state.get(props.categoryInfo.id);
-			//console.log(info);
-			if (info !== undefined) {
-				setInput((input) => info.input.toString());
-			}
+		if (props.mostRecentGuess !== null) {
+			const displayValue = translateIdsToValues(
+				props.mostRecentGuess.value,
+				props.categoryInfo,
+			);
+			setInput(displayValue.toString());
 		}
-	}, [cellState]);
+	}, [props.mostRecentGuess]);
 
 	return (
 		<>
