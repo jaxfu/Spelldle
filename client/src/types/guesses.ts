@@ -16,12 +16,12 @@ export type T_APIRESPONSE_GET_PAST_GUESSES = {
 		game_session_id: string;
 		current_round: number;
 	};
-	guesses: T_PAST_GUESSES[];
+	guesses: T_PAST_GUESS[];
 };
 
-export type T_PAST_GUESSES = Map<string, T_PAST_GUESS>;
+export type T_PAST_GUESS = Map<string, T_PAST_GUESS_CATEGORY>;
 
-export type T_PAST_GUESS = {
+export type T_PAST_GUESS_CATEGORY = {
 	value: T_GUESS_STATES_IDS;
 	result: E_RESULT_OPTIONS;
 };

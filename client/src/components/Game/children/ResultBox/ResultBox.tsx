@@ -1,10 +1,10 @@
-import { type T_PAST_GUESSES } from "../../../../types/guesses";
+import { type T_PAST_GUESS } from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import Result from "./children/Result/Result";
 import styles from "./ResultBox.module.scss";
 
 interface IProps {
-	pastGuesses: T_PAST_GUESSES[];
+	pastGuesses: T_PAST_GUESS[];
 	categoriesInfoArr: T_CATEGORY_INFO[];
 }
 

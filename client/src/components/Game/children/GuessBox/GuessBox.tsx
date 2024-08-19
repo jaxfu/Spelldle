@@ -5,13 +5,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../types/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
-import { type T_PAST_GUESSES } from "../../../../types/guesses";
+import { type T_PAST_GUESS } from "../../../../types/guesses";
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
-	mostRecentGuess: T_PAST_GUESSES | null;
+	mostRecentGuess: T_PAST_GUESS | null;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -26,12 +26,28 @@ const GuessBox: React.FC<IProps> = (props) => {
 	});
 
 	const guessData = useContext(CtxGuessData);
-	console.log(props.mostRecentGuess);
 
 	return (
 		<div className={styles.root}>
 			{props.categoriesInfoArr.map((category) => {
-				return <GuessCell key={category.id} categoryInfo={category} />;
+				if (props.mostRecentGuess !== null) {
+					const mostRecentGuess = props.mostRecentGuess.get(category.id);
+					if (mostRecentGuess !== undefined)
+						return (
+							<GuessCell
+								key={category.id}
+								categoryInfo={category}
+								mostRecentGuess={mostRecentGuess}
+							/>
+						);
+				}
+				return (
+					<GuessCell
+						key={category.id}
+						categoryInfo={category}
+						mostRecentGuess={null}
+					/>
+				);
 			})}
 			<button
 				onClick={() => {

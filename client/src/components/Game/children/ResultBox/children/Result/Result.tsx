@@ -1,11 +1,11 @@
 import styles from "./Result.module.scss";
-import { type T_PAST_GUESSES } from "../../../../../../types/guesses";
+import { type T_PAST_GUESS } from "../../../../../../types/guesses";
 import ResultCategory from "./children/ResultCategory/ResultCategory";
 import { useMemo } from "react";
 import { type T_CATEGORY_INFO } from "../../../../../../types/categories";
 
 interface IProps {
-	guess: T_PAST_GUESSES;
+	guess: T_PAST_GUESS;
 	categoriesInfoArr: T_CATEGORY_INFO[];
 	round: number;
 }
