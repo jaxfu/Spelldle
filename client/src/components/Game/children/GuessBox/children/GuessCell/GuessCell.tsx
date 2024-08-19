@@ -9,6 +9,7 @@ import Components from "./children/Components/Components";
 import Level from "./children/Level/Level";
 import {
 	E_RESULT_OPTIONS,
+	T_GUESS_STATES_IDS,
 	type T_GUESS_STATES_STRINGS,
 } from "../../../../../../types/guesses";
 import CtxGuessCellsState from "../../../../../../contexts/CtxGuessCellsState";

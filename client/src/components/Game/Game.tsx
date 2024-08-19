@@ -19,7 +19,7 @@ import ResultBox from "./children/ResultBox/ResultBox";
 import {
 	E_RESULT_OPTIONS,
 	T_GUESSES_AS_IDS,
-	T_PAST_GUESS,
+	T_PAST_GUESSES,
 	translateIdsToValues,
 } from "../../types/guesses";
 import { I_GUESS_CELL_STATE } from "./children/GuessBox/children/GuessCell/GuessCell";
@@ -49,17 +49,17 @@ const Game: React.FC = () => {
 	//   console.log(JSON.stringify(data.data));
 	// }
 
-	useEffect(() => {
-		console.log("updating guess cells state");
-		if (isSuccess && data.data.guesses.length > 0) {
-			setGuessCellsState((state) =>
-				updateGuessCellsStateMap(
-					categoriesInfo,
-					data.data.guesses[data.data.guesses.length - 1],
-				),
-			);
-		}
-	}, [isSuccess, isFetching]);
+	// useEffect(() => {
+	// 	console.log("updating guess cells state");
+	// 	if (isSuccess && data.data.guesses.length > 0) {
+	// 		setGuessCellsState((state) =>
+	// 			updateGuessCellsStateMap(
+	// 				categoriesInfo,
+	// 				data.data.guesses[data.data.guesses.length - 1],
+	// 			),
+	// 		);
+	// 	}
+	// }, [isSuccess, isFetching]);
 
 	function initGuessCellsStateMap(
 		categoriesInfo: T_CATEGORY_INFO[],
@@ -99,12 +99,12 @@ const Game: React.FC = () => {
 
 	function updateGuessCellsStateMap(
 		categoriesInfo: T_CATEGORY_INFO[],
-		pastGuess: T_PAST_GUESS,
+		pastGuess: T_PAST_GUESSES,
 	): Map<string, I_GUESS_CELL_STATE> {
 		const map = new Map();
 
 		for (const category of categoriesInfo) {
-			const guessMap: T_PAST_GUESS = new Map(Object.entries(pastGuess));
+			const guessMap: T_PAST_GUESSES = new Map(Object.entries(pastGuess));
 			const guess = guessMap.get(category.id);
 			if (guess !== undefined) {
 				map.set(category.id, {
@@ -130,7 +130,14 @@ const Game: React.FC = () => {
 							categoriesInfoArr={categoriesInfo}
 						/>
 					)}
-					<GuessBox categoriesInfoArr={categoriesInfo} />
+					<GuessBox
+						categoriesInfoArr={categoriesInfo}
+						mostRecentGuess={
+							data !== undefined && data.data.guesses.length > 0
+								? data.data.guesses[data.data.guesses.length - 1]
+								: null
+						}
+					/>
 				</CtxGuessCellsState.Provider>
 			</CtxGuessData.Provider>
 		</>
