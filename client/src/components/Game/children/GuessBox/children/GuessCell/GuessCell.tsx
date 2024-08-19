@@ -9,7 +9,7 @@ import Components from "./children/Components/Components";
 import Level from "./children/Level/Level";
 import {
 	E_RESULT_OPTIONS,
-	T_PAST_GUESS_CATEGORY,
+	type T_PAST_GUESS_CATEGORY,
 } from "../../../../../../types/guesses";
 
 interface IProps {
@@ -18,8 +18,8 @@ interface IProps {
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
-	const component = (): JSX.Element => {
-		switch (props.categoryInfo.component_type) {
+	const component = (type: E_CATEGORY_COMPONENT_TYPE): JSX.Element => {
+		switch (type) {
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
 				return <SingleText {...props} />;
 			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
@@ -50,7 +50,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 			style={{ backgroundColor: colorClass(props.mostRecentGuess?.result) }}
 		>
 			<h4>{props.categoryInfo.display_name}</h4>
-			{component()}
+			{component(props.categoryInfo.component_type)}
 		</div>
 	);
 };
