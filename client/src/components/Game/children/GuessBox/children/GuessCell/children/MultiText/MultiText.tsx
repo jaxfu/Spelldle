@@ -4,9 +4,14 @@ import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
+import {
+	T_PAST_GUESS_CATEGORY,
+	translateIdsToValues,
+} from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 }
 
 const MultiText: React.FC<IProps> = (props) => {
@@ -57,6 +62,17 @@ const MultiText: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		updateGuessCategoriesMap();
 	}, [guesses]);
+
+	useEffect(() => {
+		if (Array.isArray(props.mostRecentGuess.value)) {
+			setGuesses(
+				translateIdsToValues(
+					props.mostRecentGuess.value,
+					props.categoryInfo,
+				) as string[],
+			);
+		}
+	}, [props.mostRecentGuess.value]);
 
 	return (
 		<div className={styles.root}>
