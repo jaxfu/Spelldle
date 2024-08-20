@@ -8,6 +8,7 @@ import {
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
 	type T_GUESS_STATES_IDS_LEVEL,
+	T_GUESS_STATES_STRINGS_LEVEL,
 	type T_GUESSES_AS_IDS,
 	T_PAST_GUESS_CATEGORY,
 	translateIdsToValues,
@@ -102,11 +103,21 @@ const SingleText: React.FC<IProps> = (props) => {
 
 	useEffect(() => {
 		if (props.mostRecentGuess.result !== -1) {
-			const displayValue = translateIdsToValues(
-				props.mostRecentGuess.value,
-				props.categoryInfo,
-			);
-			setInput(displayValue.toString());
+			if (Number.isInteger(props.mostRecentGuess.value)) {
+				const displayValue = translateIdsToValues(
+					props.mostRecentGuess.value,
+					props.categoryInfo,
+				);
+				setInput(displayValue.toString());
+			} else {
+				const levelInfo = props.mostRecentGuess
+					.value as T_GUESS_STATES_IDS_LEVEL;
+				const displayValue = translateIdsToValues(
+					levelInfo,
+					props.categoryInfo,
+				) as T_GUESS_STATES_STRINGS_LEVEL;
+				setInput(displayValue.level);
+			}
 		}
 	}, [props.mostRecentGuess]);
 
