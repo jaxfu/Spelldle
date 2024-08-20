@@ -1,25 +1,29 @@
 import styles from "./Components.module.scss";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
+import {
+	T_GUESS_STATES_STRINGS_LEVEL,
+	T_PAST_GUESS_CATEGORY,
+	translateIdsToValues,
+} from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 }
 
 const Components: React.FC<IProps> = (props) => {
 	const guessData = useContext(CtxGuessData);
+	const checkBoxRefs = useRef<HTMLInputElement[]>([]);
 
-	function updateGuessCategoriesMap(
-		e: React.ChangeEvent<HTMLInputElement>,
-		valueId: number,
-	) {
+	function updateGuessCategoriesMap(checked: boolean, valueId: number) {
 		if (guessData !== null) {
 			const currentArr = guessData.current.get(props.categoryInfo.id);
 			if (currentArr !== undefined) {
 				let newArr = [...(currentArr as number[])];
 
-				if (e.target.checked) {
+				if (checked) {
 					newArr.push(valueId);
 				} else newArr = newArr.filter((comp) => comp !== valueId);
 
@@ -27,6 +31,19 @@ const Components: React.FC<IProps> = (props) => {
 			}
 		}
 	}
+
+	useEffect(() => {
+		if (Array.isArray(props.mostRecentGuess.value)) {
+			const ids = [...(props.mostRecentGuess.value as number[])];
+			ids.forEach((id) => {
+				const el = checkBoxRefs.current.find((el) => el.id === id.toString());
+				if (el) {
+					el.checked = true;
+					updateGuessCategoriesMap(true, id);
+				}
+			});
+		}
+	}, [props.mostRecentGuess]);
 
 	return (
 		<div className={styles.root}>
@@ -42,48 +59,20 @@ const Components: React.FC<IProps> = (props) => {
 								<input
 									type="checkbox"
 									name={lowerCase}
-									id={lowerCase}
+									id={valueId.toString()}
 									onChange={(e) => {
-										updateGuessCategoriesMap(e, valueId);
+										updateGuessCategoriesMap(e.target.checked, valueId);
+									}}
+									ref={(el) => {
+										if (el) {
+											checkBoxRefs.current.push(el);
+										}
 									}}
 								/>
 							</span>
 						);
 					}
 				})}
-				{/* <span> */}
-				{/*   <label htmlFor="v">V</label> */}
-				{/*   <input */}
-				{/*     type="checkbox" */}
-				{/*     name="v" */}
-				{/*     id="v" */}
-				{/*     onChange={(e) => { */}
-				{/*       console.log(e.target.id) */}
-				{/*     }} */}
-				{/*   /> */}
-				{/* </span> */}
-				{/* <span> */}
-				{/*   <label htmlFor="s">S</label> */}
-				{/*   <input */}
-				{/*     type="checkbox" */}
-				{/*     name="s" */}
-				{/*     id="s" */}
-				{/*     onChange={(e) => { */}
-				{/**/}
-				{/*     }} */}
-				{/*   /> */}
-				{/* </span> */}
-				{/* <span> */}
-				{/*   <label htmlFor="m">M</label> */}
-				{/*   <input */}
-				{/*     type="checkbox" */}
-				{/*     name="m" */}
-				{/*     id="m" */}
-				{/*     onChange={(e) => { */}
-				{/**/}
-				{/*     }} */}
-				{/*   /> */}
-				{/* </span> */}
 			</div>
 		</div>
 	);
