@@ -1,6 +1,6 @@
 import TextInput from "./children/TextInput/TextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
-import { useState, useMemo, useContext, useEffect } from "react";
+import { useState, useMemo, useContext, useEffect, useRef } from "react";
 import {
 	E_CATEGORY_COMPONENT_TYPE,
 	type T_CATEGORY_INFO,
@@ -65,13 +65,14 @@ function updateGuessCategoriesMapLevelText(
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
-	stillShowingRecentGuess: boolean;
-	setStillShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	showingRecentGuess: boolean;
+	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
 	const [input, setInput] = useState<string>("");
 	const [show, setShow] = useState<boolean>(false);
+	const displayValueFromMostRecentGuess = useRef<string>("");
 
 	const guessData = useContext(CtxGuessData);
 
@@ -83,26 +84,32 @@ const SingleText: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		if (props.mostRecentGuess.result !== -1) {
 			if (Number.isInteger(props.mostRecentGuess.value)) {
-				const displayValue = translateIdsToValues(
+				displayValueFromMostRecentGuess.current = translateIdsToValues(
 					props.mostRecentGuess.value,
 					props.categoryInfo,
-				);
-				setInput(displayValue.toString());
+				) as string;
+				setInput(displayValueFromMostRecentGuess.current);
 			} else {
 				const levelInfo = props.mostRecentGuess
 					.value as T_GUESS_STATES_IDS_LEVEL;
-				const displayValue = translateIdsToValues(
+				const mostRecentGuessInfo = translateIdsToValues(
 					levelInfo,
 					props.categoryInfo,
 				) as T_GUESS_STATES_STRINGS_LEVEL;
-				setInput(displayValue.level);
+				displayValueFromMostRecentGuess.current = mostRecentGuessInfo.level;
+				setInput(displayValueFromMostRecentGuess.current);
 			}
 		}
 	}, [props.mostRecentGuess]);
 
 	// reset color if input changed from most recent guess
 	useEffect(() => {
-		props.stillShowingRecentGuess && props.setStillShowingRecentGuess(false);
+		if (
+			props.showingRecentGuess &&
+			input !== displayValueFromMostRecentGuess.current
+		) {
+			props.setShowingRecentGuess(false);
+		}
 	}, [input]);
 
 	// update guessData map on valid input detection

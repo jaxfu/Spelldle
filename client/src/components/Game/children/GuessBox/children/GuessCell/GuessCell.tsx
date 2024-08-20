@@ -32,8 +32,7 @@ interface IProps {
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
-	const [stillShowingRecentGuess, setStillShowingRecentGuess] =
-		useState<boolean>(true);
+	const [showingRecentGuess, setShowingRecentGuess] = useState<boolean>(false);
 	const [color, setColor] = useState<string>("");
 
 	const component = (type: E_CATEGORY_COMPONENT_TYPE): JSX.Element => {
@@ -42,8 +41,8 @@ const GuessCell: React.FC<IProps> = (props) => {
 				return (
 					<SingleText
 						{...props}
-						stillShowingRecentGuess={stillShowingRecentGuess}
-						setStillShowingRecentGuess={setStillShowingRecentGuess}
+						showingRecentGuess={showingRecentGuess}
+						setShowingRecentGuess={setShowingRecentGuess}
 					/>
 				);
 			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
@@ -57,11 +56,17 @@ const GuessCell: React.FC<IProps> = (props) => {
 
 	useEffect(() => {
 		if (props.mostRecentGuess.result !== -1) {
+			setShowingRecentGuess(true);
+		}
+	}, [props.mostRecentGuess]);
+
+	useEffect(() => {
+		if (props.mostRecentGuess.result !== -1) {
 			setColor(() =>
-				stillShowingRecentGuess ? getColor(props.mostRecentGuess.result) : "",
+				showingRecentGuess ? getColor(props.mostRecentGuess.result) : "",
 			);
 		}
-	}, [props.mostRecentGuess, stillShowingRecentGuess]);
+	}, [props.mostRecentGuess, showingRecentGuess]);
 
 	return (
 		<div className={styles.root} style={{ backgroundColor: color }}>
