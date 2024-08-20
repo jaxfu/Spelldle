@@ -12,7 +12,7 @@ interface IProps {
 
 const MultiTextInput: React.FC<IProps> = (props) => {
 	function addGuessToGuessesBox(guess: string) {
-		props.setGuesses((guesses) => [...guesses, guess]);
+		props.setGuesses((guesses) => [...guesses, guess].sort());
 		props.setInput("");
 	}
 

@@ -12,6 +12,8 @@ import {
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
+	showingRecentGuess: boolean;
+	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MultiText: React.FC<IProps> = (props) => {
@@ -19,6 +21,7 @@ const MultiText: React.FC<IProps> = (props) => {
 	const [showRecommendationBox, setShowRecommendationBox] =
 		useState<boolean>(false);
 	const [guesses, setGuesses] = useState<string[]>([]);
+	const displayValuesFromMostRecentGuess = useRef<string[]>([]);
 
 	const remainingRecommendations = useRef<string[]>([
 		...props.categoryInfo.values,
@@ -61,19 +64,32 @@ const MultiText: React.FC<IProps> = (props) => {
 		}
 	}
 
+	// update guess map when guesses change &
+	// check if changed from most recent guess
 	useEffect(() => {
 		updateGuessCategoriesMap();
+
+		if (
+			props.showingRecentGuess &&
+			guesses.join() !== displayValuesFromMostRecentGuess.current.join()
+		) {
+			props.setShowingRecentGuess(false);
+		}
 	}, [guesses]);
 
+	// set to most recent guess
 	useEffect(() => {
-		if (Array.isArray(props.mostRecentGuess.value)) {
+		if (
+			props.mostRecentGuess.result !== -1 &&
+			Array.isArray(props.mostRecentGuess.value)
+		) {
 			const guesses: string[] = translateIdsToValues(
 				props.mostRecentGuess.value,
 				props.categoryInfo,
 			) as string[];
-
+			guesses.sort();
+			displayValuesFromMostRecentGuess.current = guesses;
 			setGuesses(guesses);
-
 			guesses.forEach((guess) =>
 				removeGuessFromRemainingRecommendations(guess),
 			);
