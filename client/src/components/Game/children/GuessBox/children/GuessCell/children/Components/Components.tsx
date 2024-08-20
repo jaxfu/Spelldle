@@ -2,11 +2,7 @@ import styles from "./Components.module.scss";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import {
-	T_GUESS_STATES_STRINGS_LEVEL,
-	T_PAST_GUESS_CATEGORY,
-	translateIdsToValues,
-} from "../../../../../../../../types/guesses";
+import { T_PAST_GUESS_CATEGORY } from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -32,9 +28,18 @@ const Components: React.FC<IProps> = (props) => {
 		}
 	}
 
+	// set based on most recent guess
 	useEffect(() => {
 		if (Array.isArray(props.mostRecentGuess.value)) {
 			const ids = [...(props.mostRecentGuess.value as number[])];
+			checkBoxRefs.current.forEach((checkBox) => {
+				if (ids.includes(Number.parseInt(checkBox.name))) {
+					checkBox.checked = true;
+				} else {
+					checkBox.checked = false;
+				}
+			});
+
 			ids.forEach((id) => {
 				const el = checkBoxRefs.current.find((el) => el.id === id.toString());
 				if (el) {
@@ -58,8 +63,8 @@ const Components: React.FC<IProps> = (props) => {
 								<label htmlFor={lowerCase}>{value}</label>
 								<input
 									type="checkbox"
-									name={lowerCase}
-									id={valueId.toString()}
+									name={valueId.toString()}
+									id={lowerCase}
 									onChange={(e) => {
 										updateGuessCategoriesMap(e.target.checked, valueId);
 									}}
