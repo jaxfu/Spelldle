@@ -65,6 +65,8 @@ function updateGuessCategoriesMapLevelText(
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
+	stillShowingRecentGuess: boolean;
+	setStillShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
@@ -75,6 +77,32 @@ const SingleText: React.FC<IProps> = (props) => {
 
 	const hasValidInput: boolean = useMemo(() => {
 		return props.categoryInfo.value_id_map.has(input.toLowerCase());
+	}, [input]);
+
+	// set from most recent guess
+	useEffect(() => {
+		if (props.mostRecentGuess.result !== -1) {
+			if (Number.isInteger(props.mostRecentGuess.value)) {
+				const displayValue = translateIdsToValues(
+					props.mostRecentGuess.value,
+					props.categoryInfo,
+				);
+				setInput(displayValue.toString());
+			} else {
+				const levelInfo = props.mostRecentGuess
+					.value as T_GUESS_STATES_IDS_LEVEL;
+				const displayValue = translateIdsToValues(
+					levelInfo,
+					props.categoryInfo,
+				) as T_GUESS_STATES_STRINGS_LEVEL;
+				setInput(displayValue.level);
+			}
+		}
+	}, [props.mostRecentGuess]);
+
+	// reset color if input changed from most recent guess
+	useEffect(() => {
+		props.stillShowingRecentGuess && props.setStillShowingRecentGuess(false);
 	}, [input]);
 
 	// update guessData map on valid input detection
@@ -100,26 +128,6 @@ const SingleText: React.FC<IProps> = (props) => {
 			);
 		}
 	}, [hasValidInput]);
-
-	useEffect(() => {
-		if (props.mostRecentGuess.result !== -1) {
-			if (Number.isInteger(props.mostRecentGuess.value)) {
-				const displayValue = translateIdsToValues(
-					props.mostRecentGuess.value,
-					props.categoryInfo,
-				);
-				setInput(displayValue.toString());
-			} else {
-				const levelInfo = props.mostRecentGuess
-					.value as T_GUESS_STATES_IDS_LEVEL;
-				const displayValue = translateIdsToValues(
-					levelInfo,
-					props.categoryInfo,
-				) as T_GUESS_STATES_STRINGS_LEVEL;
-				setInput(displayValue.level);
-			}
-		}
-	}, [props.mostRecentGuess]);
 
 	return (
 		<>

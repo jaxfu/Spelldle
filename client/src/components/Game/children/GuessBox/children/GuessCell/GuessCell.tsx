@@ -11,6 +11,20 @@ import {
 	E_RESULT_OPTIONS,
 	type T_PAST_GUESS_CATEGORY,
 } from "../../../../../../types/guesses";
+import { useEffect, useState } from "react";
+
+function getColor(result: E_RESULT_OPTIONS): string {
+	switch (result) {
+		case E_RESULT_OPTIONS.INCORRECT:
+			return "red";
+		case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+			return "orange";
+		case E_RESULT_OPTIONS.CORRECT:
+			return "green";
+		default:
+			return "";
+	}
+}
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -18,10 +32,20 @@ interface IProps {
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
+	const [stillShowingRecentGuess, setStillShowingRecentGuess] =
+		useState<boolean>(true);
+	const [color, setColor] = useState<string>("");
+
 	const component = (type: E_CATEGORY_COMPONENT_TYPE): JSX.Element => {
 		switch (type) {
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-				return <SingleText {...props} />;
+				return (
+					<SingleText
+						{...props}
+						stillShowingRecentGuess={stillShowingRecentGuess}
+						setStillShowingRecentGuess={setStillShowingRecentGuess}
+					/>
+				);
 			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
 				return <MultiText {...props} />;
 			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
@@ -31,24 +55,16 @@ const GuessCell: React.FC<IProps> = (props) => {
 		}
 	};
 
-	const colorClass = (result: E_RESULT_OPTIONS): string => {
-		switch (result) {
-			case E_RESULT_OPTIONS.INCORRECT:
-				return "red";
-			case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
-				return "orange";
-			case E_RESULT_OPTIONS.CORRECT:
-				return "green";
-			default:
-				return "";
+	useEffect(() => {
+		if (props.mostRecentGuess.result !== -1) {
+			setColor(() =>
+				stillShowingRecentGuess ? getColor(props.mostRecentGuess.result) : "",
+			);
 		}
-	};
+	}, [props.mostRecentGuess, stillShowingRecentGuess]);
 
 	return (
-		<div
-			className={styles.root}
-			style={{ backgroundColor: colorClass(props.mostRecentGuess?.result) }}
-		>
+		<div className={styles.root} style={{ backgroundColor: color }}>
 			<h4>{props.categoryInfo.display_name}</h4>
 			{component(props.categoryInfo.component_type)}
 		</div>
