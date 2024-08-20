@@ -54,7 +54,13 @@ const GuessCell: React.FC<IProps> = (props) => {
 					/>
 				);
 			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
-				return <Components {...props} />;
+				return (
+					<Components
+						{...props}
+						showingRecentGuess={showingRecentGuess}
+						setShowingRecentGuess={setShowingRecentGuess}
+					/>
+				);
 			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
 				return <Level {...props} />;
 		}

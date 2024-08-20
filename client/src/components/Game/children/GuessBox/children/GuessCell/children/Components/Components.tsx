@@ -7,11 +7,14 @@ import { T_PAST_GUESS_CATEGORY } from "../../../../../../../../types/guesses";
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
+	showingRecentGuess: boolean;
+	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Components: React.FC<IProps> = (props) => {
 	const guessData = useContext(CtxGuessData);
 	const checkBoxRefs = useRef<HTMLInputElement[]>([]);
+	const displayValuesFromMostRecentGuess = useRef<number[]>([]);
 
 	function updateGuessCategoriesMap(checked: boolean, valueId: number) {
 		if (guessData !== null) {
