@@ -1,32 +1,90 @@
 import styles from "./Components.module.scss";
-import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
-import { useContext } from "react";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
+import { useContext, useEffect, useRef } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
+import {
+	T_GUESSES_AS_IDS,
+	T_PAST_GUESS_CATEGORY,
+} from "../../../../../../../../types/guesses";
+
+function updateGuessCategoriesMap(
+	checked: boolean,
+	valueId: number,
+	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	categoryId: string,
+) {
+	if (guessData !== null) {
+		const currentArr = guessData.current.get(categoryId);
+		if (currentArr !== undefined) {
+			let newArr = [...(currentArr as number[])];
+
+			if (checked) {
+				newArr.push(valueId);
+			} else newArr = newArr.filter((comp) => comp !== valueId);
+
+			guessData.current.set(categoryId, newArr.sort());
+		}
+	}
+}
+
+function setGuessCategoriesMap(
+	newArray: number[],
+	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	categoryId: string,
+) {
+	if (guessData !== null) {
+		const currentArr = guessData.current.get(categoryId);
+		if (currentArr !== undefined) {
+			guessData.current.set(categoryId, newArray.sort());
+		}
+	}
+}
+
+function isCurrentEqualToRecentGuess(
+	current: number[],
+	recent: number[],
+): boolean {
+	return current.sort().join() === recent.sort().join();
+}
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY;
+	showingRecentGuess: boolean;
+	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Components: React.FC<IProps> = (props) => {
-	const guessData = useContext(GuessDataContext);
+	const guessData = useContext(CtxGuessData);
+	const checkBoxRefs = useRef<HTMLInputElement[]>([]);
+	const displayValuesFromMostRecentGuess = useRef<number[]>([]);
 
-	function updateGuessCategoriesMap(
-		e: React.ChangeEvent<HTMLInputElement>,
-		valueId: number,
-	) {
-		if (guessData !== null) {
-			const currentArr = guessData.current.get(props.categoryInfo.id);
-			if (currentArr !== undefined) {
-				let newArr = [...(currentArr as number[])];
+	// set based on most recent guess
+	useEffect(() => {
+		if (Array.isArray(props.mostRecentGuess.value)) {
+			displayValuesFromMostRecentGuess.current = [
+				...(props.mostRecentGuess.value as number[]),
+			];
 
-				if (e.target.checked) {
-					newArr.push(valueId);
-				} else newArr = newArr.filter((comp) => comp !== valueId);
+			checkBoxRefs.current.forEach((checkBox) => {
+				if (
+					displayValuesFromMostRecentGuess.current.includes(
+						Number.parseInt(checkBox.name),
+					)
+				) {
+					checkBox.checked = true;
+				} else {
+					checkBox.checked = false;
+				}
+			});
 
-				guessData.current.set(props.categoryInfo.id, newArr.sort());
-			}
+			setGuessCategoriesMap(
+				displayValuesFromMostRecentGuess.current,
+				guessData,
+				props.categoryInfo.id,
+			);
 		}
-	}
+	}, [props.mostRecentGuess]);
 
 	return (
 		<div className={styles.root}>
@@ -41,49 +99,40 @@ const Components: React.FC<IProps> = (props) => {
 								<label htmlFor={lowerCase}>{value}</label>
 								<input
 									type="checkbox"
-									name={lowerCase}
+									name={valueId.toString()}
 									id={lowerCase}
 									onChange={(e) => {
-										updateGuessCategoriesMap(e, valueId);
+										updateGuessCategoriesMap(
+											e.target.checked,
+											valueId,
+											guessData,
+											props.categoryInfo.id,
+										);
+
+										if (
+											props.showingRecentGuess &&
+											!isCurrentEqualToRecentGuess(
+												checkBoxRefs.current
+													.map((el) =>
+														el.checked ? Number.parseInt(el.name) : null,
+													)
+													.filter((id) => id != null),
+												displayValuesFromMostRecentGuess.current,
+											)
+										) {
+											props.setShowingRecentGuess(false);
+										}
+									}}
+									ref={(el) => {
+										if (el) {
+											checkBoxRefs.current.push(el);
+										}
 									}}
 								/>
 							</span>
 						);
 					}
 				})}
-				{/* <span> */}
-				{/*   <label htmlFor="v">V</label> */}
-				{/*   <input */}
-				{/*     type="checkbox" */}
-				{/*     name="v" */}
-				{/*     id="v" */}
-				{/*     onChange={(e) => { */}
-				{/*       console.log(e.target.id) */}
-				{/*     }} */}
-				{/*   /> */}
-				{/* </span> */}
-				{/* <span> */}
-				{/*   <label htmlFor="s">S</label> */}
-				{/*   <input */}
-				{/*     type="checkbox" */}
-				{/*     name="s" */}
-				{/*     id="s" */}
-				{/*     onChange={(e) => { */}
-				{/**/}
-				{/*     }} */}
-				{/*   /> */}
-				{/* </span> */}
-				{/* <span> */}
-				{/*   <label htmlFor="m">M</label> */}
-				{/*   <input */}
-				{/*     type="checkbox" */}
-				{/*     name="m" */}
-				{/*     id="m" */}
-				{/*     onChange={(e) => { */}
-				{/**/}
-				{/*     }} */}
-				{/*   /> */}
-				{/* </span> */}
 			</div>
 		</div>
 	);

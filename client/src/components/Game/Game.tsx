@@ -12,9 +12,9 @@ import {
 	generateGuessesStateFromJSON,
 } from "../../types/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
-import GuessDataContext from "../../contexts/GuessDataContext";
+import CtxGuessData from "../../contexts/CtxGuessData";
 import ResultBox from "./children/ResultBox/ResultBox";
-import type { T_GUESSES_AS_IDS } from "../../types/guesses";
+import { T_GUESSES_AS_IDS } from "../../types/guesses";
 
 const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
@@ -28,19 +28,19 @@ const Game: React.FC = () => {
 		),
 	);
 
-	const { data, isSuccess } = useQuery({
+	const { data, isSuccess, isFetching } = useQuery({
 		queryKey: [QUERY_KEYS.pastGuesses],
 		queryFn: () =>
 			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
 	});
 
-	if (isSuccess) {
-		console.log(JSON.stringify(data.data))
-	}
+	// if (isSuccess && data.data.guesses.length > 0) {
+	//   console.log(JSON.stringify(data.data));
+	// }
 
 	return (
 		<>
-			<GuessDataContext.Provider value={currentGuessInfo}>
+			<CtxGuessData.Provider value={currentGuessInfo}>
 				<GuessInfoButton />
 				{data != undefined && data.data.guesses.length > 0 && (
 					<ResultBox
@@ -48,8 +48,20 @@ const Game: React.FC = () => {
 						categoriesInfoArr={categoriesInfo}
 					/>
 				)}
-				<GuessBox categoriesInfoArr={categoriesInfo} />
-			</GuessDataContext.Provider>
+				<GuessBox
+					categoriesInfoArr={categoriesInfo}
+					mostRecentGuess={
+						data !== undefined && data.data.guesses.length > 0
+							? //TODO: create map on fetch
+								new Map(
+									Object.entries(
+										data.data.guesses[data.data.guesses.length - 1],
+									),
+								)
+							: null
+					}
+				/>
+			</CtxGuessData.Provider>
 		</>
 	);
 };

@@ -3,10 +3,17 @@ import styles from "./MultiText.module.scss";
 import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import GuessDataContext from "../../../../../../../../contexts/GuessDataContext";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
+import {
+	T_PAST_GUESS_CATEGORY,
+	translateIdsToValues,
+} from "../../../../../../../../types/guesses";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
+	mostRecentGuess: T_PAST_GUESS_CATEGORY;
+	showingRecentGuess: boolean;
+	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MultiText: React.FC<IProps> = (props) => {
@@ -14,10 +21,13 @@ const MultiText: React.FC<IProps> = (props) => {
 	const [showRecommendationBox, setShowRecommendationBox] =
 		useState<boolean>(false);
 	const [guesses, setGuesses] = useState<string[]>([]);
+	const displayValuesFromMostRecentGuess = useRef<string[]>([]);
 
-	const remainingValues = useRef<string[]>([...props.categoryInfo.values]);
+	const remainingRecommendations = useRef<string[]>([
+		...props.categoryInfo.values,
+	]);
 
-	const guessData = useContext(GuessDataContext);
+	const guessData = useContext(CtxGuessData);
 
 	const hasValidInput: boolean = useMemo(() => {
 		for (const guess of guesses) {
@@ -27,14 +37,14 @@ const MultiText: React.FC<IProps> = (props) => {
 		return props.categoryInfo.value_id_map.has(input.toLowerCase());
 	}, [input]);
 
-	function removeGuessFromRemainingValues(guess: string): void {
-		remainingValues.current = remainingValues.current.filter(
+	function removeGuessFromRemainingRecommendations(guess: string): void {
+		remainingRecommendations.current = remainingRecommendations.current.filter(
 			(value) => value.toLowerCase() !== guess.toLowerCase(),
 		);
 	}
 
 	function addGuessToRemainingValues(guess: string): void {
-		remainingValues.current.push(guess);
+		remainingRecommendations.current.push(guess);
 	}
 
 	function updateGuessCategoriesMap(): void {
@@ -54,9 +64,37 @@ const MultiText: React.FC<IProps> = (props) => {
 		}
 	}
 
+	// update guess map when guesses change &
+	// check if changed from most recent guess
 	useEffect(() => {
 		updateGuessCategoriesMap();
+
+		if (
+			props.showingRecentGuess &&
+			guesses.join() !== displayValuesFromMostRecentGuess.current.join()
+		) {
+			props.setShowingRecentGuess(false);
+		}
 	}, [guesses]);
+
+	// set to most recent guess
+	useEffect(() => {
+		if (
+			props.mostRecentGuess.result !== -1 &&
+			Array.isArray(props.mostRecentGuess.value)
+		) {
+			const guesses: string[] = translateIdsToValues(
+				props.mostRecentGuess.value,
+				props.categoryInfo,
+			) as string[];
+			guesses.sort();
+			displayValuesFromMostRecentGuess.current = guesses;
+			setGuesses(guesses);
+			guesses.forEach((guess) =>
+				removeGuessFromRemainingRecommendations(guess),
+			);
+		}
+	}, [props.mostRecentGuess.value]);
 
 	return (
 		<div className={styles.root}>
@@ -87,11 +125,11 @@ const MultiText: React.FC<IProps> = (props) => {
 				showRecommendationBox={showRecommendationBox}
 				setShowRecommendationBox={setShowRecommendationBox}
 				setGuesses={setGuesses}
-				removeGuessFromRemainingValues={removeGuessFromRemainingValues}
+				removeGuessFromRemainingValues={removeGuessFromRemainingRecommendations}
 			/>
 			{showRecommendationBox && (
 				<RecommendationBox
-					values={remainingValues.current}
+					values={remainingRecommendations.current}
 					input={input}
 					setInput={setInput}
 				/>

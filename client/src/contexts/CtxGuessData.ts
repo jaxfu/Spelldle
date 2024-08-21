@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { T_GUESSES_AS_IDS } from "../types/guesses";
 
-const GuessDataContext =
+const CtxGuessData =
 	createContext<React.MutableRefObject<T_GUESSES_AS_IDS> | null>(null);
 
-export default GuessDataContext;
+export default CtxGuessData;

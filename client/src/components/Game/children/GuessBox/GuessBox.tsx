@@ -1,20 +1,28 @@
-import GuessCell from "./children/GuessCell/GuessCell";
 import styles from "./GuessBox.module.scss";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../types/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
-import GuessDataContext from "../../../../contexts/GuessDataContext";
-import { useContext } from "react";
-import { getUserSessionDataFromStorage } from "../../../../utils/methods";
+import CtxGuessData from "../../../../contexts/CtxGuessData";
+import { useContext, useMemo } from "react";
+import {
+	deepCopyObject,
+	getUserSessionDataFromStorage,
+} from "../../../../utils/methods";
+import {
+	INIT_PAST_GUESS_CATEGORY,
+	T_PAST_GUESS_CATEGORY,
+	type T_PAST_GUESS,
+} from "../../../../types/guesses";
+import GuessCell from "./children/GuessCell/GuessCell";
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
+	mostRecentGuess: T_PAST_GUESS | null;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
-
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuess,
 		onSuccess: (data) => {
@@ -23,12 +31,34 @@ const GuessBox: React.FC<IProps> = (props) => {
 		},
 	});
 
-	const guessData = useContext(GuessDataContext);
+	const guessData = useContext(CtxGuessData);
+
+	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = useMemo(
+		() => deepCopyObject(INIT_PAST_GUESS_CATEGORY),
+		[],
+	);
 
 	return (
 		<div className={styles.root}>
 			{props.categoriesInfoArr.map((category) => {
-				return <GuessCell key={category.id} categoryInfo={category} />;
+				if (props.mostRecentGuess !== null) {
+					const mostRecentGuess = props.mostRecentGuess.get(category.id);
+					if (mostRecentGuess !== undefined)
+						return (
+							<GuessCell
+								key={category.id}
+								categoryInfo={category}
+								mostRecentGuess={mostRecentGuess}
+							/>
+						);
+				}
+				return (
+					<GuessCell
+						key={category.id}
+						categoryInfo={category}
+						mostRecentGuess={nullPastGuessCategory}
+					/>
+				);
 			})}
 			<button
 				onClick={() => {

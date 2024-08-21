@@ -17,24 +17,6 @@
 		"has_modifiers": false
 	},
 	{
-		"id": "level",
-		"display_name": "Level",
-		"values": [
-			"1st",
-			"2nd",
-			"3rd",
-			"4th",
-			"5th",
-			"6th",
-			"7th",
-			"8th",
-			"9th",
-			"Cantrip"
-		],
-		"component_type": 3,
-		"has_modifiers": true
-	},
-	{
 		"id": "casting_time",
 		"display_name": "Casting Time",
 		"values": [
@@ -73,13 +55,6 @@
 		"has_modifiers": false
 	},
 	{
-		"id": "components",
-		"display_name": "Components",
-		"values": ["V", "S", "M"],
-		"component_type": 2,
-		"has_modifiers": false
-	},
-	{
 		"id": "duration",
 		"display_name": "Duration",
 		"values": [
@@ -94,6 +69,31 @@
 		],
 		"component_type": 0,
 		"has_modifiers": true
+	},
+	{
+		"id": "level",
+		"display_name": "Level",
+		"values": [
+			"1st",
+			"2nd",
+			"3rd",
+			"4th",
+			"5th",
+			"6th",
+			"7th",
+			"8th",
+			"9th",
+			"Cantrip"
+		],
+		"component_type": 3,
+		"has_modifiers": true
+	},
+	{
+		"id": "components",
+		"display_name": "Components",
+		"values": ["V", "S", "M"],
+		"component_type": 2,
+		"has_modifiers": false
 	},
 	{
 		"id": "class",
