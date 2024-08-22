@@ -6,7 +6,6 @@ import {
 	INIT_USERINPUT_LOGIN,
 	type T_APIRESULT_LOGIN,
 	type T_USERINPUT_LOGIN,
-	type T_USERDATA_STATE,
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
 import { AxiosResponse } from "axios";
@@ -31,6 +30,7 @@ const Login: React.FC = () => {
 		onError(err) {
 			console.log(err);
 		},
+		// TODO: handle error vs incorrect info
 		onSuccess(data) {
 			sendTokensToLocalStorage(data.data.tokens);
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });

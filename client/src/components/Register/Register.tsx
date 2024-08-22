@@ -4,7 +4,7 @@ import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
 import { apiRequestRegister } from "../../types/requests.ts";
 import {
 	INIT_USERINPUT_REGISTER,
-	T_USERINPUT_REGISTER,
+	type T_USERINPUT_REGISTER,
 	type T_APIRESULT_REGISTER,
 } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -28,6 +28,7 @@ const Register: React.FC = () => {
 		onError(err) {
 			console.log(err);
 		},
+		// TODO: handle taken and error
 		onSuccess(data) {
 			sendTokensToLocalStorage(data.data.tokens);
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
