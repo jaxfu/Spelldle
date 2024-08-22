@@ -61,6 +61,7 @@ CREATE TABLE users.data
     user_id    INTEGER PRIMARY KEY UNIQUE REFERENCES users.ids(user_id),
     username   VARCHAR(32) UNIQUE,
     password   TEXT,
+    salt       TEXT,
     first_name VARCHAR(32),
     last_name  VARCHAR(32)
 );
