@@ -42,7 +42,7 @@ const Game: React.FC = () => {
 		<>
 			<CtxGuessData.Provider value={currentGuessInfo}>
 				<GuessInfoButton />
-				{data != undefined && data.data.guesses.length > 0 && (
+				{data != undefined && data.data.guesses !== null && (
 					<ResultBox
 						pastGuesses={data.data.guesses}
 						categoriesInfoArr={categoriesInfo}
@@ -51,7 +51,7 @@ const Game: React.FC = () => {
 				<GuessBox
 					categoriesInfoArr={categoriesInfo}
 					mostRecentGuess={
-						data !== undefined && data.data.guesses.length > 0
+						data !== undefined && data.data.guesses !== null
 							? //TODO: create map on fetch
 								new Map(
 									Object.entries(
