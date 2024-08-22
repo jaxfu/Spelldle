@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
+	"golang.org/x/crypto/bcrypt"
 	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
@@ -57,10 +58,19 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
+		// TODO: hash and salt password on register
+		// hash password
+		hashed, err := bcrypt.GenerateFromPassword([]byte(registerPayload.Password), bcrypt.DefaultCost)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("error hashing password: %+v\n", err)
+			return
+		}
+
 		UserData := types.UserData{
 			UserID:    userID,
 			Username:  registerPayload.Username,
-			Password:  registerPayload.Password,
+			Password:  string(hashed),
 			FirstName: registerPayload.FirstName,
 			LastName:  registerPayload.LastName,
 		}
