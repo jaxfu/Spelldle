@@ -61,8 +61,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// TODO: hash and salt password on register
-		// hash password
+		// salt and hash password
 		salt, err := generateSalt(16)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
