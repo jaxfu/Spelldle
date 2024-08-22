@@ -7,5 +7,6 @@ type UserData struct {
 	LastName  string `json:"last_name"`
 	Username  string `json:"username"`
 	Password  string `json:"password"`
+	Salt      string `json:"salt"`
 	UserID    UserID `json:"user_id"`
 }

@@ -60,7 +60,8 @@ CREATE TABLE users.data
 (
     user_id    INTEGER PRIMARY KEY UNIQUE REFERENCES users.ids(user_id),
     username   VARCHAR(32) UNIQUE,
-    password   VARCHAR(32),
+    password   TEXT,
+    salt       TEXT,
     first_name VARCHAR(32),
     last_name  VARCHAR(32)
 );
@@ -72,7 +73,7 @@ CREATE TABLE guesses.categories
   school INTEGER,
   casting_time INTEGER,
   range INTEGER,
-  target INTEGER,
+ target INTEGER,
   duration INTEGER,
   components INTEGER[],
   class INTEGER[],

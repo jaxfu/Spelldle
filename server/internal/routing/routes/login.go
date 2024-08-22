@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"golang.org/x/crypto/bcrypt"
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-gonic/gin"
@@ -56,9 +57,9 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// Check password
-		if loginPayload.Password != userData.Password {
-			fmt.Printf("Password does not match: got %s, want %s\n", loginPayload.Password, userData.Password)
+		if err := bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(loginPayload.Password+userData.Salt)); err != nil {
 			ctx.JSON(http.StatusOK, response)
+			fmt.Printf("error hashing and comparing password: %+v\n", err)
 			return
 		}
 

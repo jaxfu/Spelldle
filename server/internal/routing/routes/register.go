@@ -1,11 +1,15 @@
 package routes
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
+	"golang.org/x/crypto/bcrypt"
 	"spelldle.com/server/internal/auth"
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
@@ -57,10 +61,26 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
+		// salt and hash password
+		salt, err := generateSalt(16)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("error generating salt: %+v\n", err)
+			return
+		}
+
+		hashed, err := bcrypt.GenerateFromPassword([]byte(registerPayload.Password+salt), bcrypt.DefaultCost)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("error hashing password: %+v\n", err)
+			return
+		}
+
 		UserData := types.UserData{
 			UserID:    userID,
 			Username:  registerPayload.Username,
-			Password:  registerPayload.Password,
+			Password:  string(hashed),
+			Salt:      salt,
 			FirstName: registerPayload.FirstName,
 			LastName:  registerPayload.LastName,
 		}
@@ -106,4 +126,14 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		//	log.Printf("cError backing up Postgres: %+v\n", err)
 		//}
 	}
+}
+
+// Generate a random salt of specified length
+func generateSalt(size int) (string, error) {
+	salt := make([]byte, size)
+	_, err := io.ReadFull(rand.Reader, salt)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(salt), nil
 }
