@@ -6,13 +6,7 @@ import {
 } from "../../utils/methods";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
-
-interface IProps {
-	//userData: T_USERDATA_STATE;
-	//setUserData: React.Dispatch<React.SetStateAction<T_USERDATA_STATE>>;
-	//userIsLoggedIn: boolean;
-	//setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
 	const queryClient = useQueryClient();
@@ -38,7 +32,16 @@ const Navbar: React.FC = () => {
 						Logout
 					</button>
 				</>
-			) : null}
+			) : (
+				<>
+					<Link to={"/login"}>
+						<button>Login</button>
+					</Link>
+					<Link to={"/register"}>
+						<button>Register</button>
+					</Link>
+				</>
+			)}
 		</div>
 	);
 };
