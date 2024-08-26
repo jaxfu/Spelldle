@@ -73,21 +73,12 @@ CREATE TABLE guesses.categories
   school INTEGER,
   casting_time INTEGER,
   range INTEGER,
- target INTEGER,
+  target INTEGER,
   duration INTEGER,
+  level INTEGER[],
   components INTEGER[],
   class INTEGER[],
   effects INTEGER[],
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
-);
-
-CREATE TABLE guesses.level_objects
-(
-  game_session_id TEXT,
-  round SMALLINT,
-  level INTEGER,
-  is_ritual BOOLEAN,
   PRIMARY KEY(game_session_id, round),
   FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
 );
