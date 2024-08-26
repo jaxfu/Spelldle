@@ -16,8 +16,7 @@ func (spell *SpellCategories) Equals(other *SpellCategories) (bool, string) {
 	if !slices.Equal(spell.Effects, other.Effects) {
 		return false, fmt.Sprintf("field mismatch effects: %v vs %v", spell.Effects, other.Effects)
 	}
-
-	if spell.Level != other.Level {
+	if !slices.Equal(spell.Level, other.Level) {
 		return false, fmt.Sprintf("field mismatch level: %+v vs %+v", spell.Level, other.Level)
 	}
 
