@@ -27,7 +27,7 @@ type PastGuessesAll struct {
 	Components  PastGuessesMulti  `json:"components"`
 	Class       PastGuessesMulti  `json:"class"`
 	Effects     PastGuessesMulti  `json:"effects"`
-	Level       PastGuessesLevel  `json:"level"`
+	Level       PastGuessesMulti  `json:"level"`
 	School      PastGuessesSingle `json:"school"`
 	CastingTime PastGuessesSingle `json:"casting_time"`
 	Range       PastGuessesSingle `json:"range"`
@@ -44,9 +44,4 @@ type PastGuessesSingle struct {
 type PastGuessesMulti struct {
 	Value  []uint `json:"value"`
 	Result uint   `json:"result"`
-}
-
-type PastGuessesLevel struct {
-	Value  SpellLevel `json:"value"`
-	Result uint       `json:"result"`
 }

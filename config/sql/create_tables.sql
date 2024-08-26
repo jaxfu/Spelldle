@@ -34,16 +34,10 @@ CREATE TABLE spells.categories
   range INTEGER,
   target INTEGER,
   duration INTEGER,
+  level INTEGER[],
   components INTEGER[],
   class INTEGER[],
   effects INTEGER[]
-);
-
-CREATE TABLE spells.level_objects
-(
-  spell_id INTEGER PRIMARY KEY references spells.ids(spell_id),
-  level INTEGER,
-  is_ritual BOOLEAN
 );
 
 CREATE TABLE game_sessions.data

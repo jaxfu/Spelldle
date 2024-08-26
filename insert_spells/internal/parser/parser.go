@@ -8,8 +8,8 @@ import (
 	"spelldle.com/server/shared/types"
 )
 
-func ParseSpellsFromJson(filename string) ([]types.SpellAllInfo, error) {
-	var spells []types.SpellAllInfo
+func ParseSpellsFromJson(filename string) ([]types.SpellAll, error) {
+	var spells []types.SpellAll
 
 	buf, err := os.Open(filename)
 	if err != nil {

@@ -9,9 +9,8 @@ import (
 // GETS
 
 const QGetGuessCategoriesByGuessId = `
-  SELECT school, casting_time, range, target, duration, level, is_ritual, components, class, effects
+  SELECT school, casting_time, range, target, duration, level, components, class, effects
   FROM guesses.categories
-  NATURAL JOIN guesses.level_objects
   WHERE game_session_id=$1 AND round=$2
 `
 
@@ -24,8 +23,7 @@ func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (
 		&guess.Range,
 		&guess.Target,
 		&guess.Duration,
-		&guess.Level.Level,
-		&guess.Level.IsRitual,
+		&guess.Level,
 		&guess.Components,
 		&guess.Class,
 		&guess.Effects,
@@ -148,13 +146,8 @@ const EInsertGuessID = `
 `
 
 const EInsertGuessCategories = `
-  INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, components, class, effects)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-`
-
-const EInsertGuessLevel = `
-  INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
-  VALUES ($1, $2, $3, $4)
+  INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, level, components, class, effects)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 `
 
 func (dbHandler *DBHandler) InsertGuessCategories(guess types.SpellCategories, guessID types.GuessID) error {
@@ -174,18 +167,10 @@ func (dbHandler *DBHandler) InsertGuessCategories(guess types.SpellCategories, g
 		guess.Range,
 		guess.Target,
 		guess.Duration,
+		guess.Level,
 		guess.Components,
 		guess.Class,
 		guess.Effects,
-	)
-	if err != nil {
-		return err
-	}
-	_, err = dbHandler.Conn.Exec(context.Background(), EInsertGuessLevel,
-		guessID.GameSessionID,
-		guessID.Round,
-		guess.Level.Level,
-		guess.Level.IsRitual,
 	)
 	if err != nil {
 		return err
