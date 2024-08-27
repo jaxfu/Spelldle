@@ -7,48 +7,42 @@ const GameSessionID types.GameSessionID = "TEST"
 // ROUND 1: All incorrect
 // ROUND 2: Some correct
 // ROUND 3: All correct
-var TestGuesses = [3]types.SpellCategories{
+var TestGuesses = [3]types.GuessCategories{
 	{
-		Components: []uint{10, 11},
-		Class:      []uint{12, 13, 14},
-		Effects:    []uint{15, 16, 17},
-		Level: types.SpellLevel{
-			Level:    0,
-			IsRitual: true,
-		},
+		Components:  []uint{10, 11},
+		Class:       []uint{12, 13, 14},
+		Effects:     []uint{15, 16, 17},
+		Level:       []uint{0, 0},
 		School:      9,
 		CastingTime: 10,
 		Range:       11,
 		Target:      12,
 		Duration:    13,
+		Spell:       0,
 	},
 	{
-		Components: []uint{1, 3, 4},
-		Class:      []uint{3, 4, 10},
-		Effects:    []uint{7, 10, 13, 14},
-		Level: types.SpellLevel{
-			Level:    1,
-			IsRitual: true,
-		},
+		Components:  []uint{1, 3, 4},
+		Class:       []uint{3, 4, 10},
+		Effects:     []uint{7, 10, 13, 14},
+		Level:       []uint{1, 0},
 		School:      0,
 		CastingTime: 10,
 		Range:       11,
 		Target:      12,
 		Duration:    13,
+		Spell:       0,
 	},
 	{
-		Components: []uint{1, 2},
-		Class:      []uint{3, 4, 5},
-		Effects:    []uint{6, 7, 8, 9},
-		Level: types.SpellLevel{
-			Level:    1,
-			IsRitual: false,
-		},
+		Components:  []uint{1, 2},
+		Class:       []uint{3, 4, 5},
+		Effects:     []uint{6, 7, 8, 9},
+		Level:       []uint{1, 1},
 		School:      0,
 		CastingTime: 1,
 		Range:       2,
 		Target:      3,
 		Duration:    4,
+		Spell:       1,
 	},
 }
 
@@ -63,6 +57,7 @@ var TestResults = [3]types.GuessResults{
 		Range:       0,
 		Target:      0,
 		Duration:    0,
+		Spell:       0,
 	},
 	{
 		Components:  1,
@@ -74,6 +69,7 @@ var TestResults = [3]types.GuessResults{
 		Range:       0,
 		Target:      0,
 		Duration:    0,
+		Spell:       0,
 	},
 	{
 		Components:  2,
@@ -85,5 +81,6 @@ var TestResults = [3]types.GuessResults{
 		Range:       2,
 		Target:      2,
 		Duration:    2,
+		Spell:       2,
 	},
 }

@@ -9,23 +9,22 @@ import (
 // GETS
 
 const QGetGuessCategoriesByGuessId = `
-  SELECT school, casting_time, range, target, duration, level, is_ritual, components, class, effects
+  SELECT spell, school, casting_time, range, target, duration, level, components, class, effects
   FROM guesses.categories
-  NATURAL JOIN guesses.level_objects
   WHERE game_session_id=$1 AND round=$2
 `
 
-func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (types.SpellCategories, error) {
-	var guess types.SpellCategories
+func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (types.GuessCategories, error) {
+	var guess types.GuessCategories
 
 	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessCategoriesByGuessId, guessID.GameSessionID, guessID.Round).Scan(
+		&guess.Spell,
 		&guess.School,
 		&guess.CastingTime,
 		&guess.Range,
 		&guess.Target,
 		&guess.Duration,
-		&guess.Level.Level,
-		&guess.Level.IsRitual,
+		&guess.Level,
 		&guess.Components,
 		&guess.Class,
 		&guess.Effects,
@@ -37,8 +36,8 @@ func (dbHandler *DBHandler) GetGuessCategoriesByGuessID(guessID types.GuessID) (
 	return guess, nil
 }
 
-func (dbHandler *DBHandler) GetAllGuessCategoriesByUserID(userID types.UserID) ([]types.SpellCategories, error) {
-	var guesses []types.SpellCategories
+func (dbHandler *DBHandler) GetAllGuessCategoriesByUserID(userID types.UserID) ([]types.GuessCategories, error) {
+	var guesses []types.GuessCategories
 	gameSession, err := dbHandler.GetGameSessionByUserID(userID)
 	if err != nil {
 		return guesses, err
@@ -60,7 +59,7 @@ func (dbHandler *DBHandler) GetAllGuessCategoriesByUserID(userID types.UserID) (
 }
 
 const QGetGuessResultsByGuessId = `
-  SELECT school, casting_time, range, target, duration, level, components, class, effects
+  SELECT spell, school, casting_time, range, target, duration, level, components, class, effects
   FROM guesses.results
   WHERE game_session_id=$1 AND round=$2
 `
@@ -69,6 +68,7 @@ func (dbHandler *DBHandler) GetGuessResultsByGuessID(guessID types.GuessID) (typ
 	var results types.GuessResults
 
 	err := dbHandler.Conn.QueryRow(context.Background(), QGetGuessResultsByGuessId, guessID.GameSessionID, guessID.Round).Scan(
+		&results.Spell,
 		&results.School,
 		&results.CastingTime,
 		&results.Range,
@@ -148,16 +148,11 @@ const EInsertGuessID = `
 `
 
 const EInsertGuessCategories = `
-  INSERT INTO guesses.categories(game_session_id, round, school, casting_time, range, target, duration, components, class, effects)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+  INSERT INTO guesses.categories(game_session_id, round, spell, school, casting_time, range, target, duration, level, components, class, effects)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 `
 
-const EInsertGuessLevel = `
-  INSERT INTO guesses.level_objects(game_session_id, round, level, is_ritual)
-  VALUES ($1, $2, $3, $4)
-`
-
-func (dbHandler *DBHandler) InsertGuessCategories(guess types.SpellCategories, guessID types.GuessID) error {
+func (dbHandler *DBHandler) InsertGuessCategories(guess types.GuessCategories, guessID types.GuessID) error {
 	_, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessID,
 		guessID.GameSessionID,
 		guessID.Round,
@@ -169,23 +164,16 @@ func (dbHandler *DBHandler) InsertGuessCategories(guess types.SpellCategories, g
 	_, err = dbHandler.Conn.Exec(context.Background(), EInsertGuessCategories,
 		guessID.GameSessionID,
 		guessID.Round,
+		guess.Spell,
 		guess.School,
 		guess.CastingTime,
 		guess.Range,
 		guess.Target,
 		guess.Duration,
+		guess.Level,
 		guess.Components,
 		guess.Class,
 		guess.Effects,
-	)
-	if err != nil {
-		return err
-	}
-	_, err = dbHandler.Conn.Exec(context.Background(), EInsertGuessLevel,
-		guessID.GameSessionID,
-		guessID.Round,
-		guess.Level.Level,
-		guess.Level.IsRitual,
 	)
 	if err != nil {
 		return err
@@ -195,14 +183,15 @@ func (dbHandler *DBHandler) InsertGuessCategories(guess types.SpellCategories, g
 }
 
 const EInsertGuessResults = `
-  INSERT INTO guesses.results(game_session_id, round, school, casting_time, range, target, duration, level, components, class, effects)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+  INSERT INTO guesses.results(game_session_id, round, spell, school, casting_time, range, target, duration, level, components, class, effects)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 `
 
 func (dbHandler *DBHandler) InsertGuessResults(results types.GuessResults, guessID types.GuessID) error {
 	if _, err := dbHandler.Conn.Exec(context.Background(), EInsertGuessResults,
 		guessID.GameSessionID,
 		guessID.Round,
+		results.Spell,
 		results.School,
 		results.CastingTime,
 		results.Range,

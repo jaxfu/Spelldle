@@ -6,7 +6,7 @@ import {
 	INIT_AUTH_STATUS,
 } from "../types";
 import { LOCAL_STORAGE_TOKENS_KEYS } from "./consts";
-import { apiRequestValidateSession } from "../types/requests";
+import { apiRequestValidateSession } from "./requests";
 
 export function deepCopyObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));

@@ -28,7 +28,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// bind payload
-		var payload types.SpellCategories
+		var payload types.GuessCategories
 		err = ctx.BindJSON(&payload)
 		if err != nil {
 			fmt.Printf("Error binding payload: %v\n", err)
@@ -57,8 +57,9 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// insert results
-		results := payload.GetResults(&testHelpers.TestSpell.SpellCategories)
+		// get and insert results
+		// TODO: fetch spellID from current game session and use spell
+		results := payload.GetResults(&testHelpers.TestSpell)
 		if err := db.InsertGuessResults(results, guessID); err != nil {
 			fmt.Printf("Error inserting guess results: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)

@@ -34,16 +34,10 @@ CREATE TABLE spells.categories
   range INTEGER,
   target INTEGER,
   duration INTEGER,
+  level INTEGER[],
   components INTEGER[],
   class INTEGER[],
   effects INTEGER[]
-);
-
-CREATE TABLE spells.level_objects
-(
-  spell_id INTEGER PRIMARY KEY references spells.ids(spell_id),
-  level INTEGER,
-  is_ritual BOOLEAN
 );
 
 CREATE TABLE game_sessions.data
@@ -70,24 +64,16 @@ CREATE TABLE guesses.categories
 (
   game_session_id TEXT,
   round SMALLINT,
+  spell INTEGER,
   school INTEGER,
   casting_time INTEGER,
   range INTEGER,
- target INTEGER,
+  target INTEGER,
   duration INTEGER,
+  level INTEGER[],
   components INTEGER[],
   class INTEGER[],
   effects INTEGER[],
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
-);
-
-CREATE TABLE guesses.level_objects
-(
-  game_session_id TEXT,
-  round SMALLINT,
-  level INTEGER,
-  is_ritual BOOLEAN,
   PRIMARY KEY(game_session_id, round),
   FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
 );
@@ -96,6 +82,7 @@ CREATE TABLE guesses.results
 (
   game_session_id TEXT,
   round SMALLINT,
+  spell SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
   range SMALLINT,

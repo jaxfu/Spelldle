@@ -8,7 +8,7 @@ import {
 } from "../types";
 import {
 	type T_APIRESPONSE_GET_PAST_GUESSES,
-	type T_GUESSES_AS_IDS,
+	type T_GUESS_MAP_IDS,
 } from "../types/guesses";
 import { T_TOKENS } from "../types";
 
@@ -64,7 +64,7 @@ export async function apiRequestValidateSession(
 
 interface T_ARG_APIREQUEST_MAKE_GUESS {
 	accessToken: string;
-	guessData: T_GUESSES_AS_IDS;
+	guessData: T_GUESS_MAP_IDS;
 }
 
 export async function apiRequestMakeGuess(

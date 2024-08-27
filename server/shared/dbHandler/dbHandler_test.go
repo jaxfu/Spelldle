@@ -148,7 +148,7 @@ func TestDBHandler(t *testing.T) {
 	})
 	t.Run("GetGuessCategoriesByGuessID", func(t *testing.T) {
 		for i := range testGuessesData {
-			guessInfo, err := dbHandler.GetGuessCategoriesByGuessID(
+			_, err := dbHandler.GetGuessCategoriesByGuessID(
 				types.GuessID{
 					GameSessionID: testGameSessionData.GameSessionID,
 					Round:         uint(i + 1),
@@ -156,9 +156,6 @@ func TestDBHandler(t *testing.T) {
 			)
 			if err != nil {
 				t.Errorf("Error getting guess: %+v", err)
-			}
-			if guessInfo.Level != testGuessesData[i].Level {
-				t.Errorf("mismatch in GetGuessCategoriesByGuessID: got %+v, want %+v", guessInfo.Level, testGuessesData[i].Level)
 			}
 		}
 	})

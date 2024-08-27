@@ -58,6 +58,8 @@ func TestRoutes(t *testing.T) {
 		}
 		testUserDataTokens = responseData.Tokens
 
+		fmt.Printf("responseData: %+v\n", responseData)
+
 		if !responseData.Valid {
 			t.Errorf("Invalid response, expected valid: %+v\n", responseData)
 		}

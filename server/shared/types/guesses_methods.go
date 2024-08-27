@@ -29,6 +29,75 @@ func (guess *GuessResults) Equals(other *GuessResults) (bool, string) {
 	if guess.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
 	}
+	if guess.Spell != other.Spell {
+		return false, fmt.Sprintf("field mismatch spell: %d vs %d", guess.Spell, other.Spell)
+	}
 
 	return true, ""
+}
+
+func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
+	var results GuessResults
+
+	// test single ints
+	singlesGuess := [6]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration, &spell.SpellID}
+	singlesSpell := [6]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration, &guess.Spell}
+	singlesResult := [6]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration, &results.Spell}
+
+	for i := range singlesResult {
+		if *singlesGuess[i] == *singlesSpell[i] {
+			*singlesResult[i] = 2
+		} else {
+			*singlesResult[i] = 0
+		}
+	}
+
+	// test arrays
+	arraysGuess := [4]*[]uint{&spell.Class, &spell.Components, &spell.Effects, &spell.Level}
+	arraysSpell := [4]*[]uint{&guess.Class, &guess.Components, &guess.Effects, &guess.Level}
+	arraysResult := [4]*uint{&results.Class, &results.Components, &results.Effects, &results.Level}
+
+	for i := range arraysResult {
+		*arraysResult[i] = compareArrays(arraysGuess[i], arraysSpell[i])
+	}
+
+	return results
+}
+
+func compareArrays(guess, spell *[]uint) uint {
+	a := *guess
+	b := *spell
+
+	if len(a) != len(b) {
+		return checkCommonElements(a, b)
+	}
+
+	identical := true
+	for i := range a {
+		if a[i] != b[i] {
+			identical = false
+			break
+		}
+	}
+
+	if identical {
+		return 2
+	}
+
+	return checkCommonElements(a, b)
+}
+
+func checkCommonElements(a, b []uint) uint {
+	i, j := 0, 0
+	for i < len(a) && j < len(b) {
+		if a[i] < b[j] {
+			i++
+		} else if a[i] > b[j] {
+			j++
+		} else {
+			return 1
+		}
+	}
+
+	return 0
 }

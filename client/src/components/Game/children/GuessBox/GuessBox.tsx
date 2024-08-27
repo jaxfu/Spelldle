@@ -1,7 +1,7 @@
 import styles from "./GuessBox.module.scss";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../../types/requests";
+import { apiRequestMakeGuess } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
 import { useContext, useMemo } from "react";

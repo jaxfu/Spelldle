@@ -6,7 +6,7 @@ import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
 	T_PAST_GUESS_CATEGORY,
-	translateIdsToValues,
+	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
 
 interface IProps {
@@ -83,7 +83,7 @@ const MultiText: React.FC<IProps> = (props) => {
 			props.mostRecentGuess.result !== -1 &&
 			Array.isArray(props.mostRecentGuess.value)
 		) {
-			const guesses: string[] = translateIdsToValues(
+			const guesses: string[] = translateIdsToDisplay(
 				props.mostRecentGuess.value,
 				props.categoryInfo,
 			) as string[];

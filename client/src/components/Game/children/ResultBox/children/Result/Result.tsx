@@ -1,7 +1,6 @@
 import styles from "./Result.module.scss";
 import { type T_PAST_GUESS } from "../../../../../../types/guesses";
 import ResultCategory from "./children/ResultCategory/ResultCategory";
-import { useMemo } from "react";
 import { type T_CATEGORY_INFO } from "../../../../../../types/categories";
 
 interface IProps {
@@ -13,26 +12,21 @@ interface IProps {
 const Result: React.FC<IProps> = (props) => {
 	const categoryMap = new Map(Object.entries(props.guess));
 
-	const resultCategories = props.categoriesInfoArr.map(
-		({ id, display_name, component_type, values }) => {
-			const categoryInfo = categoryMap.get(id);
+	const resultCategories = props.categoriesInfoArr.map((categoryInfo) => {
+		const pastGuessInfo = categoryMap.get(categoryInfo.id);
 
-			if (categoryInfo !== undefined) {
-				return (
-					<ResultCategory
-						key={`${props.round}-${id}`}
-						round={props.round}
-						id={id}
-						display_name={display_name}
-						result={categoryInfo.result}
-						guessAsIds={categoryInfo.value}
-						categoryType={component_type}
-						values={values}
-					/>
-				);
-			}
-		},
-	);
+		if (pastGuessInfo !== undefined) {
+			return (
+				<ResultCategory
+					key={`${props.round}-${categoryInfo.id}`}
+					round={props.round}
+					result={pastGuessInfo.result}
+					guess={pastGuessInfo.value}
+					categoryInfo={categoryInfo}
+				/>
+			);
+		}
+	});
 
 	// const categoryMap: Map<string, T_GUESS_AND_RESULT_VALUE> = useMemo(() => {
 	//   const map: Map<string, T_GUESS_AND_RESULT_VALUE> = new Map();
