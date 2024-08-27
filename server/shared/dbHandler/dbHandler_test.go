@@ -237,6 +237,16 @@ func TestDBHandler(t *testing.T) {
 		}
 	})
 
+	t.Run("GetSpellsCount", func(t *testing.T) {
+		count, err := dbHandler.GetSpellsCount()
+		if err != nil {
+			t.Errorf("error getting count: %+v", err)
+		}
+		if count != 1 {
+			t.Errorf("count mismatch: got %d, want 1", count)
+		}
+	})
+
 	t.Run("DropTablesEnd", func(t *testing.T) {
 		if err := dbHandler.ExecuteSqlScript(os.Getenv("SQL_DROP_TABLES")); err != nil {
 			t.Errorf("Error dropping tables: %+v\n", err)
