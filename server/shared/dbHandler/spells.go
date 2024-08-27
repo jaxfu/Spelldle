@@ -38,6 +38,21 @@ func (dbHandler *DBHandler) GetSpellBySpellId(spellID uint) (types.SpellAll, err
 	return spell, nil
 }
 
+const QGetSpellsCount = `
+	SELECT COUNT(*)
+	FROM spells.ids
+`
+
+func (dbHandler *DBHandler) GetSpellsCount() (uint, error) {
+	var count uint
+	err := dbHandler.Conn.QueryRow(context.Background(), QGetSpellsCount).Scan(&count)
+	if err != nil {
+		return count, err
+	}
+
+	return count, nil
+}
+
 // Inserts
 
 const EInsertSpellID = `

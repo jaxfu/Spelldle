@@ -1,11 +1,12 @@
 package routes
 
 import (
-	"crypto/rand"
+	crypto "crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
+	rand "math/rand"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
@@ -93,13 +94,8 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// create and insert game session
-		// TODO: randomly select spellID, currently hardcoded
-		gameSession := types.GameSession{
-			GameSessionID: types.GameSessionID(fmt.Sprintf("%d", userID)),
-			UserID:        userID,
-			SpellID:       1,
-			Rounds:        0,
-		}
+		gameSession, err := spawnNewGameSession(userID, db)
+		fmt.Printf("created game session: %+v\n", gameSession)
 		if err := db.InsertGameSession(gameSession); err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
 			fmt.Printf("error inserting game session: %+v", err)
@@ -128,12 +124,33 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 	}
 }
 
-// Generate a random salt of specified length
+// generate a random salt of specified length
 func generateSalt(size int) (string, error) {
 	salt := make([]byte, size)
-	_, err := io.ReadFull(rand.Reader, salt)
+	_, err := io.ReadFull(crypto.Reader, salt)
 	if err != nil {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(salt), nil
+}
+
+// generate new game session
+func spawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.GameSession, error) {
+	var session types.GameSession
+	session.GameSessionID = types.GameSessionID(fmt.Sprintf("%d", userID))
+	session.UserID = userID
+	session.Rounds = 0
+
+	count, err := db.GetSpellsCount()
+	if err != nil {
+		return session, err
+	}
+
+	session.SpellID = randomUint(count)
+
+	return session, nil
+}
+
+func randomUint(count uint) uint {
+	return uint(rand.Intn(int(count))) + 1
 }

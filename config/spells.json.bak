@@ -1,5 +1,33 @@
 [
   {
+    "spell_id": 1,
+    "name": "Fireball",
+    "school": 0,
+    "range": 2,
+    "casting_time": 1,
+    "target": 3,
+    "duration": 4,
+    "level": [
+      1,
+      1
+    ],
+    "components": [
+      1,
+      2
+    ],
+    "effects": [
+      3,
+      4,
+      5
+    ],
+    "class": [
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  {
     "spell_id": 2,
     "name": "test_2",
     "school": 0,
