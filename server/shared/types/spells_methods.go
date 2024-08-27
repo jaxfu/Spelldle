@@ -55,28 +55,16 @@ func (guess *SpellCategories) GetResults(spell *SpellCategories) GuessResults {
 		}
 	}
 
-	// test level
-	if guess.Level.Level == spell.Level.Level {
-		if guess.Level.IsRitual == spell.Level.IsRitual {
-			results.Level = 2
-		} else {
-			results.Level = 1
-		}
-	} else {
-		if guess.Level.IsRitual == spell.Level.IsRitual {
-			results.Level = 1
-		} else {
-			results.Level = 0
-		}
-	}
-
 	// test arrays
-	arraysGuess := [3]*[]uint{&guess.Class, &guess.Components, &guess.Effects}
-	arraysSpell := [3]*[]uint{&spell.Class, &spell.Components, &spell.Effects}
-	arraysResult := [3]*uint{&results.Class, &results.Components, &results.Effects}
+	arraysGuess := [4]*[]uint{&guess.Class, &guess.Components, &guess.Effects, &guess.Level}
+	arraysSpell := [4]*[]uint{&spell.Class, &spell.Components, &spell.Effects, &spell.Level}
+	arraysResult := [4]*uint{&results.Class, &results.Components, &results.Effects, &results.Level}
 
 	for i := range arraysResult {
 		*arraysResult[i] = compareArrays(arraysGuess[i], arraysSpell[i])
+		fmt.Printf("guess: %+v\n", arraysGuess[i])
+		fmt.Printf("spell: %+v\n", arraysSpell[i])
+		fmt.Printf("result: %d\n", *arraysResult[i])
 	}
 
 	return results

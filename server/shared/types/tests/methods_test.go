@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"spelldle.com/server/internal/testHelpers"
-	"spelldle.com/server/shared/types"
 )
 
 func TestMethods(t *testing.T) {
@@ -33,17 +32,6 @@ func TestMethods(t *testing.T) {
 	t.Run("SpellEqualsInvalidSlice", func(t *testing.T) {
 		alteredSpell := testSpell
 		alteredSpell.Class = []uint{8, 9}
-		valid, _ := testSpell.Equals(&alteredSpell.SpellCategories)
-		if valid {
-			t.Error("Expected invalid, got valid")
-		}
-	})
-	t.Run("SpellEqualsInvalidLevel", func(t *testing.T) {
-		alteredSpell := testSpell
-		alteredSpell.Level = types.SpellLevel{
-			Level:    testSpell.Level.Level + 1,
-			IsRitual: testSpell.Level.IsRitual,
-		}
 		valid, _ := testSpell.Equals(&alteredSpell.SpellCategories)
 		if valid {
 			t.Error("Expected invalid, got valid")

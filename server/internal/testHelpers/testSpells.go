@@ -8,7 +8,7 @@ var TestSpell = types.SpellAll{
 		Components:  []uint{1, 2},
 		Class:       []uint{3, 4, 5},
 		Effects:     []uint{6, 7, 8, 9},
-		Level:       []uint{0, 0},
+		Level:       []uint{1, 1},
 		School:      0,
 		CastingTime: 1,
 		Range:       2,

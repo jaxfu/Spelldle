@@ -53,7 +53,7 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 				Components:  types.PastGuessesMulti{Value: values.Components, Result: results.Components},
 				Class:       types.PastGuessesMulti{Value: values.Class, Result: results.Class},
 				Effects:     types.PastGuessesMulti{Value: values.Effects, Result: results.Effects},
-				Level:       types.PastGuessesLevel{Value: values.Level, Result: results.Level},
+				Level:       types.PastGuessesMulti{Value: values.Level, Result: results.Level},
 				School:      types.PastGuessesSingle{Value: values.School, Result: results.School},
 				CastingTime: types.PastGuessesSingle{Value: values.CastingTime, Result: results.CastingTime},
 				Range:       types.PastGuessesSingle{Value: values.Range, Result: results.Range},
