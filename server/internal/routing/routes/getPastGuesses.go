@@ -50,6 +50,7 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 			guess := types.PastGuessesAll{
 				Round:       (i + 1),
+				Spell:       types.PastGuessSingle{Value: values.Spell, Result: results.Spell},
 				Components:  types.PastGuessMulti{Value: values.Components, Result: results.Components},
 				Class:       types.PastGuessMulti{Value: values.Class, Result: results.Class},
 				Effects:     types.PastGuessMulti{Value: values.Effects, Result: results.Effects},

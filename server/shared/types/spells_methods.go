@@ -35,6 +35,9 @@ func (spell *SpellAll) Equals(other *SpellAll) (bool, string) {
 	if spell.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", spell.Duration, other.Duration)
 	}
+	if spell.SpellID != other.SpellID {
+		return false, fmt.Sprintf("field mismatch spell id: %d vs %d", spell.SpellID, other.SpellID)
+	}
 
 	return true, ""
 }

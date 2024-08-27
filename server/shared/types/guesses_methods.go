@@ -29,6 +29,9 @@ func (guess *GuessResults) Equals(other *GuessResults) (bool, string) {
 	if guess.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
 	}
+	if guess.Spell != other.Spell {
+		return false, fmt.Sprintf("field mismatch spell: %d vs %d", guess.Spell, other.Spell)
+	}
 
 	return true, ""
 }
@@ -56,9 +59,6 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 
 	for i := range arraysResult {
 		*arraysResult[i] = compareArrays(arraysGuess[i], arraysSpell[i])
-		fmt.Printf("guess: %+v\n", arraysGuess[i])
-		fmt.Printf("spell: %+v\n", arraysSpell[i])
-		fmt.Printf("result: %d\n", *arraysResult[i])
 	}
 
 	return results
