@@ -13,6 +13,7 @@ const Navbar: React.FC = () => {
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
 		queryFn: getAuthStatus,
+		retry: false,
 	});
 
 	const navigate = useNavigate();

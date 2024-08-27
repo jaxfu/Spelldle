@@ -28,7 +28,6 @@ const App: React.FC = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (isSuccess) {
-			console.log(!data || !data.valid);
 			if (!data || !data.valid) navigate("/login");
 			else navigate("/");
 		}
