@@ -14,7 +14,7 @@ func TestMethods(t *testing.T) {
 	t.Run("GetResults", func(t *testing.T) {
 		for i := range testGuesses {
 			guess1 := testGuesses[i]
-			results := guess1.GetResults(&testSpell.SpellCategories)
+			results := guess1.GetResults(&testSpell)
 
 			valid, msg := results.Equals(&testResults[i])
 			if !valid {
@@ -24,7 +24,7 @@ func TestMethods(t *testing.T) {
 	})
 	t.Run("SpellEqualsValid", func(t *testing.T) {
 		copiedSpell := testSpell
-		valid, msg := testSpell.Equals(&copiedSpell.SpellCategories)
+		valid, msg := testSpell.Equals(&copiedSpell)
 		if !valid {
 			t.Errorf("Error in SpellEquals: %s\n", msg)
 		}
@@ -32,7 +32,7 @@ func TestMethods(t *testing.T) {
 	t.Run("SpellEqualsInvalidSlice", func(t *testing.T) {
 		alteredSpell := testSpell
 		alteredSpell.Class = []uint{8, 9}
-		valid, _ := testSpell.Equals(&alteredSpell.SpellCategories)
+		valid, _ := testSpell.Equals(&alteredSpell)
 		if valid {
 			t.Error("Expected invalid, got valid")
 		}
@@ -40,7 +40,7 @@ func TestMethods(t *testing.T) {
 	t.Run("SpellEqualsInvalidSingle", func(t *testing.T) {
 		alteredSpell := testSpell
 		alteredSpell.Range = testSpell.Range + 1
-		valid, _ := testSpell.Equals(&alteredSpell.SpellCategories)
+		valid, _ := testSpell.Equals(&alteredSpell)
 		if valid {
 			t.Error("Expected invalid, got valid")
 		}

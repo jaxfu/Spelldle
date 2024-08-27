@@ -64,6 +64,7 @@ CREATE TABLE guesses.categories
 (
   game_session_id TEXT,
   round SMALLINT,
+  spell INTEGER,
   school INTEGER,
   casting_time INTEGER,
   range INTEGER,
@@ -81,6 +82,7 @@ CREATE TABLE guesses.results
 (
   game_session_id TEXT,
   round SMALLINT,
+  spell SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
   range SMALLINT,

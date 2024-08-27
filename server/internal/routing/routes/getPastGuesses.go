@@ -50,15 +50,15 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 			guess := types.PastGuessesAll{
 				Round:       (i + 1),
-				Components:  types.PastGuessesMulti{Value: values.Components, Result: results.Components},
-				Class:       types.PastGuessesMulti{Value: values.Class, Result: results.Class},
-				Effects:     types.PastGuessesMulti{Value: values.Effects, Result: results.Effects},
-				Level:       types.PastGuessesMulti{Value: values.Level, Result: results.Level},
-				School:      types.PastGuessesSingle{Value: values.School, Result: results.School},
-				CastingTime: types.PastGuessesSingle{Value: values.CastingTime, Result: results.CastingTime},
-				Range:       types.PastGuessesSingle{Value: values.Range, Result: results.Range},
-				Target:      types.PastGuessesSingle{Value: values.Target, Result: results.Target},
-				Duration:    types.PastGuessesSingle{Value: values.Duration, Result: results.Duration},
+				Components:  types.PastGuessMulti{Value: values.Components, Result: results.Components},
+				Class:       types.PastGuessMulti{Value: values.Class, Result: results.Class},
+				Effects:     types.PastGuessMulti{Value: values.Effects, Result: results.Effects},
+				Level:       types.PastGuessMulti{Value: values.Level, Result: results.Level},
+				School:      types.PastGuessSingle{Value: values.School, Result: results.School},
+				CastingTime: types.PastGuessSingle{Value: values.CastingTime, Result: results.CastingTime},
+				Range:       types.PastGuessSingle{Value: values.Range, Result: results.Range},
+				Target:      types.PastGuessSingle{Value: values.Target, Result: results.Target},
+				Duration:    types.PastGuessSingle{Value: values.Duration, Result: results.Duration},
 			}
 
 			guesses = append(guesses, guess)

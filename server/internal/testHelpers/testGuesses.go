@@ -7,7 +7,7 @@ const GameSessionID types.GameSessionID = "TEST"
 // ROUND 1: All incorrect
 // ROUND 2: Some correct
 // ROUND 3: All correct
-var TestGuesses = [3]types.SpellCategories{
+var TestGuesses = [3]types.GuessCategories{
 	{
 		Components:  []uint{10, 11},
 		Class:       []uint{12, 13, 14},
@@ -18,6 +18,7 @@ var TestGuesses = [3]types.SpellCategories{
 		Range:       11,
 		Target:      12,
 		Duration:    13,
+		Spell:       0,
 	},
 	{
 		Components:  []uint{1, 3, 4},
@@ -29,6 +30,7 @@ var TestGuesses = [3]types.SpellCategories{
 		Range:       11,
 		Target:      12,
 		Duration:    13,
+		Spell:       0,
 	},
 	{
 		Components:  []uint{1, 2},
@@ -40,6 +42,7 @@ var TestGuesses = [3]types.SpellCategories{
 		Range:       2,
 		Target:      3,
 		Duration:    4,
+		Spell:       1,
 	},
 }
 
@@ -54,6 +57,7 @@ var TestResults = [3]types.GuessResults{
 		Range:       0,
 		Target:      0,
 		Duration:    0,
+		Spell:       0,
 	},
 	{
 		Components:  1,
@@ -65,6 +69,7 @@ var TestResults = [3]types.GuessResults{
 		Range:       0,
 		Target:      0,
 		Duration:    0,
+		Spell:       0,
 	},
 	{
 		Components:  2,
@@ -76,5 +81,6 @@ var TestResults = [3]types.GuessResults{
 		Range:       2,
 		Target:      2,
 		Duration:    2,
+		Spell:       2,
 	},
 }

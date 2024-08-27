@@ -28,7 +28,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// bind payload
-		var payload types.SpellCategories
+		var payload types.GuessCategories
 		err = ctx.BindJSON(&payload)
 		if err != nil {
 			fmt.Printf("Error binding payload: %v\n", err)
