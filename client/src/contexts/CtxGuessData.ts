@@ -1,7 +1,7 @@
 import { createContext } from "react";
-import { T_GUESSES_AS_IDS } from "../types/guesses";
+import { T_GUESS_MAP_IDS } from "../types/guesses";
 
 const CtxGuessData =
-	createContext<React.MutableRefObject<T_GUESSES_AS_IDS> | null>(null);
+	createContext<React.MutableRefObject<T_GUESS_MAP_IDS> | null>(null);
 
 export default CtxGuessData;

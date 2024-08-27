@@ -3,10 +3,10 @@ import { useContext } from "react";
 import CtxGuessData from "../../../contexts/CtxGuessData";
 import * as testGuesses from "./TEST_GUESSES";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../types/requests";
+import { apiRequestMakeGuess } from "../../../utils/requests";
 import { QUERY_KEYS } from "../../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../../utils/methods";
-import { type T_GUESSES_AS_IDS } from "../../../types/guesses";
+import { type T_GUESS_MAP_IDS } from "../../../types/guesses";
 
 const GuessInfoButton: React.FC = () => {
 	const queryClient = useQueryClient();
@@ -21,8 +21,8 @@ const GuessInfoButton: React.FC = () => {
 
 	const guessData = useContext(CtxGuessData);
 
-	const testGuess: T_GUESSES_AS_IDS = new Map(
-		Object.entries(testGuesses.TEST_GUESS_SOME_CORRECT),
+	const testGuess: T_GUESS_MAP_IDS = new Map(
+		Object.entries(testGuesses.TEST_GUESS_INCORRECT),
 	);
 
 	return (

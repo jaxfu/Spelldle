@@ -4,26 +4,22 @@ import SingleText from "../SingleText/SingleText";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
-	T_GUESS_STATES_IDS_LEVEL,
-	T_GUESSES_AS_IDS,
+	T_GUESS_MAP_IDS,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
 
 function updateGuessCategoriesMapRitualToggle(
 	checked: boolean,
 	categoryId: string,
-	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
 ) {
 	if (guessData !== null) {
-		const currentData = guessData.current.get(
-			categoryId,
-		) as T_GUESS_STATES_IDS_LEVEL;
+		const currentData = guessData.current.get(categoryId) as number[];
 
 		if (currentData !== undefined) {
-			guessData.current.set(categoryId, {
-				level: currentData.level,
-				is_ritual: checked,
-			});
+			const newData = [currentData[0]];
+			newData.push(checked ? 1 : 0);
+			guessData.current.set(categoryId, newData);
 		}
 	}
 }
@@ -42,12 +38,12 @@ const Level: React.FC<IProps> = (props) => {
 
 	// set from most recent guess
 	useEffect(() => {
-		const mostRecentGuessInfo = {
-			...(props.mostRecentGuess.value as T_GUESS_STATES_IDS_LEVEL),
-		};
-		checkBoxValueFromMostRecentGuess.current = mostRecentGuessInfo.is_ritual;
+		const mostRecentGuessInfo: number[] = props.mostRecentGuess
+			.value as number[];
+		checkBoxValueFromMostRecentGuess.current =
+			mostRecentGuessInfo[1] == 1 ? true : false;
 
-		if (mostRecentGuessInfo.is_ritual) {
+		if (mostRecentGuessInfo[1] == 1) {
 			setChecked(true);
 			updateGuessCategoriesMapRitualToggle(
 				true,

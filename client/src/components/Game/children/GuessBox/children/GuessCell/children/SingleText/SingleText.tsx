@@ -7,18 +7,16 @@ import {
 } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
-	type T_GUESS_STATES_IDS_LEVEL,
-	T_GUESS_STATES_STRINGS_LEVEL,
-	type T_GUESSES_AS_IDS,
-	T_PAST_GUESS_CATEGORY,
-	translateIdsToValues,
+	type T_GUESS_MAP_IDS,
+	type T_PAST_GUESS_CATEGORY,
+	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
 
 function updateGuessCategoriesMapSingleText(
 	input: string,
 	hasValidInput: boolean,
 	categoryInfo: T_CATEGORY_INFO,
-	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
 ): void {
 	if (guessData !== null) {
 		if (hasValidInput) {
@@ -37,27 +35,23 @@ function updateGuessCategoriesMapLevelText(
 	input: string,
 	hasValidInput: boolean,
 	categoryInfo: T_CATEGORY_INFO,
-	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
 ): void {
 	if (guessData !== null) {
-		const currentData = guessData.current.get(
-			categoryInfo.id,
-		) as T_GUESS_STATES_IDS_LEVEL;
+		const currentData = guessData.current.get(categoryInfo.id) as
+			| number[]
+			| undefined;
 
-		if (hasValidInput) {
-			const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
+		if (currentData !== undefined) {
+			if (hasValidInput) {
+				const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
 
-			if (valueId !== undefined && currentData !== undefined) {
-				guessData.current.set(categoryInfo.id, {
-					level: valueId,
-					is_ritual: currentData.is_ritual,
-				});
+				if (valueId !== undefined) {
+					guessData.current.set(categoryInfo.id, [valueId, currentData[1]]);
+				}
+			} else {
+				guessData.current.set(categoryInfo.id, [-1, currentData[1]]);
 			}
-		} else {
-			guessData.current.set(categoryInfo.id, {
-				level: -1,
-				is_ritual: currentData.is_ritual,
-			});
 		}
 	}
 }
@@ -84,19 +78,16 @@ const SingleText: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		if (props.mostRecentGuess.result !== -1) {
 			if (Number.isInteger(props.mostRecentGuess.value)) {
-				displayValueFromMostRecentGuess.current = translateIdsToValues(
+				displayValueFromMostRecentGuess.current = translateIdsToDisplay(
 					props.mostRecentGuess.value,
 					props.categoryInfo,
-				) as string;
+				)[0];
 				setInput(displayValueFromMostRecentGuess.current);
-			} else {
-				const levelInfo = props.mostRecentGuess
-					.value as T_GUESS_STATES_IDS_LEVEL;
-				const mostRecentGuessInfo = translateIdsToValues(
-					levelInfo,
+			} else if (Array.isArray(props.mostRecentGuess.value)) {
+				displayValueFromMostRecentGuess.current = translateIdsToDisplay(
+					props.mostRecentGuess.value,
 					props.categoryInfo,
-				) as T_GUESS_STATES_STRINGS_LEVEL;
-				displayValueFromMostRecentGuess.current = mostRecentGuessInfo.level;
+				)[0] as string;
 				setInput(displayValueFromMostRecentGuess.current);
 			}
 		}

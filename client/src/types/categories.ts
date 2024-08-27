@@ -1,4 +1,4 @@
-import { type T_GUESSES_AS_IDS } from "./guesses";
+import { type T_GUESS_MAP_IDS } from "./guesses";
 
 // TYPES
 export type T_CATEGORY_INFO = {
@@ -60,8 +60,8 @@ function generateValuesMapFromValues(arr: string[]): Map<string, number> {
 
 export function generateGuessesStateFromJSON(
 	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
-): T_GUESSES_AS_IDS {
-	const map: T_GUESSES_AS_IDS = new Map();
+): T_GUESS_MAP_IDS {
+	const map: T_GUESS_MAP_IDS = new Map();
 
 	for (const { id, component_type } of categoryInfoJson) {
 		let value;
@@ -70,12 +70,8 @@ export function generateGuessesStateFromJSON(
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
 				value = -1;
 				break;
-			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
-			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+			default:
 				value = [];
-				break;
-			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
-				value = { level: -1, is_ritual: false };
 				break;
 		}
 

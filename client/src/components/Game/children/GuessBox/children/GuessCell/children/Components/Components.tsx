@@ -3,14 +3,14 @@ import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import {
-	T_GUESSES_AS_IDS,
+	T_GUESS_MAP_IDS,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
 
 function updateGuessCategoriesMap(
 	checked: boolean,
 	valueId: number,
-	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
 	categoryId: string,
 ) {
 	if (guessData !== null) {
@@ -29,7 +29,7 @@ function updateGuessCategoriesMap(
 
 function setGuessCategoriesMap(
 	newArray: number[],
-	guessData: React.MutableRefObject<T_GUESSES_AS_IDS> | null,
+	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
 	categoryId: string,
 ) {
 	if (guessData !== null) {
