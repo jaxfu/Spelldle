@@ -40,38 +40,42 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			{props.categoriesInfoArr.map((category) => {
-				if (props.mostRecentGuess !== null) {
-					const mostRecentGuess = props.mostRecentGuess.get(category.id);
-					if (mostRecentGuess !== undefined)
-						return (
-							<GuessCell
-								key={category.id}
-								categoryInfo={category}
-								mostRecentGuess={mostRecentGuess}
-							/>
-						);
-				}
-				return (
-					<GuessCell
-						key={category.id}
-						categoryInfo={category}
-						mostRecentGuess={nullPastGuessCategory}
-					/>
-				);
-			})}
-			<button
-				onClick={() => {
-					if (guessData !== null) {
-						mutation.mutate({
-							accessToken: getUserSessionDataFromStorage().access_token,
-							guessData: guessData?.current,
-						});
+			<div className={styles.guess_cells}>
+				{props.categoriesInfoArr.map((category) => {
+					if (props.mostRecentGuess !== null) {
+						const mostRecentGuess = props.mostRecentGuess.get(category.id);
+						if (mostRecentGuess !== undefined)
+							return (
+								<GuessCell
+									key={category.id}
+									categoryInfo={category}
+									mostRecentGuess={mostRecentGuess}
+								/>
+							);
 					}
-				}}
-			>
-				Submit
-			</button>
+					return (
+						<GuessCell
+							key={category.id}
+							categoryInfo={category}
+							mostRecentGuess={nullPastGuessCategory}
+						/>
+					);
+				})}
+			</div>
+			<div className={styles.submit}>
+					<button
+						onClick={() => {
+							if (guessData !== null) {
+								mutation.mutate({
+									accessToken: getUserSessionDataFromStorage().access_token,
+									guessData: guessData?.current,
+								});
+							}
+						}}
+					>
+						Submit
+					</button>
+				</div>
 		</div>
 	);
 };
