@@ -63,19 +63,19 @@ const GuessBox: React.FC<IProps> = (props) => {
 				})}
 			</div>
 			<div className={styles.submit}>
-					<button
-						onClick={() => {
-							if (guessData !== null) {
-								mutation.mutate({
-									accessToken: getUserSessionDataFromStorage().access_token,
-									guessData: guessData?.current,
-								});
-							}
-						}}
-					>
-						Submit
-					</button>
-				</div>
+				<button
+					onClick={() => {
+						if (guessData !== null) {
+							mutation.mutate({
+								accessToken: getUserSessionDataFromStorage().access_token,
+								guessData: guessData?.current,
+							});
+						}
+					}}
+				>
+					Submit
+				</button>
+			</div>
 		</div>
 	);
 };

@@ -88,8 +88,12 @@ const GuessCell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<h3>{props.categoryInfo.display_name}</h3>
-			{component(props.categoryInfo.component_type)}
+			<h3 style={{ backgroundColor: color }}>
+				{props.categoryInfo.display_name}
+			</h3>
+			<div className={styles.inputs}>
+				{component(props.categoryInfo.component_type)}
+			</div>
 		</div>
 	);
 };
