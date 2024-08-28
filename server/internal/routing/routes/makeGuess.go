@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"spelldle.com/server/internal/routing/utils"
-	"spelldle.com/server/internal/testHelpers"
 	"spelldle.com/server/shared/dbHandler"
 
 	"github.com/gin-gonic/gin"
@@ -59,7 +58,13 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 		// get and insert results
 		// TODO: fetch spellID from current game session and use spell
-		results := payload.GetResults(&testHelpers.TestSpell)
+		spell, err := db.GetSpellBySpellId(gameSession.SpellID)
+		if err != nil {
+			fmt.Printf("error getting spell: %v\n", err)
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+		results := payload.GetResults(&spell)
 		if err := db.InsertGuessResults(results, guessID); err != nil {
 			fmt.Printf("Error inserting guess results: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)

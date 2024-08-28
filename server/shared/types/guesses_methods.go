@@ -50,6 +50,8 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 		} else {
 			*singlesResult[i] = 0
 		}
+
+		fmt.Printf("guess: %d, spell: %d, result: %d\n", *singlesGuess[i], *singlesSpell[i], *singlesResult[i])
 	}
 
 	// test arrays
