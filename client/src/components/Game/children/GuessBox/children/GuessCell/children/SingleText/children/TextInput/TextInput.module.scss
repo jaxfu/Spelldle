@@ -8,7 +8,7 @@
 		width: 100%;
 		height: 100%;
 		text-align: center;
-		border: 1px solid white;
+		border: none;
 		border-bottom-right-radius: 13px;
 		border-bottom-left-radius: 13px;
 		background: rgb(49, 47, 47);
@@ -16,7 +16,7 @@
 
 	.check {
 		position: absolute;
-		bottom: 0;
+		bottom: 3%;
 		right: 10px;
 		color: lightseagreen;
 	}

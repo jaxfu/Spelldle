@@ -8,13 +8,9 @@
 		display: inline-block;
 		border: $border;
 		width: 75px;
+		height: 50px;
 		text-align: center;
-	}
 
-	.cell {
-		display: inline-block;
-		border: $border;
-		width: 125px;
-		text-align: center;
+		overflow-y: auto;
 	}
 }
