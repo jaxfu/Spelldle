@@ -74,7 +74,7 @@ const Level: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			<SingleText {...props} />
 			<div className={styles.toggle}>
-				<label htmlFor="ritual_toggle">Ritual</label>
+				<label htmlFor="ritual_toggle">Ritual?</label>
 				<input
 					type="checkbox"
 					name="ritual_toggle"

@@ -87,8 +87,8 @@ const GuessCell: React.FC<IProps> = (props) => {
 	}, [props.mostRecentGuess, showingRecentGuess]);
 
 	return (
-		<div className={styles.root} style={{ backgroundColor: color }}>
-			<h4>{props.categoryInfo.display_name}</h4>
+		<div className={styles.root}>
+			<h3>{props.categoryInfo.display_name}</h3>
 			{component(props.categoryInfo.component_type)}
 		</div>
 	);

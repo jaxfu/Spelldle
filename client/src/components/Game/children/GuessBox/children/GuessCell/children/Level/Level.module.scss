@@ -3,5 +3,11 @@
 .root {
 	@include full-size-percent;
 	@include flex-center;
-	flex-direction: row;
+
+	.toggle {
+		height: 100%;
+
+		@include flex-center;
+		margin-bottom: 5px;
+	}
 }
