@@ -3,9 +3,11 @@
 .root {
 	@include flex-center;
 
+	overflow-x: auto;
+
 	text-align: center;
 	text-wrap: nowrap;
-	height: 2rem;
+	height: 4rem;
 
 	padding: 5px;
 

@@ -1,4 +1,8 @@
-import { type T_PAST_GUESS } from "../../../../types/guesses";
+import {
+	E_RESULT_OPTIONS,
+	translateIdsToDisplay,
+	type T_PAST_GUESS,
+} from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import Result from "./children/Result/Result";
 import styles from "./ResultBox.module.scss";
@@ -10,38 +14,43 @@ interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
 }
 
-function generateCols(
+function generateCols (
 	categoriesInfoArr: T_CATEGORY_INFO[],
 	pastGuesses: T_PAST_GUESS[],
 ): JSX.Element[] {
-	const cols: JSX.Element[] = [];
-
-	categoriesInfoArr.forEach((category) => {
-		const cells: ICell[] = [];
-
-		pastGuesses.forEach((guess) => {
+	const results = categoriesInfoArr.map((category) => {
+		const cells: ICell[] = pastGuesses.map((guess) => {
 			const categoryFromPastGuess = guess.get(category.id);
-			if (categoryFromPastGuess !== undefined) {
-				const cell: ICell = {
-					content: [categoryFromPastGuess.value.toString()],
-					result: categoryFromPastGuess.result,
-				};
-				cells.push(cell)
-			} else {
+			const cell: ICell = {
+				content: [],
+				result: E_RESULT_OPTIONS.UNINITIALIZED,
+			};
+			if (categoryFromPastGuess === undefined) {
 				console.log("Error in generateCols(), id not found in pastGuess");
+			} else {
+				cell.content = translateIdsToDisplay(
+					categoryFromPastGuess.value,
+					category,
+				);
+				cell.result = categoryFromPastGuess.result;
 			}
+			return cell;
 		});
 
-		cols.push(
+		return (
 			<ResultCol
 				key={category.id}
 				title={category.display_name}
 				cells={cells}
-			/>,
+			/>
 		);
 	});
 
-	return cols;
+	const cells: ICell[] = pastGuesses.map((guess, i) =>  {return {content: [i], result: E_RESULT_OPTIONS.UNINITIALIZED }})
+
+	results.unshift(<ResultCol key={"round"} title={"Round"} cells={cells} />)
+
+	return results
 }
 
 const ResultBox: React.FC<IProps> = (props) => {
@@ -49,7 +58,9 @@ const ResultBox: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			{/* <ResultCol key={"rounds"} title={"Rounds"} /> */}
 
-			{generateCols(props.categoriesInfoArr, props.pastGuesses)}
+			<div className={styles.cols}>
+				{generateCols(props.categoriesInfoArr, props.pastGuesses)}
+			</div>
 
 			{/* <div className={styles.row}>
 				<span className={styles.round}>

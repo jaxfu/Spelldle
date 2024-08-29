@@ -5,9 +5,16 @@
 	overflow: auto;
 	max-width: 90dvw;
 
+	max-height: 50dvh;
+
 	border: 5px solid black;
 
-	display: flex;
+	.cols {
+		width: fit-content;
+		height: fit-content;
+
+		display: flex;
+	}
 
 	// .row {
 	// 	white-space: nowrap;
