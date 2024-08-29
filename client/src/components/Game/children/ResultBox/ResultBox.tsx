@@ -7,6 +7,7 @@ import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import styles from "./ResultBox.module.scss";
 import ResultCol from "./children/ResultCol/ResultCol";
 import Cell, { ICell } from "./children/ResultCol/children/Cell/Cell";
+import { useState } from "react";
 
 interface IProps {
 	pastGuesses: T_PAST_GUESS[];
@@ -54,7 +55,34 @@ function generateCols(
 	return results;
 }
 
+function initWidthMap(
+	categoriesInfoArr: T_CATEGORY_INFO[],
+): Map<string, number> {
+	const map = new Map();
+
+	//TODO: magic string
+	map.set("round", 0);
+	categoriesInfoArr.forEach(({ id }) => {
+		map.set(id, 0);
+	});
+
+	return map;
+}
+
+function calcAndSetWidthCol(
+	width1: number,
+	width2: number,
+	setWidthMap: React.Dispatch<React.SetStateAction<Map<string, number>>>,
+	id: string,
+): void {
+	setWidthMap((curr) => curr.set(id, width1 >= width2 ? width1 : width2));
+}
+
 const ResultBox: React.FC<IProps> = (props) => {
+	const [colWidths, setColWidths] = useState<Map<string, number>>(
+		initWidthMap(props.categoriesInfoArr),
+	);
+
 	return (
 		<div className={styles.root}>
 			<div className={styles.headers}>

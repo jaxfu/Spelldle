@@ -9,6 +9,7 @@ interface IProps {
 }
 
 const ResultCol: React.FC<IProps> = (props) => {
+	// TODO: magic string
 	const id = props.title.toLowerCase() === "round" ? "rounds" : "";
 
 	return (
