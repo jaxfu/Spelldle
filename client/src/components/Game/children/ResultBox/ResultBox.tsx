@@ -14,7 +14,7 @@ interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
 }
 
-function generateCols (
+function generateCols(
 	categoriesInfoArr: T_CATEGORY_INFO[],
 	pastGuesses: T_PAST_GUESS[],
 ): JSX.Element[] {
@@ -46,11 +46,13 @@ function generateCols (
 		);
 	});
 
-	const cells: ICell[] = pastGuesses.map((guess, i) =>  {return {content: [i], result: E_RESULT_OPTIONS.UNINITIALIZED }})
+	const cells: ICell[] = pastGuesses.map((guess, i) => {
+		return { content: [i.toString()], result: E_RESULT_OPTIONS.UNINITIALIZED };
+	});
 
-	results.unshift(<ResultCol key={"round"} title={"Round"} cells={cells} />)
+	results.unshift(<ResultCol key={"round"} title={"Round"} cells={cells} />);
 
-	return results
+	return results;
 }
 
 const ResultBox: React.FC<IProps> = (props) => {

@@ -29,9 +29,11 @@ const Cell: React.FC<IProps> = (props) => {
 			className={styles.root}
 			style={{ background: colorClass(props.data.result) }}
 		>
+			<div className={styles.content}>
 			{props.data.content.map((str) => {
 				return <span>{str}</span>;
 			})}
+			</div>
 		</div>
 	);
 };

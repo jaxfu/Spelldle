@@ -2,14 +2,24 @@
 
 .root {
 	@include flex-center;
+	overflow-x: hidden;
 
-	overflow-x: auto;
-
-	text-align: center;
-	text-wrap: nowrap;
 	height: 4rem;
 
 	padding: 5px;
 
 	border: 1px solid white;
+
+	.content {
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		height: fit-content;
+
+		text-align: center;
+		text-wrap: nowrap;
+
+		display: flex;
+		flex-direction: column;
+	}
 }
