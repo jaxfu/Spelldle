@@ -36,7 +36,7 @@ const Game: React.FC = () => {
 	});
 
 	if (isSuccess) {
-		console.log(data.data);
+		console.log(data);
 	}
 
 	if (isFetching) {
@@ -46,22 +46,15 @@ const Game: React.FC = () => {
 			<>
 				<CtxGuessData.Provider value={currentGuessInfo}>
 					<GuessInfoButton />
-					{data != undefined && data.data.guesses !== null && (
-						<ResultBox
-							pastGuesses={data.data.guesses}
-							categoriesInfoArr={categoriesInfo}
-						/>
+					{data !== undefined && (
+						<ResultBox pastGuesses={data} categoriesInfoArr={categoriesInfo} />
 					)}
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}
 						mostRecentGuess={
-							data !== undefined && data.data.guesses !== null
+							data !== undefined
 								? //TODO: create map on fetch
-									new Map(
-										Object.entries(
-											data.data.guesses[data.data.guesses.length - 1],
-										),
-									)
+									data[data.length - 1]
 								: null
 						}
 					/>

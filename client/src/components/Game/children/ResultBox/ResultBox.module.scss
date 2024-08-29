@@ -7,14 +7,16 @@
 
 	border: 5px solid black;
 
-	.row {
-		white-space: nowrap;
+	display: flex;
 
-		.round {
-			display: inline-block;
-			border: $border;
-			width: 75px;
-			text-align: center;
-		}
-	}
+	// .row {
+	// 	white-space: nowrap;
+
+	// 	.round {
+	// 		display: inline-block;
+	// 		border: $border;
+	// 		width: 75px;
+	// 		text-align: center;
+	// 	}
+	// }
 }
