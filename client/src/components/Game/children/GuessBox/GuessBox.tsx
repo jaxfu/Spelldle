@@ -26,7 +26,6 @@ const GuessBox: React.FC<IProps> = (props) => {
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuess,
 		onSuccess: (data) => {
-			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
 		},
 	});
