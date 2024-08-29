@@ -28,6 +28,8 @@ const Cell: React.FC<IProps> = (props) => {
 		<div
 			className={styles.root}
 			style={{ background: colorClass(props.data.result) }}
+			//TODO: magic string
+			id={props.data.content[0] === "Round" ? "rounds" : ""}
 		>
 			<div className={styles.content}>
 				{props.data.content.map((str, i) => {
