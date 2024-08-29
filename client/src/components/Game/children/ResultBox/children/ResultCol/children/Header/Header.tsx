@@ -1,12 +1,9 @@
-import Cell from "./children/Cell/Cell";
-import styles from "./ResultCol.module.scss";
-import { ICell } from "./children/Cell/Cell";
+import styles from "./Header.module.scss";
+import { IColWidths } from "../../../../ResultBox";
 import { useEffect, useRef } from "react";
-import type { IColWidths } from "../../ResultBox";
 
 interface IProps {
 	title: string;
-	cells: ICell[];
 	categoryID: string;
 	colWidthsMap: Map<string, IColWidths>;
 	setColWidthsMap: React.Dispatch<
@@ -14,7 +11,7 @@ interface IProps {
 	>;
 }
 
-const ResultCol: React.FC<IProps> = (props) => {
+const Header: React.FC<IProps> = (props) => {
 	const ref: React.MutableRefObject<HTMLDivElement | null> = useRef(null);
 
 	// update colWidthsMap on load
@@ -24,7 +21,7 @@ const ResultCol: React.FC<IProps> = (props) => {
 
 			if (colWidths !== undefined) {
 				if (ref.current) {
-					colWidths.col = ref.current.clientWidth;
+					colWidths.header = ref.current.clientWidth;
 				}
 				colWidthsMap.set(props.categoryID, { ...colWidths });
 			}
@@ -49,12 +46,10 @@ const ResultCol: React.FC<IProps> = (props) => {
 	}, [props.colWidthsMap]);
 
 	return (
-		<div className={`${styles.root} ${props.categoryID} col`} ref={ref}>
-			{props.cells.map((cell, i) => {
-				return <Cell key={`${props.title}-${i}`} {...cell} />;
-			})}
+		<div className={`${styles.root} ${props.categoryID} header`} ref={ref}>
+			{props.title}
 		</div>
 	);
 };
 
-export default ResultCol;
+export default Header;

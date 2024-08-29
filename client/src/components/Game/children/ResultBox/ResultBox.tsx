@@ -8,6 +8,7 @@ import styles from "./ResultBox.module.scss";
 import ResultCol from "./children/ResultCol/ResultCol";
 import Cell, { ICell } from "./children/ResultCol/children/Cell/Cell";
 import { useRef, useState, type MutableRefObject } from "react";
+import Header from "./children/ResultCol/children/Header/Header";
 
 export const CONSTS_RESULT = {
 	ROUNDS: {
@@ -29,7 +30,9 @@ function generateCols(
 	categoriesInfoArr: T_CATEGORY_INFO[],
 	pastGuesses: T_PAST_GUESS[],
 	colWidthsMap: Map<string, IColWidths>,
-	setColWidthsMap: React.Dispatch<React.SetStateAction<Map<string, IColWidths>>>
+	setColWidthsMap: React.Dispatch<
+		React.SetStateAction<Map<string, IColWidths>>
+	>,
 ): JSX.Element[] {
 	const results = categoriesInfoArr.map((category) => {
 		const cells: ICell[] = pastGuesses.map((guess, i) => {
@@ -41,7 +44,9 @@ function generateCols(
 				round: i,
 			};
 			if (categoryFromPastGuess === undefined) {
-				console.log(`error in generateCols(), id ${category.id} not found in pastGuess`);
+				console.log(
+					`error in generateCols(), id ${category.id} not found in pastGuess`,
+				);
 			} else {
 				cell.content = translateIdsToDisplay(
 					categoryFromPastGuess.value,
@@ -52,19 +57,16 @@ function generateCols(
 			return cell;
 		});
 
-		const colWidths = colWidthsMap.get(category.id)
-		if (colWidths !== undefined) {
-			return (
-				<ResultCol
-					key={category.id}
-					categoryID={category.id}
-					title={category.display_name}
-					cells={cells}
-					colWidths={colWidths}
-					setColWidthsMap={setColWidthsMap}
-				/>
-			);
-		} else console.log(`error in generateCols(), id ${category.id} not found in colWidthsMap`)
+		return (
+			<ResultCol
+				key={category.id}
+				categoryID={category.id}
+				title={category.display_name}
+				cells={cells}
+				colWidthsMap={colWidthsMap}
+				setColWidthsMap={setColWidthsMap}
+			/>
+		);
 	});
 
 	const cells: ICell[] = pastGuesses.map((guess, i) => {
@@ -72,23 +74,20 @@ function generateCols(
 			content: [(i + 1).toString()],
 			result: E_RESULT_OPTIONS.UNINITIALIZED,
 			categoryID: CONSTS_RESULT.ROUNDS.ID,
-			round: i+1,
+			round: i + 1,
 		};
 	});
 
-	const colWidths = colWidthsMap.get(CONSTS_RESULT.ROUNDS.ID)
-	if (colWidths !== undefined) {
-		results.unshift(
-			<ResultCol
-				key={CONSTS_RESULT.ROUNDS.ID}
-				categoryID={CONSTS_RESULT.ROUNDS.ID}
-				title={CONSTS_RESULT.ROUNDS.DISPLAY}
-				cells={cells}
-				colWidths={colWidths}
-				setColWidthsMap={setColWidthsMap}
-			/>,
-		);
-	} else console.log(`error in generateCols(), id ${CONSTS_RESULT.ROUNDS.ID} not found in colWidthsMap`)
+	results.unshift(
+		<ResultCol
+			key={CONSTS_RESULT.ROUNDS.ID}
+			categoryID={CONSTS_RESULT.ROUNDS.ID}
+			title={CONSTS_RESULT.ROUNDS.DISPLAY}
+			cells={cells}
+			colWidthsMap={colWidthsMap}
+			setColWidthsMap={setColWidthsMap}
+		/>,
+	);
 
 	return results;
 }
@@ -118,7 +117,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 		CONSTS_RESULT.ROUNDS.ID,
 		props.categoriesInfoArr,
 	);
-	const [colWidths, setColWidths] = useState<Map<string, IColWidths>>(
+	const [colWidthsMap, setColWidthsMap] = useState<Map<string, IColWidths>>(
 		initColRefsMap(mapKeys),
 	);
 
@@ -126,24 +125,30 @@ const ResultBox: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			<div className={styles.headers}>
 				{/* round header explicit because it is not in categoriesInfoArr */}
-				<Cell
-					content={[CONSTS_RESULT.ROUNDS.DISPLAY]}
-					result={E_RESULT_OPTIONS.UNINITIALIZED}
+				<Header
+					key={CONSTS_RESULT.ROUNDS.ID}
 					categoryID={CONSTS_RESULT.ROUNDS.ID}
-					round={0}
+					title={CONSTS_RESULT.ROUNDS.DISPLAY}
+					colWidthsMap={colWidthsMap}
+					setColWidthsMap={setColWidthsMap}
 				/>
 				{props.categoriesInfoArr.map(({ id, display_name }, i) => (
-					<Cell
+					<Header
 						key={id}
-						content={[display_name]}
-						result={E_RESULT_OPTIONS.UNINITIALIZED}
 						categoryID={id}
-						round={i}
+						title={display_name}
+						colWidthsMap={colWidthsMap}
+						setColWidthsMap={setColWidthsMap}
 					/>
 				))}
 			</div>
 			<div className={styles.cols}>
-				{generateCols(props.categoriesInfoArr, props.pastGuesses, colWidths, setColWidths)}
+				{generateCols(
+					props.categoriesInfoArr,
+					props.pastGuesses,
+					colWidthsMap,
+					setColWidthsMap,
+				)}
 			</div>
 		</div>
 	);
