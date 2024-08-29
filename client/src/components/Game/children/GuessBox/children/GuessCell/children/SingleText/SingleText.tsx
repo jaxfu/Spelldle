@@ -1,3 +1,4 @@
+import styles from "./SingleText.module.scss";
 import TextInput from "./children/TextInput/TextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { useState, useMemo, useContext, useEffect, useRef } from "react";

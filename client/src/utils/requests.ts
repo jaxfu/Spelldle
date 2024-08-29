@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, HttpStatusCode } from "axios";
 import {
 	type T_APIRESULT_LOGIN,
 	type T_USERINPUT_LOGIN,
@@ -9,6 +9,7 @@ import {
 import {
 	type T_APIRESPONSE_GET_PAST_GUESSES,
 	type T_GUESS_MAP_IDS,
+	type T_PAST_GUESS,
 } from "../types/guesses";
 import { T_TOKENS } from "../types";
 
@@ -85,13 +86,19 @@ export async function apiRequestMakeGuess(
 
 export async function apiRequestGetPastGuesses(
 	accessToken: string,
-): Promise<AxiosResponse<T_APIRESPONSE_GET_PAST_GUESSES>> {
+): Promise<T_PAST_GUESS[] | undefined> {
 	console.log("Running apiRequestGetPastGuesses");
-	return await axios<T_APIRESPONSE_GET_PAST_GUESSES>({
+	const res = await axios<T_APIRESPONSE_GET_PAST_GUESSES>({
 		method: "POST",
 		url: API_ROUTES.GET_PAST_GUESSES,
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
+
+	if (res.data !== undefined && res.data.guesses.length > 0) {
+		return res.data.guesses.map((guess) => {
+			return new Map(Object.entries(guess));
+		});
+	} else return undefined;
 }

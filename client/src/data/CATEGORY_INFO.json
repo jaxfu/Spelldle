@@ -1,5 +1,12 @@
 [
 	{
+		"id": "spell",
+		"display_name": "Spell",
+		"values": ["Fireball"],
+		"component_type": 0,
+		"has_modifiers": false
+	},
+	{
 		"id": "school",
 		"display_name": "School",
 		"values": [
@@ -69,31 +76,6 @@
 		],
 		"component_type": 0,
 		"has_modifiers": true
-	},
-	{
-		"id": "level",
-		"display_name": "Level",
-		"values": [
-			"1st",
-			"2nd",
-			"3rd",
-			"4th",
-			"5th",
-			"6th",
-			"7th",
-			"8th",
-			"9th",
-			"Cantrip"
-		],
-		"component_type": 3,
-		"has_modifiers": true
-	},
-	{
-		"id": "components",
-		"display_name": "Components",
-		"values": ["V", "S", "M"],
-		"component_type": 2,
-		"has_modifiers": false
 	},
 	{
 		"id": "class",
@@ -170,10 +152,28 @@
 		"has_modifiers": false
 	},
 	{
-		"id": "spell",
-		"display_name": "Spell",
-		"values": ["Fireball"],
-		"component_type": 0,
+		"id": "level",
+		"display_name": "Level",
+		"values": [
+			"1st",
+			"2nd",
+			"3rd",
+			"4th",
+			"5th",
+			"6th",
+			"7th",
+			"8th",
+			"9th",
+			"Cantrip"
+		],
+		"component_type": 3,
+		"has_modifiers": true
+	},
+	{
+		"id": "components",
+		"display_name": "Components",
+		"values": ["V", "S", "M"],
+		"component_type": 2,
 		"has_modifiers": false
 	}
 ]

@@ -1,3 +1,5 @@
+@import "./styles/vars";
+
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
@@ -38,4 +40,24 @@ button {
 
 input[type="checkbox"] {
 	cursor: pointer;
+}
+
+input[type="text"] {
+	box-shadow: none;
+}
+
+.round.col {
+	position: sticky;
+	left: 0;
+
+	z-index: 9;
+	background: $main_bg;
+}
+
+.round.header {
+	position: sticky;
+	left: 0;
+
+	z-index: 9;
+	background: $main_bg;
 }

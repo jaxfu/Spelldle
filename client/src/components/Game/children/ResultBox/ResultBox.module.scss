@@ -4,24 +4,39 @@
 .root {
 	overflow: auto;
 	max-width: 90dvw;
+	max-height: 30rem;
 
-	border: 1px solid yellow;
+	display: flex;
+	flex-direction: column;
 
-	.row {
-		white-space: nowrap;
+	.headers {
+		display: flex;
+		width: fit-content;
 
-		.round {
-			display: inline-block;
-			border: $border;
-			width: 75px;
-			text-align: center;
-		}
+		position: sticky;
+		top: 0;
+		z-index: 10;
 
-		.cell {
-			display: inline-block;
-			border: $border;
-			width: 125px;
-			text-align: center;
-		}
+		background: $main_bg;
+		backdrop-filter: blur(2rem);
+		-webkit-backdrop-filter: blur(2rem);
 	}
+
+	.cols {
+		width: fit-content;
+		height: fit-content;
+
+		display: flex;
+	}
+
+	// .row {
+	// 	white-space: nowrap;
+
+	// 	.round {
+	// 		display: inline-block;
+	// 		border: $border;
+	// 		width: 75px;
+	// 		text-align: center;
+	// 	}
+	// }
 }

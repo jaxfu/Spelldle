@@ -1,0 +1,15 @@
+@import "../../../../../../../../styles/mixins";
+
+.root {
+	@include flex-center;
+	overflow-x: hidden;
+
+	min-width: 5rem;
+	height: 4rem;
+
+	text-wrap: nowrap;
+
+	padding: 5px;
+
+	border: 2px solid white;
+}

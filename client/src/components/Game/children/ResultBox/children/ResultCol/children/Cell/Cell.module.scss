@@ -1,0 +1,27 @@
+@import "../../../../../../../../styles/mixins";
+
+.root {
+	@include flex-center;
+	overflow-x: hidden;
+
+	min-width: 5rem;
+	height: 4rem;
+
+	padding: 5px;
+
+	border: 2px solid white;
+
+	.content {
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		width: fit-content;
+		height: fit-content;
+
+		text-align: center;
+		text-wrap: nowrap;
+
+		display: flex;
+		flex-direction: column;
+	}
+}

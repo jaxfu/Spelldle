@@ -7,6 +7,8 @@ import {
 	T_GUESS_MAP_IDS,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
+import { FaCheck } from "react-icons/fa";
+import { FaCircleXmark } from "react-icons/fa6";
 
 function updateGuessCategoriesMapRitualToggle(
 	checked: boolean,
@@ -72,9 +74,37 @@ const Level: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
+			<div className={styles.ritual_toggle}>
+				<span
+					onClick={() => {
+						setChecked((checked) => !checked);
+						updateGuessCategoriesMapRitualToggle(
+							!checked,
+							props.categoryInfo.id,
+							guessData,
+						);
+					}}
+					className={`${styles.check} ${!checked ? styles.unchecked : ""}`}
+				>
+					{checked ? <FaCheck /> : <FaCircleXmark />}
+				</span>
+				<button
+					className={!checked ? styles.unchecked : ""}
+					onClick={() => {
+						setChecked((checked) => !checked);
+						updateGuessCategoriesMapRitualToggle(
+							!checked,
+							props.categoryInfo.id,
+							guessData,
+						);
+					}}
+				>
+					Ritual
+				</button>
+			</div>
 			<SingleText {...props} />
-			<div className={styles.toggle}>
-				<label htmlFor="ritual_toggle">Ritual</label>
+			{/* <div className={styles.toggle}>
+				<label htmlFor="ritual_toggle">Ritual?</label>
 				<input
 					type="checkbox"
 					name="ritual_toggle"
@@ -89,7 +119,7 @@ const Level: React.FC<IProps> = (props) => {
 					}}
 					checked={checked}
 				/>
-			</div>
+			</div> */}
 		</div>
 	);
 };
