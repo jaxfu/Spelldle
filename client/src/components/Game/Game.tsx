@@ -36,7 +36,7 @@ const Game: React.FC = () => {
 	});
 
 	if (isSuccess) {
-		console.log(data);
+		//console.log(data);
 	}
 
 	if (isFetching) {

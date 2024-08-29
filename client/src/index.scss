@@ -46,12 +46,18 @@ input[type="text"] {
 	box-shadow: none;
 }
 
-#round {
+.round.col {
 	position: sticky;
 	left: 0;
 
 	z-index: 9;
 	background: $main_bg;
-	backdrop-filter: blur(1rem);
-	-webkit-backdrop-filter: blur(2rem);
+}
+
+.round.header {
+	position: sticky;
+	left: 0;
+
+	z-index: 9;
+	background: $main_bg;
 }

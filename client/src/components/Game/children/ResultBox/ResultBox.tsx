@@ -7,7 +7,7 @@ import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import styles from "./ResultBox.module.scss";
 import ResultCol from "./children/ResultCol/ResultCol";
 import Cell, { ICell } from "./children/ResultCol/children/Cell/Cell";
-import { useRef, useState } from "react";
+import { useRef, useState, type MutableRefObject } from "react";
 
 export const CONSTS_RESULT = {
 	ROUNDS: {
@@ -30,12 +30,13 @@ function generateCols(
 	pastGuesses: T_PAST_GUESS[],
 ): JSX.Element[] {
 	const results = categoriesInfoArr.map((category) => {
-		const cells: ICell[] = pastGuesses.map((guess) => {
+		const cells: ICell[] = pastGuesses.map((guess, i) => {
 			const categoryFromPastGuess = guess.get(category.id);
 			const cell: ICell = {
 				content: [],
 				result: E_RESULT_OPTIONS.UNINITIALIZED,
-				id: ""
+				categoryID: category.id,
+				round: i,
 			};
 			if (categoryFromPastGuess === undefined) {
 				console.log("Error in generateCols(), id not found in pastGuess");
@@ -52,6 +53,7 @@ function generateCols(
 		return (
 			<ResultCol
 				key={category.id}
+				categoryID={category.id}
 				title={category.display_name}
 				cells={cells}
 			/>
@@ -59,12 +61,18 @@ function generateCols(
 	});
 
 	const cells: ICell[] = pastGuesses.map((guess, i) => {
-		return { content: [(i+1).toString()], result: E_RESULT_OPTIONS.UNINITIALIZED, id: "" };
+		return {
+			content: [(i + 1).toString()],
+			result: E_RESULT_OPTIONS.UNINITIALIZED,
+			categoryID: CONSTS_RESULT.ROUNDS.ID,
+			round: i,
+		};
 	});
 
 	results.unshift(
 		<ResultCol
 			key={CONSTS_RESULT.ROUNDS.ID}
+			categoryID={CONSTS_RESULT.ROUNDS.ID}
 			title={CONSTS_RESULT.ROUNDS.DISPLAY}
 			cells={cells}
 		/>,
@@ -73,7 +81,7 @@ function generateCols(
 	return results;
 }
 
-function initWidthMap(mapKeys: string[]): Map<string, number> {
+function initColRefsMap(mapKeys: string[]): Map<string, IColRefs> {
 	const map = new Map();
 
 	mapKeys.forEach((key) => {
@@ -83,13 +91,18 @@ function initWidthMap(mapKeys: string[]): Map<string, number> {
 	return map;
 }
 
-function calcAndSetWidthCol(
-	width1: number,
-	width2: number,
-	setWidthMap: React.Dispatch<React.SetStateAction<Map<string, number>>>,
-	id: string,
-): void {
-	setWidthMap((curr) => curr.set(id, width1 >= width2 ? width1 : width2));
+function calcAndSetColWidth(refs: IColRefs): void {
+	const max = Math.max(
+		refs.header.current.clientWidth,
+		refs.first.current.clientWidth,
+	);
+	refs.header.current.style.width = `${max}px`;
+	refs.first.current.style.width = `${max}px`;
+}
+
+interface IColRefs {
+	header: MutableRefObject<HTMLDivElement>;
+	first: MutableRefObject<HTMLDivElement>;
 }
 
 interface IProps {
@@ -102,8 +115,8 @@ const ResultBox: React.FC<IProps> = (props) => {
 		CONSTS_RESULT.ROUNDS.ID,
 		props.categoriesInfoArr,
 	);
-	const [colWidths, setColWidths] = useState<Map<string, number>>(
-		initWidthMap(mapKeys),
+	const [colRefs, setColRefs] = useState<Map<string, IColRefs>>(
+		initColRefsMap(mapKeys),
 	);
 
 	return (
@@ -114,16 +127,18 @@ const ResultBox: React.FC<IProps> = (props) => {
 					data={{
 						content: [CONSTS_RESULT.ROUNDS.DISPLAY],
 						result: E_RESULT_OPTIONS.UNINITIALIZED,
-						id: CONSTS_RESULT.ROUNDS.ID
+						categoryID: CONSTS_RESULT.ROUNDS.ID,
+						round: 0,
 					}}
 				/>
-				{props.categoriesInfoArr.map(({ id, display_name }) => (
+				{props.categoriesInfoArr.map(({ id, display_name }, i) => (
 					<Cell
 						key={id}
 						data={{
 							content: [display_name],
 							result: E_RESULT_OPTIONS.UNINITIALIZED,
-							id
+							categoryID: id,
+							round: i,
 						}}
 					/>
 				))}

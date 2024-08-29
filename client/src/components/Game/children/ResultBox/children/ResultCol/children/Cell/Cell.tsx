@@ -1,11 +1,12 @@
 import { E_RESULT_OPTIONS } from "../../../../../../../../types/guesses";
 import styles from "./Cell.module.scss";
-import { CONSTS_RESULT } from "../../../../ResultBox";
+import { useEffect, useRef } from "react";
 
 export interface ICell {
 	content: string[];
 	result: E_RESULT_OPTIONS;
-	id: string;
+	categoryID: string;
+	round: number;
 }
 
 interface IProps {
@@ -26,13 +27,17 @@ const colorClass = (result: E_RESULT_OPTIONS) => {
 };
 
 const Cell: React.FC<IProps> = (props) => {
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		console.log(ref.current?.clientWidth);
+	}, [ref]);
+
 	return (
 		<div
-			className={styles.root}
+			className={`${styles.root} ${props.data.categoryID} ${props.data.round === 0 ? "header" : props.data.round.toString()}`}
 			style={{ background: colorClass(props.data.result) }}
-			id={
-				props.data.id
-			}
+			ref={ref}
 		>
 			<div className={styles.content}>
 				{props.data.content.map((str, i) => {
