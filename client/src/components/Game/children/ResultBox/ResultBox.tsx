@@ -28,6 +28,8 @@ function generateMapKeys(
 function generateCols(
 	categoriesInfoArr: T_CATEGORY_INFO[],
 	pastGuesses: T_PAST_GUESS[],
+	colWidthsMap: Map<string, IColWidths>,
+	setColWidthsMap: React.Dispatch<React.SetStateAction<Map<string, IColWidths>>>
 ): JSX.Element[] {
 	const results = categoriesInfoArr.map((category) => {
 		const cells: ICell[] = pastGuesses.map((guess, i) => {
@@ -39,7 +41,7 @@ function generateCols(
 				round: i,
 			};
 			if (categoryFromPastGuess === undefined) {
-				console.log("Error in generateCols(), id not found in pastGuess");
+				console.log(`error in generateCols(), id ${category.id} not found in pastGuess`);
 			} else {
 				cell.content = translateIdsToDisplay(
 					categoryFromPastGuess.value,
@@ -50,14 +52,19 @@ function generateCols(
 			return cell;
 		});
 
-		return (
-			<ResultCol
-				key={category.id}
-				categoryID={category.id}
-				title={category.display_name}
-				cells={cells}
-			/>
-		);
+		const colWidths = colWidthsMap.get(category.id)
+		if (colWidths !== undefined) {
+			return (
+				<ResultCol
+					key={category.id}
+					categoryID={category.id}
+					title={category.display_name}
+					cells={cells}
+					colWidths={colWidths}
+					setColWidthsMap={setColWidthsMap}
+				/>
+			);
+		} else console.log(`error in generateCols(), id ${category.id} not found in colWidthsMap`)
 	});
 
 	const cells: ICell[] = pastGuesses.map((guess, i) => {
@@ -65,44 +72,40 @@ function generateCols(
 			content: [(i + 1).toString()],
 			result: E_RESULT_OPTIONS.UNINITIALIZED,
 			categoryID: CONSTS_RESULT.ROUNDS.ID,
-			round: i,
+			round: i+1,
 		};
 	});
 
-	results.unshift(
-		<ResultCol
-			key={CONSTS_RESULT.ROUNDS.ID}
-			categoryID={CONSTS_RESULT.ROUNDS.ID}
-			title={CONSTS_RESULT.ROUNDS.DISPLAY}
-			cells={cells}
-		/>,
-	);
+	const colWidths = colWidthsMap.get(CONSTS_RESULT.ROUNDS.ID)
+	if (colWidths !== undefined) {
+		results.unshift(
+			<ResultCol
+				key={CONSTS_RESULT.ROUNDS.ID}
+				categoryID={CONSTS_RESULT.ROUNDS.ID}
+				title={CONSTS_RESULT.ROUNDS.DISPLAY}
+				cells={cells}
+				colWidths={colWidths}
+				setColWidthsMap={setColWidthsMap}
+			/>,
+		);
+	} else console.log(`error in generateCols(), id ${CONSTS_RESULT.ROUNDS.ID} not found in colWidthsMap`)
 
 	return results;
 }
 
-function initColRefsMap(mapKeys: string[]): Map<string, IColRefs> {
-	const map = new Map();
+export interface IColWidths {
+	header: number;
+	col: number;
+}
+
+function initColRefsMap(mapKeys: string[]): Map<string, IColWidths> {
+	const map: Map<string, IColWidths> = new Map();
 
 	mapKeys.forEach((key) => {
-		map.set(key, 0);
+		map.set(key, { header: 0, col: 0 });
 	});
 
 	return map;
-}
-
-function calcAndSetColWidth(refs: IColRefs): void {
-	const max = Math.max(
-		refs.header.current.clientWidth,
-		refs.first.current.clientWidth,
-	);
-	refs.header.current.style.width = `${max}px`;
-	refs.first.current.style.width = `${max}px`;
-}
-
-interface IColRefs {
-	header: MutableRefObject<HTMLDivElement>;
-	first: MutableRefObject<HTMLDivElement>;
 }
 
 interface IProps {
@@ -115,7 +118,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 		CONSTS_RESULT.ROUNDS.ID,
 		props.categoriesInfoArr,
 	);
-	const [colRefs, setColRefs] = useState<Map<string, IColRefs>>(
+	const [colWidths, setColWidths] = useState<Map<string, IColWidths>>(
 		initColRefsMap(mapKeys),
 	);
 
@@ -124,23 +127,23 @@ const ResultBox: React.FC<IProps> = (props) => {
 			<div className={styles.headers}>
 				{/* round header explicit because it is not in categoriesInfoArr */}
 				<Cell
-				content={[CONSTS_RESULT.ROUNDS.DISPLAY]}
-				result={E_RESULT_OPTIONS.UNINITIALIZED}
-				categoryID={CONSTS_RESULT.ROUNDS.ID}
-				round={0}
+					content={[CONSTS_RESULT.ROUNDS.DISPLAY]}
+					result={E_RESULT_OPTIONS.UNINITIALIZED}
+					categoryID={CONSTS_RESULT.ROUNDS.ID}
+					round={0}
 				/>
 				{props.categoriesInfoArr.map(({ id, display_name }, i) => (
 					<Cell
 						key={id}
-							content={[display_name]}
-							result={E_RESULT_OPTIONS.UNINITIALIZED}
-							categoryID={id}
-							round={i}
+						content={[display_name]}
+						result={E_RESULT_OPTIONS.UNINITIALIZED}
+						categoryID={id}
+						round={i}
 					/>
 				))}
 			</div>
 			<div className={styles.cols}>
-				{generateCols(props.categoriesInfoArr, props.pastGuesses)}
+				{generateCols(props.categoriesInfoArr, props.pastGuesses, colWidths, setColWidths)}
 			</div>
 		</div>
 	);

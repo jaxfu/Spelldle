@@ -1,6 +1,5 @@
 import { E_RESULT_OPTIONS } from "../../../../../../../../types/guesses";
 import styles from "./Cell.module.scss";
-import { useEffect, useRef } from "react";
 
 export interface ICell {
 	content: string[];
@@ -23,22 +22,16 @@ const colorClass = (result: E_RESULT_OPTIONS) => {
 };
 
 const Cell: React.FC<ICell> = (props) => {
-	const ref = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		console.log(ref.current?.clientWidth);
-	}, [ref]);
-
 	return (
 		<div
 			className={`${styles.root} ${props.categoryID} ${props.round === 0 ? "header" : props.round.toString()}`}
 			style={{ background: colorClass(props.result) }}
-			ref={ref}
 		>
 			<div className={styles.content}>
 				{props.content.map((str, i) => {
-					//TODO: better key
-					return <span key={`${str}-${i}`}>{str}</span>;
+					return (
+						<span key={`${props.categoryID}-${props.round}-${i}`}>{str}</span>
+					);
 				})}
 			</div>
 		</div>
