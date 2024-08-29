@@ -7,19 +7,22 @@ import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import styles from "./ResultBox.module.scss";
 import ResultCol from "./children/ResultCol/ResultCol";
 import Cell, { ICell } from "./children/ResultCol/children/Cell/Cell";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const CONSTS_RESULT = {
 	ROUNDS: {
-		ID: "round", 
-		DISPLAY: "Round"
-	}
+		ID: "round",
+		DISPLAY: "Round",
+	},
 };
 
-function generateMapKeys(roundsId: string, categoriesInfoArr: T_CATEGORY_INFO[]): string[] {
-	const keys = categoriesInfoArr.map((category) => category.id)
-	keys.unshift(roundsId)
-	return keys
+function generateMapKeys(
+	roundsId: string,
+	categoriesInfoArr: T_CATEGORY_INFO[],
+): string[] {
+	const keys = categoriesInfoArr.map((category) => category.id);
+	keys.unshift(roundsId);
+	return keys;
 }
 
 function generateCols(
@@ -32,6 +35,7 @@ function generateCols(
 			const cell: ICell = {
 				content: [],
 				result: E_RESULT_OPTIONS.UNINITIALIZED,
+				id: ""
 			};
 			if (categoryFromPastGuess === undefined) {
 				console.log("Error in generateCols(), id not found in pastGuess");
@@ -55,7 +59,7 @@ function generateCols(
 	});
 
 	const cells: ICell[] = pastGuesses.map((guess, i) => {
-		return { content: [i.toString()], result: E_RESULT_OPTIONS.UNINITIALIZED };
+		return { content: [(i+1).toString()], result: E_RESULT_OPTIONS.UNINITIALIZED, id: "" };
 	});
 
 	results.unshift(
@@ -69,9 +73,7 @@ function generateCols(
 	return results;
 }
 
-function initWidthMap(
-	mapKeys: string[],
-): Map<string, number> {
+function initWidthMap(mapKeys: string[]): Map<string, number> {
 	const map = new Map();
 
 	mapKeys.forEach((key) => {
@@ -96,7 +98,10 @@ interface IProps {
 }
 
 const ResultBox: React.FC<IProps> = (props) => {
-	const mapKeys = generateMapKeys(CONSTS_RESULT.ROUNDS.ID, props.categoriesInfoArr)
+	const mapKeys = generateMapKeys(
+		CONSTS_RESULT.ROUNDS.ID,
+		props.categoriesInfoArr,
+	);
 	const [colWidths, setColWidths] = useState<Map<string, number>>(
 		initWidthMap(mapKeys),
 	);
@@ -104,8 +109,13 @@ const ResultBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.headers}>
+				{/* round header explicit because it is not in categoriesInfoArr */}
 				<Cell
-					data={{ content: ["Round"], result: E_RESULT_OPTIONS.UNINITIALIZED }}
+					data={{
+						content: [CONSTS_RESULT.ROUNDS.DISPLAY],
+						result: E_RESULT_OPTIONS.UNINITIALIZED,
+						id: CONSTS_RESULT.ROUNDS.ID
+					}}
 				/>
 				{props.categoriesInfoArr.map(({ id, display_name }) => (
 					<Cell
@@ -113,6 +123,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 						data={{
 							content: [display_name],
 							result: E_RESULT_OPTIONS.UNINITIALIZED,
+							id
 						}}
 					/>
 				))}

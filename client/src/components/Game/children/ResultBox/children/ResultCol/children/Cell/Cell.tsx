@@ -5,6 +5,7 @@ import { CONSTS_RESULT } from "../../../../ResultBox";
 export interface ICell {
 	content: string[];
 	result: E_RESULT_OPTIONS;
+	id: string;
 }
 
 interface IProps {
@@ -30,9 +31,7 @@ const Cell: React.FC<IProps> = (props) => {
 			className={styles.root}
 			style={{ background: colorClass(props.data.result) }}
 			id={
-				props.data.content[0] === CONSTS_RESULT.ROUNDS.DISPLAY
-					? CONSTS_RESULT.ROUNDS.ID
-					: ""
+				props.data.id
 			}
 		>
 			<div className={styles.content}>
