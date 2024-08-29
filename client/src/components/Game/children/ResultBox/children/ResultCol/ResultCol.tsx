@@ -12,7 +12,7 @@ const ResultCol: React.FC<IProps> = (props) => {
 	return (
 		<div className={`${styles.root} ${props.categoryID} col`}>
 			{props.cells.map((cell, i) => {
-				return <Cell key={`${props.title}-${i}`} data={cell} />;
+				return <Cell key={`${props.title}-${i}`} {...cell} />;
 			})}
 		</div>
 	);

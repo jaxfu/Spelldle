@@ -124,22 +124,18 @@ const ResultBox: React.FC<IProps> = (props) => {
 			<div className={styles.headers}>
 				{/* round header explicit because it is not in categoriesInfoArr */}
 				<Cell
-					data={{
-						content: [CONSTS_RESULT.ROUNDS.DISPLAY],
-						result: E_RESULT_OPTIONS.UNINITIALIZED,
-						categoryID: CONSTS_RESULT.ROUNDS.ID,
-						round: 0,
-					}}
+				content={[CONSTS_RESULT.ROUNDS.DISPLAY]}
+				result={E_RESULT_OPTIONS.UNINITIALIZED}
+				categoryID={CONSTS_RESULT.ROUNDS.ID}
+				round={0}
 				/>
 				{props.categoriesInfoArr.map(({ id, display_name }, i) => (
 					<Cell
 						key={id}
-						data={{
-							content: [display_name],
-							result: E_RESULT_OPTIONS.UNINITIALIZED,
-							categoryID: id,
-							round: i,
-						}}
+							content={[display_name]}
+							result={E_RESULT_OPTIONS.UNINITIALIZED}
+							categoryID={id}
+							round={i}
 					/>
 				))}
 			</div>
