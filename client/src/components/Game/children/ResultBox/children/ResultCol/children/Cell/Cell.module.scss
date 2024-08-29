@@ -1,14 +1,15 @@
-@import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../styles/mixins";
 
 .root {
 	@include flex-center;
 	overflow-x: hidden;
 
+	min-width: 5rem;
 	height: 4rem;
 
 	padding: 5px;
 
-	border: 1px solid white;
+	border: 2px solid white;
 
 	.content {
 		overflow-y: auto;

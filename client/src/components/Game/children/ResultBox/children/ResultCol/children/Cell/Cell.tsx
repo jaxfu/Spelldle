@@ -1,4 +1,4 @@
-import { E_RESULT_OPTIONS } from "../../../../../../../../../../types/guesses";
+import { E_RESULT_OPTIONS } from "../../../../../../../../types/guesses";
 import styles from "./Cell.module.scss";
 
 export interface ICell {
@@ -30,9 +30,10 @@ const Cell: React.FC<IProps> = (props) => {
 			style={{ background: colorClass(props.data.result) }}
 		>
 			<div className={styles.content}>
-			{props.data.content.map((str) => {
-				return <span>{str}</span>;
-			})}
+				{props.data.content.map((str, i) => {
+					//TODO: better key
+					return <span key={`${str}-${i}`}>{str}</span>;
+				})}
 			</div>
 		</div>
 	);

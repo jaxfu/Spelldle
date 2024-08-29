@@ -4,10 +4,24 @@
 .root {
 	overflow: auto;
 	max-width: 90dvw;
-
 	max-height: 30rem;
 
 	border: 5px solid black;
+
+	display: flex;
+	flex-direction: column;
+
+	.headers {
+		display: flex;
+
+		position: sticky;
+		top: 0;
+		z-index: 10;
+
+		background: $main_bg;
+		backdrop-filter: blur(2rem);
+		-webkit-backdrop-filter: blur(2rem);
+	}
 
 	.cols {
 		width: fit-content;

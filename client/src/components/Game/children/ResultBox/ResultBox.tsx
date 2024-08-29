@@ -4,10 +4,9 @@ import {
 	type T_PAST_GUESS,
 } from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
-import Result from "./children/Result/Result";
 import styles from "./ResultBox.module.scss";
-import ResultCol from "./children/Result/children/ResultCol/ResultCol";
-import type { ICell } from "./children/Result/children/ResultCol/children/Cell/Cell";
+import ResultCol from "./children/ResultCol/ResultCol";
+import Cell, { ICell } from "./children/ResultCol/children/Cell/Cell";
 
 interface IProps {
 	pastGuesses: T_PAST_GUESS[];
@@ -58,35 +57,23 @@ function generateCols(
 const ResultBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
-			{/* <ResultCol key={"rounds"} title={"Rounds"} /> */}
-
+			<div className={styles.headers}>
+				<Cell
+					data={{ content: ["Round"], result: E_RESULT_OPTIONS.UNINITIALIZED }}
+				/>
+				{props.categoriesInfoArr.map(({ id, display_name }) => (
+					<Cell
+						key={id}
+						data={{
+							content: [display_name],
+							result: E_RESULT_OPTIONS.UNINITIALIZED,
+						}}
+					/>
+				))}
+			</div>
 			<div className={styles.cols}>
 				{generateCols(props.categoriesInfoArr, props.pastGuesses)}
 			</div>
-
-			{/* <div className={styles.row}>
-				<span className={styles.round}>
-					<b>Round</b>
-				</span>
-
-				{props.categoriesInfoArr.map((category) => {
-					return (
-						<span className={styles.cell} key={category.id}>
-							<b>{category.display_name}</b>
-						</span>
-					);
-				})}
-			</div>
-			{props.pastGuesses.map((guess, i) => {
-				return (
-					<Result
-						guess={guess}
-						key={i}
-						round={i + 1}
-						categoriesInfoArr={props.categoriesInfoArr}
-					/>
-				);
-			})} */}
 		</div>
 	);
 };
