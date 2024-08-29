@@ -1,5 +1,12 @@
 [
 	{
+		"id": "spell",
+		"display_name": "Spell",
+		"values": ["Fireball"],
+		"component_type": 0,
+		"has_modifiers": false
+	},
+	{
 		"id": "school",
 		"display_name": "School",
 		"values": [
@@ -167,13 +174,6 @@
 			"Thunder"
 		],
 		"component_type": 1,
-		"has_modifiers": false
-	},
-	{
-		"id": "spell",
-		"display_name": "Spell",
-		"values": ["Fireball"],
-		"component_type": 0,
 		"has_modifiers": false
 	}
 ]
