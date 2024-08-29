@@ -90,16 +90,6 @@ function generateCols(
 	return results;
 }
 
-function initColRefsMap(mapKeys: string[]): Map<string, number> {
-	const map: Map<string, number> = new Map();
-
-	mapKeys.forEach((key) => {
-		map.set(key, 0);
-	});
-
-	return map;
-}
-
 interface IProps {
 	pastGuesses: T_PAST_GUESS[];
 	categoriesInfoArr: T_CATEGORY_INFO[];
@@ -111,7 +101,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 		props.categoriesInfoArr,
 	);
 	const [colWidthsMap, setColWidthsMap] = useState<Map<string, number>>(
-		initColRefsMap(mapKeys),
+		new Map(mapKeys.map((key) => [key, 0])),
 	);
 
 	return (
