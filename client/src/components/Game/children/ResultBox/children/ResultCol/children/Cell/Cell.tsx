@@ -1,5 +1,6 @@
 import { E_RESULT_OPTIONS } from "../../../../../../../../types/guesses";
 import styles from "./Cell.module.scss";
+import { CONSTS_RESULT } from "../../../../ResultBox";
 
 export interface ICell {
 	content: string[];
@@ -28,8 +29,11 @@ const Cell: React.FC<IProps> = (props) => {
 		<div
 			className={styles.root}
 			style={{ background: colorClass(props.data.result) }}
-			//TODO: magic string
-			id={props.data.content[0] === "Round" ? "rounds" : ""}
+			id={
+				props.data.content[0] === CONSTS_RESULT.ROUNDS.DISPLAY
+					? CONSTS_RESULT.ROUNDS.ID
+					: ""
+			}
 		>
 			<div className={styles.content}>
 				{props.data.content.map((str, i) => {

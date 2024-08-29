@@ -9,9 +9,17 @@ import ResultCol from "./children/ResultCol/ResultCol";
 import Cell, { ICell } from "./children/ResultCol/children/Cell/Cell";
 import { useState } from "react";
 
-interface IProps {
-	pastGuesses: T_PAST_GUESS[];
-	categoriesInfoArr: T_CATEGORY_INFO[];
+export const CONSTS_RESULT = {
+	ROUNDS: {
+		ID: "round", 
+		DISPLAY: "Round"
+	}
+};
+
+function generateMapKeys(roundsId: string, categoriesInfoArr: T_CATEGORY_INFO[]): string[] {
+	const keys = categoriesInfoArr.map((category) => category.id)
+	keys.unshift(roundsId)
+	return keys
 }
 
 function generateCols(
@@ -50,20 +58,24 @@ function generateCols(
 		return { content: [i.toString()], result: E_RESULT_OPTIONS.UNINITIALIZED };
 	});
 
-	results.unshift(<ResultCol key={"round"} title={"Round"} cells={cells} />);
+	results.unshift(
+		<ResultCol
+			key={CONSTS_RESULT.ROUNDS.ID}
+			title={CONSTS_RESULT.ROUNDS.DISPLAY}
+			cells={cells}
+		/>,
+	);
 
 	return results;
 }
 
 function initWidthMap(
-	categoriesInfoArr: T_CATEGORY_INFO[],
+	mapKeys: string[],
 ): Map<string, number> {
 	const map = new Map();
 
-	//TODO: magic string
-	map.set("round", 0);
-	categoriesInfoArr.forEach(({ id }) => {
-		map.set(id, 0);
+	mapKeys.forEach((key) => {
+		map.set(key, 0);
 	});
 
 	return map;
@@ -78,9 +90,15 @@ function calcAndSetWidthCol(
 	setWidthMap((curr) => curr.set(id, width1 >= width2 ? width1 : width2));
 }
 
+interface IProps {
+	pastGuesses: T_PAST_GUESS[];
+	categoriesInfoArr: T_CATEGORY_INFO[];
+}
+
 const ResultBox: React.FC<IProps> = (props) => {
+	const mapKeys = generateMapKeys(CONSTS_RESULT.ROUNDS.ID, props.categoriesInfoArr)
 	const [colWidths, setColWidths] = useState<Map<string, number>>(
-		initWidthMap(props.categoriesInfoArr),
+		initWidthMap(mapKeys),
 	);
 
 	return (

@@ -2,6 +2,7 @@ import Cell from "./children/Cell/Cell";
 import styles from "./ResultCol.module.scss";
 import { ICell } from "./children/Cell/Cell";
 import { E_RESULT_OPTIONS } from "../../../../../../types/guesses";
+import { CONSTS_RESULT } from "../../ResultBox";
 
 interface IProps {
 	title: string;
@@ -9,8 +10,10 @@ interface IProps {
 }
 
 const ResultCol: React.FC<IProps> = (props) => {
-	// TODO: magic string
-	const id = props.title.toLowerCase() === "round" ? "rounds" : "";
+	const id =
+		props.title.toLowerCase() === CONSTS_RESULT.ROUNDS.ID
+			? CONSTS_RESULT.ROUNDS.ID
+			: "";
 
 	return (
 		<div className={styles.root} id={id}>
