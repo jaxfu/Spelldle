@@ -29,10 +29,8 @@ function generateMapKeys(
 function generateCols(
 	categoriesInfoArr: T_CATEGORY_INFO[],
 	pastGuesses: T_PAST_GUESS[],
-	colWidthsMap: Map<string, IColWidths>,
-	setColWidthsMap: React.Dispatch<
-		React.SetStateAction<Map<string, IColWidths>>
-	>,
+	colWidthsMap: Map<string, number>,
+	setColWidthsMap: React.Dispatch<React.SetStateAction<Map<string, number>>>,
 ): JSX.Element[] {
 	const results = categoriesInfoArr.map((category) => {
 		const cells: ICell[] = pastGuesses.map((guess, i) => {
@@ -92,16 +90,11 @@ function generateCols(
 	return results;
 }
 
-export interface IColWidths {
-	header: number;
-	col: number;
-}
-
-function initColRefsMap(mapKeys: string[]): Map<string, IColWidths> {
-	const map: Map<string, IColWidths> = new Map();
+function initColRefsMap(mapKeys: string[]): Map<string, number> {
+	const map: Map<string, number> = new Map();
 
 	mapKeys.forEach((key) => {
-		map.set(key, { header: 0, col: 0 });
+		map.set(key, 0);
 	});
 
 	return map;
@@ -117,7 +110,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 		CONSTS_RESULT.ROUNDS.ID,
 		props.categoriesInfoArr,
 	);
-	const [colWidthsMap, setColWidthsMap] = useState<Map<string, IColWidths>>(
+	const [colWidthsMap, setColWidthsMap] = useState<Map<string, number>>(
 		initColRefsMap(mapKeys),
 	);
 

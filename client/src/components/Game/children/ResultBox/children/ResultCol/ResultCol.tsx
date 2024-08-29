@@ -2,16 +2,13 @@ import Cell from "./children/Cell/Cell";
 import styles from "./ResultCol.module.scss";
 import { ICell } from "./children/Cell/Cell";
 import { useEffect, useRef } from "react";
-import type { IColWidths } from "../../ResultBox";
 
 interface IProps {
 	title: string;
 	cells: ICell[];
 	categoryID: string;
-	colWidthsMap: Map<string, IColWidths>;
-	setColWidthsMap: React.Dispatch<
-		React.SetStateAction<Map<string, IColWidths>>
-	>;
+	colWidthsMap: Map<string, number>;
+	setColWidthsMap: React.Dispatch<React.SetStateAction<Map<string, number>>>;
 }
 
 const ResultCol: React.FC<IProps> = (props) => {
@@ -20,13 +17,13 @@ const ResultCol: React.FC<IProps> = (props) => {
 	// update colWidthsMap on load
 	useEffect(() => {
 		props.setColWidthsMap((colWidthsMap) => {
-			const colWidths = colWidthsMap.get(props.categoryID);
+			let colWidth = colWidthsMap.get(props.categoryID);
 
-			if (colWidths !== undefined) {
+			if (colWidth !== undefined) {
 				if (ref.current) {
-					colWidths.col = ref.current.clientWidth;
+					colWidth = Math.max(colWidth, ref.current.clientWidth);
 				}
-				colWidthsMap.set(props.categoryID, { ...colWidths });
+				colWidthsMap.set(props.categoryID, colWidth);
 			}
 
 			return colWidthsMap;
@@ -35,15 +32,11 @@ const ResultCol: React.FC<IProps> = (props) => {
 
 	// update ref width on colWidthsMap change
 	useEffect(() => {
-		const colWidths = props.colWidthsMap.get(props.categoryID);
+		const colWidth = props.colWidthsMap.get(props.categoryID);
 
-		if (colWidths !== undefined) {
+		if (colWidth !== undefined) {
 			if (ref.current) {
-				ref.current.style.width = `${Math.max(colWidths.col, colWidths.header)}px`;
-				if (props.categoryID === "components") {
-					console.log(`${colWidths.col} vs ${colWidths.header}`)
-					console.log(`${Math.max(colWidths.col, colWidths.header)}`)
-				}
+				ref.current.style.width = `${colWidth}px`;
 			}
 		}
 	}, [props.colWidthsMap]);
