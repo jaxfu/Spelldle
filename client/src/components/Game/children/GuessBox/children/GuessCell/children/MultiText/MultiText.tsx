@@ -104,7 +104,7 @@ const MultiText: React.FC<IProps> = (props) => {
 					{
 						/*TODO: remove to own component and style*/
 					}
-					return <MultiTextGuess content={guess} />;
+					return <MultiTextGuess key={guess} content={guess} />;
 				})}
 			</div>
 			<MultiTextInput

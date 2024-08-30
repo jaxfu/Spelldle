@@ -3,10 +3,16 @@
 
 .root {
 	.guesses {
+		width: 100%;
+		height: 100%;
+
 		padding: 5px;
 
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: center;
 		gap: 5px;
+
+		border: 1px solid yellow;
 	}
 }
