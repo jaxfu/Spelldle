@@ -8,6 +8,7 @@ import {
 	T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
+import MultiTextGuess from "./children/MultiTextGuess/MultiTextGuess";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -98,24 +99,12 @@ const MultiText: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<div>
+			<div className={styles.guesses}>
 				{guesses.map((guess) => {
 					{
 						/*TODO: remove to own component and style*/
 					}
-					return (
-						<div key={guess}>
-							{guess}
-							<button
-								onClick={() => {
-									setGuesses(guesses.filter((g) => g !== guess));
-									addGuessToRemainingValues(guess);
-								}}
-							>
-								-
-							</button>
-						</div>
-					);
+					return <MultiTextGuess content={guess} />;
 				})}
 			</div>
 			<MultiTextInput

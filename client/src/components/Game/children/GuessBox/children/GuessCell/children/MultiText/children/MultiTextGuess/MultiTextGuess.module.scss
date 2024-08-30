@@ -1,0 +1,19 @@
+@import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../../../styles/vars";
+
+.root {
+	width: fit-content;
+	height: fit-content;
+	padding-left: 5px;
+	padding-right: 5px;
+
+	background: rgba($color: #ffffff, $alpha: 0.1);
+
+	border: $border;
+	border-radius: 1rem;
+
+	&:hover {
+		cursor: pointer;
+		background: rgba($color: #bc0404, $alpha: 0.2);
+	}
+}

@@ -17,7 +17,7 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 	}
 
 	return (
-		<span className={styles.root}>
+		<div className={styles.root}>
 			<input
 				type="text"
 				name="guess"
@@ -31,7 +31,7 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 				}
 				autoComplete="false"
 			/>
-			{props.hasValidInput && (
+			{true && (
 				<button
 					onClick={() => {
 						addGuessToGuessesBox(props.input);
@@ -41,7 +41,7 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 					+
 				</button>
 			)}
-		</span>
+		</div>
 	);
 };
 
