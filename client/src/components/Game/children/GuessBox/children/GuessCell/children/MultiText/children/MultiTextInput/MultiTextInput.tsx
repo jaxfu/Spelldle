@@ -35,6 +35,7 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 				type="text"
 				name="guess"
 				value={props.IInput.input}
+				className={props.IInput.hasValidInput ? "" : styles.solo}
 				onChange={(e) => props.IInput.setInput(e.target.value)}
 				onClick={() =>
 					!props.IRecommendations.showRecommendationBox &&
@@ -46,7 +47,7 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 				}
 				autoComplete="false"
 			/>
-			{true && (
+			{props.IInput.hasValidInput && (
 				<button
 					onClick={() => {
 						addGuessToGuessesBox(props.IInput.input);

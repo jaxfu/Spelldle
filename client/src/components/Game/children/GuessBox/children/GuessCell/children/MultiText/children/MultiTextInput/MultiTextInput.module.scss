@@ -4,16 +4,15 @@
 .root {
 	width: 100%;
 
-	display: grid;
-	grid-template-columns: 4fr 1fr;
-
 	border-top: 1px solid white;
+	display: flex;
 
 	button {
 		border-bottom-right-radius: 13px;
 		text-decoration: none;
 		border: none;
 		border-left: 1px solid white;
+		width: 20%;
 	}
 
 	input {
@@ -23,5 +22,9 @@
 		border: none;
 		background: $main_bg;
 		text-align: center;
+	}
+
+	.solo {
+		border-bottom-right-radius: 13px;
 	}
 }
