@@ -26,9 +26,10 @@
 		border: none;
 		border-left: 1px solid white;
 		width: 20%;
+		background: $color-btn;
 
 		&:hover {
-			background-color: rgb(125, 122, 122);
+			background-color: $color-btn-hover;
 		}
 	}
 

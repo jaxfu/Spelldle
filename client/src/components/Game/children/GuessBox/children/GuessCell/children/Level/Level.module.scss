@@ -31,13 +31,14 @@
 			border-bottom-right-radius: $border-radius;
 			padding: 5px;
 			font-weight: bold;
-
-			&.unchecked {
-				background: $color-btn;
-			}
+			background: $color-btn;
 
 			&:hover {
-				background-color: $color-btn-hover;
+				background: $color-btn-hover;
+			}
+
+			&.unchecked {
+				background: $main_bg;
 			}
 		}
 	}
