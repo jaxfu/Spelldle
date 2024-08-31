@@ -87,9 +87,6 @@ const MultiText: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			<div className={styles.guesses}>
 				{guesses.map((guess) => {
-					{
-						/*TODO: remove to own component and style*/
-					}
 					return (
 						<MultiTextGuess
 							key={guess}
