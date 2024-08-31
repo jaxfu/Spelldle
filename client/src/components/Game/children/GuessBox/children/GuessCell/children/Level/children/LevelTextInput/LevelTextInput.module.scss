@@ -1,0 +1,22 @@
+@import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../../../styles/vars";
+
+.root {
+	width: 100%;
+	height: 100%;
+
+	input {
+		width: 100%;
+		height: 1.5rem;
+		text-align: center;
+		border: none;
+		border-bottom-left-radius: 13px;
+		background: $main_bg;
+	}
+
+	.icon {
+		position: absolute;
+		bottom: -2px;
+		right: 3.4rem;
+	}
+}

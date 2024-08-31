@@ -62,9 +62,11 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 					>
 						+
 					</button>
-					<FaCheck className={`${styles.icon} ${styles.check}`}/>
+					<FaCheck className={`${styles.icon} ${styles.check}`} />
 				</>
-			) : <FaCircleXmark className={`${styles.icon} ${styles.x}`} />}
+			) : (
+				<FaCircleXmark className={`${styles.icon} ${styles.x}`} />
+			)}
 		</div>
 	);
 };

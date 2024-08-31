@@ -12,6 +12,7 @@ import {
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
+import LevelTextInput from "../Level/children/LevelTextInput/LevelTextInput";
 
 function updateGuessCategoriesMapSingleText(
 	input: string,
@@ -130,13 +131,25 @@ const SingleText: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<SingleTextInput
-				input={input}
-				setInput={setInput}
-				show={show}
-				setShow={setShow}
-				validInput={hasValidInput}
-			/>
+			{props.categoryInfo.component_type ===
+			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT ? (
+				<SingleTextInput
+					input={input}
+					setInput={setInput}
+					show={show}
+					setShow={setShow}
+					validInput={hasValidInput}
+				/>
+			) : (
+				<LevelTextInput
+					input={input}
+					setInput={setInput}
+					show={show}
+					setShow={setShow}
+					validInput={hasValidInput}
+				/>
+			)}
+
 			{show && (
 				<RecommendationBox
 					values={props.categoryInfo.values}

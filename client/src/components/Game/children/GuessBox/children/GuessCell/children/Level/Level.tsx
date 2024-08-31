@@ -76,19 +76,6 @@ const Level: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			<SingleText {...props} />
 			<div className={styles.ritual_toggle}>
-				{/* <span
-					onClick={() => {
-						setChecked((checked) => !checked);
-						updateGuessCategoriesMapRitualToggle(
-							!checked,
-							props.categoryInfo.id,
-							guessData,
-						);
-					}}
-					className={`${styles.check} ${!checked ? styles.unchecked : ""}`}
-				>
-					{checked ? <FaCheck /> : <FaCircleXmark />}
-				</span> */}
 				<button
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
