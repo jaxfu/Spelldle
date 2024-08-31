@@ -1,5 +1,5 @@
 import styles from "./SingleText.module.scss";
-import TextInput from "./children/TextInput/TextInput";
+import SingleTextInput from "./children/SingleTextInput/SingleTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { useState, useMemo, useContext, useEffect, useRef } from "react";
 import {
@@ -130,7 +130,7 @@ const SingleText: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<TextInput
+			<SingleTextInput
 				input={input}
 				setInput={setInput}
 				show={show}

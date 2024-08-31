@@ -74,8 +74,9 @@ const Level: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
+			<SingleText {...props} />
 			<div className={styles.ritual_toggle}>
-				<span
+				{/* <span
 					onClick={() => {
 						setChecked((checked) => !checked);
 						updateGuessCategoriesMapRitualToggle(
@@ -87,7 +88,7 @@ const Level: React.FC<IProps> = (props) => {
 					className={`${styles.check} ${!checked ? styles.unchecked : ""}`}
 				>
 					{checked ? <FaCheck /> : <FaCircleXmark />}
-				</span>
+				</span> */}
 				<button
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
@@ -102,24 +103,6 @@ const Level: React.FC<IProps> = (props) => {
 					Ritual
 				</button>
 			</div>
-			<SingleText {...props} />
-			{/* <div className={styles.toggle}>
-				<label htmlFor="ritual_toggle">Ritual?</label>
-				<input
-					type="checkbox"
-					name="ritual_toggle"
-					id="ritual_toggle"
-					onChange={(e) => {
-						setChecked(e.target.checked);
-						updateGuessCategoriesMapRitualToggle(
-							e.target.checked,
-							props.categoryInfo.id,
-							guessData,
-						);
-					}}
-					checked={checked}
-				/>
-			</div> */}
 		</div>
 	);
 };

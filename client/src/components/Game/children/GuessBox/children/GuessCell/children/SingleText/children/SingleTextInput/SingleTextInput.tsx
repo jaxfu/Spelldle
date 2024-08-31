@@ -1,4 +1,4 @@
-import styles from "./TextInput.module.scss";
+import styles from "./SingleTextInput.module.scss";
 import { FaCheck } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
 
@@ -10,7 +10,7 @@ interface IProps {
 	validInput: boolean;
 }
 
-const TextInput: React.FC<IProps> = (props) => {
+const SingleTextInput: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<input
@@ -22,7 +22,7 @@ const TextInput: React.FC<IProps> = (props) => {
 				onBlur={() => props.show && props.setShow(false)}
 				autoComplete="false"
 			/>
-			<span className={styles.check}>
+			<span className={styles.icon}>
 				{props.validInput ? (
 					<FaCheck style={{ color: "lightseagreen" }} />
 				) : (
@@ -33,4 +33,4 @@ const TextInput: React.FC<IProps> = (props) => {
 	);
 };
 
-export default TextInput;
+export default SingleTextInput;
