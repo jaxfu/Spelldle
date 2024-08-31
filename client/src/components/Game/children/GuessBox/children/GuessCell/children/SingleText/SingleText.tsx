@@ -129,7 +129,7 @@ const SingleText: React.FC<IProps> = (props) => {
 	}, [hasValidInput]);
 
 	return (
-		<>
+		<div className={styles.root}>
 			<TextInput
 				input={input}
 				setInput={setInput}
@@ -144,7 +144,7 @@ const SingleText: React.FC<IProps> = (props) => {
 					setInput={setInput}
 				/>
 			)}
-		</>
+		</div>
 	);
 };
 

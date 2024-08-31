@@ -1,4 +1,6 @@
+import { FaCircleXmark } from "react-icons/fa6";
 import styles from "./MultiTextInput.module.scss";
+import { FaCheck } from "react-icons/fa";
 
 interface IProps {
 	IInput: {
@@ -47,19 +49,22 @@ const MultiTextInput: React.FC<IProps> = (props) => {
 				}
 				autoComplete="false"
 			/>
-			{props.IInput.hasValidInput && (
-				<button
-					onClick={() => {
-						addGuessToGuessesBox(props.IInput.input);
-						props.IMethods.removeGuessFromRemainingRecommendations(
-							props.IGuesses.guess,
-							props.IRecommendations.remainingReccomendations,
-						);
-					}}
-				>
-					+
-				</button>
-			)}
+			{props.IInput.hasValidInput ? (
+				<>
+					<button
+						onClick={() => {
+							addGuessToGuessesBox(props.IInput.input);
+							props.IMethods.removeGuessFromRemainingRecommendations(
+								props.IGuesses.guess,
+								props.IRecommendations.remainingReccomendations,
+							);
+						}}
+					>
+						+
+					</button>
+					<FaCheck className={`${styles.icon} ${styles.check}`}/>
+				</>
+			) : <FaCircleXmark className={`${styles.icon} ${styles.x}`} />}
 		</div>
 	);
 };

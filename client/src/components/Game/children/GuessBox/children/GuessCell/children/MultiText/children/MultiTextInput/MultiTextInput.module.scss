@@ -7,14 +7,6 @@
 	border-top: 1px solid white;
 	display: flex;
 
-	button {
-		border-bottom-right-radius: 13px;
-		text-decoration: none;
-		border: none;
-		border-left: 1px solid white;
-		width: 20%;
-	}
-
 	input {
 		width: 100%;
 		height: 1.5rem;
@@ -26,5 +18,32 @@
 
 	.solo {
 		border-bottom-right-radius: 13px;
+	}
+
+	button {
+		border-bottom-right-radius: 13px;
+		text-decoration: none;
+		border: none;
+		border-left: 1px solid white;
+		width: 20%;
+
+		&:hover {
+			background-color: rgb(125, 122, 122);
+		}
+	}
+
+	.icon {
+		position: absolute;
+		bottom: 0.25rem;
+
+		&.check {
+			right: 19%;
+			color: $color-checkmark;
+		}
+
+		&.x {
+			right: 5px;
+			color: $color-xmark;
+		}
 	}
 }

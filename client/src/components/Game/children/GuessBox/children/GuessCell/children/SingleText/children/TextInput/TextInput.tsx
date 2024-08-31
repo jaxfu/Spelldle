@@ -1,6 +1,6 @@
 import styles from "./TextInput.module.scss";
 import { FaCheck } from "react-icons/fa";
-import { IconContext } from "react-icons";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface IProps {
 	input: string;
@@ -21,13 +21,14 @@ const TextInput: React.FC<IProps> = (props) => {
 				onClick={() => !props.show && props.setShow(true)}
 				onBlur={() => props.show && props.setShow(false)}
 				autoComplete="false"
-				className={styles.input}
 			/>
-			{props.validInput && (
-				<span className={styles.check}>
-					<FaCheck />
-				</span>
-			)}
+			<span className={styles.check}>
+				{props.validInput ? (
+					<FaCheck style={{ color: "lightseagreen" }} />
+				) : (
+					<FaCircleXmark style={{ color: "red" }} />
+				)}
+			</span>
 		</div>
 	);
 };

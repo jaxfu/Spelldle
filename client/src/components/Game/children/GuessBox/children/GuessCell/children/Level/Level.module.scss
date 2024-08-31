@@ -1,4 +1,5 @@
 @import "../../../../../../../../styles/mixins";
+@import "../../../../../../../../styles/vars";
 
 .root {
 	@include full-size-percent;
@@ -14,10 +15,10 @@
 			position: absolute;
 			bottom: 38%;
 			right: 10px;
-			color: lightseagreen;
+			color: $color-checkmark;
 
 			&.unchecked {
-				color: red;
+				color: $color-xmark;
 			}
 
 			&:hover {
@@ -34,11 +35,11 @@
 			border-bottom: 1px solid white;
 
 			&.unchecked {
-				background: rgb(49, 47, 47);
+				background: $color-btn;
 			}
 
 			&:hover {
-				background-color: rgb(125, 122, 122);
+				background-color: $color-btn-hover;
 			}
 		}
 	}
