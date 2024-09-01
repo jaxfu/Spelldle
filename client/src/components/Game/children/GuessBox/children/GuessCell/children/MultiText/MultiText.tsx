@@ -9,7 +9,7 @@ import {
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
 import MultiTextGuess from "./children/MultiTextGuess/MultiTextGuess";
-import Locals from "./methods";
+import Locals from "./Locals";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
