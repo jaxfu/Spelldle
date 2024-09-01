@@ -4,17 +4,8 @@
 .root {
 	width: 100%;
 
-	display: grid;
-	grid-template-columns: 4fr 1fr;
-
 	border-top: 1px solid white;
-
-	button {
-		border-bottom-right-radius: 13px;
-		text-decoration: none;
-		border: none;
-		border-left: 1px solid white;
-	}
+	display: flex;
 
 	input {
 		width: 100%;
@@ -22,5 +13,38 @@
 		border-bottom-left-radius: 13px;
 		border: none;
 		background: $main_bg;
+		text-align: center;
+	}
+
+	.solo {
+		border-bottom-right-radius: 13px;
+	}
+
+	button {
+		border-bottom-right-radius: 13px;
+		text-decoration: none;
+		border: none;
+		border-left: 1px solid white;
+		width: 20%;
+		background: $color-btn;
+
+		&:hover {
+			background-color: $color-btn-hover;
+		}
+	}
+
+	.icon {
+		position: absolute;
+		bottom: 0.25rem;
+
+		&.check {
+			right: 19%;
+			color: $color-checkmark;
+		}
+
+		&.x {
+			right: 5px;
+			color: $color-xmark;
+		}
 	}
 }

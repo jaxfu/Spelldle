@@ -9,22 +9,7 @@ import {
 } from "../../../../../../../../types/guesses";
 import { FaCheck } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
-
-function updateGuessCategoriesMapRitualToggle(
-	checked: boolean,
-	categoryId: string,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-) {
-	if (guessData !== null) {
-		const currentData = guessData.current.get(categoryId) as number[];
-
-		if (currentData !== undefined) {
-			const newData = [currentData[0]];
-			newData.push(checked ? 1 : 0);
-			guessData.current.set(categoryId, newData);
-		}
-	}
-}
+import Locals from "./Locals";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -47,14 +32,14 @@ const Level: React.FC<IProps> = (props) => {
 
 		if (mostRecentGuessInfo[1] == 1) {
 			setChecked(true);
-			updateGuessCategoriesMapRitualToggle(
+			Locals.updateGuessCategoriesMapRitualToggle(
 				true,
 				props.categoryInfo.id,
 				guessData,
 			);
 		} else {
 			setChecked(false);
-			updateGuessCategoriesMapRitualToggle(
+			Locals.updateGuessCategoriesMapRitualToggle(
 				false,
 				props.categoryInfo.id,
 				guessData,
@@ -62,6 +47,7 @@ const Level: React.FC<IProps> = (props) => {
 		}
 	}, [props.mostRecentGuess]);
 
+	// change showingRecentGuess on first change
 	useEffect(() => {
 		if (
 			props.showingRecentGuess &&
@@ -74,52 +60,27 @@ const Level: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
+			<SingleText {...props} />
 			<div className={styles.ritual_toggle}>
-				<span
-					onClick={() => {
-						setChecked((checked) => !checked);
-						updateGuessCategoriesMapRitualToggle(
-							!checked,
-							props.categoryInfo.id,
-							guessData,
-						);
-					}}
-					className={`${styles.check} ${!checked ? styles.unchecked : ""}`}
-				>
-					{checked ? <FaCheck /> : <FaCircleXmark />}
-				</span>
 				<button
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
 						setChecked((checked) => !checked);
-						updateGuessCategoriesMapRitualToggle(
+						Locals.updateGuessCategoriesMapRitualToggle(
 							!checked,
 							props.categoryInfo.id,
 							guessData,
 						);
 					}}
 				>
-					Ritual
+					Ritual:
+					{checked ? (
+						<FaCheck className={styles.icon} />
+					) : (
+						<FaCircleXmark className={`${styles.icon} ${styles.unchecked}`} />
+					)}
 				</button>
 			</div>
-			<SingleText {...props} />
-			{/* <div className={styles.toggle}>
-				<label htmlFor="ritual_toggle">Ritual?</label>
-				<input
-					type="checkbox"
-					name="ritual_toggle"
-					id="ritual_toggle"
-					onChange={(e) => {
-						setChecked(e.target.checked);
-						updateGuessCategoriesMapRitualToggle(
-							e.target.checked,
-							props.categoryInfo.id,
-							guessData,
-						);
-					}}
-					checked={checked}
-				/>
-			</div> */}
 		</div>
 	);
 };

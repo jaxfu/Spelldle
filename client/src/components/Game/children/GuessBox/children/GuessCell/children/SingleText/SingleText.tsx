@@ -1,5 +1,5 @@
 import styles from "./SingleText.module.scss";
-import TextInput from "./children/TextInput/TextInput";
+import SingleTextInput from "./children/SingleTextInput/SingleTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { useState, useMemo, useContext, useEffect, useRef } from "react";
 import {
@@ -12,50 +12,8 @@ import {
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
-
-function updateGuessCategoriesMapSingleText(
-	input: string,
-	hasValidInput: boolean,
-	categoryInfo: T_CATEGORY_INFO,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-): void {
-	if (guessData !== null) {
-		if (hasValidInput) {
-			const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
-
-			if (valueId !== undefined) {
-				guessData.current.set(categoryInfo.id, valueId);
-			}
-		} else {
-			guessData.current.set(categoryInfo.id, -1);
-		}
-	}
-}
-
-function updateGuessCategoriesMapLevelText(
-	input: string,
-	hasValidInput: boolean,
-	categoryInfo: T_CATEGORY_INFO,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-): void {
-	if (guessData !== null) {
-		const currentData = guessData.current.get(categoryInfo.id) as
-			| number[]
-			| undefined;
-
-		if (currentData !== undefined) {
-			if (hasValidInput) {
-				const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
-
-				if (valueId !== undefined) {
-					guessData.current.set(categoryInfo.id, [valueId, currentData[1]]);
-				}
-			} else {
-				guessData.current.set(categoryInfo.id, [-1, currentData[1]]);
-			}
-		}
-	}
-}
+import LevelTextInput from "../Level/children/LevelTextInput/LevelTextInput";
+import Locals from "./Locals";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -110,7 +68,7 @@ const SingleText: React.FC<IProps> = (props) => {
 			props.categoryInfo.component_type ===
 			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT
 		) {
-			updateGuessCategoriesMapSingleText(
+			Locals.updateGuessCategoriesMapSingleText(
 				input,
 				hasValidInput,
 				props.categoryInfo,
@@ -119,7 +77,7 @@ const SingleText: React.FC<IProps> = (props) => {
 		} else if (
 			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
 		) {
-			updateGuessCategoriesMapLevelText(
+			Locals.updateGuessCategoriesMapLevelText(
 				input,
 				hasValidInput,
 				props.categoryInfo,
@@ -129,14 +87,26 @@ const SingleText: React.FC<IProps> = (props) => {
 	}, [hasValidInput]);
 
 	return (
-		<>
-			<TextInput
-				input={input}
-				setInput={setInput}
-				show={show}
-				setShow={setShow}
-				validInput={hasValidInput}
-			/>
+		<div className={styles.root}>
+			{props.categoryInfo.component_type ===
+			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT ? (
+				<SingleTextInput
+					input={input}
+					setInput={setInput}
+					show={show}
+					setShow={setShow}
+					validInput={hasValidInput}
+				/>
+			) : (
+				<LevelTextInput
+					input={input}
+					setInput={setInput}
+					show={show}
+					setShow={setShow}
+					validInput={hasValidInput}
+				/>
+			)}
+
 			{show && (
 				<RecommendationBox
 					values={props.categoryInfo.values}
@@ -144,7 +114,7 @@ const SingleText: React.FC<IProps> = (props) => {
 					setInput={setInput}
 				/>
 			)}
-		</>
+		</div>
 	);
 };
 

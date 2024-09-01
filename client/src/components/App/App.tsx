@@ -26,6 +26,7 @@ const App: React.FC = () => {
 	}
 
 	const navigate = useNavigate();
+	// if auth invalid, send to login
 	useEffect(() => {
 		if (isSuccess) {
 			if (!data || !data.valid) navigate("/login");

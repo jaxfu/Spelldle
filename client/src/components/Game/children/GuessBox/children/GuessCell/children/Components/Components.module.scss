@@ -1,22 +1,47 @@
 @import "../../../../../../../../styles/mixins";
+@import "../../../../../../../../styles/vars";
 
 .root {
-	@include flex-center;
-	width: 100%;
-	height: fit-content;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 
-	.checkbox_root {
+	span {
 		@include flex-center;
-		flex-direction: row;
+		padding: 2px;
+		height: 100%;
 
-		width: 100%;
-		height: fit-content;
+		cursor: pointer;
 
-		padding: 1px;
+		&:nth-child(1) {
+			border-right: 1px solid white;
+			border-bottom-left-radius: 15px;
+		}
 
-		& > span {
-			width: 33%;
-			@include flex-center;
+		&:nth-child(2) {
+			border-right: 1px solid white;
+		}
+
+		&:nth-child(3) {
+			border-bottom-right-radius: 15px;
+		}
+
+		&.checked {
+			background: $color-btn;
+			color: lightseagreen;
+
+			&:hover {
+				background: $main_bg;
+			}
+		}
+
+		&.unchecked {
+			background: $main_bg;
+			color: red;
+
+			&:hover {
+				background: $color-btn-hover;
+			}
 		}
 	}
 }
