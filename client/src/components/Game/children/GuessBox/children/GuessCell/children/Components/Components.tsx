@@ -1,6 +1,6 @@
 import styles from "./Components.module.scss";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import {
 	T_GUESS_MAP_IDS,
@@ -17,39 +17,83 @@ interface IProps {
 
 const Components: React.FC<IProps> = (props) => {
 	const guessData = useContext(CtxGuessData);
-	const checkBoxRefs = useRef<HTMLInputElement[]>([]);
 	const displayValuesFromMostRecentGuess = useRef<number[]>([]);
+	const [checkedStates, setCheckedStates] = useState<boolean[]>(
+		props.categoryInfo.values.map((value) => false),
+	);
 
 	// set based on most recent guess
 	useEffect(() => {
-		if (Array.isArray(props.mostRecentGuess.value)) {
+			if (Array.isArray(props.mostRecentGuess.value)) {
 			displayValuesFromMostRecentGuess.current = [
 				...(props.mostRecentGuess.value as number[]),
 			];
 
-			checkBoxRefs.current.forEach((checkBox) => {
-				if (
-					displayValuesFromMostRecentGuess.current.includes(
-						Number.parseInt(checkBox.name),
-					)
-				) {
-					checkBox.checked = true;
-				} else {
-					checkBox.checked = false;
-				}
-			});
-
-			Locals.setGuessCategoriesMap(
-				displayValuesFromMostRecentGuess.current,
-				guessData,
-				props.categoryInfo.id,
-			);
+			displayValuesFromMostRecentGuess.current.forEach((id) => {
+				setCheckedStates((checkedStates) => {
+					const current = [...checkedStates]
+					current[id] = true
+					return current
+				})
+			})
 		}
-	}, [props.mostRecentGuess]);
+	}, [props.mostRecentGuess])
+
+	// update guess map on change
+	useEffect(() => {
+		const newArr: number[] = []
+		checkedStates.forEach((bool, i) => bool && newArr.push(i))
+		Locals.setGuessCategoriesMap(newArr.sort(), guessData, props.categoryInfo.id)
+	}, [checkedStates])
+
+
+	// set based on most recent guess
+	// useEffect(() => {
+	// 	if (Array.isArray(props.mostRecentGuess.value)) {
+	// 		displayValuesFromMostRecentGuess.current = [
+	// 			...(props.mostRecentGuess.value as number[]),
+	// 		];
+
+	// 		checkBoxRefs.current.forEach((checkBox) => {
+	// 			if (
+	// 				displayValuesFromMostRecentGuess.current.includes(
+	// 					Number.parseInt(checkBox.name),
+	// 				)
+	// 			) {
+	// 				checkBox.checked = true;
+	// 			} else {
+	// 				checkBox.checked = false;
+	// 			}
+	// 		});
+
+	// 		Locals.setGuessCategoriesMap(
+	// 			displayValuesFromMostRecentGuess.current,
+	// 			guessData,
+	// 			props.categoryInfo.id,
+	// 		);
+	// 	}
+	// }, [props.mostRecentGuess]);
 
 	return (
 		<div className={styles.root}>
-				{props.categoryInfo.values.map((value) => {
+			{props.categoryInfo.values.map((value, i) => {
+				return (
+					<span
+					key={value}
+						className={checkedStates[i] ? styles.checked : styles.unchecked}
+						onClick={() =>
+							setCheckedStates((checkedStates) => {
+								const current = [...checkedStates]
+								current[i] = !current[i];
+								return current;
+							})
+						}
+					>
+						<b>{value}</b>
+					</span>
+				);
+			})}
+			{/* {props.categoryInfo.values.map((value) => {
 					const lowerCase = value.toLowerCase();
 					const valueId = props.categoryInfo.value_id_map.get(lowerCase);
 
@@ -92,7 +136,7 @@ const Components: React.FC<IProps> = (props) => {
 							</span>
 						);
 					}
-				})}
+				})} */}
 		</div>
 	);
 };

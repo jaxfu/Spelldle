@@ -11,11 +11,11 @@ const Locals = {
 			const currentArr = guessData.current.get(categoryId);
 			if (currentArr !== undefined) {
 				let newArr = [...(currentArr as number[])];
-	
+
 				if (checked) {
 					newArr.push(valueId);
 				} else newArr = newArr.filter((comp) => comp !== valueId);
-	
+
 				guessData.current.set(categoryId, newArr.sort());
 			}
 		}
@@ -37,7 +37,7 @@ const Locals = {
 		recent: number[],
 	): boolean {
 		return current.sort().join() === recent.sort().join();
-	}
-}
+	},
+};
 
-export default Locals
+export default Locals;
