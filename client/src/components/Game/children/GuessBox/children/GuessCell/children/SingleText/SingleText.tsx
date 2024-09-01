@@ -13,50 +13,7 @@ import {
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
 import LevelTextInput from "../Level/children/LevelTextInput/LevelTextInput";
-
-function updateGuessCategoriesMapSingleText(
-	input: string,
-	hasValidInput: boolean,
-	categoryInfo: T_CATEGORY_INFO,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-): void {
-	if (guessData !== null) {
-		if (hasValidInput) {
-			const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
-
-			if (valueId !== undefined) {
-				guessData.current.set(categoryInfo.id, valueId);
-			}
-		} else {
-			guessData.current.set(categoryInfo.id, -1);
-		}
-	}
-}
-
-function updateGuessCategoriesMapLevelText(
-	input: string,
-	hasValidInput: boolean,
-	categoryInfo: T_CATEGORY_INFO,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-): void {
-	if (guessData !== null) {
-		const currentData = guessData.current.get(categoryInfo.id) as
-			| number[]
-			| undefined;
-
-		if (currentData !== undefined) {
-			if (hasValidInput) {
-				const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
-
-				if (valueId !== undefined) {
-					guessData.current.set(categoryInfo.id, [valueId, currentData[1]]);
-				}
-			} else {
-				guessData.current.set(categoryInfo.id, [-1, currentData[1]]);
-			}
-		}
-	}
-}
+import Locals from "./Locals";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -111,7 +68,7 @@ const SingleText: React.FC<IProps> = (props) => {
 			props.categoryInfo.component_type ===
 			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT
 		) {
-			updateGuessCategoriesMapSingleText(
+			Locals.updateGuessCategoriesMapSingleText(
 				input,
 				hasValidInput,
 				props.categoryInfo,
@@ -120,7 +77,7 @@ const SingleText: React.FC<IProps> = (props) => {
 		} else if (
 			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
 		) {
-			updateGuessCategoriesMapLevelText(
+			Locals.updateGuessCategoriesMapLevelText(
 				input,
 				hasValidInput,
 				props.categoryInfo,

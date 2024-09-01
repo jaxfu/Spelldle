@@ -9,22 +9,7 @@ import {
 } from "../../../../../../../../types/guesses";
 import { FaCheck } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
-
-function updateGuessCategoriesMapRitualToggle(
-	checked: boolean,
-	categoryId: string,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-) {
-	if (guessData !== null) {
-		const currentData = guessData.current.get(categoryId) as number[];
-
-		if (currentData !== undefined) {
-			const newData = [currentData[0]];
-			newData.push(checked ? 1 : 0);
-			guessData.current.set(categoryId, newData);
-		}
-	}
-}
+import Locals from "./Locals";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -47,14 +32,14 @@ const Level: React.FC<IProps> = (props) => {
 
 		if (mostRecentGuessInfo[1] == 1) {
 			setChecked(true);
-			updateGuessCategoriesMapRitualToggle(
+			Locals.updateGuessCategoriesMapRitualToggle(
 				true,
 				props.categoryInfo.id,
 				guessData,
 			);
 		} else {
 			setChecked(false);
-			updateGuessCategoriesMapRitualToggle(
+			Locals.updateGuessCategoriesMapRitualToggle(
 				false,
 				props.categoryInfo.id,
 				guessData,
@@ -81,7 +66,7 @@ const Level: React.FC<IProps> = (props) => {
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
 						setChecked((checked) => !checked);
-						updateGuessCategoriesMapRitualToggle(
+						Locals.updateGuessCategoriesMapRitualToggle(
 							!checked,
 							props.categoryInfo.id,
 							guessData,
