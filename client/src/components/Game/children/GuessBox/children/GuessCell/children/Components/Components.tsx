@@ -6,46 +6,7 @@ import {
 	T_GUESS_MAP_IDS,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
-
-function updateGuessCategoriesMap(
-	checked: boolean,
-	valueId: number,
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-	categoryId: string,
-) {
-	if (guessData !== null) {
-		const currentArr = guessData.current.get(categoryId);
-		if (currentArr !== undefined) {
-			let newArr = [...(currentArr as number[])];
-
-			if (checked) {
-				newArr.push(valueId);
-			} else newArr = newArr.filter((comp) => comp !== valueId);
-
-			guessData.current.set(categoryId, newArr.sort());
-		}
-	}
-}
-
-function setGuessCategoriesMap(
-	newArray: number[],
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-	categoryId: string,
-) {
-	if (guessData !== null) {
-		const currentArr = guessData.current.get(categoryId);
-		if (currentArr !== undefined) {
-			guessData.current.set(categoryId, newArray.sort());
-		}
-	}
-}
-
-function isCurrentEqualToRecentGuess(
-	current: number[],
-	recent: number[],
-): boolean {
-	return current.sort().join() === recent.sort().join();
-}
+import Locals from "./Locals";
 
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
@@ -78,7 +39,7 @@ const Components: React.FC<IProps> = (props) => {
 				}
 			});
 
-			setGuessCategoriesMap(
+			Locals.setGuessCategoriesMap(
 				displayValuesFromMostRecentGuess.current,
 				guessData,
 				props.categoryInfo.id,
@@ -102,7 +63,7 @@ const Components: React.FC<IProps> = (props) => {
 									name={valueId.toString()}
 									id={lowerCase}
 									onChange={(e) => {
-										updateGuessCategoriesMap(
+										Locals.updateGuessCategoriesMap(
 											e.target.checked,
 											valueId,
 											guessData,
@@ -111,7 +72,7 @@ const Components: React.FC<IProps> = (props) => {
 
 										if (
 											props.showingRecentGuess &&
-											!isCurrentEqualToRecentGuess(
+											!Locals.isCurrentEqualToRecentGuess(
 												checkBoxRefs.current
 													.map((el) =>
 														el.checked ? Number.parseInt(el.name) : null,
