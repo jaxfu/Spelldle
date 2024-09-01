@@ -87,7 +87,8 @@ const Level: React.FC<IProps> = (props) => {
 						);
 					}}
 				>
-					Ritual
+					Ritual?
+				<FaCheck className={styles.icon}/>
 				</button>
 			</div>
 		</div>
