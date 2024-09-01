@@ -1,22 +1,23 @@
 @import "../../../../../../../../styles/mixins";
 
 .root {
-	@include flex-center;
-	width: 100%;
-	height: fit-content;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 
-	.checkbox_root {
+	span {
 		@include flex-center;
-		flex-direction: row;
+		padding: 2px;
+		height: 100%;
 
-		width: 100%;
-		height: fit-content;
+		cursor: pointer;
 
-		padding: 1px;
+		&:nth-child(1) {
+			border-right: 1px solid white;
+		}
 
-		& > span {
-			width: 33%;
-			@include flex-center;
+		&:nth-child(2) {
+			border-right: 1px solid white;
 		}
 	}
 }
