@@ -49,7 +49,6 @@ const Components: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.checkbox_root}>
 				{props.categoryInfo.values.map((value) => {
 					const lowerCase = value.toLowerCase();
 					const valueId = props.categoryInfo.value_id_map.get(lowerCase);
@@ -94,7 +93,6 @@ const Components: React.FC<IProps> = (props) => {
 						);
 					}
 				})}
-			</div>
 		</div>
 	);
 };
