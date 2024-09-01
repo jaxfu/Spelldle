@@ -2,9 +2,7 @@ import styles from "./Components.module.scss";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import {
-	T_PAST_GUESS_CATEGORY,
-} from "../../../../../../../../types/guesses";
+import { T_PAST_GUESS_CATEGORY } from "../../../../../../../../types/guesses";
 import Locals from "./Locals";
 
 interface IProps {

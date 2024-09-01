@@ -2,7 +2,7 @@ import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import { T_GUESS_MAP_IDS } from "../../../../../../../../types/guesses";
 
 const Locals = {
-	 updateGuessCategoriesMapSingleText: function(
+	updateGuessCategoriesMapSingleText: function (
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
@@ -11,7 +11,7 @@ const Locals = {
 		if (guessData !== null) {
 			if (hasValidInput) {
 				const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
-	
+
 				if (valueId !== undefined) {
 					guessData.current.set(categoryInfo.id, valueId);
 				}
@@ -20,8 +20,8 @@ const Locals = {
 			}
 		}
 	},
-	
-	 updateGuessCategoriesMapLevelText: function(
+
+	updateGuessCategoriesMapLevelText: function (
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
@@ -31,11 +31,11 @@ const Locals = {
 			const currentData = guessData.current.get(categoryInfo.id) as
 				| number[]
 				| undefined;
-	
+
 			if (currentData !== undefined) {
 				if (hasValidInput) {
 					const valueId = categoryInfo.value_id_map.get(input.toLowerCase());
-	
+
 					if (valueId !== undefined) {
 						guessData.current.set(categoryInfo.id, [valueId, currentData[1]]);
 					}
@@ -44,7 +44,7 @@ const Locals = {
 				}
 			}
 		}
-	}
-}
+	},
+};
 
 export default Locals;
