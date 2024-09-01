@@ -18,6 +18,7 @@
 			font-weight: bold;
 			background: $color-btn;
 			display: flex;
+			align-items: center;
 
 			&:hover {
 				background: $color-btn-hover;
@@ -29,18 +30,12 @@
 
 			.icon {
 				color: $color-checkmark;
+				margin-left: 5px;
 
 				&.unchecked {
 					color: $color-xmark;
 				}
 			}
 		}
-	}
-
-	.toggle {
-		height: 100%;
-
-		@include flex-center;
-		margin-bottom: 5px;
 	}
 }

@@ -62,6 +62,7 @@ const Level: React.FC<IProps> = (props) => {
 		}
 	}, [props.mostRecentGuess]);
 
+	// change showingRecentGuess on first change
 	useEffect(() => {
 		if (
 			props.showingRecentGuess &&
@@ -87,8 +88,12 @@ const Level: React.FC<IProps> = (props) => {
 						);
 					}}
 				>
-					Ritual?
-				<FaCheck className={styles.icon}/>
+					Ritual:
+					{checked ? (
+						<FaCheck className={styles.icon} />
+					) : (
+						<FaCircleXmark className={`${styles.icon} ${styles.unchecked}`} />
+					)}
 				</button>
 			</div>
 		</div>
