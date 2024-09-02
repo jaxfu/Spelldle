@@ -19,6 +19,7 @@ const App: React.FC = () => {
 	const { isFetching, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
 		queryFn: getAuthStatus,
+		retry: false,
 	});
 	if (error) {
 		console.log(`GET_AUTH_STATUS ERROR: ${error}`);

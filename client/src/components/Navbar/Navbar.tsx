@@ -20,9 +20,40 @@ const Navbar: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
-			{isSuccess && data.valid ? (
+			<span className={styles.title}>
+				<h1>Spelldle</h1>
+			</span>
+			<span className={styles.username}>
+				{isSuccess && data.valid && <h2>{data.user_data.username}</h2>}
+			</span>
+			<span className={styles.buttons}>
+				{isSuccess && data.valid ? (
+					<button
+						onClick={() => {
+							clearTokensFromLocalStorage();
+							queryClient.invalidateQueries({
+								queryKey: [QUERY_KEYS.userData],
+							});
+							navigate("/login");
+						}}
+					>
+						Logout
+					</button>
+				) : (
+					<>
+						<Link to={"/login"}>
+							<button>Login</button>
+						</Link>
+						<Link to={"/register"}>
+							<button>Register</button>
+						</Link>
+					</>
+				)}
+			</span>
+
+			{/* {isSuccess && data.valid ? (
 				<>
-					<span>{data.user_data.username}</span>
+					<h2>{data.user_data.username}</h2>
 					<button
 						onClick={() => {
 							clearTokensFromLocalStorage();
@@ -44,7 +75,7 @@ const Navbar: React.FC = () => {
 						<button>Register</button>
 					</Link>
 				</>
-			)}
+			)} */}
 		</div>
 	);
 };
