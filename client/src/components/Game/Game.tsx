@@ -33,10 +33,11 @@ const Game: React.FC = () => {
 		queryKey: [QUERY_KEYS.pastGuesses],
 		queryFn: () =>
 			apiRequestGetPastGuesses(getUserSessionDataFromStorage().access_token),
+		retry: false
 	});
 
 	if (isSuccess) {
-		//console.log(data);
+		console.log(data);
 	}
 
 	if (isFetching) {

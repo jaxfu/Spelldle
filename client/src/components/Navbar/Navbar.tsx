@@ -41,41 +41,15 @@ const Navbar: React.FC = () => {
 					</button>
 				) : (
 					<>
-						<Link to={"/login"}>
+						{/* <Link to={"/login"}>
 							<button>Login</button>
 						</Link>
 						<Link to={"/register"}>
 							<button>Register</button>
-						</Link>
+						</Link> */}
 					</>
 				)}
 			</span>
-
-			{/* {isSuccess && data.valid ? (
-				<>
-					<h2>{data.user_data.username}</h2>
-					<button
-						onClick={() => {
-							clearTokensFromLocalStorage();
-							queryClient.invalidateQueries({
-								queryKey: [QUERY_KEYS.userData],
-							});
-							navigate("/login");
-						}}
-					>
-						Logout
-					</button>
-				</>
-			) : (
-				<>
-					<Link to={"/login"}>
-						<button>Login</button>
-					</Link>
-					<Link to={"/register"}>
-						<button>Register</button>
-					</Link>
-				</>
-			)} */}
 		</div>
 	);
 };
