@@ -12,31 +12,6 @@ export function deepCopyObject<T extends Object>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-// TextInput
-export function onAddGuessClick(
-	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
-	inputValue: string,
-	setInputValue: React.Dispatch<React.SetStateAction<string>>,
-): void {
-	setGuesses((guesses: string[]) => {
-		const newArr = [...guesses];
-		newArr.push(inputValue);
-		return newArr;
-	});
-	setInputValue("");
-}
-
-export function onRemoveGuessClick(
-	setGuesses: React.Dispatch<React.SetStateAction<string[]>>,
-	guess: string,
-): void {
-	setGuesses((guesses) => {
-		return guesses.filter((g: string) => {
-			return g.toLocaleLowerCase() !== guess.toLocaleLowerCase();
-		});
-	});
-}
-
 // Login
 export function logoutUser(
 	setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,

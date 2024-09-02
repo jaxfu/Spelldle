@@ -1,5 +1,5 @@
-import { FaCircleXmark } from "react-icons/fa6";
 import styles from "./MultiTextInput.module.scss";
+import { FaCircleXmark } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
 
 interface IProps {

@@ -1,5 +1,5 @@
-import { useState, useContext, useRef, useEffect } from "react";
 import styles from "./MultiText.module.scss";
+import { useState, useContext, useRef, useEffect } from "react";
 import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
@@ -86,7 +86,7 @@ const MultiText: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.guesses}>
-				{guesses.map((guess) => {
+				{guesses.length > 0 && guesses.map((guess) => {
 					return (
 						<MultiTextGuess
 							key={guess}
@@ -98,7 +98,8 @@ const MultiText: React.FC<IProps> = (props) => {
 							}}
 						/>
 					);
-				})}
+				})
+			}
 			</div>
 			<MultiTextInput
 				IInput={{
