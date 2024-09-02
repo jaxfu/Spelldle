@@ -1,20 +1,49 @@
 import styles from "./GuessBox.module.scss";
-import { type T_CATEGORY_INFO } from "../../../../types/categories";
+import { E_CATEGORY_COMPONENT_TYPE, type T_CATEGORY_INFO } from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import {
 	deepCopyObject,
 	getUserSessionDataFromStorage,
 } from "../../../../utils/methods";
 import {
 	INIT_PAST_GUESS_CATEGORY,
-	T_PAST_GUESS_CATEGORY,
+	type T_PAST_GUESS_CATEGORY,
 	type T_PAST_GUESS,
+	type T_GUESS_MAP_IDS,
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
+import Locals from "./Locals";
+
+function checkForValidToSubmit(
+	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+	categoriesInfoArr: T_CATEGORY_INFO[],
+) {
+	if (guessData !== null) {
+		categoriesInfoArr.forEach(({component_type, id}) => {
+			const currentValue = guessData.current.get(id)
+			if (currentValue !== undefined) {
+			switch(component_type) {
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+					if (currentValue === -1) return false
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+					if (Array.isArray(currentValue) && currentValue.length === 0) return false;
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+					if (Array.isArray(currentValue) && currentValue[0] === -1) return false;
+			}
+		}
+
+		})
+	}
+
+	return true
+}
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
@@ -36,6 +65,12 @@ const GuessBox: React.FC<IProps> = (props) => {
 		() => deepCopyObject(INIT_PAST_GUESS_CATEGORY),
 		[],
 	);
+
+	useEffect(() => {
+		if (guessData) {
+			console.log("running")
+		}
+	}, [guessData?.current])
 
 	return (
 		<div className={styles.root}>

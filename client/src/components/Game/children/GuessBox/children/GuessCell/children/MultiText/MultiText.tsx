@@ -86,20 +86,20 @@ const MultiText: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.guesses}>
-				{guesses.length > 0 && guesses.map((guess) => {
-					return (
-						<MultiTextGuess
-							key={guess}
-							guess={guess}
-							IRemoveFromGuesses={{
-								removeFromGuesses: Locals.removeGuessFromGuesses,
-								setGuesses: setGuesses,
-								remainingReccomendations: remainingRecommendations,
-							}}
-						/>
-					);
-				})
-			}
+				{guesses.length > 0 &&
+					guesses.map((guess) => {
+						return (
+							<MultiTextGuess
+								key={guess}
+								guess={guess}
+								IRemoveFromGuesses={{
+									removeFromGuesses: Locals.removeGuessFromGuesses,
+									setGuesses: setGuesses,
+									remainingReccomendations: remainingRecommendations,
+								}}
+							/>
+						);
+					})}
 			</div>
 			<MultiTextInput
 				IInput={{
