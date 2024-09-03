@@ -1,0 +1,22 @@
+@import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../../../styles/vars";
+
+.root {
+	width: auto;
+	height: fit-content;
+
+	padding-left: 5px;
+	padding-right: 5px;
+
+	background: rgba($color: #ffffff, $alpha: 0.1);
+
+	border: 1px solid white;
+	border-radius: 1rem;
+
+	text-align: center;
+
+	&:hover {
+		cursor: pointer;
+		background: $main_bg;
+	}
+}

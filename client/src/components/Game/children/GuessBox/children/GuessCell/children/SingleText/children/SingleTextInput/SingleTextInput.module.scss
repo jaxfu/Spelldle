@@ -1,23 +1,23 @@
 @import "../../../../../../../../../../styles/mixins";
+@import "../../../../../../../../../../styles/vars";
 
 .root {
 	width: 100%;
 	height: 100%;
 
-	.input {
+	input {
 		width: 100%;
-		height: 100%;
+		height: 1.5rem;
 		text-align: center;
 		border: none;
 		border-bottom-right-radius: 13px;
 		border-bottom-left-radius: 13px;
-		background: rgb(49, 47, 47);
+		background: $main_bg;
 	}
 
-	.check {
+	.icon {
 		position: absolute;
-		bottom: 3%;
-		right: 10px;
-		color: lightseagreen;
+		bottom: -2px;
+		right: 8px;
 	}
 }

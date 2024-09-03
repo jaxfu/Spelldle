@@ -1,47 +1,73 @@
 import styles from "./MultiTextInput.module.scss";
+import { FaCircleXmark } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa";
 
 interface IProps {
-	input: string;
-	setInput: React.Dispatch<React.SetStateAction<string>>;
-	showRecommendationBox: boolean;
-	setShowRecommendationBox: React.Dispatch<React.SetStateAction<boolean>>;
-	setGuesses: React.Dispatch<React.SetStateAction<string[]>>;
-	hasValidInput: boolean;
-	removeGuessFromRemainingValues: (guess: string) => void;
+	IInput: {
+		input: string;
+		setInput: React.Dispatch<React.SetStateAction<string>>;
+		hasValidInput: boolean;
+	};
+	IRecommendations: {
+		showRecommendationBox: boolean;
+		setShowRecommendationBox: React.Dispatch<React.SetStateAction<boolean>>;
+		remainingReccomendations: React.MutableRefObject<string[]>;
+	};
+	IGuesses: {
+		guess: string;
+		setGuesses: React.Dispatch<React.SetStateAction<string[]>>;
+	};
+	IMethods: {
+		removeGuessFromRemainingRecommendations: (
+			guess: string,
+			remainingRecommendations: React.MutableRefObject<string[]>,
+		) => void;
+	};
 }
 
 const MultiTextInput: React.FC<IProps> = (props) => {
 	function addGuessToGuessesBox(guess: string) {
-		props.setGuesses((guesses) => [...guesses, guess].sort());
-		props.setInput("");
+		props.IGuesses.setGuesses((guesses) => [...guesses, guess].sort());
+		props.IInput.setInput("");
 	}
 
 	return (
-		<span className={styles.root}>
+		<div className={styles.root}>
 			<input
 				type="text"
 				name="guess"
-				value={props.input}
-				onChange={(e) => props.setInput(e.target.value)}
+				value={props.IInput.input}
+				className={props.IInput.hasValidInput ? "" : styles.solo}
+				onChange={(e) => props.IInput.setInput(e.target.value)}
 				onClick={() =>
-					!props.showRecommendationBox && props.setShowRecommendationBox(true)
+					!props.IRecommendations.showRecommendationBox &&
+					props.IRecommendations.setShowRecommendationBox(true)
 				}
 				onBlur={() =>
-					props.showRecommendationBox && props.setShowRecommendationBox(false)
+					props.IRecommendations.showRecommendationBox &&
+					props.IRecommendations.setShowRecommendationBox(false)
 				}
 				autoComplete="false"
 			/>
-			{props.hasValidInput && (
-				<button
-					onClick={() => {
-						addGuessToGuessesBox(props.input);
-						props.removeGuessFromRemainingValues(props.input);
-					}}
-				>
-					+
-				</button>
+			{props.IInput.hasValidInput ? (
+				<>
+					<button
+						onClick={() => {
+							addGuessToGuessesBox(props.IInput.input);
+							props.IMethods.removeGuessFromRemainingRecommendations(
+								props.IGuesses.guess,
+								props.IRecommendations.remainingReccomendations,
+							);
+						}}
+					>
+						+
+					</button>
+					<FaCheck className={`${styles.icon} ${styles.check}`} />
+				</>
+			) : (
+				<FaCircleXmark className={`${styles.icon} ${styles.x}`} />
 			)}
-		</span>
+		</div>
 	);
 };
 

@@ -2,19 +2,30 @@
 @import "../../styles/vars";
 
 .root {
-	@include flex-center;
-	flex-direction: row;
-	height: 75px;
 	width: 100%;
-	background: red;
+	height: $height-navbar;
+	background: $color-navbar-bg;
+
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+
 	position: fixed;
 	top: 0;
-	z-index: 1;
 	overflow: hidden;
 
-	& > span {
-		border: $border;
-		height: 100%;
+	.title {
+		color: $color-navbar-title;
+		padding-left: 10px;
+	}
+
+	.username {
 		@include flex-center;
+		color: $color-navbar-username;
+	}
+
+	.buttons {
+		@include flex-center;
+		flex-direction: row;
+		gap: 10px;
 	}
 }
