@@ -37,9 +37,9 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 	var results GuessResults
 
 	// test single ints
-	singlesGuess := [6]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration}
-	singlesSpell := [6]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration}
-	singlesResult := [6]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration}
+	singlesGuess := [5]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration}
+	singlesSpell := [5]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration}
+	singlesResult := [5]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration}
 
 	for i := range singlesResult {
 		if *singlesGuess[i] == *singlesSpell[i] {

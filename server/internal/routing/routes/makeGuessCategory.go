@@ -16,7 +16,7 @@ import (
 // 1 = Some Correct
 // 2 = Correct
 
-func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
+func MakeGuessCategory(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// get userID from jwt
 		userID, err := utils.GetJwtInfoFromCtx(ctx)
@@ -45,7 +45,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 		guessID := types.GuessID{
 			GameSessionID: gameSession.GameSessionID,
-			Round:         gameSession.Rounds + 1,
+			Round:         gameSession.CategoryRounds + 1,
 		}
 
 		// insert guess
@@ -57,7 +57,6 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// get and insert results
-		// TODO: fetch spellID from current game session and use spell
 		spell, err := db.GetSpellBySpellId(gameSession.SpellID)
 		if err != nil {
 			fmt.Printf("error getting spell: %v\n", err)
@@ -72,7 +71,7 @@ func MakeGuess(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// update gameSession
-		if err := db.UpdateGameSessionRounds(userID, guessID.Round); err != nil {
+		if err := db.UpdateGameSessionCategoryRounds(userID, guessID.Round); err != nil {
 			fmt.Printf("error updating gameSession: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
 			return

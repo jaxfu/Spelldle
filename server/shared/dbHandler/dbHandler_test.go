@@ -147,6 +147,11 @@ func TestDBHandler(t *testing.T) {
 			}
 		}
 	})
+	t.Run("InitializeGuessSpells", func(t *testing.T) {
+		if err := dbHandler.InitializeGuessSpell(testGameSessionData.GameSessionID); err != nil {
+			t.Errorf("error initializing guesses: %+v", err)
+		}
+	})
 	t.Run("InsertGuessSpells", func(t *testing.T) {
 		for i := range testSpellGuessesCount {
 			if err := dbHandler.InsertGuessSpell(testHelpers.GameSessionID, uint(i)); err != nil {

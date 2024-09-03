@@ -131,12 +131,23 @@ func (dbHandler *DBHandler) InsertGuessResults(results types.GuessResults, guess
 	return nil
 }
 
+const EInitializeGuessSpell = `
+	INSERT INTO guesses.spells(game_session_id, spells)
+	VALUES ($1, '{}'::smallint[])
+`
+
+func (dbHandler *DBHandler) InitializeGuessSpell(gameSessionID types.GameSessionID) error {
+	if _, err := dbHandler.Conn.Exec(context.Background(), EInitializeGuessSpell, gameSessionID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 const EInsertGuessSpell = `
-INSERT INTO guesses.spells(game_session_id, spells)
-VALUES ($1, ARRAY[$2::smallint])
-ON CONFLICT (game_session_id)
-DO UPDATE 
-SET spells = guesses.spells.spells || EXCLUDED.spells
+	UPDATE guesses.spells
+	SET spells = spells || ARRAY[$2::smallint]
+	WHERE game_session_id = $1
 `
 
 func (dbHandler *DBHandler) InsertGuessSpell(gameSessionID types.GameSessionID, spellID uint) error {

@@ -102,6 +102,14 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
+		// initialize guesses.spells
+		if err := db.InitializeGuessSpell(gameSession.GameSessionID); err != nil {
+			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("error in InitializeGuessSpell: %+v", err)
+			return
+		}
+
+		// generate JWT
 		accessToken, err := auth.CreateJWTFromUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
@@ -139,7 +147,8 @@ func spawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.Ga
 	var session types.GameSession
 	session.GameSessionID = types.GameSessionID(fmt.Sprintf("%d", userID))
 	session.UserID = userID
-	session.Rounds = 0
+	session.CategoryRounds = 0
+	session.SpellRounds = 0
 
 	count, err := db.GetSpellsCount()
 	if err != nil {
