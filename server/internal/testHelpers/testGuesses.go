@@ -2,7 +2,7 @@ package testHelpers
 
 import "spelldle.com/server/shared/types"
 
-const GameSessionID types.GameSessionID = "TEST"
+const GameSessionID types.GameSessionID = "9ff6b354-1063-40f6-b196-fa422723b978"
 
 // ROUND 1: All incorrect
 // ROUND 2: Some correct

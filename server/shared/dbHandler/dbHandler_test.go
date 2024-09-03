@@ -103,6 +103,10 @@ func TestDBHandler(t *testing.T) {
 	})
 
 	t.Run("InsertGameSession", func(t *testing.T) {
+		if _, err := dbHandler.InsertGameSessionID(testHelpers.GameSessionID); err != nil {
+			t.Errorf("error inserting game session: %+v", err)
+		}
+
 		err := dbHandler.InsertGameSession(testGameSessionData)
 		if err != nil {
 			t.Errorf("Error inserting game session: %+v", err)
