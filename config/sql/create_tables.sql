@@ -18,26 +18,19 @@ CREATE TABLE game_sessions.ids
   game_session_id TEXT PRIMARY KEY
 );
 
-CREATE TABLE guesses.ids
-(
-  game_session_id TEXT REFERENCES game_sessions.ids(game_session_id),
-  round SMALLINT,
-  PRIMARY KEY(game_session_id, round)
-);
-
 CREATE TABLE spells.categories
 (
-  spell_id INTEGER PRIMARY KEY REFERENCES spells.ids(spell_id),
+  spell_id SMALLINT PRIMARY KEY REFERENCES spells.ids(spell_id),
   name TEXT UNIQUE,
-  school INTEGER,
-  casting_time INTEGER,
-  range INTEGER,
-  target INTEGER,
-  duration INTEGER,
-  level INTEGER[],
-  components INTEGER[],
-  class INTEGER[],
-  effects INTEGER[]
+  school SMALLINT,
+  casting_time SMALLINT,
+  range SMALLINT,
+  target SMALLINT,
+  duration SMALLINT,
+  components SMALLINT[],
+  level SMALLINT[],
+  class SMALLINT[],
+  effects SMALLINT[]
 );
 
 CREATE TABLE game_sessions.data
@@ -47,7 +40,8 @@ CREATE TABLE game_sessions.data
   spell_id INTEGER REFERENCES spells.ids(spell_id),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP,
-  rounds SMALLINT
+  category_rounds SMALLINT,
+  spell_rounds SMALLINT
 );
 
 CREATE TABLE users.data
@@ -64,25 +58,23 @@ CREATE TABLE guesses.categories
 (
   game_session_id TEXT,
   round SMALLINT,
-  spell INTEGER,
-  school INTEGER,
-  casting_time INTEGER,
-  range INTEGER,
-  target INTEGER,
-  duration INTEGER,
-  level INTEGER[],
-  components INTEGER[],
-  class INTEGER[],
-  effects INTEGER[],
+  school SMALLINT,
+  casting_time SMALLINT,
+  range SMALLINT,
+  target SMALLINT,
+  duration SMALLINT,
+  level SMALLINT[],
+  components SMALLINT[],
+  class SMALLINT[],
+  effects SMALLINT[],
   PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
+  FOREIGN KEY(game_session_id) REFERENCES game_sessions.ids(game_session_id)
 );
 
 CREATE TABLE guesses.results
 (
   game_session_id TEXT,
   round SMALLINT,
-  spell SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
   range SMALLINT,
@@ -93,5 +85,12 @@ CREATE TABLE guesses.results
   class SMALLINT,
   effects SMALLINT,
   PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
+  FOREIGN KEY(game_session_id) REFERENCES game_sessions.ids(game_session_id)
+);
+
+CREATE TABLE guesses.spells
+(
+  game_session_id TEXT,
+  spells SMALLINT[],
+  FOREIGN KEY(game_session_id) REFERENCES game_sessions.ids(game_session_id)
 );
