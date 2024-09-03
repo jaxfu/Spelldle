@@ -9,6 +9,7 @@ import (
 	rand "math/rand"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/crypto/bcrypt"
 	"spelldle.com/server/internal/auth"
@@ -98,14 +99,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		fmt.Printf("created game session: %+v\n", gameSession)
 		if err := db.InsertGameSession(gameSession); err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
-			fmt.Printf("error inserting game session: %+v", err)
-			return
-		}
-
-		// initialize guesses.spells
-		if err := db.InitializeGuessSpell(gameSession.GameSessionID); err != nil {
-			ctx.JSON(http.StatusInternalServerError, response)
-			fmt.Printf("error in InitializeGuessSpell: %+v", err)
+			fmt.Printf("error spawning game session: %+v", err)
 			return
 		}
 
@@ -145,7 +139,18 @@ func generateSalt(size int) (string, error) {
 // generate new game session
 func spawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.GameSession, error) {
 	var session types.GameSession
-	session.GameSessionID = types.GameSessionID(fmt.Sprintf("%d", userID))
+
+	gameSessionID, err := createAndInsertNewGameSessionID(db)
+	if err != nil {
+		return session, err
+	}
+
+	// initialize guesses.spells
+	if err := db.InitializeGuessSpell(gameSessionID); err != nil {
+		return session, err
+	}
+
+	session.GameSessionID = gameSessionID
 	session.UserID = userID
 	session.CategoryRounds = 0
 	session.SpellRounds = 0
@@ -162,4 +167,31 @@ func spawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.Ga
 
 func randomUint(count uint) uint {
 	return uint(rand.Intn(int(count))) + 1
+}
+
+func createAndInsertNewGameSessionID(db *dbHandler.DBHandler) (types.GameSessionID, error) {
+	var id types.GameSessionID
+
+	for {
+		// Generate a new UUID
+		id = uuid.New().String()
+
+		// Execute the query
+		result, err := db.InsertGameSessionID(id)
+		if err != nil {
+			return id, err
+		}
+
+		// Check if the insert was successful
+		if result.RowsAffected() > 0 {
+			// Successfully inserted
+			fmt.Println("Successfully inserted record with UUID:", id)
+			break
+		}
+
+		// If no rows were affected, it means there was a conflict, so we retry
+		fmt.Println("UUID conflict detected, generating a new UUID and retrying...")
+	}
+
+	return id, nil
 }

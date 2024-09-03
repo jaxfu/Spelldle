@@ -3,6 +3,7 @@ package dbHandler
 import (
 	"context"
 
+	"github.com/jackc/pgx/v5/pgconn"
 	"spelldle.com/server/shared/types"
 )
 
@@ -70,10 +71,24 @@ func (dbHandler *DBHandler) GetGameSessionIDByUserID(userID types.UserID) (types
 
 // INSERTS
 
+// const EInsertGameSessionID = `
+//   INSERT INTO game_sessions.ids(game_session_id)
+//   VALUES ($1)
+// `
+
 const EInsertGameSessionID = `
-  INSERT INTO game_sessions.ids(game_session_id)
+	INSERT INTO game_sessions.ids (game_session_id)
   VALUES ($1)
+  ON CONFLICT (game_session_id) DO NOTHING;
 `
+
+func (dbHandler *DBHandler) InsertGameSessionID(gameSessionID types.GameSessionID) (pgconn.CommandTag, error) {
+	result, err := dbHandler.Conn.Exec(context.Background(), EInsertGameSessionID,
+		gameSessionID,
+	)
+
+	return result, err
+}
 
 const EInsertGameSessionData = `
   INSERT INTO game_sessions.data(game_session_id, user_id, spell_id, category_rounds, spell_rounds)
@@ -81,14 +96,7 @@ const EInsertGameSessionData = `
 `
 
 func (dbHandler *DBHandler) InsertGameSession(session types.GameSession) error {
-	_, err := dbHandler.Conn.Exec(context.Background(), EInsertGameSessionID,
-		session.GameSessionID,
-	)
-	if err != nil {
-		return err
-	}
-
-	_, err = dbHandler.Conn.Exec(context.Background(), EInsertGameSessionData,
+	_, err := dbHandler.Conn.Exec(context.Background(), EInsertGameSessionData,
 		session.GameSessionID,
 		session.UserID,
 		session.SpellID,

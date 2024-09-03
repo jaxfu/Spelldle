@@ -15,7 +15,7 @@ CREATE TABLE spells.ids
 
 CREATE TABLE game_sessions.ids
 (
-  game_session_id TEXT PRIMARY KEY
+  game_session_id UUID PRIMARY KEY
 );
 
 CREATE TABLE spells.categories
@@ -35,7 +35,7 @@ CREATE TABLE spells.categories
 
 CREATE TABLE game_sessions.data
 (
-  game_session_id TEXT PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
+  game_session_id UUID PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
   user_id INTEGER REFERENCES users.ids(user_id),
   spell_id INTEGER REFERENCES spells.ids(spell_id),
   created_at TIMESTAMP DEFAULT NOW(),
@@ -56,7 +56,7 @@ CREATE TABLE users.data
 
 CREATE TABLE guesses.categories
 (
-  game_session_id TEXT,
+  game_session_id UUID,
   round SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
@@ -73,7 +73,7 @@ CREATE TABLE guesses.categories
 
 CREATE TABLE guesses.results
 (
-  game_session_id TEXT,
+  game_session_id UUID,
   round SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
@@ -90,6 +90,6 @@ CREATE TABLE guesses.results
 
 CREATE TABLE guesses.spells
 (
-  game_session_id TEXT PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
+  game_session_id UUID PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
   spells SMALLINT[]
 );
