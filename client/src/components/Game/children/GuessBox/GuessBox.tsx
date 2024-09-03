@@ -1,5 +1,8 @@
 import styles from "./GuessBox.module.scss";
-import { E_CATEGORY_COMPONENT_TYPE, type T_CATEGORY_INFO } from "../../../../types/categories";
+import {
+	E_CATEGORY_COMPONENT_TYPE,
+	type T_CATEGORY_INFO,
+} from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
@@ -23,26 +26,27 @@ function checkForValidToSubmit(
 	categoriesInfoArr: T_CATEGORY_INFO[],
 ) {
 	if (guessData !== null) {
-		categoriesInfoArr.forEach(({component_type, id}) => {
-			const currentValue = guessData.current.get(id)
+		categoriesInfoArr.forEach(({ component_type, id }) => {
+			const currentValue = guessData.current.get(id);
 			if (currentValue !== undefined) {
-			switch(component_type) {
-				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-					if (currentValue === -1) return false
-					break;
-				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
-				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
-					if (Array.isArray(currentValue) && currentValue.length === 0) return false;
-					break;
-				case E_CATEGORY_COMPONENT_TYPE.LEVEL:
-					if (Array.isArray(currentValue) && currentValue[0] === -1) return false;
+				switch (component_type) {
+					case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+						if (currentValue === -1) return false;
+						break;
+					case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+					case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+						if (Array.isArray(currentValue) && currentValue.length === 0)
+							return false;
+						break;
+					case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+						if (Array.isArray(currentValue) && currentValue[0] === -1)
+							return false;
+				}
 			}
-		}
-
-		})
+		});
 	}
 
-	return true
+	return true;
 }
 
 interface IProps {
@@ -68,9 +72,9 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	useEffect(() => {
 		if (guessData) {
-			console.log("running")
+			console.log("running");
 		}
-	}, [guessData?.current])
+	}, [guessData?.current]);
 
 	return (
 		<div className={styles.root}>
