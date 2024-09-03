@@ -29,9 +29,6 @@ func (guess *GuessResults) Equals(other *GuessResults) (bool, string) {
 	if guess.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
 	}
-	if guess.Spell != other.Spell {
-		return false, fmt.Sprintf("field mismatch spell: %d vs %d", guess.Spell, other.Spell)
-	}
 
 	return true, ""
 }
@@ -40,9 +37,9 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 	var results GuessResults
 
 	// test single ints
-	singlesGuess := [6]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration, &spell.SpellID}
-	singlesSpell := [6]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration, &guess.Spell}
-	singlesResult := [6]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration, &results.Spell}
+	singlesGuess := [6]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration}
+	singlesSpell := [6]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration}
+	singlesResult := [6]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration}
 
 	for i := range singlesResult {
 		if *singlesGuess[i] == *singlesSpell[i] {

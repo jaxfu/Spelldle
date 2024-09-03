@@ -22,86 +22,59 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		gameSession, err := db.GetGameSessionByUserID(userID)
+		// get guess categories and results
+		guesses, err := getPastGuessesCategoriesByUserID(userID, db)
 		if err != nil {
-			fmt.Printf("error getting game session %+v\n", err)
+			fmt.Printf("error in getPastGuessesCategoriesByUserID %+v\n", err)
 			ctx.JSON(http.StatusInternalServerError, response)
-			return
 		}
 
-		var guesses []types.PastGuessesAll
-		for i := range gameSession.Rounds {
-			guessID := types.GuessID{
-				GameSessionID: gameSession.GameSessionID,
-				Round:         (i + 1),
-			}
-			results, err := db.GetGuessResultsByGuessID(guessID)
-			if err != nil {
-				fmt.Printf("error getting results %+v\n", err)
-				ctx.JSON(http.StatusInternalServerError, response)
-				return
-			}
-			values, err := db.GetGuessCategoriesByGuessID(guessID)
-			if err != nil {
-				fmt.Printf("error getting values %+v\n", err)
-				ctx.JSON(http.StatusInternalServerError, response)
-				return
-			}
+		// get spells
 
-			guess := types.PastGuessesAll{
-				Round:       (i + 1),
-				Spell:       types.PastGuessSingle{Value: values.Spell, Result: results.Spell},
-				Components:  types.PastGuessMulti{Value: values.Components, Result: results.Components},
-				Class:       types.PastGuessMulti{Value: values.Class, Result: results.Class},
-				Effects:     types.PastGuessMulti{Value: values.Effects, Result: results.Effects},
-				Level:       types.PastGuessMulti{Value: values.Level, Result: results.Level},
-				School:      types.PastGuessSingle{Value: values.School, Result: results.School},
-				CastingTime: types.PastGuessSingle{Value: values.CastingTime, Result: results.CastingTime},
-				Range:       types.PastGuessSingle{Value: values.Range, Result: results.Range},
-				Target:      types.PastGuessSingle{Value: values.Target, Result: results.Target},
-				Duration:    types.PastGuessSingle{Value: values.Duration, Result: results.Duration},
-			}
-
-			guesses = append(guesses, guess)
-		}
-
-		// allGuessAll, err := db.GetAllGuessAllByUserID(userID)
-		// if err != nil {
-		// 	fmt.Printf("error getting all guesses %+v\n", err)
-		// 	ctx.JSON(http.StatusInternalServerError, response)
-		// 	return
-		// }
-
-		response.GameSession = types.ResponseGameSessionData{
-			GameSessionID: gameSession.GameSessionID,
-			CurrentRound:  gameSession.Rounds + 1,
-		}
 		response.Guesses = guesses
 
 		ctx.JSON(http.StatusOK, response)
 	}
 }
 
-//
-// func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
-// 	return func(ctx *gin.Context) {
-// 		var response []types.GuessAll
-//
-// 		// get userID from jwt
-// 		userID, err := utils.GetJwtInfoFromCtx(ctx)
-// 		if err != nil {
-// 			fmt.Printf("error in GetJwtInfoFromCtx %+v\n", err)
-// 			ctx.JSON(http.StatusInternalServerError, response)
-// 			return
-// 		}
-//
-// 		allGuessAll, err := db.GetAllGuessAllByUserID(userID)
-// 		if err != nil {
-// 			fmt.Printf("error getting all guesses %+v\n", err)
-// 			ctx.JSON(http.StatusInternalServerError, response)
-// 			return
-// 		}
-//
-// 		ctx.JSON(http.StatusOK, allGuessAll)
-// 	}
-// }
+func getPastGuessesCategoriesByUserID(userID types.UserID, db *dbHandler.DBHandler) ([]types.PastGuessesCategories, error) {
+	var guesses []types.PastGuessesCategories
+
+	// get gameSession
+	gameSession, err := db.GetGameSessionByUserID(userID)
+	if err != nil {
+		return guesses, err
+	}
+
+	for i := range gameSession.CategoryRounds {
+		guessID := types.GuessID{
+			GameSessionID: gameSession.GameSessionID,
+			Round:         (i + 1),
+		}
+		results, err := db.GetGuessResultsByGuessID(guessID)
+		if err != nil {
+			return guesses, err
+		}
+		values, err := db.GetGuessCategoriesByGuessID(guessID)
+		if err != nil {
+			return guesses, err
+		}
+
+		guess := types.PastGuessesCategories{
+			Round:       (i + 1),
+			Components:  types.PastGuessMulti{Value: values.Components, Result: results.Components},
+			Class:       types.PastGuessMulti{Value: values.Class, Result: results.Class},
+			Effects:     types.PastGuessMulti{Value: values.Effects, Result: results.Effects},
+			Level:       types.PastGuessMulti{Value: values.Level, Result: results.Level},
+			School:      types.PastGuessSingle{Value: values.School, Result: results.School},
+			CastingTime: types.PastGuessSingle{Value: values.CastingTime, Result: results.CastingTime},
+			Range:       types.PastGuessSingle{Value: values.Range, Result: results.Range},
+			Target:      types.PastGuessSingle{Value: values.Target, Result: results.Target},
+			Duration:    types.PastGuessSingle{Value: values.Duration, Result: results.Duration},
+		}
+
+		guesses = append(guesses, guess)
+	}
+
+	return guesses, nil
+}

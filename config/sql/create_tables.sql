@@ -90,7 +90,6 @@ CREATE TABLE guesses.results
 
 CREATE TABLE guesses.spells
 (
-  game_session_id TEXT,
-  spells SMALLINT[],
-  FOREIGN KEY(game_session_id) REFERENCES game_sessions.ids(game_session_id)
+  game_session_id TEXT PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
+  spells SMALLINT[]
 );

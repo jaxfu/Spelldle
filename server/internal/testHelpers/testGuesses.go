@@ -18,7 +18,6 @@ var TestGuesses = [3]types.GuessCategories{
 		Range:       11,
 		Target:      12,
 		Duration:    13,
-		Spell:       0,
 	},
 	{
 		Components:  []uint{1, 3, 4},
@@ -30,7 +29,6 @@ var TestGuesses = [3]types.GuessCategories{
 		Range:       11,
 		Target:      12,
 		Duration:    13,
-		Spell:       0,
 	},
 	{
 		Components:  []uint{1, 2},
@@ -42,7 +40,6 @@ var TestGuesses = [3]types.GuessCategories{
 		Range:       2,
 		Target:      3,
 		Duration:    4,
-		Spell:       1,
 	},
 }
 
@@ -57,7 +54,6 @@ var TestResults = [3]types.GuessResults{
 		Range:       0,
 		Target:      0,
 		Duration:    0,
-		Spell:       0,
 	},
 	{
 		Components:  1,
@@ -69,7 +65,6 @@ var TestResults = [3]types.GuessResults{
 		Range:       0,
 		Target:      0,
 		Duration:    0,
-		Spell:       0,
 	},
 	{
 		Components:  2,
@@ -81,6 +76,5 @@ var TestResults = [3]types.GuessResults{
 		Range:       2,
 		Target:      2,
 		Duration:    2,
-		Spell:       2,
 	},
 }

@@ -21,7 +21,6 @@ type GuessCategories struct {
 	Range       uint   `json:"range"`
 	Target      uint   `json:"target"`
 	Duration    uint   `json:"duration"`
-	Spell       uint   `json:"spell"`
 }
 
 type GuessResults struct {
@@ -34,10 +33,11 @@ type GuessResults struct {
 	Range       uint `json:"range"`
 	Target      uint `json:"target"`
 	Duration    uint `json:"duration"`
-	Spell       uint `json:"spell"`
 }
 
-type PastGuessesAll struct {
+type PastGuessesSpells []uint
+
+type PastGuessesCategories struct {
 	Components  PastGuessMulti  `json:"components"`
 	Class       PastGuessMulti  `json:"class"`
 	Effects     PastGuessMulti  `json:"effects"`
