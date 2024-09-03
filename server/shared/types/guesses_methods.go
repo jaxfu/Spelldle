@@ -49,10 +49,25 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 		}
 	}
 
+	// test level
+	if &guess.Level[0] != &spell.Level[0] {
+		if &guess.Level[1] != &spell.Level[1] {
+			results.Level = 0
+		} else {
+			results.Level = 1
+		}
+	} else {
+		if &guess.Level[1] != &spell.Level[1] {
+			results.Level = 1
+		} else {
+			results.Level = 2
+		}
+	}
+
 	// test arrays
-	arraysGuess := [4]*[]uint{&spell.Class, &spell.Components, &spell.Effects, &spell.Level}
-	arraysSpell := [4]*[]uint{&guess.Class, &guess.Components, &guess.Effects, &guess.Level}
-	arraysResult := [4]*uint{&results.Class, &results.Components, &results.Effects, &results.Level}
+	arraysGuess := [3]*[]uint{&spell.Class, &spell.Components, &spell.Effects}
+	arraysSpell := [3]*[]uint{&guess.Class, &guess.Components, &guess.Effects}
+	arraysResult := [3]*uint{&results.Class, &results.Components, &results.Effects}
 
 	for i := range arraysResult {
 		*arraysResult[i] = compareArrays(arraysGuess[i], arraysSpell[i])
