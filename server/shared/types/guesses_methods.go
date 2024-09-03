@@ -47,8 +47,6 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 		} else {
 			*singlesResult[i] = 0
 		}
-
-		fmt.Printf("guess: %d, spell: %d, result: %d\n", *singlesGuess[i], *singlesSpell[i], *singlesResult[i])
 	}
 
 	// test arrays
@@ -58,6 +56,8 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 
 	for i := range arraysResult {
 		*arraysResult[i] = compareArrays(arraysGuess[i], arraysSpell[i])
+
+		fmt.Printf("guess: %+v, spell: %+v, result: %d\n", arraysGuess[i], arraysSpell[i], *arraysResult[i])
 	}
 
 	return results
