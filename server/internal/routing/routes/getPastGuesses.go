@@ -22,29 +22,37 @@ func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
+		// get gameSession
+		gameSession, err := db.GetGameSessionByUserID(userID)
+		if err != nil {
+			fmt.Printf("error in GetGameSessionByUserID %+v\n", err)
+			ctx.JSON(http.StatusInternalServerError, response)
+			return
+		}
+
 		// get guess categories and results
-		guesses, err := getPastGuessesCategoriesByUserID(userID, db)
+		guesses, err := getPastGuessesCategories(gameSession, db)
 		if err != nil {
 			fmt.Printf("error in getPastGuessesCategoriesByUserID %+v\n", err)
 			ctx.JSON(http.StatusInternalServerError, response)
 		}
 
 		// get spells
+		spells, err := db.GetGuessSpellsByGameSessionID(gameSession.GameSessionID)
+		if err != nil {
+			fmt.Printf("error in GetSpellsByUserID %+v\n", err)
+			ctx.JSON(http.StatusInternalServerError, response)
+		}
 
 		response.Guesses = guesses
+		response.Spells = spells
 
 		ctx.JSON(http.StatusOK, response)
 	}
 }
 
-func getPastGuessesCategoriesByUserID(userID types.UserID, db *dbHandler.DBHandler) ([]types.PastGuessesCategories, error) {
+func getPastGuessesCategories(gameSession types.GameSession, db *dbHandler.DBHandler) ([]types.PastGuessesCategories, error) {
 	var guesses []types.PastGuessesCategories
-
-	// get gameSession
-	gameSession, err := db.GetGameSessionByUserID(userID)
-	if err != nil {
-		return guesses, err
-	}
 
 	for i := range gameSession.CategoryRounds {
 		guessID := types.GuessID{
