@@ -1,7 +1,7 @@
 import styles from "./Level.module.scss";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
-import CtxGameSession from "../../../../../../../../contexts/CtxGuessData";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
 	T_GUESS_CATEGORIES_IDS_MAP,
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const Level: React.FC<IProps> = (props) => {
-	const guessData = useContext(CtxGameSession);
+	const guessData = useContext(CtxGuessData);
 	const checkBoxValueFromMostRecentGuess = useRef<boolean>(false);
 	const [checked, setChecked] = useState(false);
 

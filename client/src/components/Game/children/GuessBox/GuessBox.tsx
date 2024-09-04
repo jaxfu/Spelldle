@@ -6,7 +6,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
-import CtxGameSession from "../../../../contexts/CtxGuessData";
+import CtxGuessData from "../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useMemo } from "react";
 import {
 	deepCopyObject,
@@ -63,7 +63,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 		},
 	});
 
-	const guessData = useContext(CtxGameSession);
+	const guessData = useContext(CtxGuessData);
 
 	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = useMemo(
 		() => deepCopyObject(INIT_PAST_GUESS_CATEGORY),

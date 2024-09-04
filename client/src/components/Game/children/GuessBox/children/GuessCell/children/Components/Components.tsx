@@ -1,5 +1,5 @@
 import styles from "./Components.module.scss";
-import CtxGameSession from "../../../../../../../../contexts/CtxGuessData";
+import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import { T_PAST_GUESS_CATEGORY } from "../../../../../../../../types/guesses";
@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const Components: React.FC<IProps> = (props) => {
-	const guessData = useContext(CtxGameSession);
+	const guessData = useContext(CtxGuessData);
 	const displayValuesFromMostRecentGuess = useRef<number[]>([]);
 	const [checkedStates, setCheckedStates] = useState<boolean[]>(
 		props.categoryInfo.values.map((value) => false),
