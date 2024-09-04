@@ -26,13 +26,13 @@ const GuessSpell: React.FC<IProps> = (props) => {
 	const [input, setInput] = useState<string>("");
 	const [show, setShow] = useState<boolean>(false);
 
-	const spellSet = useMemo(
-		() => new Set(props.spells.map((spell) => spell.toLowerCase())),
+	const spellIdMap: Map<string, number> = useMemo(
+		() => new Map(props.spells.map((spell, i) => [spell.toLowerCase(), i+1])),
 		[props.spells],
 	);
 
 	const hasValidInput = useMemo(
-		() => spellSet.has(input.toLowerCase()),
+		() => spellIdMap.has(input.toLowerCase()),
 		[input],
 	);
 
@@ -49,22 +49,24 @@ const GuessSpell: React.FC<IProps> = (props) => {
 						setShow={setShow}
 						validInput={hasValidInput}
 					/>
+					{show && (
+						<RecommendationBox
+							values={props.spells}
+							input={input}
+							setInput={setInput}
+						/>
+					)}
 				</div>
-				{show && (
-					<RecommendationBox
-						values={props.spells}
-						input={input}
-						setInput={setInput}
-					/>
-				)}
 			</div>
 			<button
-				onClick={() =>
-					mutation.mutate({
-						accessToken: getUserSessionDataFromStorage().access_token,
-						spell_id: 1,
-					})
-				}
+				onClick={() => {
+					const id = spellIdMap.get(input.toLowerCase());
+					id &&
+						mutation.mutate({
+							accessToken: getUserSessionDataFromStorage().access_token,
+							spell_id: id,
+						});
+				}}
 			>
 				Submit
 			</button>
