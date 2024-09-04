@@ -3,6 +3,10 @@ import SingleTextInput from "../GuessBox/children/GuessCell/children/SingleText/
 import RecommendationBox from "../GuessBox/children/GuessCell/children/RecommendationBox/RecommendationBox";
 import { useMemo, useState } from "react";
 import GuessCount from "../GuessCount/GuessCount";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { QUERY_KEYS } from "../../../../utils/consts";
+import { apiRequestMakeGuessSpell } from "../../../../utils/requests";
+import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
 	spells: string[];
@@ -10,6 +14,15 @@ interface IProps {
 }
 
 const GuessSpell: React.FC<IProps> = (props) => {
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: apiRequestMakeGuessSpell,
+		onSuccess: (data) => {
+			console.log(`CORRECT: ${data.data.correct}`);
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });
+		},
+	});
+
 	const [input, setInput] = useState<string>("");
 	const [show, setShow] = useState<boolean>(false);
 
@@ -28,13 +41,15 @@ const GuessSpell: React.FC<IProps> = (props) => {
 			<GuessCount title="Guesses" capacity={3} numGuesses={props.numGuesses} />
 			<div className={styles.cell}>
 				<h3>Spell</h3>
-				<SingleTextInput
-					input={input}
-					setInput={setInput}
-					show={show}
-					setShow={setShow}
-					validInput={hasValidInput}
-				/>
+				<div className={styles.input}>
+					<SingleTextInput
+						input={input}
+						setInput={setInput}
+						show={show}
+						setShow={setShow}
+						validInput={hasValidInput}
+					/>
+				</div>
 				{show && (
 					<RecommendationBox
 						values={props.spells}
@@ -43,6 +58,16 @@ const GuessSpell: React.FC<IProps> = (props) => {
 					/>
 				)}
 			</div>
+			<button
+				onClick={() =>
+					mutation.mutate({
+						accessToken: getUserSessionDataFromStorage().access_token,
+						spell_id: 1,
+					})
+				}
+			>
+				Submit
+			</button>
 		</div>
 	);
 };

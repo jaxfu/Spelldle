@@ -4,7 +4,7 @@ import {
 	type T_CATEGORY_INFO,
 } from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../../utils/requests";
+import { apiRequestMakeGuessCategory } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useMemo } from "react";
@@ -59,7 +59,7 @@ interface IProps {
 const GuessBox: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: apiRequestMakeGuess,
+		mutationFn: apiRequestMakeGuessCategory,
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });
 		},
@@ -116,7 +116,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 						if (guessData !== null) {
 							mutation.mutate({
 								accessToken: getUserSessionDataFromStorage().access_token,
-								guessData: guessData?.current,
+								guessData: guessData.current,
 							});
 						}
 					}}

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import CtxGuessData from "../../../contexts/CtxGuessData";
 import * as testGuesses from "./TEST_GUESSES";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../utils/requests";
+import { apiRequestMakeGuessCategory } from "../../../utils/requests";
 import { QUERY_KEYS } from "../../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../../utils/methods";
 import { type T_GUESS_CATEGORIES_IDS_MAP } from "../../../types/guesses";
@@ -12,7 +12,7 @@ const GuessInfoButton: React.FC = () => {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
-		mutationFn: apiRequestMakeGuess,
+		mutationFn: apiRequestMakeGuessCategory,
 		onSuccess: (data) => {
 			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });

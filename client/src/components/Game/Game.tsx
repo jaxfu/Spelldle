@@ -22,7 +22,6 @@ import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
 import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import GuessSpell from "./children/GuessSpell/GuessSpell";
-import GuessCount from "./children/GuessCount/GuessCount";
 
 const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
@@ -37,7 +36,7 @@ const Game: React.FC = () => {
 	);
 	const navigate = useNavigate();
 
-	const { data, isFetching, isSuccess, isError } = useQuery({
+	const { data, isFetching, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.gameSessionInfo],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
@@ -55,7 +54,10 @@ const Game: React.FC = () => {
 			<>
 				<CtxGuessData.Provider value={currentGuessInfo}>
 					<GuessInfoButton />
-					<GuessSpell spells={data.spells} numGuesses={data.guesses.spells.length} />
+					<GuessSpell
+						spells={data.spells}
+						numGuesses={data.guesses.spells.length}
+					/>
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}
 						mostRecentGuess={

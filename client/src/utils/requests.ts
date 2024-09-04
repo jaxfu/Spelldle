@@ -21,6 +21,7 @@ const API_ROUTES = {
 	REGISTER: ROUTE_PREFIX + "/api/register",
 	VALIDATE: ROUTE_PREFIX + "/api/validateSession",
 	MAKE_GUESS_CATEGORY: ROUTE_PREFIX + "/api/makeGuess/category",
+	MAKE_GUESS_SPELL: ROUTE_PREFIX + "/api/makeGuess/spell",
 	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
 };
 
@@ -64,13 +65,13 @@ export async function apiRequestValidateSession(
 	});
 }
 
-interface T_ARG_APIREQUEST_MAKE_GUESS {
+interface T_ARG_APIREQUEST_MAKE_GUESS_CATEGORY {
 	accessToken: string;
 	guessData: T_GUESS_CATEGORIES_IDS_MAP;
 }
 
-export async function apiRequestMakeGuess(
-	paramObject: T_ARG_APIREQUEST_MAKE_GUESS,
+export async function apiRequestMakeGuessCategory(
+	paramObject: T_ARG_APIREQUEST_MAKE_GUESS_CATEGORY,
 ): Promise<AxiosResponse<string>> {
 	console.log(paramObject.guessData);
 	return await axios<string>({
@@ -78,6 +79,30 @@ export async function apiRequestMakeGuess(
 		url: API_ROUTES.MAKE_GUESS_CATEGORY,
 		data: {
 			...Object.fromEntries(paramObject.guessData),
+		},
+		headers: {
+			Authorization: `Bearer ${paramObject.accessToken}`,
+		},
+	});
+}
+
+interface T_ARG_APIREQUEST_MAKE_GUESS_SPELL {
+	accessToken: string;
+	spell_id: number;
+}
+
+type T_APIRESPONSE_MAKE_GUESS_SPELL = {
+	correct: boolean;
+};
+
+export async function apiRequestMakeGuessSpell(
+	paramObject: T_ARG_APIREQUEST_MAKE_GUESS_SPELL,
+): Promise<AxiosResponse<T_APIRESPONSE_MAKE_GUESS_SPELL>> {
+	return await axios<T_APIRESPONSE_MAKE_GUESS_SPELL>({
+		method: "POST",
+		url: API_ROUTES.MAKE_GUESS_SPELL,
+		data: {
+			spell_id: paramObject.spell_id,
 		},
 		headers: {
 			Authorization: `Bearer ${paramObject.accessToken}`,
