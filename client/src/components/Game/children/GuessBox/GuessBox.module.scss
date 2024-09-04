@@ -4,8 +4,7 @@
 .root {
 	width: 100%;
 	height: fit-content;
-	display: flex;
-	flex-direction: column;
+	@include flex-center;
 
 	//border: 5px solid red;
 

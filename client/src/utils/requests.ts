@@ -90,6 +90,7 @@ type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
 		categories: T_PAST_GUESS_CATEGORIES_MAP[];
 		spells: number[];
 	};
+	spells: string[];
 };
 
 export async function apiRequestGetGameSessionInfo(
@@ -104,23 +105,29 @@ export async function apiRequestGetGameSessionInfo(
 		},
 	});
 
-	let categories: T_PAST_GUESS_CATEGORIES_MAP[] = [];
-	let spells: T_PAST_GUESS_SPELLS = [];
+	let guessCategories: T_PAST_GUESS_CATEGORIES_MAP[] = [];
+	let guessSpells: T_PAST_GUESS_SPELLS = [];
+	let spells: string[] = [];
 
 	if (res.data.guesses.categories.length > 0) {
-		categories = res.data.guesses.categories.map((guess) => {
+		guessCategories = res.data.guesses.categories.map((guess) => {
 			return new Map(Object.entries(guess));
 		});
 	}
 
 	if (res.data.guesses.spells.length > 0) {
-		spells = res.data.guesses.spells;
+		guessSpells = res.data.guesses.spells;
+	}
+
+	if (res.data.spells.length > 0) {
+		spells = res.data.spells;
 	}
 
 	return {
 		guesses: {
-			categories,
-			spells,
+			categories: guessCategories,
+			spells: guessSpells,
 		},
+		spells,
 	};
 }

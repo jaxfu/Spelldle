@@ -72,9 +72,10 @@ const GuessBox: React.FC<IProps> = (props) => {
 		[],
 	);
 
+	// TODO: implement check for valid to submit
 	useEffect(() => {
 		if (guessData) {
-			console.log("running");
+			//console.log("running");
 		}
 	}, [guessData?.current]);
 
@@ -85,11 +86,6 @@ const GuessBox: React.FC<IProps> = (props) => {
 					title={"Category Guesses"}
 					capacity={5}
 					numGuesses={props.numGuesses.category}
-				/>
-				<GuessCount
-					title={"Spell Guesses"}
-					capacity={3}
-					numGuesses={props.numGuesses.spell}
 				/>
 			</div>
 			<div className={styles.guess_cells}>

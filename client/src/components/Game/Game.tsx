@@ -1,3 +1,4 @@
+import styles from "./Game.module.scss";
 import GuessBox from "./children/GuessBox/GuessBox";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
@@ -20,6 +21,8 @@ import ResultBox from "./children/ResultBox/ResultBox";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
 import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
+import GuessSpell from "./children/GuessBox/children/GuessSpell/GuessSpell";
+import GuessCount from "./children/GuessBox/children/GuessCount/GuessCount";
 
 const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
@@ -52,6 +55,7 @@ const Game: React.FC = () => {
 			<>
 				<CtxGuessData.Provider value={currentGuessInfo}>
 					<GuessInfoButton />
+					<GuessSpell spells={data.spells} numGuesses={data.guesses.spells.length} />
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}
 						mostRecentGuess={
