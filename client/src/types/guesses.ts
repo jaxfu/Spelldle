@@ -15,14 +15,7 @@ export enum E_GUESS_CATEGORY_RESULTS {
 	CORRECT = 2,
 }
 
-export type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
-	guesses: {
-		categories: T_PAST_GUESS_CATEGORIES[];
-		spells: number[];
-	};
-};
-
-export type T_PAST_GUESS_CATEGORIES = Map<string, T_PAST_GUESS_CATEGORY>;
+export type T_PAST_GUESS_CATEGORIES_MAP = Map<string, T_PAST_GUESS_CATEGORY>;
 
 export type T_PAST_GUESS_CATEGORY = {
 	value: T_GUESS_CATEGORIES_STATES_IDS;
@@ -32,6 +25,8 @@ export const INIT_PAST_GUESS_CATEGORY: T_PAST_GUESS_CATEGORY = {
 	value: -1,
 	result: E_GUESS_CATEGORY_RESULTS.UNINITIALIZED,
 };
+
+export type T_PAST_GUESS_SPELLS = number[]
 
 export function translateIdsToDisplay(
 	id: T_GUESS_CATEGORIES_STATES_IDS,

@@ -6,7 +6,7 @@ import {
 	E_CATEGORY_COMPONENT_TYPE,
 	type T_CATEGORY_INFO,
 } from "../../../../../../../../types/categories";
-import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
+import CtxGameSession from "../../../../../../../../contexts/CtxGuessData";
 import {
 	type T_GUESS_CATEGORIES_IDS_MAP,
 	type T_PAST_GUESS_CATEGORY,
@@ -27,7 +27,7 @@ const SingleText: React.FC<IProps> = (props) => {
 	const [show, setShow] = useState<boolean>(false);
 	const displayValueFromMostRecentGuess = useRef<string>("");
 
-	const guessData = useContext(CtxGuessData);
+	const guessData = useContext(CtxGameSession);
 
 	const hasValidInput: boolean = useMemo(() => {
 		return props.categoryInfo.value_id_map.has(input.toLowerCase());

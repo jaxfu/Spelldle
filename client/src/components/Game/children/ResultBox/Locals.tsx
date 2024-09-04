@@ -1,6 +1,6 @@
 import { T_CATEGORY_INFO } from "../../../../types/categories";
 import {
-	T_PAST_GUESS_CATEGORIES,
+	T_PAST_GUESS_CATEGORIES_MAP,
 	E_GUESS_CATEGORY_RESULTS,
 } from "../../../../types/guesses";
 import { ICell } from "./children/ResultCol/children/Cell/Cell";
@@ -19,7 +19,7 @@ const Locals = {
 	},
 	generateCols: function (
 		categoriesInfoArr: T_CATEGORY_INFO[],
-		pastGuesses: T_PAST_GUESS_CATEGORIES[],
+		pastGuesses: T_PAST_GUESS_CATEGORIES_MAP[],
 		colWidthsMap: Map<string, number>,
 		setColWidthsMap: React.Dispatch<React.SetStateAction<Map<string, number>>>,
 	): JSX.Element[] {

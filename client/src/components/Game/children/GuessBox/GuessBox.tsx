@@ -6,7 +6,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuess } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
-import CtxGuessData from "../../../../contexts/CtxGuessData";
+import CtxGameSession from "../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useMemo } from "react";
 import {
 	deepCopyObject,
@@ -15,7 +15,7 @@ import {
 import {
 	INIT_PAST_GUESS_CATEGORY,
 	type T_PAST_GUESS_CATEGORY,
-	type T_PAST_GUESS_CATEGORIES,
+	type T_PAST_GUESS_CATEGORIES_MAP,
 	type T_GUESS_CATEGORIES_IDS_MAP,
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
@@ -51,7 +51,7 @@ function checkForValidToSubmit(
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
-	mostRecentGuess: T_PAST_GUESS_CATEGORIES | null;
+	mostRecentGuess: T_PAST_GUESS_CATEGORIES_MAP | null;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -63,7 +63,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 		},
 	});
 
-	const guessData = useContext(CtxGuessData);
+	const guessData = useContext(CtxGameSession);
 
 	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = useMemo(
 		() => deepCopyObject(INIT_PAST_GUESS_CATEGORY),

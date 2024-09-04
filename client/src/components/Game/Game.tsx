@@ -12,7 +12,7 @@ import {
 	generateGuessesStateFromJSON,
 } from "../../types/categories";
 import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
-import CtxGuessData from "../../contexts/CtxGuessData";
+import CtxGameSession from "../../contexts/CtxGuessData";
 import ResultBox from "./children/ResultBox/ResultBox";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
 import Loading from "../Loading/Loading";
@@ -47,21 +47,21 @@ const Game: React.FC = () => {
 	} else {
 		return (
 			<>
-				<CtxGuessData.Provider value={currentGuessInfo}>
+				<CtxGameSession.Provider value={currentGuessInfo}>
 					<GuessInfoButton />
 					{data !== undefined && (
-						<ResultBox pastGuesses={data} categoriesInfoArr={categoriesInfo} />
+						<ResultBox pastGuesses={data.guesses.categories} categoriesInfoArr={categoriesInfo} />
 					)}
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}
 						mostRecentGuess={
-							data !== undefined
+							data && data.guesses.categories.length > 0
 								? //TODO: create map on fetch
-									data[data.length - 1]
+									data.guesses.categories[data.guesses.categories.length - 1]
 								: null
 						}
 					/>
-				</CtxGuessData.Provider>
+				</CtxGameSession.Provider>
 			</>
 		);
 	}

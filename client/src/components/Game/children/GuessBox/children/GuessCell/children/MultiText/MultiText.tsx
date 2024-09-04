@@ -3,7 +3,7 @@ import { useState, useContext, useRef, useEffect } from "react";
 import MultiTextInput from "./children/MultiTextInput/MultiTextInput";
 import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
+import CtxGameSession from "../../../../../../../../contexts/CtxGuessData";
 import {
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
@@ -30,7 +30,7 @@ const MultiText: React.FC<IProps> = (props) => {
 		...props.categoryInfo.values,
 	]);
 
-	const guessData = useContext(CtxGuessData);
+	const guessData = useContext(CtxGameSession);
 
 	// update guess map when guesses change &
 	// check if changed from most recent guess

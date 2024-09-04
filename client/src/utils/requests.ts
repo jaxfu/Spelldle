@@ -7,11 +7,12 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-	type T_APIRESPONSE_GET_GAME_SESSION_INFO,
 	type T_GUESS_CATEGORIES_IDS_MAP,
-	type T_PAST_GUESS_CATEGORIES,
+	type T_PAST_GUESS_CATEGORIES_MAP,
+	type T_PAST_GUESS_SPELLS,
 } from "../types/guesses";
-import { T_TOKENS } from "../types";
+import { type T_TOKENS } from "../types";
+import type { T_GAME_SESSION } from "../types/gameSession";
 
 // Routes
 const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";
@@ -84,9 +85,16 @@ export async function apiRequestMakeGuess(
 	});
 }
 
+type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
+	guesses: {
+		categories: T_PAST_GUESS_CATEGORIES_MAP[];
+		spells: number[];
+	};
+};
+
 export async function apiRequestGetGameSessionInfo(
 	accessToken: string,
-): Promise<T_PAST_GUESS_CATEGORIES[] | undefined> {
+): Promise<T_GAME_SESSION> {
 	console.log("Running apiRequestGetGameSessionInfo");
 	const res = await axios<T_APIRESPONSE_GET_GAME_SESSION_INFO>({
 		method: "POST",
@@ -96,9 +104,23 @@ export async function apiRequestGetGameSessionInfo(
 		},
 	});
 
-	if (res.data !== undefined && res.data.guesses.categories.length > 0) {
-		return res.data.guesses.categories.map((guess) => {
-			return new Map(Object.entries(guess));
-		});
-	} else return undefined;
+	let categories: T_PAST_GUESS_CATEGORIES_MAP[] = []
+	let spells: T_PAST_GUESS_SPELLS = []
+
+	if (res.data.guesses.categories.length > 0) {
+		categories = res.data.guesses.categories.map((guess) => {
+			return new Map(Object.entries(guess))
+		})
+	}
+
+	if (res.data.guesses.spells.length > 0) {
+		spells = res.data.guesses.spells
+	}
+
+	return {
+		guesses: {
+			categories,
+			spells
+		}
+	}
 }

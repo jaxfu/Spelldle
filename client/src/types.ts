@@ -39,16 +39,6 @@ export const INIT_USERDATA_STATE: T_USERDATA_STATE = {
 	last_name: "",
 };
 
-// GAME_SESSION
-export type T_GAME_SESSION = {
-	game_session_id: string;
-	current_round: number;
-};
-export const INIT_GAME_SESSION_DATA: T_GAME_SESSION = {
-	game_session_id: "",
-	current_round: 0,
-};
-
 // REGISTER
 export type T_USERINPUT_REGISTER = {
 	username: string;
