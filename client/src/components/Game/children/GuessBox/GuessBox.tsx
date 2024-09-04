@@ -81,8 +81,16 @@ const GuessBox: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.session_info}>
-				<GuessCount title={"Category Guesses"} capacity={5} numGuesses={props.numGuesses.category} />
-				<GuessCount title={"Spell Guesses"} capacity={3} numGuesses={props.numGuesses.spell} />
+				<GuessCount
+					title={"Category Guesses"}
+					capacity={5}
+					numGuesses={props.numGuesses.category}
+				/>
+				<GuessCount
+					title={"Spell Guesses"}
+					capacity={3}
+					numGuesses={props.numGuesses.spell}
+				/>
 			</div>
 			<div className={styles.guess_cells}>
 				{props.categoriesInfoArr.map((category) => {

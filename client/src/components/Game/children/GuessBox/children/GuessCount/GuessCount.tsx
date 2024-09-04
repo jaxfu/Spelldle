@@ -16,8 +16,7 @@ const GuessCount: React.FC<IProps> = (props) => {
 						<div
 							key={`${props.title}-${i}`}
 							className={`${styles.guess} ${i < props.numGuesses && styles.filled}`}
-						>
-						</div>
+						></div>
 					);
 				})}
 			</div>
