@@ -20,6 +20,7 @@ import {
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";
+import GuessCount from "./children/GuessCount/GuessCount";
 
 function checkForValidToSubmit(
 	guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
@@ -52,6 +53,7 @@ function checkForValidToSubmit(
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
 	mostRecentGuess: T_PAST_GUESS_CATEGORIES_MAP | null;
+	numGuesses: { category: number; spell: number };
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -78,6 +80,10 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
+			<div className={styles.session_info}>
+				<GuessCount title={"Category Guesses"} capacity={5} numGuesses={props.numGuesses.category} />
+				<GuessCount title={"Spell Guesses"} capacity={3} numGuesses={props.numGuesses.spell} />
+			</div>
 			<div className={styles.guess_cells}>
 				{props.categoriesInfoArr.map((category) => {
 					if (props.mostRecentGuess !== null) {

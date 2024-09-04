@@ -43,16 +43,11 @@ const Game: React.FC = () => {
 		retry: false,
 	});
 
-	if (isSuccess) {
-		console.log(data);
-	}
-
 	if (isFetching) {
 		return <Loading />;
-	} else if (isError) {
-		clearTokensFromLocalStorage();
-		navigate("/login");
-	} else {
+	} else if (isSuccess && data) {
+		console.log(data);
+
 		return (
 			<>
 				<CtxGuessData.Provider value={currentGuessInfo}>
@@ -60,13 +55,16 @@ const Game: React.FC = () => {
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}
 						mostRecentGuess={
-							data && data.guesses.categories.length > 0
-								? //TODO: create map on fetch
-									data.guesses.categories[data.guesses.categories.length - 1]
+							data.guesses.categories.length > 0
+								? data.guesses.categories[data.guesses.categories.length - 1]
 								: null
 						}
+						numGuesses={{
+							category: data.guesses.categories.length,
+							spell: data.guesses.spells.length,
+						}}
 					/>
-					{data && data.guesses.categories.length > 0 && (
+					{data.guesses.categories.length > 0 && (
 						<ResultBox
 							pastGuesses={data.guesses.categories}
 							categoriesInfoArr={categoriesInfo}
@@ -75,6 +73,9 @@ const Game: React.FC = () => {
 				</CtxGuessData.Provider>
 			</>
 		);
+	} else {
+		clearTokensFromLocalStorage();
+		navigate("/login");
 	}
 };
 
