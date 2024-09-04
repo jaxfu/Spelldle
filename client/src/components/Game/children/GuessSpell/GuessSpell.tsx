@@ -2,7 +2,7 @@ import styles from "./GuessSpell.module.scss";
 import SingleTextInput from "../GuessBox/children/GuessCell/children/SingleText/children/SingleTextInput/SingleTextInput";
 import RecommendationBox from "../GuessBox/children/GuessCell/children/RecommendationBox/RecommendationBox";
 import { useMemo, useState } from "react";
-import GuessCount from "../GuessBox/children/GuessCount/GuessCount";
+import GuessCount from "../GuessCount/GuessCount";
 
 interface IProps {
 	spells: string[];

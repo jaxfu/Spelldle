@@ -20,7 +20,7 @@ import {
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";
-import GuessCount from "./children/GuessCount/GuessCount";
+import GuessCount from "../GuessCount/GuessCount";
 
 function checkForValidToSubmit(
 	guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
