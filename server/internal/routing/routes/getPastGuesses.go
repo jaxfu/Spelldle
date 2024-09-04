@@ -10,7 +10,7 @@ import (
 	"spelldle.com/server/shared/types"
 )
 
-func GetPastGuesses(db *dbHandler.DBHandler) gin.HandlerFunc {
+func GetGameSessionInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var response types.ResponsePastGuesses
 

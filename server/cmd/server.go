@@ -60,7 +60,7 @@ func main() {
 	router.POST(consts.RouteUrlValidateSession, routes.ValidateSession(db))
 	router.POST(consts.RouteUrlMakeGuessCategory, routes.MakeGuessCategory(db))
 	router.POST(consts.RouteUrlMakeGuessSpell, routes.MakeGuessSpell(db))
-	router.POST(consts.RouteUrlGetPastGuesses, routes.GetPastGuesses(db))
+	router.POST(consts.RouteUrlGetGameSessionInfo, routes.GetGameSessionInfo(db))
 
 	router.Use(spa.Middleware("/", "client"))
 
