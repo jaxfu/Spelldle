@@ -5,4 +5,4 @@ export type T_GAME_SESSION = {
 		categories: T_PAST_GUESS_CATEGORIES_MAP[];
 		spells: number[];
 	};
-}
+};

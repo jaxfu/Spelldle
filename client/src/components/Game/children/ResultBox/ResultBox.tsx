@@ -1,7 +1,7 @@
 import { type T_PAST_GUESS_CATEGORIES_MAP } from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import styles from "./ResultBox.module.scss";
-import { useRef, useState, type MutableRefObject } from "react";
+import { useState } from "react";
 import Header from "./children/ResultCol/children/Header/Header";
 import Locals from "./Locals";
 

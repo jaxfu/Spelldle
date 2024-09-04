@@ -20,7 +20,7 @@ const API_ROUTES = {
 	LOGIN: ROUTE_PREFIX + "/api/login",
 	REGISTER: ROUTE_PREFIX + "/api/register",
 	VALIDATE: ROUTE_PREFIX + "/api/validateSession",
-	MAKE_GUESS: ROUTE_PREFIX + "/api/makeGuess",
+	MAKE_GUESS_CATEGORY: ROUTE_PREFIX + "/api/makeGuess/category",
 	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
 };
 
@@ -75,7 +75,7 @@ export async function apiRequestMakeGuess(
 	console.log(paramObject.guessData);
 	return await axios<string>({
 		method: "POST",
-		url: API_ROUTES.MAKE_GUESS,
+		url: API_ROUTES.MAKE_GUESS_CATEGORY,
 		data: {
 			...Object.fromEntries(paramObject.guessData),
 		},
@@ -104,23 +104,23 @@ export async function apiRequestGetGameSessionInfo(
 		},
 	});
 
-	let categories: T_PAST_GUESS_CATEGORIES_MAP[] = []
-	let spells: T_PAST_GUESS_SPELLS = []
+	let categories: T_PAST_GUESS_CATEGORIES_MAP[] = [];
+	let spells: T_PAST_GUESS_SPELLS = [];
 
 	if (res.data.guesses.categories.length > 0) {
 		categories = res.data.guesses.categories.map((guess) => {
-			return new Map(Object.entries(guess))
-		})
+			return new Map(Object.entries(guess));
+		});
 	}
 
 	if (res.data.guesses.spells.length > 0) {
-		spells = res.data.guesses.spells
+		spells = res.data.guesses.spells;
 	}
 
 	return {
 		guesses: {
 			categories,
-			spells
-		}
-	}
+			spells,
+		},
+	};
 }

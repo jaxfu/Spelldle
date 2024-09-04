@@ -1,7 +1,10 @@
 import GuessBox from "./children/GuessBox/GuessBox";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
-import { getUserSessionDataFromStorage } from "../../utils/methods";
+import {
+	clearTokensFromLocalStorage,
+	getUserSessionDataFromStorage,
+} from "../../utils/methods";
 import { apiRequestGetGameSessionInfo } from "../../utils/requests";
 import { useMemo, useRef } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
@@ -16,6 +19,7 @@ import CtxGuessData from "../../contexts/CtxGuessData";
 import ResultBox from "./children/ResultBox/ResultBox";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
 import Loading from "../Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Game: React.FC = () => {
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
@@ -28,8 +32,9 @@ const Game: React.FC = () => {
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
 		),
 	);
+	const navigate = useNavigate();
 
-	const { data, isFetching, isSuccess } = useQuery({
+	const { data, isFetching, isSuccess, isError } = useQuery({
 		queryKey: [QUERY_KEYS.gameSessionInfo],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
@@ -44,14 +49,14 @@ const Game: React.FC = () => {
 
 	if (isFetching) {
 		return <Loading />;
+	} else if (isError) {
+		clearTokensFromLocalStorage();
+		navigate("/login");
 	} else {
 		return (
 			<>
 				<CtxGuessData.Provider value={currentGuessInfo}>
 					<GuessInfoButton />
-					{data !== undefined && (
-						<ResultBox pastGuesses={data.guesses.categories} categoriesInfoArr={categoriesInfo} />
-					)}
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}
 						mostRecentGuess={
@@ -61,6 +66,12 @@ const Game: React.FC = () => {
 								: null
 						}
 					/>
+					{data && data.guesses.categories.length > 0 && (
+						<ResultBox
+							pastGuesses={data.guesses.categories}
+							categoriesInfoArr={categoriesInfo}
+						/>
+					)}
 				</CtxGuessData.Provider>
 			</>
 		);

@@ -26,7 +26,7 @@ export const INIT_PAST_GUESS_CATEGORY: T_PAST_GUESS_CATEGORY = {
 	result: E_GUESS_CATEGORY_RESULTS.UNINITIALIZED,
 };
 
-export type T_PAST_GUESS_SPELLS = number[]
+export type T_PAST_GUESS_SPELLS = number[];
 
 export function translateIdsToDisplay(
 	id: T_GUESS_CATEGORIES_STATES_IDS,
