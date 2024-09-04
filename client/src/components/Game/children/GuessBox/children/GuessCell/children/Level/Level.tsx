@@ -4,7 +4,7 @@ import SingleText from "../SingleText/SingleText";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
-	T_GUESS_MAP_IDS,
+	T_GUESS_CATEGORIES_IDS_MAP,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
 import { FaCheck } from "react-icons/fa";

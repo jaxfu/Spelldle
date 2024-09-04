@@ -1,10 +1,10 @@
-import { T_GUESS_MAP_IDS } from "../../../../../../../../types/guesses";
+import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
 	updateGuessCategoriesMapRitualToggle: function (
 		checked: boolean,
 		categoryId: string,
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
 	) {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(categoryId) as number[];

@@ -15,14 +15,14 @@ import {
 import {
 	INIT_PAST_GUESS_CATEGORY,
 	type T_PAST_GUESS_CATEGORY,
-	type T_PAST_GUESS,
-	type T_GUESS_MAP_IDS,
+	type T_PAST_GUESS_CATEGORIES,
+	type T_GUESS_CATEGORIES_IDS_MAP,
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";
 
 function checkForValidToSubmit(
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+	guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
 	categoriesInfoArr: T_CATEGORY_INFO[],
 ) {
 	if (guessData !== null) {
@@ -51,7 +51,7 @@ function checkForValidToSubmit(
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
-	mostRecentGuess: T_PAST_GUESS | null;
+	mostRecentGuess: T_PAST_GUESS_CATEGORIES | null;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -59,7 +59,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuess,
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });
 		},
 	});
 

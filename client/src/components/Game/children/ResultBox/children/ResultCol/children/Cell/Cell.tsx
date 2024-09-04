@@ -1,20 +1,20 @@
-import { E_RESULT_OPTIONS } from "../../../../../../../../types/guesses";
+import { E_GUESS_CATEGORY_RESULTS } from "../../../../../../../../types/guesses";
 import styles from "./Cell.module.scss";
 
 export interface ICell {
 	content: string[];
-	result: E_RESULT_OPTIONS;
+	result: E_GUESS_CATEGORY_RESULTS;
 	categoryID: string;
 	round: number;
 }
 
-const colorClass = (result: E_RESULT_OPTIONS) => {
+const colorClass = (result: E_GUESS_CATEGORY_RESULTS) => {
 	switch (result) {
-		case E_RESULT_OPTIONS.INCORRECT:
+		case E_GUESS_CATEGORY_RESULTS.INCORRECT:
 			return "red";
-		case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+		case E_GUESS_CATEGORY_RESULTS.SLIGHTLY_CORRECT:
 			return "orange";
-		case E_RESULT_OPTIONS.CORRECT:
+		case E_GUESS_CATEGORY_RESULTS.CORRECT:
 			return "green";
 		default:
 			return "";

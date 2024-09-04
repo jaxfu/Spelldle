@@ -1,4 +1,4 @@
-import { type T_PAST_GUESS } from "../../../../types/guesses";
+import { type T_PAST_GUESS_CATEGORIES } from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import styles from "./ResultBox.module.scss";
 import { useRef, useState, type MutableRefObject } from "react";
@@ -13,7 +13,7 @@ export const CONSTS_RESULT = {
 };
 
 interface IProps {
-	pastGuesses: T_PAST_GUESS[];
+	pastGuesses: T_PAST_GUESS_CATEGORIES[];
 	categoriesInfoArr: T_CATEGORY_INFO[];
 }
 

@@ -1,12 +1,12 @@
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import { T_GUESS_MAP_IDS } from "../../../../../../../../types/guesses";
+import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
 	updateGuessCategoriesMapSingleText: function (
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
 	): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
@@ -25,7 +25,7 @@ const Locals = {
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
 	): void {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(categoryInfo.id) as

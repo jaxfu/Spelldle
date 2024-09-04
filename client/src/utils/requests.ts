@@ -7,9 +7,9 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-	type T_APIRESPONSE_GET_PAST_GUESSES,
-	type T_GUESS_MAP_IDS,
-	type T_PAST_GUESS,
+	type T_APIRESPONSE_GET_GAME_SESSION_INFO,
+	type T_GUESS_CATEGORIES_IDS_MAP,
+	type T_PAST_GUESS_CATEGORIES,
 } from "../types/guesses";
 import { T_TOKENS } from "../types";
 
@@ -20,7 +20,7 @@ const API_ROUTES = {
 	REGISTER: ROUTE_PREFIX + "/api/register",
 	VALIDATE: ROUTE_PREFIX + "/api/validateSession",
 	MAKE_GUESS: ROUTE_PREFIX + "/api/makeGuess",
-	GET_PAST_GUESSES: ROUTE_PREFIX + "/api/getPastGuesses",
+	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
 };
 
 export async function apiRequestLogin(
@@ -65,7 +65,7 @@ export async function apiRequestValidateSession(
 
 interface T_ARG_APIREQUEST_MAKE_GUESS {
 	accessToken: string;
-	guessData: T_GUESS_MAP_IDS;
+	guessData: T_GUESS_CATEGORIES_IDS_MAP;
 }
 
 export async function apiRequestMakeGuess(
@@ -84,20 +84,20 @@ export async function apiRequestMakeGuess(
 	});
 }
 
-export async function apiRequestGetPastGuesses(
+export async function apiRequestGetGameSessionInfo(
 	accessToken: string,
-): Promise<T_PAST_GUESS[] | undefined> {
-	console.log("Running apiRequestGetPastGuesses");
-	const res = await axios<T_APIRESPONSE_GET_PAST_GUESSES>({
+): Promise<T_PAST_GUESS_CATEGORIES[] | undefined> {
+	console.log("Running apiRequestGetGameSessionInfo");
+	const res = await axios<T_APIRESPONSE_GET_GAME_SESSION_INFO>({
 		method: "POST",
-		url: API_ROUTES.GET_PAST_GUESSES,
+		url: API_ROUTES.GET_GAME_SESSION_INFO,
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
 
-	if (res.data !== undefined && res.data.guesses.length > 0) {
-		return res.data.guesses.map((guess) => {
+	if (res.data !== undefined && res.data.guesses.categories.length > 0) {
+		return res.data.guesses.categories.map((guess) => {
 			return new Map(Object.entries(guess));
 		});
 	} else return undefined;

@@ -1,4 +1,4 @@
-import { T_GUESS_MAP_IDS } from "../../../../../../../../types/guesses";
+import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
 	checkForValidInput: function (
@@ -21,7 +21,7 @@ const Locals = {
 		);
 	},
 	updateGuessCategoriesMap: function (
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
 		guesses: string[],
 		value_id_map: Map<string, number>,
 		categoryID: string,

@@ -8,7 +8,7 @@ import {
 } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
-	type T_GUESS_MAP_IDS,
+	type T_GUESS_CATEGORIES_IDS_MAP,
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";

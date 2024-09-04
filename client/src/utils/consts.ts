@@ -11,10 +11,10 @@ export const LOCAL_STORAGE_TOKENS_KEYS: T_KEYS_TOKENS = {
 // React-Query
 type T_KEYS_QUERY = {
 	userData: string;
-	pastGuesses: string;
+	gameSessionInfo: string;
 };
 
 export const QUERY_KEYS: T_KEYS_QUERY = {
 	userData: "user_data",
-	pastGuesses: "past_guesses",
+	gameSessionInfo: "game_session_info",
 };

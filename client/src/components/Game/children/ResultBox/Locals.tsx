@@ -1,5 +1,5 @@
 import { T_CATEGORY_INFO } from "../../../../types/categories";
-import { T_PAST_GUESS, E_RESULT_OPTIONS } from "../../../../types/guesses";
+import { T_PAST_GUESS_CATEGORIES, E_GUESS_CATEGORY_RESULTS } from "../../../../types/guesses";
 import { ICell } from "./children/ResultCol/children/Cell/Cell";
 import { translateIdsToDisplay } from "../../../../types/guesses";
 import ResultCol from "./children/ResultCol/ResultCol";
@@ -16,7 +16,7 @@ const Locals = {
 	},
 	generateCols: function (
 		categoriesInfoArr: T_CATEGORY_INFO[],
-		pastGuesses: T_PAST_GUESS[],
+		pastGuesses: T_PAST_GUESS_CATEGORIES[],
 		colWidthsMap: Map<string, number>,
 		setColWidthsMap: React.Dispatch<React.SetStateAction<Map<string, number>>>,
 	): JSX.Element[] {
@@ -25,7 +25,7 @@ const Locals = {
 				const categoryFromPastGuess = guess.get(category.id);
 				const cell: ICell = {
 					content: [],
-					result: E_RESULT_OPTIONS.UNINITIALIZED,
+					result: E_GUESS_CATEGORY_RESULTS.UNINITIALIZED,
 					categoryID: category.id,
 					round: i,
 				};
@@ -58,7 +58,7 @@ const Locals = {
 		const cells: ICell[] = pastGuesses.map((guess, i) => {
 			return {
 				content: [(i + 1).toString()],
-				result: E_RESULT_OPTIONS.UNINITIALIZED,
+				result: E_GUESS_CATEGORY_RESULTS.UNINITIALIZED,
 				categoryID: CONSTS_RESULT.ROUNDS.ID,
 				round: i + 1,
 			};
