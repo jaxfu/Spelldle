@@ -3,7 +3,10 @@ import { E_CATEGORY_COMPONENT_TYPE, T_CATEGORY_INFO } from "./categories";
 export type T_GUESS_CATEGORIES_STATES_DISPLAY = string | string[];
 export type T_GUESS_CATEGORIES_STATES_IDS = number | number[];
 
-export type T_GUESS_CATEGORIES_IDS_MAP = Map<string, T_GUESS_CATEGORIES_STATES_IDS>;
+export type T_GUESS_CATEGORIES_IDS_MAP = Map<
+	string,
+	T_GUESS_CATEGORIES_STATES_IDS
+>;
 
 export enum E_GUESS_CATEGORY_RESULTS {
 	UNINITIALIZED = -1,
@@ -47,7 +50,9 @@ export function translateIdsToDisplay(
 			break;
 		case E_CATEGORY_COMPONENT_TYPE.LEVEL:
 			if (Array.isArray(id)) {
-				const display: T_GUESS_CATEGORIES_STATES_DISPLAY = [categoryInfo.values[id[0]]];
+				const display: T_GUESS_CATEGORIES_STATES_DISPLAY = [
+					categoryInfo.values[id[0]],
+				];
 				display.push(id[1] == 1 ? "true" : "false");
 				return display;
 			}

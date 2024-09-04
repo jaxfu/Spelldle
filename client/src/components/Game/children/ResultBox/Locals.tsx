@@ -1,5 +1,8 @@
 import { T_CATEGORY_INFO } from "../../../../types/categories";
-import { T_PAST_GUESS_CATEGORIES, E_GUESS_CATEGORY_RESULTS } from "../../../../types/guesses";
+import {
+	T_PAST_GUESS_CATEGORIES,
+	E_GUESS_CATEGORY_RESULTS,
+} from "../../../../types/guesses";
 import { ICell } from "./children/ResultCol/children/Cell/Cell";
 import { translateIdsToDisplay } from "../../../../types/guesses";
 import ResultCol from "./children/ResultCol/ResultCol";
