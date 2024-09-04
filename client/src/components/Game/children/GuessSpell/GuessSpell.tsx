@@ -27,7 +27,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 	const [show, setShow] = useState<boolean>(false);
 
 	const spellIdMap: Map<string, number> = useMemo(
-		() => new Map(props.spells.map((spell, i) => [spell.toLowerCase(), i+1])),
+		() => new Map(props.spells.map((spell, i) => [spell.toLowerCase(), i + 1])),
 		[props.spells],
 	);
 

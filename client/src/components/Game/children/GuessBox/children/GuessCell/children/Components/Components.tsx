@@ -10,6 +10,7 @@ interface IProps {
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 	showingRecentGuess: boolean;
 	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Components: React.FC<IProps> = (props) => {
@@ -45,6 +46,7 @@ const Components: React.FC<IProps> = (props) => {
 			newArr.sort(),
 			guessData,
 			props.categoryInfo.id,
+			props.setTriggerGuessDataChange
 		);
 		if (
 			props.showingRecentGuess &&

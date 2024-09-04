@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuessCategory } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
 	deepCopyObject,
 	getUserSessionDataFromStorage,
@@ -21,34 +21,6 @@ import {
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";
 import GuessCount from "../GuessCount/GuessCount";
-
-function checkForValidToSubmit(
-	guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
-	categoriesInfoArr: T_CATEGORY_INFO[],
-) {
-	if (guessData !== null) {
-		categoriesInfoArr.forEach(({ component_type, id }) => {
-			const currentValue = guessData.current.get(id);
-			if (currentValue !== undefined) {
-				switch (component_type) {
-					case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-						if (currentValue === -1) return false;
-						break;
-					case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
-					case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
-						if (Array.isArray(currentValue) && currentValue.length === 0)
-							return false;
-						break;
-					case E_CATEGORY_COMPONENT_TYPE.LEVEL:
-						if (Array.isArray(currentValue) && currentValue[0] === -1)
-							return false;
-				}
-			}
-		});
-	}
-
-	return true;
-}
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
@@ -65,19 +37,25 @@ const GuessBox: React.FC<IProps> = (props) => {
 		},
 	});
 
+	const [triggerGuessDataChange, setTriggerGuessDataChange] =
+		useState<boolean>(false);
+	const [validForSubmission, setValidForSubmission] = useState<boolean>(false);
 	const guessData = useContext(CtxGuessData);
 
-	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = useMemo(
-		() => deepCopyObject(INIT_PAST_GUESS_CATEGORY),
-		[],
+	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = deepCopyObject(
+		INIT_PAST_GUESS_CATEGORY,
 	);
 
-	// TODO: implement check for valid to submit
+	// check for valid submission to render submit button
 	useEffect(() => {
 		if (guessData) {
-			//console.log("running");
+			console.log(guessData.current)
+			setValidForSubmission(
+				Locals.checkForValidToSubmit(guessData.current, props.categoriesInfoArr),
+			);
 		}
-	}, [guessData?.current]);
+		console.log("running")
+	}, [triggerGuessDataChange, guessData?.current]);
 
 	return (
 		<div className={styles.root}>
@@ -98,6 +76,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 									key={category.id}
 									categoryInfo={category}
 									mostRecentGuess={mostRecentGuess}
+									setTriggerGuessDataChange={setTriggerGuessDataChange}
 								/>
 							);
 					}
@@ -106,24 +85,27 @@ const GuessBox: React.FC<IProps> = (props) => {
 							key={category.id}
 							categoryInfo={category}
 							mostRecentGuess={nullPastGuessCategory}
+							setTriggerGuessDataChange={setTriggerGuessDataChange}
 						/>
 					);
 				})}
 			</div>
-			<div className={styles.submit}>
-				<button
-					onClick={() => {
-						if (guessData !== null) {
-							mutation.mutate({
-								accessToken: getUserSessionDataFromStorage().access_token,
-								guessData: guessData.current,
-							});
-						}
-					}}
-				>
-					Submit
-				</button>
-			</div>
+			{validForSubmission && (
+				<div className={styles.submit}>
+					<button
+						onClick={() => {
+							if (guessData !== null) {
+								mutation.mutate({
+									accessToken: getUserSessionDataFromStorage().access_token,
+									guessData: guessData.current,
+								});
+							}
+						}}
+					>
+						Submit
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };
