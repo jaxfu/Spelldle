@@ -21,7 +21,7 @@ import ResultBox from "./children/ResultBox/ResultBox";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
 import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
-import GuessSpell from "./children/GuessBox/children/GuessSpell/GuessSpell";
+import GuessSpell from "./children/GuessSpell/GuessSpell";
 import GuessCount from "./children/GuessBox/children/GuessCount/GuessCount";
 
 const Game: React.FC = () => {
