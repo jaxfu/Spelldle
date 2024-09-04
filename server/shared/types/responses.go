@@ -28,6 +28,10 @@ type ResponseValidateToken struct {
 }
 
 type ResponsePastGuesses struct {
-	Guesses []PastGuessesCategories `json:"guesses"`
-	Spells  PastGuessesSpells       `json:"spells"`
+	Categories []PastGuessCategory `json:"categories"`
+	Spells     PastGuessesSpells   `json:"spells"`
+}
+
+type ResponseGetGameSessionInfo struct {
+	Guesses ResponsePastGuesses `json:"guesses"`
 }

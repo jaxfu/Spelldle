@@ -1,11 +1,5 @@
 package types
 
-type GuessAll struct {
-	GuessID
-	Categories GuessCategories `json:"categories"`
-	Results    GuessResults    `json:"results"`
-}
-
 type GuessID struct {
 	GameSessionID GameSessionID `json:"game_session_id"`
 	Round         uint          `json:"round"`
@@ -37,26 +31,26 @@ type GuessResults struct {
 
 type PastGuessesSpells []uint
 
-type PastGuessesCategories struct {
-	Components  PastGuessMulti  `json:"components"`
-	Class       PastGuessMulti  `json:"class"`
-	Effects     PastGuessMulti  `json:"effects"`
-	Level       PastGuessMulti  `json:"level"`
-	School      PastGuessSingle `json:"school"`
-	CastingTime PastGuessSingle `json:"casting_time"`
-	Range       PastGuessSingle `json:"range"`
-	Target      PastGuessSingle `json:"target"`
-	Duration    PastGuessSingle `json:"duration"`
-	Spell       PastGuessSingle `json:"spell"`
-	Round       uint            `json:"round"`
+type PastGuessCategory struct {
+	Components  PastGuessCategoryMulti  `json:"components"`
+	Class       PastGuessCategoryMulti  `json:"class"`
+	Effects     PastGuessCategoryMulti  `json:"effects"`
+	Level       PastGuessCategoryMulti  `json:"level"`
+	School      PastGuessCategorySingle `json:"school"`
+	CastingTime PastGuessCategorySingle `json:"casting_time"`
+	Range       PastGuessCategorySingle `json:"range"`
+	Target      PastGuessCategorySingle `json:"target"`
+	Duration    PastGuessCategorySingle `json:"duration"`
+	Spell       PastGuessCategorySingle `json:"spell"`
+	Round       uint                    `json:"round"`
 }
 
-type PastGuessSingle struct {
+type PastGuessCategorySingle struct {
 	Value  uint `json:"value"`
 	Result uint `json:"result"`
 }
 
-type PastGuessMulti struct {
+type PastGuessCategoryMulti struct {
 	Value  []uint `json:"value"`
 	Result uint   `json:"result"`
 }
