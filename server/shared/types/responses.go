@@ -34,4 +34,5 @@ type ResponsePastGuesses struct {
 
 type ResponseGetGameSessionInfo struct {
 	Guesses ResponsePastGuesses `json:"guesses"`
+	Spells  []string            `json:"spells"`
 }

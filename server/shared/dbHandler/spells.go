@@ -53,6 +53,38 @@ func (dbHandler *DBHandler) GetSpellsCount() (uint, error) {
 	return count, nil
 }
 
+const QGetSpellNames = `
+	SELECT name
+	FROM spells.categories
+	ORDER BY spell_id
+`
+
+func (dbHandler *DBHandler) GetSpellNames() ([]string, error) {
+	var names []string
+
+	rows, err := dbHandler.Conn.Query(context.Background(), QGetSpellNames)
+	if err != nil {
+		return names, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var name string
+
+		if err := rows.Scan(&name); err != nil {
+			return names, err
+		}
+
+		names = append(names, name)
+	}
+
+	if err := rows.Err(); err != nil {
+		return names, err
+	}
+
+	return names, nil
+}
+
 // Inserts
 
 const EInsertSpellID = `

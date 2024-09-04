@@ -35,13 +35,15 @@ func GetGameSessionInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 		if err != nil {
 			fmt.Printf("error in getPastGuessesCategoriesByUserID %+v\n", err)
 			ctx.JSON(http.StatusInternalServerError, response)
+			return
 		}
 
-		// get guessesSpells
+		// get guess spells
 		guessesSpells, err := db.GetGuessSpellsByGameSessionID(gameSession.GameSessionID)
 		if err != nil {
 			fmt.Printf("error in GetSpellsByUserID %+v\n", err)
 			ctx.JSON(http.StatusInternalServerError, response)
+			return
 		}
 
 		if len(guessesCategories) == 0 {
@@ -55,6 +57,15 @@ func GetGameSessionInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 		} else {
 			response.Guesses.Spells = guessesSpells
 		}
+
+		// get spell names
+		names, err := db.GetSpellNames()
+		if err != nil {
+			fmt.Printf("error in GetSpellNames %+v\n", err)
+			ctx.JSON(http.StatusInternalServerError, response)
+			return
+		}
+		response.Spells = names
 
 		ctx.JSON(http.StatusOK, response)
 	}
