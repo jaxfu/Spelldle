@@ -5,6 +5,7 @@ const Locals = {
 		checked: boolean,
 		categoryId: string,
 		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	) {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(categoryId) as number[];
@@ -13,6 +14,8 @@ const Locals = {
 				const newData = [currentData[0]];
 				newData.push(checked ? 1 : 0);
 				guessData.current.set(categoryId, newData);
+
+				setTriggerGuessDataChange((current) => !current);
 			}
 		}
 	},

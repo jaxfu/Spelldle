@@ -4,6 +4,7 @@ import SingleText from "../SingleText/SingleText";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
+	E_GUESS_CATEGORY_RESULTS,
 	T_GUESS_CATEGORIES_IDS_MAP,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
@@ -16,6 +17,7 @@ interface IProps {
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 	showingRecentGuess: boolean;
 	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Level: React.FC<IProps> = (props) => {
@@ -25,25 +27,19 @@ const Level: React.FC<IProps> = (props) => {
 
 	// set from most recent guess
 	useEffect(() => {
-		const mostRecentGuessInfo: number[] = props.mostRecentGuess
-			.value as number[];
-		checkBoxValueFromMostRecentGuess.current =
-			mostRecentGuessInfo[1] == 1 ? true : false;
+		if (
+			props.mostRecentGuess.result !== E_GUESS_CATEGORY_RESULTS.UNINITIALIZED
+		) {
+			const mostRecentGuessInfo: number[] = props.mostRecentGuess
+				.value as number[];
+			checkBoxValueFromMostRecentGuess.current =
+				mostRecentGuessInfo[1] == 1 ? true : false;
 
-		if (mostRecentGuessInfo[1] == 1) {
-			setChecked(true);
-			Locals.updateGuessCategoriesMapRitualToggle(
-				true,
-				props.categoryInfo.id,
-				guessData,
-			);
-		} else {
-			setChecked(false);
-			Locals.updateGuessCategoriesMapRitualToggle(
-				false,
-				props.categoryInfo.id,
-				guessData,
-			);
+			if (mostRecentGuessInfo[1] == 1) {
+				setChecked(true);
+			} else {
+				setChecked(false);
+			}
 		}
 	}, [props.mostRecentGuess]);
 
@@ -55,6 +51,25 @@ const Level: React.FC<IProps> = (props) => {
 		) {
 			console.log("running");
 			props.setShowingRecentGuess(false);
+		}
+	}, [checked]);
+
+	// update guess map on checked change
+	useEffect(() => {
+		if (checked) {
+			Locals.updateGuessCategoriesMapRitualToggle(
+				true,
+				props.categoryInfo.id,
+				guessData,
+				props.setTriggerGuessDataChange,
+			);
+		} else {
+			Locals.updateGuessCategoriesMapRitualToggle(
+				false,
+				props.categoryInfo.id,
+				guessData,
+				props.setTriggerGuessDataChange,
+			);
 		}
 	}, [checked]);
 
@@ -70,6 +85,7 @@ const Level: React.FC<IProps> = (props) => {
 							!checked,
 							props.categoryInfo.id,
 							guessData,
+							props.setTriggerGuessDataChange,
 						);
 					}}
 				>

@@ -29,7 +29,7 @@ function getColor(result: E_GUESS_CATEGORY_RESULTS): string {
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
-	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GuessCell: React.FC<IProps> = (props) => {

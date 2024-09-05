@@ -25,6 +25,7 @@ const Locals = {
 		guesses: string[],
 		value_id_map: Map<string, number>,
 		categoryID: string,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
 		if (guessData !== null) {
 			const mapArr: number[] = [];
@@ -37,6 +38,8 @@ const Locals = {
 			}
 
 			guessData.current.set(categoryID, mapArr.sort());
+
+			setTriggerGuessDataChange((current) => !current);
 		}
 	},
 	removeGuessFromGuesses: function (

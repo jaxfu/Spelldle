@@ -49,12 +49,13 @@ const GuessBox: React.FC<IProps> = (props) => {
 	// check for valid submission to render submit button
 	useEffect(() => {
 		if (guessData) {
-			console.log(guessData.current)
 			setValidForSubmission(
-				Locals.checkForValidToSubmit(guessData.current, props.categoriesInfoArr),
+				Locals.checkForValidToSubmit(
+					guessData.current,
+					props.categoriesInfoArr,
+				),
 			);
 		}
-		console.log("running")
 	}, [triggerGuessDataChange, guessData?.current]);
 
 	return (

@@ -7,6 +7,7 @@ const Locals = {
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
 		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
@@ -18,6 +19,8 @@ const Locals = {
 			} else {
 				guessData.current.set(categoryInfo.id, -1);
 			}
+
+			setTriggerGuessDataChange((current) => !current);
 		}
 	},
 
@@ -26,6 +29,7 @@ const Locals = {
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
 		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(categoryInfo.id) as
@@ -42,6 +46,8 @@ const Locals = {
 				} else {
 					guessData.current.set(categoryInfo.id, [-1, currentData[1]]);
 				}
+
+				setTriggerGuessDataChange((current) => !current);
 			}
 		}
 	},
