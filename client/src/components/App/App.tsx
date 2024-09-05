@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
 
 const App: React.FC = () => {
-	const [showingPostGame, setShowingPostGame] = useState<boolean>(true);
+	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
 
 	const { isFetching, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.userData],

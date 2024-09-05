@@ -62,6 +62,7 @@ const Game: React.FC<IProps> = (props) => {
 					<GuessSpell
 						spells={data.spells}
 						numGuesses={data.guesses.spells.length}
+						setShowingPostGame={props.setShowingPostGame}
 					/>
 					<GuessBox
 						categoriesInfoArr={categoriesInfo}

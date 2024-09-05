@@ -11,6 +11,7 @@ import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 interface IProps {
 	spells: string[];
 	numGuesses: number;
+	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GuessSpell: React.FC<IProps> = (props) => {
@@ -20,6 +21,9 @@ const GuessSpell: React.FC<IProps> = (props) => {
 		onSuccess: (data) => {
 			console.log(`CORRECT: ${data.data.correct}`);
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });
+			if (data.data.correct) {
+				props.setShowingPostGame(true);
+			}
 		},
 	});
 
