@@ -7,7 +7,7 @@ import {
 	getUserSessionDataFromStorage,
 } from "../../utils/methods";
 import { apiRequestGetGameSessionInfo } from "../../utils/requests";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
 	type T_CATEGORY_INFO,
@@ -22,13 +22,19 @@ import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
 import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import GuessSpell from "./children/GuessSpell/GuessSpell";
+import PostGame from "./children/PostGame/PostGame";
 
-const Game: React.FC = () => {
+interface IProps {
+	showingPostGame: boolean;
+	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Game: React.FC<IProps> = (props) => {
 	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
 		return generateCategoryInfoFromSeedJSON(
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
 		);
-	}, []);
+	}, [CATEGORY_INFO_JSON]);
 	const currentGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>(
 		generateGuessesStateFromJSON(
 			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
@@ -48,11 +54,10 @@ const Game: React.FC = () => {
 	if (isFetching) {
 		return <Loading />;
 	} else if (isSuccess && data) {
-		console.log(data);
-
 		return (
-			<>
+			<div className={styles.root}>
 				<CtxGuessData.Provider value={currentGuessInfo}>
+					{props.showingPostGame && <PostGame />}
 					<GuessInfoButton />
 					<GuessSpell
 						spells={data.spells}
@@ -77,7 +82,7 @@ const Game: React.FC = () => {
 						/>
 					)}
 				</CtxGuessData.Provider>
-			</>
+			</div>
 		);
 	} else {
 		clearTokensFromLocalStorage();

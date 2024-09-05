@@ -31,8 +31,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 		[props.spells],
 	);
 
-	const hasValidInput = spellIdMap.has(input.toLowerCase())
-
+	const hasValidInput = spellIdMap.has(input.toLowerCase());
 
 	return (
 		<div className={styles.root}>
@@ -56,20 +55,20 @@ const GuessSpell: React.FC<IProps> = (props) => {
 					)}
 				</div>
 			</div>
-			{hasValidInput && 
-			<button
-				onClick={() => {
-					const id = spellIdMap.get(input.toLowerCase());
-					id &&
-						mutation.mutate({
-							accessToken: getUserSessionDataFromStorage().access_token,
-							spell_id: id,
-						});
-				}}
-			>
-				Submit
-			</button>
-}
+			{hasValidInput && (
+				<button
+					onClick={() => {
+						const id = spellIdMap.get(input.toLowerCase());
+						id &&
+							mutation.mutate({
+								accessToken: getUserSessionDataFromStorage().access_token,
+								spell_id: id,
+							});
+					}}
+				>
+					Submit
+				</button>
+			)}
 		</div>
 	);
 };

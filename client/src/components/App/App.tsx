@@ -12,10 +12,12 @@ import {
 } from "../../utils/methods";
 import ContentBox from "../ContentBox/ContentBox";
 import Register from "../Register/Register";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
 
 const App: React.FC = () => {
+	const [showingPostGame, setShowingPostGame] = useState<boolean>(true);
+
 	const { isFetching, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.userData],
 		queryFn: getAuthStatus,
@@ -42,11 +44,20 @@ const App: React.FC = () => {
 
 			{/* CORE */}
 			<Navbar />
-			<ContentBox>
+			<ContentBox showingPostGame={showingPostGame}>
 				<Routes>
 					<Route
 						path="/"
-						element={isFetching && !isSuccess ? <Loading /> : <Game />}
+						element={
+							isFetching && !isSuccess ? (
+								<Loading />
+							) : (
+								<Game
+									showingPostGame={showingPostGame}
+									setShowingPostGame={setShowingPostGame}
+								/>
+							)
+						}
 					/>
 					<Route path="/register" element={<Register />} />
 					<Route path="/login" element={<Login />} />
