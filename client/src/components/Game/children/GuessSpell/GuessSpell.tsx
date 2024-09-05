@@ -31,10 +31,8 @@ const GuessSpell: React.FC<IProps> = (props) => {
 		[props.spells],
 	);
 
-	const hasValidInput = useMemo(
-		() => spellIdMap.has(input.toLowerCase()),
-		[input],
-	);
+	const hasValidInput = spellIdMap.has(input.toLowerCase())
+
 
 	return (
 		<div className={styles.root}>
@@ -58,6 +56,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 					)}
 				</div>
 			</div>
+			{hasValidInput && 
 			<button
 				onClick={() => {
 					const id = spellIdMap.get(input.toLowerCase());
@@ -70,6 +69,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 			>
 				Submit
 			</button>
+}
 		</div>
 	);
 };
