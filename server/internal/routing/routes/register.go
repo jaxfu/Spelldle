@@ -102,6 +102,13 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
+		// update user gameSessionID
+		if err := db.UpdateGameSessionIDByUserID(gameSession.GameSessionID, userID); err != nil {
+			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("Error updating user gameSessionID: %+v\n", err)
+			return
+		}
+
 		// generate JWT
 		accessToken, err := auth.CreateJWTFromUserID(userID)
 		if err != nil {

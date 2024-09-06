@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"spelldle.com/server/internal/routing/consts"
 	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/dbHandler"
 )
@@ -61,9 +62,30 @@ func MakeGuessSpell(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// if spell, correct, set response and spawn new game session
-		if payload.SpellID == gameSession.SpellID {
+		// if spell correct, set response and spawn new game session
+		if payload.SpellID == gameSession.SpellID || gameSession.SpellRounds+1 == consts.SpellGuessLimit {
 			response.Correct = true
+
+			newGameSession, err := utils.SpawnNewGameSession(userID, db)
+			if err != nil {
+				fmt.Printf("error spawning new gameSession: %+v", err)
+				ctx.JSON(http.StatusInternalServerError, response)
+				return
+			}
+
+			// insert new gameSessionData
+			if err := db.InsertGameSession(newGameSession); err != nil {
+				fmt.Printf("error in InsertGameSession: %+v", err)
+				ctx.JSON(http.StatusInternalServerError, response)
+				return
+			}
+
+			// update user gameSessionID
+			if err := db.UpdateGameSessionIDByUserID(newGameSession.GameSessionID, userID); err != nil {
+				fmt.Printf("error in UpdateGameSessionIDByUserID: %+v", err)
+				ctx.JSON(http.StatusInternalServerError, response)
+				return
+			}
 		}
 
 		ctx.JSON(http.StatusOK, response)
