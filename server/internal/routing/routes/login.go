@@ -16,6 +16,7 @@ import (
 
 type responseLogin struct {
 	Tokens types.AllTokens `json:"tokens"`
+	Role   string          `json:"role"`
 	Valid  bool            `json:"valid"`
 }
 
@@ -72,6 +73,7 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 			AccessToken:  accessToken,
 			RefreshToken: accessToken,
 		}
+		response.Role = userData.Role
 		response.Valid = true
 
 		ctx.JSON(http.StatusOK, response)
