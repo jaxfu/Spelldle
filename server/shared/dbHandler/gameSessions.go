@@ -33,7 +33,8 @@ func (dbHandler *DBHandler) GetGameSessionByGameSessionID(gameSessionID types.Ga
 
 const QGetGameSessionByUserID = `
   SELECT game_session_id, user_id, spell_id, category_rounds, spell_rounds
-  FROM game_sessions.data
+	FROM users.data
+	NATURAL JOIN game_sessions.data
   WHERE user_id=$1
 `
 
@@ -56,7 +57,7 @@ func (dbHandler *DBHandler) GetGameSessionByUserID(userID types.UserID) (types.G
 
 const QGetGameSessionIDByUserID = `
   SELECT game_session_id
-  FROM game_sessions.data
+  FROM users.data
   WHERE user_id=$1
 `
 
@@ -71,11 +72,6 @@ func (dbHandler *DBHandler) GetGameSessionIDByUserID(userID types.UserID) (types
 
 // INSERTS
 
-// const EInsertGameSessionID = `
-//   INSERT INTO game_sessions.ids(game_session_id)
-//   VALUES ($1)
-// `
-
 const EInsertGameSessionID = `
 	INSERT INTO game_sessions.ids (game_session_id)
   VALUES ($1)
@@ -83,7 +79,9 @@ const EInsertGameSessionID = `
 `
 
 func (dbHandler *DBHandler) InsertGameSessionID(gameSessionID types.GameSessionID) (pgconn.CommandTag, error) {
-	result, err := dbHandler.Conn.Exec(context.Background(), EInsertGameSessionID,
+	result, err := dbHandler.Conn.Exec(
+		context.Background(),
+		EInsertGameSessionID,
 		gameSessionID,
 	)
 
@@ -111,6 +109,23 @@ func (dbHandler *DBHandler) InsertGameSession(session types.GameSession) error {
 }
 
 // UPDATES
+
+const EUpdateGameSessionIDByUserID = `
+	UPDATE users.data
+  SET game_session_id = $1
+	WHERE user_id = $2
+`
+
+func (dbHandler *DBHandler) UpdateGameSessionIDByUserID(gameSessionID types.GameSessionID, userID types.UserID) error {
+	_, err := dbHandler.Conn.Exec(
+		context.Background(),
+		EUpdateGameSessionIDByUserID,
+		gameSessionID,
+		userID,
+	)
+
+	return err
+}
 
 const EUpdateCategoryRoundsByUserID = `
   UPDATE game_sessions.data

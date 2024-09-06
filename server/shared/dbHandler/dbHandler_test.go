@@ -119,6 +119,11 @@ func TestDBHandler(t *testing.T) {
 			t.Errorf("Error inserting game session: %+v", err)
 		}
 	})
+	t.Run("UpdateGameSessionIDByUserID", func(t *testing.T) {
+		if err := dbHandler.UpdateGameSessionIDByUserID(testGameSessionData.GameSessionID, testUserData.UserID); err != nil {
+			t.Errorf("error in InsertGameSessionIDByUserID: %+v", err)
+		}
+	})
 	t.Run("GetGameSessionIDByUserID", func(t *testing.T) {
 		gameSessionID, err := dbHandler.GetGameSessionIDByUserID(testUserData.UserID)
 		if err != nil {

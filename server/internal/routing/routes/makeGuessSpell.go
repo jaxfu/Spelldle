@@ -61,7 +61,7 @@ func MakeGuessSpell(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		// check if spell is correct
+		// if spell, correct, set response and spawn new game session
 		if payload.SpellID == gameSession.SpellID {
 			response.Correct = true
 		}

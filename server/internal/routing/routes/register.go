@@ -6,13 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	rand "math/rand"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/crypto/bcrypt"
 	"spelldle.com/server/internal/auth"
+	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
 
@@ -20,8 +19,8 @@ import (
 )
 
 type responseRegister struct {
-	Valid  bool            `json:"valid"`
 	Tokens types.AllTokens `json:"tokens"`
+	Valid  bool            `json:"valid"`
 }
 
 // Register recieves a RequestPayloadRegister, then checks if the username is valid,
@@ -95,7 +94,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// create and insert game session
-		gameSession, err := spawnNewGameSession(userID, db)
+		gameSession, err := utils.SpawnNewGameSession(userID, db)
 		fmt.Printf("created game session: %+v\n", gameSession)
 		if err := db.InsertGameSession(gameSession); err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
@@ -134,64 +133,4 @@ func generateSalt(size int) (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(salt), nil
-}
-
-// generate new game session
-func spawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.GameSession, error) {
-	var session types.GameSession
-
-	gameSessionID, err := createAndInsertNewGameSessionID(db)
-	if err != nil {
-		return session, err
-	}
-
-	// initialize guesses.spells
-	if err := db.InitializeGuessSpell(gameSessionID); err != nil {
-		return session, err
-	}
-
-	session.GameSessionID = gameSessionID
-	session.UserID = userID
-	session.CategoryRounds = 0
-	session.SpellRounds = 0
-
-	count, err := db.GetSpellsCount()
-	if err != nil {
-		return session, err
-	}
-
-	session.SpellID = randomUint(count)
-
-	return session, nil
-}
-
-func randomUint(count uint) uint {
-	return uint(rand.Intn(int(count))) + 1
-}
-
-func createAndInsertNewGameSessionID(db *dbHandler.DBHandler) (types.GameSessionID, error) {
-	var id types.GameSessionID
-
-	for {
-		// Generate a new UUID
-		id = uuid.New().String()
-
-		// Execute the query
-		result, err := db.InsertGameSessionID(id)
-		if err != nil {
-			return id, err
-		}
-
-		// Check if the insert was successful
-		if result.RowsAffected() > 0 {
-			// Successfully inserted
-			fmt.Println("Successfully inserted record with UUID:", id)
-			break
-		}
-
-		// If no rows were affected, it means there was a conflict, so we retry
-		fmt.Println("UUID conflict detected, generating a new UUID and retrying...")
-	}
-
-	return id, nil
 }
