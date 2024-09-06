@@ -11,5 +11,6 @@ const (
 	RouteUrlMakeGuessSpell            = RouteUrlBase + "/makeGuess/spell"
 	RouteUrlValidateSession           = RouteUrlBase + "/validateSession"
 	RouteUrlGetGameSessionInfo        = RouteUrlBase + "/getGameSessionInfo"
+	RouteUrlAddSpell                  = RouteUrlBase + "/addSpell"
 	SpellGuessLimit            uint   = 3
 )
