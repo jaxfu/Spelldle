@@ -3,6 +3,8 @@ CREATE SCHEMA spells;
 CREATE SCHEMA game_sessions;
 CREATE SCHEMA guesses;
 
+CREATE TYPE users.role AS ENUM ('U', 'G', 'A');
+
 CREATE TABLE users.ids
 (
     user_id SERIAL PRIMARY KEY
@@ -52,7 +54,8 @@ CREATE TABLE users.data
     salt       TEXT,
     first_name VARCHAR(32),
     last_name  VARCHAR(32),
-    game_session_id UUID REFERENCES game_sessions.ids(game_session_id)
+    game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
+    role users.role DEFAULT 'U'
 );
 
 CREATE TABLE guesses.categories
