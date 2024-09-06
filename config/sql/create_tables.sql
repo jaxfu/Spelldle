@@ -51,12 +51,13 @@ CREATE TABLE users.data
     password   TEXT,
     salt       TEXT,
     first_name VARCHAR(32),
-    last_name  VARCHAR(32)
+    last_name  VARCHAR(32),
+    game_session_id UUID REFERENCES game_sessions.ids(game_session_id)
 );
 
 CREATE TABLE guesses.categories
 (
-  game_session_id UUID,
+  game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
   round SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
@@ -67,13 +68,12 @@ CREATE TABLE guesses.categories
   components SMALLINT[],
   class SMALLINT[],
   effects SMALLINT[],
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id) REFERENCES game_sessions.ids(game_session_id)
+  PRIMARY KEY(game_session_id, round)
 );
 
 CREATE TABLE guesses.results
 (
-  game_session_id UUID,
+  game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
   round SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
@@ -84,8 +84,7 @@ CREATE TABLE guesses.results
   components SMALLINT,
   class SMALLINT,
   effects SMALLINT,
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id) REFERENCES game_sessions.ids(game_session_id)
+  PRIMARY KEY(game_session_id, round)
 );
 
 CREATE TABLE guesses.spells
