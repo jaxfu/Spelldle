@@ -12,7 +12,7 @@ CREATE TABLE users.ids
 
 CREATE TABLE spells.ids
 (
-    spell_id INTEGER PRIMARY KEY
+    spell_id SERIAL PRIMARY KEY
 );
 
 CREATE TABLE game_sessions.ids
