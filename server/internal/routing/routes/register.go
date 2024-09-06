@@ -84,6 +84,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			Salt:      salt,
 			FirstName: registerPayload.FirstName,
 			LastName:  registerPayload.LastName,
+			Role:      "U",
 		}
 
 		// Insert UserData
