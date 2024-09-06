@@ -121,7 +121,6 @@ type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
 export async function apiRequestGetGameSessionInfo(
 	accessToken: string,
 ): Promise<T_GAME_SESSION> {
-	console.log("Running apiRequestGetGameSessionInfo");
 	const res = await axios<T_APIRESPONSE_GET_GAME_SESSION_INFO>({
 		method: "POST",
 		url: API_ROUTES.GET_GAME_SESSION_INFO,

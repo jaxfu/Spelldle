@@ -1,8 +1,5 @@
 import styles from "./GuessBox.module.scss";
-import {
-	E_CATEGORY_COMPONENT_TYPE,
-	type T_CATEGORY_INFO,
-} from "../../../../types/categories";
+import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuessCategory } from "../../../../utils/requests";
 import { QUERY_KEYS } from "../../../../utils/consts";
@@ -16,7 +13,6 @@ import {
 	INIT_PAST_GUESS_CATEGORY,
 	type T_PAST_GUESS_CATEGORY,
 	type T_PAST_GUESS_CATEGORIES_MAP,
-	type T_GUESS_CATEGORIES_IDS_MAP,
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";

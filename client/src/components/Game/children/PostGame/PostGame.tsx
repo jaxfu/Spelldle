@@ -1,11 +1,28 @@
 import styles from "./PostGame.module.scss";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "../../../../utils/consts";
 
-const PostGame: React.FC = () => {
+interface IProps {
+	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PostGame: React.FC<IProps> = (props) => {
+	const queryClient = useQueryClient();
+
 	return (
 		<div className={styles.root}>
 			<div className={styles.content}>
 				<h2>PostGame</h2>
-				<button>New Game</button>
+				<button
+					onClick={() => {
+						queryClient.invalidateQueries({
+							queryKey: [QUERY_KEYS.gameSessionInfo],
+						});
+						props.setShowingPostGame(false);
+					}}
+				>
+					New Game
+				</button>
 			</div>
 		</div>
 	);

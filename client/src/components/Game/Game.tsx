@@ -57,7 +57,9 @@ const Game: React.FC<IProps> = (props) => {
 		return (
 			<div className={styles.root}>
 				<CtxGuessData.Provider value={currentGuessInfo}>
-					{props.showingPostGame && <PostGame />}
+					{props.showingPostGame && (
+						<PostGame setShowingPostGame={props.setShowingPostGame} />
+					)}
 					<GuessInfoButton />
 					<GuessSpell
 						spells={data.spells}
