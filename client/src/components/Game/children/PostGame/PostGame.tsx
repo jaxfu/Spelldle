@@ -16,7 +16,7 @@ const PostGame: React.FC<IProps> = (props) => {
 				<button
 					onClick={() => {
 						queryClient.invalidateQueries({
-							queryKey: [QUERY_KEYS.gameSessionInfo],
+							queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 						});
 						props.setShowingPostGame(false);
 					}}

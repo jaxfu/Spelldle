@@ -43,7 +43,7 @@ const Game: React.FC<IProps> = (props) => {
 	const navigate = useNavigate();
 
 	const { data, isFetching, isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.gameSessionInfo],
+		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
 				getUserSessionDataFromStorage().access_token,

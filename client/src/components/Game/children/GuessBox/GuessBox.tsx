@@ -29,7 +29,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuessCategory,
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GAME_SESSION_INFO] });
 		},
 	});
 

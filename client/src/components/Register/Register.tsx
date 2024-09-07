@@ -31,7 +31,7 @@ const Register: React.FC = () => {
 		// TODO: handle taken and error
 		onSuccess(data) {
 			sendTokensToLocalStorage(data.data.tokens);
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
 		},
 	});
 

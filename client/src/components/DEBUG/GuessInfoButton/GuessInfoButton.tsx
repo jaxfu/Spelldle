@@ -15,7 +15,7 @@ const GuessInfoButton: React.FC = () => {
 		mutationFn: apiRequestMakeGuessCategory,
 		onSuccess: (data) => {
 			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.gameSessionInfo] });
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GAME_SESSION_INFO] });
 		},
 	});
 

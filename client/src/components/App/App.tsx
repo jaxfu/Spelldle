@@ -19,7 +19,7 @@ const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
 
 	const { isFetching, isSuccess, error, data } = useQuery({
-		queryKey: [QUERY_KEYS.userData],
+		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
 	});
