@@ -16,5 +16,5 @@ export const QUERY_KEYS = {
 
 export const USER_ROLES = {
 	USER: "U",
-	ADMIN: "A"
-}
+	ADMIN: "A",
+};

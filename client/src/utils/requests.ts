@@ -1,12 +1,10 @@
-import axios, { AxiosResponse, HttpStatusCode } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
 	type T_APIRESULT_LOGIN,
 	type T_USERINPUT_LOGIN,
 	type T_APIRESULT_REGISTER,
 	type T_USERINPUT_REGISTER,
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
-	INIT_AUTH_STATUS,
-	type T_AUTH_STATUS,
 } from "../types";
 import {
 	type T_GUESS_CATEGORIES_IDS_MAP,
@@ -15,7 +13,6 @@ import {
 } from "../types/guesses";
 import { type T_TOKENS } from "../types";
 import type { T_GAME_SESSION } from "../types/gameSession";
-import { deepCopyObject, areTokensInLocalStorage, getUserSessionDataFromStorage } from "./methods";
 
 // Routes
 const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";

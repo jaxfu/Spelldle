@@ -1,12 +1,13 @@
 import styles from "./GuessBox.module.scss";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuessCategory } from "../../../../utils/requests";
-import { QUERY_KEYS } from "../../../../utils/consts";
+import { QUERY_KEYS, USER_ROLES } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
 	deepCopyObject,
+	getAuthStatus,
 	getUserSessionDataFromStorage,
 } from "../../../../utils/methods";
 import {
@@ -17,6 +18,10 @@ import {
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";
 import GuessCount from "../GuessCount/GuessCount";
+// TODO: remove
+import devRequests from "../../../DEBUG/GuessInfoButton/devRequests";
+import { HttpStatusCode } from "axios";
+// END
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
@@ -25,11 +30,23 @@ interface IProps {
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
+	// TODO: remove
+	const { data } = useQuery({
+		queryKey: [QUERY_KEYS.USER_DATA],
+		queryFn: getAuthStatus,
+		retry: false,
+	});
+
+	const nameRef = useRef<HTMLInputElement>(null);
+	// END
+
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuessCategory,
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GAME_SESSION_INFO] });
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
 		},
 	});
 
@@ -103,6 +120,35 @@ const GuessBox: React.FC<IProps> = (props) => {
 					</button>
 				</div>
 			)}
+			{/*TODO: remove */}
+			{data && data.user_data.role === USER_ROLES.ADMIN && (
+				<>
+					<button
+						onClick={async () => {
+							try {
+								if (guessData && nameRef.current) {
+									const paramObj = {
+										accessToken: getUserSessionDataFromStorage().access_token,
+										category_info: Object.fromEntries(guessData.current),
+										name: nameRef.current.value,
+									};
+									console.log(paramObj);
+									const res = await devRequests.addSpell(paramObj);
+									if (res.status === HttpStatusCode.Ok)
+										console.log("added spell");
+									else console.log("unsuccessful, status " + res.status);
+								}
+							} catch (error) {
+								console.log(error);
+							}
+						}}
+					>
+						Add Spell
+					</button>
+					<input type="text" placeholder="name" ref={nameRef} />
+				</>
+			)}
+			{/*END*/}
 		</div>
 	);
 };

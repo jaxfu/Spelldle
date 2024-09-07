@@ -38,14 +38,14 @@ export type T_USERDATA_STATE = {
 	username: string;
 	first_name: string;
 	last_name: string;
-	role: E_USER_ROLES;
+	role: string;
 };
 export const INIT_USERDATA_STATE: T_USERDATA_STATE = {
 	user_id: 0,
 	username: "",
 	first_name: "",
 	last_name: "",
-	role: E_USER_ROLES.UNINITIALIZED
+	role: "U",
 };
 
 // REGISTER
