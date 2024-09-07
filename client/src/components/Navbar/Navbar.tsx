@@ -14,6 +14,8 @@ const Navbar: React.FC = () => {
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
 	});
 
 	const navigate = useNavigate();

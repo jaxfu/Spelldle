@@ -22,6 +22,8 @@ const App: React.FC = () => {
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
 	});
 	if (error) {
 		console.log(`GET_AUTH_STATUS ERROR: ${error}`);

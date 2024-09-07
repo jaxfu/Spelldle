@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { T_GUESS_CATEGORIES_IDS_MAP } from "../../../types/guesses";
 
 interface IParamObject {
 	accessToken: string;

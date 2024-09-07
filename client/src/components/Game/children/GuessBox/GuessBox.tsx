@@ -21,6 +21,7 @@ import GuessCount from "../GuessCount/GuessCount";
 // TODO: remove
 import devRequests from "../../../DEBUG/GuessInfoButton/devRequests";
 import { HttpStatusCode } from "axios";
+import type { T_AUTH_STATUS, T_USERDATA_STATE } from "../../../../types";
 // END
 
 interface IProps {
@@ -35,6 +36,8 @@ const GuessBox: React.FC<IProps> = (props) => {
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
 	});
 
 	const nameRef = useRef<HTMLInputElement>(null);
@@ -43,7 +46,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuessCategory,
-		onSuccess: (data) => {
+		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 			});
@@ -121,7 +124,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 				</div>
 			)}
 			{/*TODO: remove */}
-			{data && data.user_data.role === USER_ROLES.ADMIN && (
+			{data?.user_data.role === USER_ROLES.ADMIN && (
 				<>
 					<button
 						onClick={async () => {
@@ -145,7 +148,13 @@ const GuessBox: React.FC<IProps> = (props) => {
 					>
 						Add Spell
 					</button>
-					<input type="text" placeholder="name" ref={nameRef} />
+					<input
+						type="text"
+						placeholder="name"
+						name="name"
+						ref={nameRef}
+						style={{ marginBottom: "50px" }}
+					/>
 				</>
 			)}
 			{/*END*/}
