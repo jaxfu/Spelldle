@@ -13,7 +13,7 @@ import {
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
-import LevelTextInput from "../Level/children/LevelTextInput/LevelTextInput";
+import LevelTextInput from "../SingleTextWithToggle/children/LevelTextInput/LevelTextInput";
 import Locals from "./Locals";
 
 interface IProps {

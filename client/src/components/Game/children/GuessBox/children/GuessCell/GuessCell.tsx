@@ -6,7 +6,7 @@ import {
 import SingleText from "./children/SingleText/SingleText";
 import MultiText from "./children/MultiText/MultiText";
 import Components from "./children/Components/Components";
-import Level from "./children/Level/Level";
+import SingleTextWithToggle from "./children/SingleTextWithToggle/SingleTextWithToggle";
 import {
 	E_GUESS_CATEGORY_RESULTS,
 	type T_PAST_GUESS_CATEGORY,
@@ -64,7 +64,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 				);
 			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
 				return (
-					<Level
+					<SingleTextWithToggle
 						{...props}
 						showingRecentGuess={showingRecentGuess}
 						setShowingRecentGuess={setShowingRecentGuess}

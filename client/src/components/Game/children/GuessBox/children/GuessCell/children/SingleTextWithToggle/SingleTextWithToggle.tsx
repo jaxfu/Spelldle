@@ -1,11 +1,10 @@
-import styles from "./Level.module.scss";
+import styles from "./SingleTextWithToggle.module.scss";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
 	E_GUESS_CATEGORY_RESULTS,
-	T_GUESS_CATEGORIES_IDS_MAP,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
 import { FaCheck } from "react-icons/fa";
@@ -20,7 +19,7 @@ interface IProps {
 	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Level: React.FC<IProps> = (props) => {
+const SingleTextWithToggle: React.FC<IProps> = (props) => {
 	const guessData = useContext(CtxGuessData);
 	const checkBoxValueFromMostRecentGuess = useRef<boolean>(false);
 	const [checked, setChecked] = useState(false);
@@ -101,4 +100,4 @@ const Level: React.FC<IProps> = (props) => {
 	);
 };
 
-export default Level;
+export default SingleTextWithToggle;
