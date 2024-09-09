@@ -43,7 +43,7 @@ export function translateIdsToDisplay(
 				});
 			}
 			break;
-		case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+		case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
 			if (Array.isArray(id)) {
 				const display: T_GUESS_CATEGORIES_STATES_DISPLAY = [
 					categoryInfo.values[id[0]],

@@ -80,7 +80,7 @@ const SingleText: React.FC<IProps> = (props) => {
 				props.setTriggerGuessDataChange,
 			);
 		} else if (
-			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
+			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE
 		) {
 			Locals.updateGuessCategoriesMapLevelText(
 				input,

@@ -62,7 +62,7 @@ const GuessCell: React.FC<IProps> = (props) => {
 						setShowingRecentGuess={setShowingRecentGuess}
 					/>
 				);
-			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
 				return (
 					<Level
 						{...props}
