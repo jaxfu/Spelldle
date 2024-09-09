@@ -24,7 +24,7 @@ const Locals = {
 		}
 	},
 
-	updateGuessCategoriesMapLevelText: function (
+	updateGuessCategoriesMapSingleTextWithToggle: function (
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,

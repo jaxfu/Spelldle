@@ -1,19 +1,16 @@
 import styles from "./App.module.scss";
-import Game from "../Game/Game";
 import Navbar from "../Navbar/Navbar";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Login from "../Login/Login";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../utils/consts";
+import { QUERY_KEYS, USER_ROLES } from "../../utils/consts";
 import {
 	clearTokensFromLocalStorage,
 	getAuthStatus,
 } from "../../utils/methods";
-import ContentBox from "../ContentBox/ContentBox";
-import Register from "../Register/Register";
 import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
+import AdminApp from "./children/AdminApp/AdminApp";
+import UserApp from "./children/UserApp/UserApp";
 
 const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
@@ -34,40 +31,47 @@ const App: React.FC = () => {
 
 	// if auth invalid, send to login
 	useEffect(() => {
-		if (isSuccess) {
+		if (isSuccess && !isFetching) {
 			if (!data || !data.valid) navigate("/login");
 			else navigate("/");
 		}
 	}, [isFetching, isSuccess]);
 
-	return (
-		<div className={styles.root}>
-			{/* DEBUG */}
-			<ReactQueryDevtools initialIsOpen={false} />
-
-			{/* CORE */}
-			<Navbar />
-			<ContentBox showingPostGame={showingPostGame}>
-				<Routes>
-					<Route
-						path="/"
-						element={
-							isFetching && !isSuccess ? (
-								<Loading />
-							) : (
-								<Game
-									showingPostGame={showingPostGame}
-									setShowingPostGame={setShowingPostGame}
-								/>
-							)
-						}
-					/>
-					<Route path="/register" element={<Register />} />
-					<Route path="/login" element={<Login />} />
-				</Routes>
-			</ContentBox>
-		</div>
-	);
+	if (isSuccess) {
+		switch (data.user_data.role) {
+			case USER_ROLES.ADMIN:
+				return (
+					<div className={styles.root}>
+						<Navbar data={data} />
+						<AdminApp
+							isFetching={isFetching}
+							isSuccess={isSuccess}
+							showingPostGame={showingPostGame}
+							setShowingPostGame={setShowingPostGame}
+						/>
+					</div>
+				);
+			case USER_ROLES.USER:
+				return (
+					<div className={styles.root}>
+						<Navbar data={data} />
+						<UserApp
+							isFetching={isFetching}
+							isSuccess={isSuccess}
+							showingPostGame={showingPostGame}
+							setShowingPostGame={setShowingPostGame}
+						/>
+					</div>
+				);
+		}
+	} else if (isFetching) {
+		return (
+			<div className={styles.root}>
+				<Navbar data={undefined} />
+				<Loading />
+			</div>
+		);
+	}
 };
 
 export default App;

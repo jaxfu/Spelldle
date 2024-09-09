@@ -83,7 +83,7 @@ const SingleText: React.FC<IProps> = (props) => {
 			props.categoryInfo.component_type ===
 			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE
 		) {
-			Locals.updateGuessCategoriesMapLevelText(
+			Locals.updateGuessCategoriesMapSingleTextWithToggle(
 				input,
 				hasValidInput,
 				props.categoryInfo,

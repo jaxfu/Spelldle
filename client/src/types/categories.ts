@@ -65,19 +65,17 @@ export function generateGuessesStateFromJSON(
 
 	if (categoryInfoJson !== undefined) {
 		for (const { id, component_type } of categoryInfoJson) {
-			let value;
-
 			switch (component_type) {
 				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-					value = -1;
+					map.set(id, -1);
 					break;
-				default:
-					value = [];
+				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+					map.set(id, []);
 					break;
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
+					map.set(id, [0, 0]);
 			}
-
-			//console.log(`${id}: ${value}`)
-			map.set(id, value);
 		}
 	}
 
