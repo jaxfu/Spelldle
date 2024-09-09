@@ -64,21 +64,22 @@ export function generateGuessesStateFromJSON(
 	const map: T_GUESS_CATEGORIES_IDS_MAP = new Map();
 
 	if (categoryInfoJson !== undefined) {
-	for (const { id, component_type } of categoryInfoJson) {
-		let value;
+		for (const { id, component_type } of categoryInfoJson) {
+			let value;
 
-		switch (component_type) {
-			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-				value = -1;
-				break;
-			default:
-				value = [];
-				break;
+			switch (component_type) {
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+					value = -1;
+					break;
+				default:
+					value = [];
+					break;
+			}
+
+			//console.log(`${id}: ${value}`)
+			map.set(id, value);
 		}
-
-		map.set(id, value);
 	}
-}
 
 	return map;
 }

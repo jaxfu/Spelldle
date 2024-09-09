@@ -56,14 +56,14 @@ const SingleTextWithToggle: React.FC<IProps> = (props) => {
 	// update guess map on checked change
 	useEffect(() => {
 		if (checked) {
-			Locals.updateGuessCategoriesMapRitualToggle(
+			Locals.updateGuessCategoriesMapToggle(
 				true,
 				props.categoryInfo.id,
 				guessData,
 				props.setTriggerGuessDataChange,
 			);
 		} else {
-			Locals.updateGuessCategoriesMapRitualToggle(
+			Locals.updateGuessCategoriesMapToggle(
 				false,
 				props.categoryInfo.id,
 				guessData,
@@ -80,7 +80,7 @@ const SingleTextWithToggle: React.FC<IProps> = (props) => {
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
 						setChecked((checked) => !checked);
-						Locals.updateGuessCategoriesMapRitualToggle(
+						Locals.updateGuessCategoriesMapToggle(
 							!checked,
 							props.categoryInfo.id,
 							guessData,
@@ -88,7 +88,7 @@ const SingleTextWithToggle: React.FC<IProps> = (props) => {
 						);
 					}}
 				>
-					Ritual:
+					{props.categoryInfo.id == "level" ? "Ritual:" : "Conc:"}
 					{checked ? (
 						<FaCheck className={styles.icon} />
 					) : (

@@ -29,34 +29,29 @@ interface IProps {
 }
 
 const Game: React.FC<IProps> = (props) => {
-	const [loadedJson, setLoadedJson] = useState<T_CATEGORY_INFO_SEED_JSON>()
+	const [loadedJson, setLoadedJson] = useState<T_CATEGORY_INFO_SEED_JSON>();
 	useEffect(() => {
 		async function fetchSpells() {
 			try {
-				const response = await fetch('/CATEGORY_INFO.json');
+				const response = await fetch("/CATEGORY_INFO.json");
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
 				const data = await response.json();
 				setLoadedJson(data);
 			} catch (error) {
-				console.error('Error fetching spells:', error);
+				console.error("Error fetching spells:", error);
 			}
 		}
 
-		fetchSpells()
-	}, [])
+		fetchSpells();
+	}, []);
 
 	const categoriesInfo: T_CATEGORY_INFO[] | undefined = useMemo(() => {
-		if (loadedJson)
-		return generateCategoryInfoFromSeedJSON(
-			loadedJson,
-		);
+		if (loadedJson) return generateCategoryInfoFromSeedJSON(loadedJson);
 	}, [loadedJson]);
 	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>(
-		generateGuessesStateFromJSON(
-			loadedJson
-		),
+		generateGuessesStateFromJSON(loadedJson),
 	);
 	const navigate = useNavigate();
 
@@ -76,7 +71,7 @@ const Game: React.FC<IProps> = (props) => {
 	} else if (isSuccess && data && categoriesInfo) {
 		return (
 			<div className={styles.root}>
-				<CtxGuessData.Provider value={{...initialGuessInfo}}>
+				<CtxGuessData.Provider value={{ ...initialGuessInfo }}>
 					{props.showingPostGame && (
 						<PostGame setShowingPostGame={props.setShowingPostGame} />
 					)}
