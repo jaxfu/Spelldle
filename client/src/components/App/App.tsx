@@ -19,9 +19,11 @@ const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
 
 	const { isFetching, isSuccess, error, data } = useQuery({
-		queryKey: [QUERY_KEYS.userData],
+		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
 	});
 	if (error) {
 		console.log(`GET_AUTH_STATUS ERROR: ${error}`);
@@ -29,6 +31,7 @@ const App: React.FC = () => {
 	}
 
 	const navigate = useNavigate();
+
 	// if auth invalid, send to login
 	useEffect(() => {
 		if (isSuccess) {

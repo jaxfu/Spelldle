@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, HttpStatusCode } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
 	type T_APIRESULT_LOGIN,
 	type T_USERINPUT_LOGIN,

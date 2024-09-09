@@ -38,6 +38,7 @@ func ValidateSession(db *dbHandler.DBHandler) gin.HandlerFunc {
 			LastName:  userData.LastName,
 			Username:  userData.Username,
 			UserID:    userID,
+			Role:      userData.Role,
 		}
 		ctx.JSON(http.StatusOK, validationResponse)
 	}

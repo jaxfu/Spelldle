@@ -11,9 +11,11 @@ import { Link, useNavigate } from "react-router-dom";
 const Navbar: React.FC = () => {
 	const queryClient = useQueryClient();
 	const { data, isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.userData],
+		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
 	});
 
 	const navigate = useNavigate();
@@ -32,7 +34,7 @@ const Navbar: React.FC = () => {
 						onClick={() => {
 							clearTokensFromLocalStorage();
 							queryClient.invalidateQueries({
-								queryKey: [QUERY_KEYS.userData],
+								queryKey: [QUERY_KEYS.USER_DATA],
 							});
 							navigate("/login");
 						}}

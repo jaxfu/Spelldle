@@ -1,14 +1,14 @@
 [
   {
-    "spell_id": 2,
-    "name": "test_2",
-    "school": 0,
-    "range": 0,
-    "casting_time": 0,
-    "target": 0,
+    "spell_id": 1,
+    "name": "Acid Splash",
+    "school": 1,
+    "range": 3,
+    "casting_time": 4,
+    "target": 1,
     "duration": 0,
     "level": [
-      0,
+      9,
       0
     ],
     "components": [
@@ -16,41 +16,16 @@
       1
     ],
     "effects": [
-      0,
-      1,
-      2
+      2,
+      16,
+      31,
+      40,
+      46
     ],
     "class": [
       0,
-      1,
-      2
-    ]
-  },
-  {
-    "spell_id": 3,
-    "name": "test_3",
-    "school": 1,
-    "range": 1,
-    "casting_time": 1,
-    "target": 1,
-    "duration": 1,
-    "level": [
-      0,
-      1
-    ],
-    "components": [
-      1,
-      2
-    ],
-    "effects": [
-      1,
-      2,
-      3
-    ],
-    "class": [
-      1,
-      2,
-      3
+      6,
+      8
     ]
   }
 ]

@@ -88,8 +88,8 @@ func (dbHandler *DBHandler) GetSpellNames() ([]string, error) {
 // Inserts
 
 const EInsertSpellID = `
-  INSERT INTO spells.ids(spell_id)
-  VALUES ($1)
+  INSERT INTO spells.ids DEFAULT VALUES
+	RETURNING spell_id
 `
 
 const EInsertSpellCategories = `
@@ -98,15 +98,14 @@ const EInsertSpellCategories = `
 `
 
 func (dbHandler *DBHandler) InsertSpell(spellInfo types.SpellAll) error {
-	_, err := dbHandler.Conn.Exec(context.Background(), EInsertSpellID,
-		spellInfo.SpellID,
-	)
+	var spellID uint
+	err := dbHandler.Conn.QueryRow(context.Background(), EInsertSpellID).Scan(&spellID)
 	if err != nil {
 		return err
 	}
 
 	_, err = dbHandler.Conn.Exec(context.Background(), EInsertSpellCategories,
-		spellInfo.SpellID,
+		spellID,
 		spellInfo.Name,
 		spellInfo.School,
 		spellInfo.CastingTime,

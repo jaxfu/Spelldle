@@ -32,8 +32,10 @@ const Login: React.FC = () => {
 		},
 		// TODO: handle error vs incorrect info
 		onSuccess(data) {
-			sendTokensToLocalStorage(data.data.tokens);
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+			if (data.data.valid) {
+				sendTokensToLocalStorage(data.data.tokens);
+				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
+			}
 		},
 	});
 

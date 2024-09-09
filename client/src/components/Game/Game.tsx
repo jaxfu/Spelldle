@@ -23,6 +23,7 @@ import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import GuessSpell from "./children/GuessSpell/GuessSpell";
 import PostGame from "./children/PostGame/PostGame";
+import type { T_USERDATA_STATE } from "../../types";
 
 interface IProps {
 	showingPostGame: boolean;
@@ -43,12 +44,14 @@ const Game: React.FC<IProps> = (props) => {
 	const navigate = useNavigate();
 
 	const { data, isFetching, isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.gameSessionInfo],
+		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
 				getUserSessionDataFromStorage().access_token,
 			),
 		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
 	});
 
 	if (isFetching) {
