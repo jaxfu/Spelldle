@@ -3,4 +3,5 @@
 set -e
 
 export PGPASSWORD=password &&
-psql -h localhost -d mfb -U postgres -p 5432 -a -w -f init.sql
+psql -U postgres -h localhost -p 5432 -d spelldle -f init.sql &&
+./restore_spells.sh
