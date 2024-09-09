@@ -6,6 +6,7 @@ cd .. &&
 mkdir deploy &&
 cp prod_utils/* deploy &&
 rm deploy/deploy.sh &&
+cp -r client/dist deploy/client &&
 cd server &&
 GOOS=linux GOARCH=amd64 go build -o ../deploy/spelldle.exe cmd/server.go &&
 cd .. &&
