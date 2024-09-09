@@ -59,10 +59,11 @@ function generateValuesMapFromValues(arr: string[]): Map<string, number> {
 }
 
 export function generateGuessesStateFromJSON(
-	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
+	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON | undefined,
 ): T_GUESS_CATEGORIES_IDS_MAP {
 	const map: T_GUESS_CATEGORIES_IDS_MAP = new Map();
 
+	if (categoryInfoJson !== undefined) {
 	for (const { id, component_type } of categoryInfoJson) {
 		let value;
 
@@ -77,6 +78,7 @@ export function generateGuessesStateFromJSON(
 
 		map.set(id, value);
 	}
+}
 
 	return map;
 }

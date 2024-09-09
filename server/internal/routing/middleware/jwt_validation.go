@@ -34,6 +34,10 @@ func ValidateAccessToken() gin.HandlerFunc {
 				ctx.Next()
 				return
 			}
+		} else {
+			fmt.Println("Skipping middleware")
+			ctx.Next()
+			return
 		}
 
 		authHeader := ctx.GetHeader(consts.HeaderTypeAuthorization)

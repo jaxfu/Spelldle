@@ -7,7 +7,7 @@ import {
 	getUserSessionDataFromStorage,
 } from "../../utils/methods";
 import { apiRequestGetGameSessionInfo } from "../../utils/requests";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
 	type T_CATEGORY_INFO,
@@ -15,7 +15,6 @@ import {
 	generateCategoryInfoFromSeedJSON,
 	generateGuessesStateFromJSON,
 } from "../../types/categories";
-import CATEGORY_INFO_JSON from "../../data/CATEGORY_INFO.json";
 import CtxGuessData from "../../contexts/CtxGuessData";
 import ResultBox from "./children/ResultBox/ResultBox";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../types/guesses";
@@ -23,7 +22,6 @@ import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import GuessSpell from "./children/GuessSpell/GuessSpell";
 import PostGame from "./children/PostGame/PostGame";
-import type { T_USERDATA_STATE } from "../../types";
 
 interface IProps {
 	showingPostGame: boolean;
@@ -31,14 +29,33 @@ interface IProps {
 }
 
 const Game: React.FC<IProps> = (props) => {
-	const categoriesInfo: T_CATEGORY_INFO[] = useMemo(() => {
+	const [loadedJson, setLoadedJson] = useState<T_CATEGORY_INFO_SEED_JSON>()
+	useEffect(() => {
+		async function fetchSpells() {
+			try {
+				const response = await fetch('/CATEGORY_INFO.json');
+				if (!response.ok) {
+					throw new Error(`HTTP error! Status: ${response.status}`);
+				}
+				const data = await response.json();
+				setLoadedJson(data);
+			} catch (error) {
+				console.error('Error fetching spells:', error);
+			}
+		}
+
+		fetchSpells()
+	}, [])
+
+	const categoriesInfo: T_CATEGORY_INFO[] | undefined = useMemo(() => {
+		if (loadedJson)
 		return generateCategoryInfoFromSeedJSON(
-			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
+			loadedJson,
 		);
-	}, [CATEGORY_INFO_JSON]);
-	const currentGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>(
+	}, [loadedJson]);
+	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>(
 		generateGuessesStateFromJSON(
-			CATEGORY_INFO_JSON as T_CATEGORY_INFO_SEED_JSON,
+			loadedJson
 		),
 	);
 	const navigate = useNavigate();
@@ -56,10 +73,10 @@ const Game: React.FC<IProps> = (props) => {
 
 	if (isFetching) {
 		return <Loading />;
-	} else if (isSuccess && data) {
+	} else if (isSuccess && data && categoriesInfo) {
 		return (
 			<div className={styles.root}>
-				<CtxGuessData.Provider value={currentGuessInfo}>
+				<CtxGuessData.Provider value={{...initialGuessInfo}}>
 					{props.showingPostGame && (
 						<PostGame setShowingPostGame={props.setShowingPostGame} />
 					)}
