@@ -10,4 +10,4 @@ rm deploy/deploy.sh &&
 cd server &&
 GOOS=linux GOARCH=amd64 go build -o ../deploy/server.exe cmd/server.go &&
 cd .. &&
-scp -r deploy/* jfdev:~/fraterhqc
+rsync -avz deploy/* jfdev:/home/fraterhqc/spelldle
