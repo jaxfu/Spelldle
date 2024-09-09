@@ -50,7 +50,7 @@
 	{
 		"id": "target",
 		"display_name": "Target",
-		"values": ["Area", "Creature", "Object", "Point", "Unnocupied Space"],
+		"values": ["Area", "Creature", "Object", "Point", "Unnocupied Space", "Self"],
 		"component_type": 0,
 		"has_modifiers": false
 	},
