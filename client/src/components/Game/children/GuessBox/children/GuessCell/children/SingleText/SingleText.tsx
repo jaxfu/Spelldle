@@ -13,7 +13,7 @@ import {
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
-import LevelTextInput from "../Level/children/LevelTextInput/LevelTextInput";
+import LevelTextInput from "../SingleTextWithToggle/children/LevelTextInput/LevelTextInput";
 import Locals from "./Locals";
 
 interface IProps {
@@ -80,9 +80,10 @@ const SingleText: React.FC<IProps> = (props) => {
 				props.setTriggerGuessDataChange,
 			);
 		} else if (
-			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
+			props.categoryInfo.component_type ===
+			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE
 		) {
-			Locals.updateGuessCategoriesMapLevelText(
+			Locals.updateGuessCategoriesMapSingleTextWithToggle(
 				input,
 				hasValidInput,
 				props.categoryInfo,

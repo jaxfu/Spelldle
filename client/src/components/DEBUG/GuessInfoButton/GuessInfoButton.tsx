@@ -32,7 +32,7 @@ const GuessInfoButton: React.FC = () => {
 			<button
 				onClick={() => {
 					console.log("CURRENT GUESSINFO: ");
-					guessData && console.log(guessData?.current);
+					guessData && console.log(guessData.current);
 				}}
 			>
 				Log

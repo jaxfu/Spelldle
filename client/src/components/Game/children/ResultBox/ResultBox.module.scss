@@ -2,42 +2,38 @@
 @import "../../../../styles/vars";
 
 .root {
-	overflow: auto;
-	max-width: 90dvw;
-	max-height: 30rem;
+	width: 100%;
+	height: fit-content;
 
-	display: flex;
-	flex-direction: column;
-	margin-top: 50px;
+	@include flex-center;
 
-	.headers {
-		display: flex;
-		width: fit-content;
-
-		position: sticky;
-		top: 0;
-		z-index: 10;
-
-		background: $main_bg;
-		backdrop-filter: blur(2rem);
-		-webkit-backdrop-filter: blur(2rem);
-	}
-
-	.cols {
-		width: fit-content;
-		height: fit-content;
+	.content {
+		overflow: auto;
+		max-width: 90dvw;
+		max-height: 30rem;
 
 		display: flex;
+		flex-direction: column;
+		margin-top: 50px;
+
+		.headers {
+			display: flex;
+			width: fit-content;
+
+			position: sticky;
+			top: 0;
+			z-index: 10;
+
+			background: $main_bg;
+			backdrop-filter: blur(2rem);
+			-webkit-backdrop-filter: blur(2rem);
+		}
+
+		.cols {
+			width: fit-content;
+			height: fit-content;
+
+			display: flex;
+		}
 	}
-
-	// .row {
-	// 	white-space: nowrap;
-
-	// 	.round {
-	// 		display: inline-block;
-	// 		border: $border;
-	// 		width: 75px;
-	// 		text-align: center;
-	// 	}
-	// }
 }

@@ -37,7 +37,10 @@ const Locals = {
 				}
 			}
 
-			guessData.current.set(categoryID, mapArr.sort((a, b) => a - b));
+			guessData.current.set(
+				categoryID,
+				mapArr.sort((a, b) => a - b),
+			);
 
 			setTriggerGuessDataChange((current) => !current);
 		}

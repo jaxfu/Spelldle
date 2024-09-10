@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"testing"
 
 	"spelldle.com/server/internal/testHelpers"
@@ -15,6 +16,7 @@ func TestMethods(t *testing.T) {
 		for i := range testGuesses {
 			guess1 := testGuesses[i]
 			results := guess1.GetResults(&testSpell)
+			fmt.Printf("%+v\n", results)
 
 			valid, msg := results.Equals(&testResults[i])
 			if !valid {

@@ -1,6 +1,6 @@
+import styles from "./ResultBox.module.scss";
 import { type T_PAST_GUESS_CATEGORIES_MAP } from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
-import styles from "./ResultBox.module.scss";
 import { useState } from "react";
 import Header from "./children/ResultCol/children/Header/Header";
 import Locals from "./Locals";
@@ -28,32 +28,34 @@ const ResultBox: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.headers}>
-				{/* round header explicit because it is not in categoriesInfoArr */}
-				<Header
-					key={CONSTS_RESULT.ROUNDS.ID}
-					categoryID={CONSTS_RESULT.ROUNDS.ID}
-					title={CONSTS_RESULT.ROUNDS.DISPLAY}
-					colWidthsMap={colWidthsMap}
-					setColWidthsMap={setColWidthsMap}
-				/>
-				{props.categoriesInfoArr.map(({ id, display_name }, i) => (
+			<div className={styles.content}>
+				<div className={styles.headers}>
+					{/* round header explicit because it is not in categoriesInfoArr */}
 					<Header
-						key={id}
-						categoryID={id}
-						title={display_name}
+						key={CONSTS_RESULT.ROUNDS.ID}
+						categoryID={CONSTS_RESULT.ROUNDS.ID}
+						title={CONSTS_RESULT.ROUNDS.DISPLAY}
 						colWidthsMap={colWidthsMap}
 						setColWidthsMap={setColWidthsMap}
 					/>
-				))}
-			</div>
-			<div className={styles.cols}>
-				{Locals.generateCols(
-					props.categoriesInfoArr,
-					props.pastGuesses,
-					colWidthsMap,
-					setColWidthsMap,
-				)}
+					{props.categoriesInfoArr.map(({ id, display_name }, i) => (
+						<Header
+							key={id}
+							categoryID={id}
+							title={display_name}
+							colWidthsMap={colWidthsMap}
+							setColWidthsMap={setColWidthsMap}
+						/>
+					))}
+				</div>
+				<div className={styles.cols}>
+					{Locals.generateCols(
+						props.categoriesInfoArr,
+						props.pastGuesses,
+						colWidthsMap,
+						setColWidthsMap,
+					)}
+				</div>
 			</div>
 		</div>
 	);

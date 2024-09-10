@@ -22,7 +22,7 @@ export enum E_CATEGORY_COMPONENT_TYPE {
 	SINGLE_TEXT = 0,
 	MULTI_TEXT,
 	COMPONENTS,
-	LEVEL,
+	SINGLE_TEXT_WITH_TOGGLE,
 }
 
 // FUNCTIONS
@@ -64,21 +64,20 @@ export function generateGuessesStateFromJSON(
 	const map: T_GUESS_CATEGORIES_IDS_MAP = new Map();
 
 	if (categoryInfoJson !== undefined) {
-	for (const { id, component_type } of categoryInfoJson) {
-		let value;
-
-		switch (component_type) {
-			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-				value = -1;
-				break;
-			default:
-				value = [];
-				break;
+		for (const { id, component_type } of categoryInfoJson) {
+			switch (component_type) {
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+					map.set(id, -1);
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+					map.set(id, []);
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
+					map.set(id, [0, 0]);
+			}
 		}
-
-		map.set(id, value);
 	}
-}
 
 	return map;
 }

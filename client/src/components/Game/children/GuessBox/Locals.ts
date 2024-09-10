@@ -21,7 +21,7 @@ const Locals = {
 						if (Array.isArray(currentValue) && currentValue.length === 0)
 							return false;
 						break;
-					case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+					case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
 						if (Array.isArray(currentValue) && currentValue[0] === -1)
 							return false;
 						break;

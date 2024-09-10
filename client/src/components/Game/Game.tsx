@@ -29,38 +29,39 @@ interface IProps {
 }
 
 const Game: React.FC<IProps> = (props) => {
-	const [loadedJson, setLoadedJson] = useState<T_CATEGORY_INFO_SEED_JSON>()
+	const [categoryInfoJson, setCategoryInfoJson] = useState<
+		T_CATEGORY_INFO_SEED_JSON | undefined
+	>(undefined);
+	// fetch CATEGORY_INFO.json
 	useEffect(() => {
-		async function fetchSpells() {
+		async function fetchCategoryInfoJson() {
 			try {
-				const response = await fetch('/CATEGORY_INFO.json');
+				const response = await fetch("/CATEGORY_INFO.json");
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
 				const data = await response.json();
-				setLoadedJson(data);
+				setCategoryInfoJson(data);
 			} catch (error) {
-				console.error('Error fetching spells:', error);
+				console.error("Error fetching spells:", error);
 			}
 		}
 
-		fetchSpells()
-	}, [])
+		fetchCategoryInfoJson();
+	}, []);
 
 	const categoriesInfo: T_CATEGORY_INFO[] | undefined = useMemo(() => {
-		if (loadedJson)
-		return generateCategoryInfoFromSeedJSON(
-			loadedJson,
-		);
-	}, [loadedJson]);
-	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>(
-		generateGuessesStateFromJSON(
-			loadedJson
-		),
-	);
-	const navigate = useNavigate();
+		if (categoryInfoJson !== undefined)
+			return generateCategoryInfoFromSeedJSON(categoryInfoJson);
+		else return undefined;
+	}, [categoryInfoJson]);
+	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>();
 
-	const { data, isFetching, isSuccess } = useQuery({
+	useEffect(() => {
+		initialGuessInfo.current = generateGuessesStateFromJSON(categoryInfoJson);
+	}, [categoryInfoJson]);
+
+	const { data, error, isFetching, isSuccess, isFetched } = useQuery({
 		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
@@ -71,45 +72,61 @@ const Game: React.FC<IProps> = (props) => {
 		staleTime: Infinity,
 	});
 
+	// logout and return to login if fetch error
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (isFetched && (!isSuccess || error)) {
+			console.log(`Error fetching gameSessionData: ${error}`);
+			clearTokensFromLocalStorage();
+			navigate("/login");
+		}
+	}, [isFetched, isSuccess, error]);
+
 	if (isFetching) {
 		return <Loading />;
-	} else if (isSuccess && data && categoriesInfo) {
-		return (
-			<div className={styles.root}>
-				<CtxGuessData.Provider value={{...initialGuessInfo}}>
-					{props.showingPostGame && (
-						<PostGame setShowingPostGame={props.setShowingPostGame} />
-					)}
-					<GuessInfoButton />
-					<GuessSpell
-						spells={data.spells}
-						numGuesses={data.guesses.spells.length}
-						setShowingPostGame={props.setShowingPostGame}
-					/>
-					<GuessBox
-						categoriesInfoArr={categoriesInfo}
-						mostRecentGuess={
-							data.guesses.categories.length > 0
-								? data.guesses.categories[data.guesses.categories.length - 1]
-								: null
+	} else if (isSuccess && data !== undefined && categoriesInfo !== undefined) {
+		if (initialGuessInfo.current !== undefined) {
+			return (
+				<div className={styles.root}>
+					<CtxGuessData.Provider
+						value={
+							initialGuessInfo as React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP>
 						}
-						numGuesses={{
-							category: data.guesses.categories.length,
-							spell: data.guesses.spells.length,
-						}}
-					/>
-					{data.guesses.categories.length > 0 && (
-						<ResultBox
-							pastGuesses={data.guesses.categories}
-							categoriesInfoArr={categoriesInfo}
+					>
+						{props.showingPostGame && (
+							<PostGame setShowingPostGame={props.setShowingPostGame} />
+						)}
+						<GuessInfoButton />
+						<GuessSpell
+							spells={data.spells}
+							numGuesses={data.guesses.spells.length}
+							setShowingPostGame={props.setShowingPostGame}
 						/>
-					)}
-				</CtxGuessData.Provider>
-			</div>
-		);
-	} else {
-		clearTokensFromLocalStorage();
-		navigate("/login");
+						<GuessBox
+							categoriesInfoArr={categoriesInfo}
+							mostRecentGuess={
+								data.guesses.categories.length > 0
+									? data.guesses.categories[data.guesses.categories.length - 1]
+									: null
+							}
+							numGuesses={{
+								category: data.guesses.categories.length,
+								spell: data.guesses.spells.length,
+							}}
+						/>
+						{data.guesses.categories.length > 0 && (
+							<ResultBox
+								pastGuesses={data.guesses.categories}
+								categoriesInfoArr={categoriesInfo}
+							/>
+						)}
+					</CtxGuessData.Provider>
+				</div>
+			);
+		} else {
+			clearTokensFromLocalStorage();
+			navigate("/login");
+		}
 	}
 };
 
