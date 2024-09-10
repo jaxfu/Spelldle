@@ -31,8 +31,8 @@ interface IProps {
 const Game: React.FC<IProps> = (props) => {
 	// fetch CATEGORY_INFO.json
 	const [categoryInfoJson, setCategoryInfoJson] = useState<
-	T_CATEGORY_INFO_SEED_JSON | undefined
->(undefined);
+		T_CATEGORY_INFO_SEED_JSON | undefined
+	>();
 	useEffect(() => {
 		async function fetchCategoryInfoJson() {
 			try {
@@ -50,15 +50,21 @@ const Game: React.FC<IProps> = (props) => {
 		fetchCategoryInfoJson();
 	}, []);
 
+	// generate categoriesInfo
 	const categoriesInfo: T_CATEGORY_INFO[] | undefined = useMemo(() => {
 		if (categoryInfoJson !== undefined)
 			return generateCategoryInfoFromSeedJSON(categoryInfoJson);
 		else return undefined;
 	}, [categoryInfoJson]);
-	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP | undefined>(undefined);
+
+	//const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP | undefined>(undefined);
+	const [guessData, setGuessData] = useState<
+		T_GUESS_CATEGORIES_IDS_MAP | undefined
+	>();
 
 	useEffect(() => {
-		initialGuessInfo.current = generateGuessesStateFromJSON(categoryInfoJson);
+		if (categoryInfoJson !== undefined)
+			setGuessData(generateGuessesStateFromJSON(categoryInfoJson));
 	}, [categoryInfoJson]);
 
 	const { data, error, isFetching, isSuccess, isFetched } = useQuery({
@@ -75,24 +81,20 @@ const Game: React.FC<IProps> = (props) => {
 	// logout and return to login if fetch error
 	const navigate = useNavigate();
 	useEffect(() => {
-		if ((!isFetching && isFetched) && (!isSuccess || error)) {
+		if (!isFetching && isFetched && (!isSuccess || error)) {
 			console.log(`Error fetching gameSessionData: ${error}`);
 			clearTokensFromLocalStorage();
 			navigate("/login");
 		}
 	}, [isFetched, isFetching, isSuccess, error]);
 
-	if (isFetching || categoriesInfo === undefined || initialGuessInfo.current === undefined) {
+	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
 	} else if (isSuccess) {
 		if (data !== undefined) {
 			return (
 				<div className={styles.root}>
-					<CtxGuessData.Provider
-						value={
-							initialGuessInfo as React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP>
-						}
-					>
+					<CtxGuessData.Provider value={{ guessData, setGuessData }}>
 						{props.showingPostGame && (
 							<PostGame setShowingPostGame={props.setShowingPostGame} />
 						)}
@@ -126,7 +128,7 @@ const Game: React.FC<IProps> = (props) => {
 			);
 		} else {
 			clearTokensFromLocalStorage();
-			navigate("/login")
+			navigate("/login");
 		}
 	}
 };

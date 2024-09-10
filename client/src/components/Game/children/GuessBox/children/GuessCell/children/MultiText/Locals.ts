@@ -1,3 +1,4 @@
+import type { IGuessDataCtx } from "../../../../../../../../contexts/CtxGuessData";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
@@ -21,29 +22,34 @@ const Locals = {
 		);
 	},
 	updateGuessCategoriesMap: function (
-		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		guessDataCtx: IGuessDataCtx,
 		guesses: string[],
 		value_id_map: Map<string, number>,
 		categoryID: string,
 		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
-		if (guessData !== null) {
-			const mapArr: number[] = [];
+		const mapArr: number[] = [];
 
-			for (const guess of guesses) {
-				const valueId = value_id_map.get(guess.toLowerCase());
-				if (valueId !== undefined) {
-					mapArr.push(valueId);
-				}
+		for (const guess of guesses) {
+			const valueId = value_id_map.get(guess.toLowerCase());
+			if (valueId !== undefined) {
+				mapArr.push(valueId);
 			}
-
-			guessData.current.set(
-				categoryID,
-				mapArr.sort((a, b) => a - b),
-			);
-
-			setTriggerGuessDataChange((current) => !current);
 		}
+
+		// guessData.current.set(
+		// 	categoryID,
+		// 	mapArr.sort((a, b) => a - b),
+		// );
+		guessDataCtx.setGuessData((current) => {
+			if (current !== undefined)
+				return current.set(
+					categoryID,
+					mapArr.sort((a, b) => a - b),
+				);
+		});
+
+		setTriggerGuessDataChange((current) => !current);
 	},
 	removeGuessFromGuesses: function (
 		guess: string,

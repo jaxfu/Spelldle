@@ -21,7 +21,7 @@ const GuessInfoButton: React.FC = () => {
 		},
 	});
 
-	const guessData = useContext(CtxGuessData);
+	const guessDataCtx = useContext(CtxGuessData);
 
 	const testGuess: T_GUESS_CATEGORIES_IDS_MAP = new Map(
 		Object.entries(testGuesses.TEST_GUESS_INCORRECT),
@@ -32,7 +32,7 @@ const GuessInfoButton: React.FC = () => {
 			<button
 				onClick={() => {
 					console.log("CURRENT GUESSINFO: ");
-					guessData && console.log(guessData.current);
+					guessDataCtx && console.log(guessDataCtx.guessData);
 				}}
 			>
 				Log

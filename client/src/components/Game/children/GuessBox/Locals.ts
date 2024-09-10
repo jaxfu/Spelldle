@@ -9,6 +9,7 @@ const Locals = {
 		guessData: T_GUESS_CATEGORIES_IDS_MAP,
 		categoriesInfoArr: T_CATEGORY_INFO[],
 	): boolean {
+		console.log(guessData);
 		for (const { component_type, id } of categoriesInfoArr) {
 			const currentValue = guessData.get(id);
 			if (currentValue !== undefined) {

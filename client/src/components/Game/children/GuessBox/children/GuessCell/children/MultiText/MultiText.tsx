@@ -32,7 +32,7 @@ const MultiText: React.FC<IProps> = (props) => {
 		...props.categoryInfo.values,
 	]);
 
-	const guessData = useContext(CtxGuessData);
+	const guessDataCtx = useContext(CtxGuessData);
 
 	// set to most recent guess
 	useEffect(() => {
@@ -59,13 +59,15 @@ const MultiText: React.FC<IProps> = (props) => {
 	// update guess map when guesses change &
 	// check if changed from most recent guess
 	useEffect(() => {
-		Locals.updateGuessCategoriesMap(
-			guessData,
-			guesses,
-			props.categoryInfo.value_id_map,
-			props.categoryInfo.id,
-			props.setTriggerGuessDataChange,
-		);
+		if (guessDataCtx) {
+			Locals.updateGuessCategoriesMap(
+				guessDataCtx,
+				guesses,
+				props.categoryInfo.value_id_map,
+				props.categoryInfo.id,
+				props.setTriggerGuessDataChange,
+			);
+		}
 
 		if (
 			props.showingRecentGuess &&

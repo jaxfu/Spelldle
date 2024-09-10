@@ -28,7 +28,7 @@ const SingleText: React.FC<IProps> = (props) => {
 	const [show, setShow] = useState<boolean>(false);
 	const displayValueFromMostRecentGuess = useRef<string>("");
 
-	const guessData = useContext(CtxGuessData);
+	const guessDataCtx = useContext(CtxGuessData);
 
 	const hasValidInput: boolean = useMemo(() => {
 		return props.categoryInfo.value_id_map.has(input.toLowerCase());
@@ -69,24 +69,26 @@ const SingleText: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		if (
 			props.categoryInfo.component_type ===
-			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT
+				E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT &&
+			guessDataCtx
 		) {
 			Locals.updateGuessCategoriesMapSingleText(
 				input,
 				hasValidInput,
 				props.categoryInfo,
-				guessData,
+				guessDataCtx,
 				props.setTriggerGuessDataChange,
 			);
 		} else if (
 			props.categoryInfo.component_type ===
-			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE
+				E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE &&
+			guessDataCtx
 		) {
 			Locals.updateGuessCategoriesMapSingleTextWithToggle(
 				input,
 				hasValidInput,
 				props.categoryInfo,
-				guessData,
+				guessDataCtx,
 				props.setTriggerGuessDataChange,
 			);
 		}
