@@ -20,14 +20,11 @@ const GuessSpell: React.FC<IProps> = (props) => {
 		mutationFn: apiRequestMakeGuessSpell,
 		onSuccess: (data) => {
 			console.log(`CORRECT: ${data.data.correct}`);
-
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
 			if (data.data.correct) {
-				console.log("Setting postgame true")
 				props.setShowingPostGame(true);
-			} else {
-				queryClient.invalidateQueries({
-					queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
-				});
 			}
 		},
 	});

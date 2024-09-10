@@ -120,7 +120,6 @@ const Game: React.FC<IProps> = (props) => {
 								categoriesInfoArr={categoriesInfo}
 							/>
 						)}
-						<button onClick={() => props.setShowingPostGame(true)}>postgame</button>
 					</CtxGuessData.Provider>
 				</div>
 			);

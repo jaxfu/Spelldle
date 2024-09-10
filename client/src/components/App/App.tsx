@@ -63,12 +63,7 @@ const App: React.FC = () => {
 			<Navbar data={data} />
 			<ContentBox showingPostGame={showingPostGame}>
 				<Routes>
-					<Route
-						path="/"
-						element={
-							gameComponent
-						}
-					/>
+					<Route path="/" element={gameComponent} />
 					<Route path="/register" element={<Register />} />
 					<Route path="/login" element={<Login />} />
 				</Routes>
