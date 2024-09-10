@@ -99,8 +99,8 @@ const Game: React.FC<IProps> = (props) => {
 						<GuessInfoButton />
 						<GuessSpell
 							spells={data.spells}
-							numGuesses={data.guesses.spells.length}
 							setShowingPostGame={props.setShowingPostGame}
+							pastGuesses={data.guesses.spells}
 						/>
 						<GuessBox
 							categoriesInfoArr={categoriesInfo}

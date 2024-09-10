@@ -3,10 +3,11 @@
 
 .root {
 	@include flex-center;
+	height: fit-content;
 	margin-top: 50px;
 	margin-bottom: 50px;
 
-	//border: 1px solid white;
+	border: 1px solid white;
 	.cell {
 		width: 14rem;
 
@@ -28,6 +29,24 @@
 
 		.input {
 			position: relative;
+		}
+	}
+
+	.pastSpellGuesses {
+		width: 80%;
+		height: fit-content;
+		margin-top: 5px;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		span {
+			background: red;
+			border-radius: 5px;
+			padding: 5px;
 		}
 	}
 }

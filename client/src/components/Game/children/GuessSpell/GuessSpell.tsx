@@ -10,7 +10,7 @@ import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
 	spells: string[];
-	numGuesses: number;
+	pastGuesses: number[];
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -41,7 +41,18 @@ const GuessSpell: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
-			<GuessCount title="Guesses" capacity={3} numGuesses={props.numGuesses} />
+			<GuessCount
+				title="Guesses"
+				capacity={3}
+				numGuesses={props.pastGuesses.length}
+			/>
+			{props.spells.length > 0 && (
+				<div className={styles.pastSpellGuesses}>
+					{props.pastGuesses.map((id) => (
+						<span>{props.spells[id - 1]}</span>
+					))}
+				</div>
+			)}
 			<div className={styles.cell}>
 				<h3>Spell</h3>
 				<div className={styles.input}>
