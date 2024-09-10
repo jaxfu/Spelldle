@@ -6,20 +6,20 @@ import {
 import SingleText from "./children/SingleText/SingleText";
 import MultiText from "./children/MultiText/MultiText";
 import Components from "./children/Components/Components";
-import Level from "./children/Level/Level";
+import SingleTextWithToggle from "./children/SingleTextWithToggle/SingleTextWithToggle";
 import {
-	E_RESULT_OPTIONS,
+	E_GUESS_CATEGORY_RESULTS,
 	type T_PAST_GUESS_CATEGORY,
 } from "../../../../../../types/guesses";
 import { useEffect, useState } from "react";
 
-function getColor(result: E_RESULT_OPTIONS): string {
+function getColor(result: E_GUESS_CATEGORY_RESULTS): string {
 	switch (result) {
-		case E_RESULT_OPTIONS.INCORRECT:
+		case E_GUESS_CATEGORY_RESULTS.INCORRECT:
 			return "red";
-		case E_RESULT_OPTIONS.SLIGHTLY_CORRECT:
+		case E_GUESS_CATEGORY_RESULTS.SLIGHTLY_CORRECT:
 			return "orange";
-		case E_RESULT_OPTIONS.CORRECT:
+		case E_GUESS_CATEGORY_RESULTS.CORRECT:
 			return "green";
 		default:
 			return "";
@@ -29,6 +29,7 @@ function getColor(result: E_RESULT_OPTIONS): string {
 interface IProps {
 	categoryInfo: T_CATEGORY_INFO;
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GuessCell: React.FC<IProps> = (props) => {
@@ -61,9 +62,9 @@ const GuessCell: React.FC<IProps> = (props) => {
 						setShowingRecentGuess={setShowingRecentGuess}
 					/>
 				);
-			case E_CATEGORY_COMPONENT_TYPE.LEVEL:
+			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
 				return (
-					<Level
+					<SingleTextWithToggle
 						{...props}
 						showingRecentGuess={showingRecentGuess}
 						setShowingRecentGuess={setShowingRecentGuess}

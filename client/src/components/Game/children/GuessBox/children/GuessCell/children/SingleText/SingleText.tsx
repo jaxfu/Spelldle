@@ -8,11 +8,12 @@ import {
 } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
-	type T_GUESS_MAP_IDS,
+	E_GUESS_CATEGORY_RESULTS,
+	type T_GUESS_CATEGORIES_IDS_MAP,
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
-import LevelTextInput from "../Level/children/LevelTextInput/LevelTextInput";
+import LevelTextInput from "../SingleTextWithToggle/children/LevelTextInput/LevelTextInput";
 import Locals from "./Locals";
 
 interface IProps {
@@ -20,6 +21,7 @@ interface IProps {
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 	showingRecentGuess: boolean;
 	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SingleText: React.FC<IProps> = (props) => {
@@ -35,7 +37,9 @@ const SingleText: React.FC<IProps> = (props) => {
 
 	// set from most recent guess
 	useEffect(() => {
-		if (props.mostRecentGuess.result !== -1) {
+		if (
+			props.mostRecentGuess.result !== E_GUESS_CATEGORY_RESULTS.UNINITIALIZED
+		) {
 			if (Number.isInteger(props.mostRecentGuess.value)) {
 				displayValueFromMostRecentGuess.current = translateIdsToDisplay(
 					props.mostRecentGuess.value,
@@ -73,15 +77,18 @@ const SingleText: React.FC<IProps> = (props) => {
 				hasValidInput,
 				props.categoryInfo,
 				guessData,
+				props.setTriggerGuessDataChange,
 			);
 		} else if (
-			props.categoryInfo.component_type === E_CATEGORY_COMPONENT_TYPE.LEVEL
+			props.categoryInfo.component_type ===
+			E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE
 		) {
-			Locals.updateGuessCategoriesMapLevelText(
+			Locals.updateGuessCategoriesMapSingleTextWithToggle(
 				input,
 				hasValidInput,
 				props.categoryInfo,
 				guessData,
+				props.setTriggerGuessDataChange,
 			);
 		}
 	}, [hasValidInput]);

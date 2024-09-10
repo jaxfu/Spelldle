@@ -3,6 +3,8 @@ CREATE SCHEMA spells;
 CREATE SCHEMA game_sessions;
 CREATE SCHEMA guesses;
 
+CREATE TYPE users.role AS ENUM ('U', 'G', 'A');
+
 CREATE TABLE users.ids
 (
     user_id SERIAL PRIMARY KEY
@@ -10,44 +12,38 @@ CREATE TABLE users.ids
 
 CREATE TABLE spells.ids
 (
-    spell_id INTEGER PRIMARY KEY
+    spell_id SERIAL PRIMARY KEY
 );
 
 CREATE TABLE game_sessions.ids
 (
-  game_session_id TEXT PRIMARY KEY
-);
-
-CREATE TABLE guesses.ids
-(
-  game_session_id TEXT REFERENCES game_sessions.ids(game_session_id),
-  round SMALLINT,
-  PRIMARY KEY(game_session_id, round)
+  game_session_id UUID PRIMARY KEY
 );
 
 CREATE TABLE spells.categories
 (
-  spell_id INTEGER PRIMARY KEY REFERENCES spells.ids(spell_id),
+  spell_id SMALLINT PRIMARY KEY REFERENCES spells.ids(spell_id),
   name TEXT UNIQUE,
-  school INTEGER,
-  casting_time INTEGER,
-  range INTEGER,
-  target INTEGER,
-  duration INTEGER,
-  level INTEGER[],
-  components INTEGER[],
-  class INTEGER[],
-  effects INTEGER[]
+  school SMALLINT,
+  casting_time SMALLINT,
+  range SMALLINT,
+  target SMALLINT,
+  duration SMALLINT[],
+  components SMALLINT[],
+  level SMALLINT[],
+  class SMALLINT[],
+  effects SMALLINT[]
 );
 
 CREATE TABLE game_sessions.data
 (
-  game_session_id TEXT PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
+  game_session_id UUID PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
   user_id INTEGER REFERENCES users.ids(user_id),
   spell_id INTEGER REFERENCES spells.ids(spell_id),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP,
-  rounds SMALLINT
+  category_rounds SMALLINT,
+  spell_rounds SMALLINT
 );
 
 CREATE TABLE users.data
@@ -57,32 +53,31 @@ CREATE TABLE users.data
     password   TEXT,
     salt       TEXT,
     first_name VARCHAR(32),
-    last_name  VARCHAR(32)
+    last_name  VARCHAR(32),
+    game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
+    role users.role DEFAULT 'U'
 );
 
 CREATE TABLE guesses.categories
 (
-  game_session_id TEXT,
+  game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
   round SMALLINT,
-  spell INTEGER,
-  school INTEGER,
-  casting_time INTEGER,
-  range INTEGER,
-  target INTEGER,
-  duration INTEGER,
-  level INTEGER[],
-  components INTEGER[],
-  class INTEGER[],
-  effects INTEGER[],
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
+  school SMALLINT,
+  casting_time SMALLINT,
+  range SMALLINT,
+  target SMALLINT,
+  duration SMALLINT[],
+  level SMALLINT[],
+  components SMALLINT[],
+  class SMALLINT[],
+  effects SMALLINT[],
+  PRIMARY KEY(game_session_id, round)
 );
 
 CREATE TABLE guesses.results
 (
-  game_session_id TEXT,
+  game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
   round SMALLINT,
-  spell SMALLINT,
   school SMALLINT,
   casting_time SMALLINT,
   range SMALLINT,
@@ -92,6 +87,11 @@ CREATE TABLE guesses.results
   components SMALLINT,
   class SMALLINT,
   effects SMALLINT,
-  PRIMARY KEY(game_session_id, round),
-  FOREIGN KEY(game_session_id, round) REFERENCES guesses.ids(game_session_id, round)
+  PRIMARY KEY(game_session_id, round)
+);
+
+CREATE TABLE guesses.spells
+(
+  game_session_id UUID PRIMARY KEY REFERENCES game_sessions.ids(game_session_id),
+  spells SMALLINT[]
 );

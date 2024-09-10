@@ -5,6 +5,7 @@ import RecommendationBox from "../RecommendationBox/RecommendationBox";
 import { type T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
+	E_GUESS_CATEGORY_RESULTS,
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";
@@ -16,6 +17,7 @@ interface IProps {
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 	showingRecentGuess: boolean;
 	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MultiText: React.FC<IProps> = (props) => {
@@ -32,28 +34,10 @@ const MultiText: React.FC<IProps> = (props) => {
 
 	const guessData = useContext(CtxGuessData);
 
-	// update guess map when guesses change &
-	// check if changed from most recent guess
-	useEffect(() => {
-		Locals.updateGuessCategoriesMap(
-			guessData,
-			guesses,
-			props.categoryInfo.value_id_map,
-			props.categoryInfo.id,
-		);
-
-		if (
-			props.showingRecentGuess &&
-			guesses.join() !== displayValuesFromMostRecentGuess.current.join()
-		) {
-			props.setShowingRecentGuess(false);
-		}
-	}, [guesses]);
-
 	// set to most recent guess
 	useEffect(() => {
 		if (
-			props.mostRecentGuess.result !== -1 &&
+			props.mostRecentGuess.result !== E_GUESS_CATEGORY_RESULTS.UNINITIALIZED &&
 			Array.isArray(props.mostRecentGuess.value)
 		) {
 			const guesses: string[] = translateIdsToDisplay(
@@ -71,6 +55,25 @@ const MultiText: React.FC<IProps> = (props) => {
 			);
 		}
 	}, [props.mostRecentGuess.value]);
+
+	// update guess map when guesses change &
+	// check if changed from most recent guess
+	useEffect(() => {
+		Locals.updateGuessCategoriesMap(
+			guessData,
+			guesses,
+			props.categoryInfo.value_id_map,
+			props.categoryInfo.id,
+			props.setTriggerGuessDataChange,
+		);
+
+		if (
+			props.showingRecentGuess &&
+			guesses.join() !== displayValuesFromMostRecentGuess.current.join()
+		) {
+			props.setShowingRecentGuess(false);
+		}
+	}, [guesses]);
 
 	// check for valid input on input change
 	useEffect(() => {

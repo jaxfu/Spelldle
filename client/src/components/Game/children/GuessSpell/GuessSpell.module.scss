@@ -1,0 +1,33 @@
+@import "../../../../styles/mixins";
+@import "../../../../styles/vars";
+
+.root {
+	@include flex-center;
+	margin-top: 50px;
+	margin-bottom: 50px;
+
+	//border: 1px solid white;
+	.cell {
+		width: 14rem;
+
+		border: 1px solid white;
+
+		margin: 5px;
+
+		border-radius: $border-radius;
+
+		h3 {
+			width: 100%;
+			text-align: center;
+			position: relative;
+
+			background: rgba(255, 255, 255, 0.1);
+			border-top-left-radius: 14px;
+			border-top-right-radius: 14px;
+		}
+
+		.input {
+			position: relative;
+		}
+	}
+}

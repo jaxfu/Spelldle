@@ -21,7 +21,7 @@ func (dbHandler *DBHandler) GetUserIDByUsername(username string) (types.UserID, 
 }
 
 const QGetUserDataByUserID = `
-	SELECT user_id, username, password, salt, first_name, last_name
+	SELECT user_id, username, password, salt, first_name, last_name, role
 	FROM users.data
 	WHERE user_id=$1
 `
@@ -35,6 +35,7 @@ func (dbHandler *DBHandler) GetUserDataByUserID(UserID types.UserID) (types.User
 		&UserData.Salt,
 		&UserData.FirstName,
 		&UserData.LastName,
+		&UserData.Role,
 	)
 	if err != nil {
 		return UserData, err
@@ -59,8 +60,8 @@ func (dbHandler *DBHandler) InsertUser() (types.UserID, error) {
 }
 
 const EInsertUserData = `
-	INSERT INTO users.data (user_id, username, password, salt, first_name, last_name)
-	VALUES ($1, $2, $3, $4, $5, $6)
+	INSERT INTO users.data (user_id, username, password, salt, first_name, last_name, role)
+	VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 func (dbHandler *DBHandler) InsertUserData(userData types.UserData) error {
@@ -71,6 +72,7 @@ func (dbHandler *DBHandler) InsertUserData(userData types.UserData) error {
 		userData.Salt,
 		userData.FirstName,
 		userData.LastName,
+		userData.Role,
 	)
 	if err != nil {
 		return err

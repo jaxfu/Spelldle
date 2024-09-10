@@ -12,6 +12,7 @@ var TestUserData = types.UserData{
 	LastName:  "Furr",
 	Username:  "poemmys",
 	Password:  "pass",
+	Role:      "A",
 }
 
 var TestUserRegisterPayload = types.RequestPayloadRegister{

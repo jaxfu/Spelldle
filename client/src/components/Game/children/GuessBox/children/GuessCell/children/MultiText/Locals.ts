@@ -1,4 +1,4 @@
-import { T_GUESS_MAP_IDS } from "../../../../../../../../types/guesses";
+import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
 	checkForValidInput: function (
@@ -21,10 +21,11 @@ const Locals = {
 		);
 	},
 	updateGuessCategoriesMap: function (
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
 		guesses: string[],
 		value_id_map: Map<string, number>,
 		categoryID: string,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
 		if (guessData !== null) {
 			const mapArr: number[] = [];
@@ -36,7 +37,12 @@ const Locals = {
 				}
 			}
 
-			guessData.current.set(categoryID, mapArr.sort());
+			guessData.current.set(
+				categoryID,
+				mapArr.sort((a, b) => a - b),
+			);
+
+			setTriggerGuessDataChange((current) => !current);
 		}
 	},
 	removeGuessFromGuesses: function (

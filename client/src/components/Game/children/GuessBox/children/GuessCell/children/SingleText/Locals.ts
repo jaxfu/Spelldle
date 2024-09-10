@@ -1,12 +1,13 @@
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import { T_GUESS_MAP_IDS } from "../../../../../../../../types/guesses";
+import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
 	updateGuessCategoriesMapSingleText: function (
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
 		if (guessData !== null) {
 			if (hasValidInput) {
@@ -18,14 +19,17 @@ const Locals = {
 			} else {
 				guessData.current.set(categoryInfo.id, -1);
 			}
+
+			setTriggerGuessDataChange((current) => !current);
 		}
 	},
 
-	updateGuessCategoriesMapLevelText: function (
+	updateGuessCategoriesMapSingleTextWithToggle: function (
 		input: string,
 		hasValidInput: boolean,
 		categoryInfo: T_CATEGORY_INFO,
-		guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
+		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	): void {
 		if (guessData !== null) {
 			const currentData = guessData.current.get(categoryInfo.id) as
@@ -42,6 +46,8 @@ const Locals = {
 				} else {
 					guessData.current.set(categoryInfo.id, [-1, currentData[1]]);
 				}
+
+				setTriggerGuessDataChange((current) => !current);
 			}
 		}
 	},

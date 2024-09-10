@@ -29,8 +29,8 @@ func (guess *GuessResults) Equals(other *GuessResults) (bool, string) {
 	if guess.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
 	}
-	if guess.Spell != other.Spell {
-		return false, fmt.Sprintf("field mismatch spell: %d vs %d", guess.Spell, other.Spell)
+	if guess.Level != other.Level {
+		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
 	}
 
 	return true, ""
@@ -40,9 +40,9 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 	var results GuessResults
 
 	// test single ints
-	singlesGuess := [6]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration, &spell.SpellID}
-	singlesSpell := [6]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration, &guess.Spell}
-	singlesResult := [6]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration, &results.Spell}
+	singlesGuess := [4]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target}
+	singlesSpell := [4]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target}
+	singlesResult := [4]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target}
 
 	for i := range singlesResult {
 		if *singlesGuess[i] == *singlesSpell[i] {
@@ -50,14 +50,34 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 		} else {
 			*singlesResult[i] = 0
 		}
+	}
 
-		fmt.Printf("guess: %d, spell: %d, result: %d\n", *singlesGuess[i], *singlesSpell[i], *singlesResult[i])
+	// test toggles
+	togglesGuess := [2]*[2]uint{&guess.Level, &guess.Duration}
+	togglesSpell := [2]*[2]uint{&spell.Level, &spell.Duration}
+	togglesResult := [2]*uint{&results.Level, &results.Duration}
+	for i := range togglesResult {
+		if (*togglesGuess[i])[0] != (*togglesSpell[i])[0] {
+			if (*togglesGuess[i])[1] != (*togglesSpell[i])[1] {
+				(*togglesResult[i]) = 0
+			} else {
+				(*togglesResult[i]) = 1
+			}
+		} else {
+			if (*togglesGuess[i])[1] != (*togglesSpell[i])[1] {
+				(*togglesResult[i]) = 1
+			} else {
+				(*togglesResult[i]) = 2
+			}
+		}
+
+		fmt.Printf("guess: %v, spell: %v, result: %d\n", *togglesGuess[i], *togglesSpell[i], togglesResult[i])
 	}
 
 	// test arrays
-	arraysGuess := [4]*[]uint{&spell.Class, &spell.Components, &spell.Effects, &spell.Level}
-	arraysSpell := [4]*[]uint{&guess.Class, &guess.Components, &guess.Effects, &guess.Level}
-	arraysResult := [4]*uint{&results.Class, &results.Components, &results.Effects, &results.Level}
+	arraysGuess := [3]*[]uint{&spell.Class, &spell.Components, &spell.Effects}
+	arraysSpell := [3]*[]uint{&guess.Class, &guess.Components, &guess.Effects}
+	arraysResult := [3]*uint{&results.Class, &results.Components, &results.Effects}
 
 	for i := range arraysResult {
 		*arraysResult[i] = compareArrays(arraysGuess[i], arraysSpell[i])

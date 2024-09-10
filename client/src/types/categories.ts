@@ -1,4 +1,4 @@
-import { type T_GUESS_MAP_IDS } from "./guesses";
+import { type T_GUESS_CATEGORIES_IDS_MAP } from "./guesses";
 
 // TYPES
 export type T_CATEGORY_INFO = {
@@ -22,7 +22,7 @@ export enum E_CATEGORY_COMPONENT_TYPE {
 	SINGLE_TEXT = 0,
 	MULTI_TEXT,
 	COMPONENTS,
-	LEVEL,
+	SINGLE_TEXT_WITH_TOGGLE,
 }
 
 // FUNCTIONS
@@ -59,23 +59,24 @@ function generateValuesMapFromValues(arr: string[]): Map<string, number> {
 }
 
 export function generateGuessesStateFromJSON(
-	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
-): T_GUESS_MAP_IDS {
-	const map: T_GUESS_MAP_IDS = new Map();
+	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON | undefined,
+): T_GUESS_CATEGORIES_IDS_MAP {
+	const map: T_GUESS_CATEGORIES_IDS_MAP = new Map();
 
-	for (const { id, component_type } of categoryInfoJson) {
-		let value;
-
-		switch (component_type) {
-			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-				value = -1;
-				break;
-			default:
-				value = [];
-				break;
+	if (categoryInfoJson !== undefined) {
+		for (const { id, component_type } of categoryInfoJson) {
+			switch (component_type) {
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+					map.set(id, -1);
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+					map.set(id, []);
+					break;
+				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
+					map.set(id, [0, 0]);
+			}
 		}
-
-		map.set(id, value);
 	}
 
 	return map;

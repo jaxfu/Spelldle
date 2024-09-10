@@ -3,25 +3,27 @@ import { useContext } from "react";
 import CtxGuessData from "../../../contexts/CtxGuessData";
 import * as testGuesses from "./TEST_GUESSES";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../utils/requests";
+import { apiRequestMakeGuessCategory } from "../../../utils/requests";
 import { QUERY_KEYS } from "../../../utils/consts";
 import { getUserSessionDataFromStorage } from "../../../utils/methods";
-import { type T_GUESS_MAP_IDS } from "../../../types/guesses";
+import { type T_GUESS_CATEGORIES_IDS_MAP } from "../../../types/guesses";
 
 const GuessInfoButton: React.FC = () => {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
-		mutationFn: apiRequestMakeGuess,
+		mutationFn: apiRequestMakeGuessCategory,
 		onSuccess: (data) => {
 			console.log("SUCCESFUL MAKE_GUESS: " + data.data.toString());
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
 		},
 	});
 
 	const guessData = useContext(CtxGuessData);
 
-	const testGuess: T_GUESS_MAP_IDS = new Map(
+	const testGuess: T_GUESS_CATEGORIES_IDS_MAP = new Map(
 		Object.entries(testGuesses.TEST_GUESS_INCORRECT),
 	);
 
@@ -30,7 +32,7 @@ const GuessInfoButton: React.FC = () => {
 			<button
 				onClick={() => {
 					console.log("CURRENT GUESSINFO: ");
-					guessData && console.log(guessData?.current);
+					guessData && console.log(guessData.current);
 				}}
 			>
 				Log

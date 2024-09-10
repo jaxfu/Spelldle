@@ -1,10 +1,10 @@
-import styles from "./Level.module.scss";
+import styles from "./SingleTextWithToggle.module.scss";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
 import SingleText from "../SingleText/SingleText";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
-	T_GUESS_MAP_IDS,
+	E_GUESS_CATEGORY_RESULTS,
 	T_PAST_GUESS_CATEGORY,
 } from "../../../../../../../../types/guesses";
 import { FaCheck } from "react-icons/fa";
@@ -16,34 +16,29 @@ interface IProps {
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 	showingRecentGuess: boolean;
 	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Level: React.FC<IProps> = (props) => {
+const SingleTextWithToggle: React.FC<IProps> = (props) => {
 	const guessData = useContext(CtxGuessData);
 	const checkBoxValueFromMostRecentGuess = useRef<boolean>(false);
 	const [checked, setChecked] = useState(false);
 
 	// set from most recent guess
 	useEffect(() => {
-		const mostRecentGuessInfo: number[] = props.mostRecentGuess
-			.value as number[];
-		checkBoxValueFromMostRecentGuess.current =
-			mostRecentGuessInfo[1] == 1 ? true : false;
+		if (
+			props.mostRecentGuess.result !== E_GUESS_CATEGORY_RESULTS.UNINITIALIZED
+		) {
+			const mostRecentGuessInfo: number[] = props.mostRecentGuess
+				.value as number[];
+			checkBoxValueFromMostRecentGuess.current =
+				mostRecentGuessInfo[1] == 1 ? true : false;
 
-		if (mostRecentGuessInfo[1] == 1) {
-			setChecked(true);
-			Locals.updateGuessCategoriesMapRitualToggle(
-				true,
-				props.categoryInfo.id,
-				guessData,
-			);
-		} else {
-			setChecked(false);
-			Locals.updateGuessCategoriesMapRitualToggle(
-				false,
-				props.categoryInfo.id,
-				guessData,
-			);
+			if (mostRecentGuessInfo[1] == 1) {
+				setChecked(true);
+			} else {
+				setChecked(false);
+			}
 		}
 	}, [props.mostRecentGuess]);
 
@@ -58,6 +53,25 @@ const Level: React.FC<IProps> = (props) => {
 		}
 	}, [checked]);
 
+	// update guess map on checked change
+	useEffect(() => {
+		if (checked) {
+			Locals.updateGuessCategoriesMapToggle(
+				true,
+				props.categoryInfo.id,
+				guessData,
+				props.setTriggerGuessDataChange,
+			);
+		} else {
+			Locals.updateGuessCategoriesMapToggle(
+				false,
+				props.categoryInfo.id,
+				guessData,
+				props.setTriggerGuessDataChange,
+			);
+		}
+	}, [checked]);
+
 	return (
 		<div className={styles.root}>
 			<SingleText {...props} />
@@ -66,14 +80,15 @@ const Level: React.FC<IProps> = (props) => {
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
 						setChecked((checked) => !checked);
-						Locals.updateGuessCategoriesMapRitualToggle(
+						Locals.updateGuessCategoriesMapToggle(
 							!checked,
 							props.categoryInfo.id,
 							guessData,
+							props.setTriggerGuessDataChange,
 						);
 					}}
 				>
-					Ritual:
+					{props.categoryInfo.id == "level" ? "Ritual:" : "Conc:"}
 					{checked ? (
 						<FaCheck className={styles.icon} />
 					) : (
@@ -85,4 +100,4 @@ const Level: React.FC<IProps> = (props) => {
 	);
 };
 
-export default Level;
+export default SingleTextWithToggle;

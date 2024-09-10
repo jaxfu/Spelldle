@@ -9,12 +9,12 @@ export const LOCAL_STORAGE_TOKENS_KEYS: T_KEYS_TOKENS = {
 };
 
 // React-Query
-type T_KEYS_QUERY = {
-	userData: string;
-	pastGuesses: string;
+export const QUERY_KEYS = {
+	USER_DATA: "user_data",
+	GAME_SESSION_INFO: "game_session_info",
 };
 
-export const QUERY_KEYS: T_KEYS_QUERY = {
-	userData: "user_data",
-	pastGuesses: "past_guesses",
+export const USER_ROLES = {
+	USER: "U",
+	ADMIN: "A",
 };

@@ -2,7 +2,10 @@ import styles from "./Components.module.scss";
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import { T_CATEGORY_INFO } from "../../../../../../../../types/categories";
-import { T_PAST_GUESS_CATEGORY } from "../../../../../../../../types/guesses";
+import {
+	E_GUESS_CATEGORY_RESULTS,
+	T_PAST_GUESS_CATEGORY,
+} from "../../../../../../../../types/guesses";
 import Locals from "./Locals";
 
 interface IProps {
@@ -10,6 +13,7 @@ interface IProps {
 	mostRecentGuess: T_PAST_GUESS_CATEGORY;
 	showingRecentGuess: boolean;
 	setShowingRecentGuess: React.Dispatch<React.SetStateAction<boolean>>;
+	setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Components: React.FC<IProps> = (props) => {
@@ -21,7 +25,10 @@ const Components: React.FC<IProps> = (props) => {
 
 	// set based on most recent guess
 	useEffect(() => {
-		if (Array.isArray(props.mostRecentGuess.value)) {
+		if (
+			props.mostRecentGuess.result !== E_GUESS_CATEGORY_RESULTS.UNINITIALIZED &&
+			Array.isArray(props.mostRecentGuess.value)
+		) {
 			displayValuesFromMostRecentGuess.current = [
 				...(props.mostRecentGuess.value as number[]).sort(),
 			];
@@ -45,6 +52,7 @@ const Components: React.FC<IProps> = (props) => {
 			newArr.sort(),
 			guessData,
 			props.categoryInfo.id,
+			props.setTriggerGuessDataChange,
 		);
 		if (
 			props.showingRecentGuess &&

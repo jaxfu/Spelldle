@@ -10,6 +10,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { QUERY_KEYS } from "../../utils/consts.ts";
+import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
 	const [userInput, setUserInput] = useState<T_USERINPUT_REGISTER>({
@@ -18,6 +19,7 @@ const Register: React.FC = () => {
 	const [taken, setTaken] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
 
+	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: (
@@ -31,7 +33,8 @@ const Register: React.FC = () => {
 		// TODO: handle taken and error
 		onSuccess(data) {
 			sendTokensToLocalStorage(data.data.tokens);
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userData] });
+			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
+			navigate("/");
 		},
 	});
 

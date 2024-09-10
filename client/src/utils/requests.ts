@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, HttpStatusCode } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
 	type T_APIRESULT_LOGIN,
 	type T_USERINPUT_LOGIN,
@@ -7,11 +7,12 @@ import {
 	type T_APIRESULT_VALIDATE_ACCESS_TOKEN,
 } from "../types";
 import {
-	type T_APIRESPONSE_GET_PAST_GUESSES,
-	type T_GUESS_MAP_IDS,
-	type T_PAST_GUESS,
+	type T_GUESS_CATEGORIES_IDS_MAP,
+	type T_PAST_GUESS_CATEGORIES_MAP,
+	type T_PAST_GUESS_SPELLS,
 } from "../types/guesses";
-import { T_TOKENS } from "../types";
+import { type T_TOKENS } from "../types";
+import type { T_GAME_SESSION } from "../types/gameSession";
 
 // Routes
 const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";
@@ -19,8 +20,9 @@ const API_ROUTES = {
 	LOGIN: ROUTE_PREFIX + "/api/login",
 	REGISTER: ROUTE_PREFIX + "/api/register",
 	VALIDATE: ROUTE_PREFIX + "/api/validateSession",
-	MAKE_GUESS: ROUTE_PREFIX + "/api/makeGuess",
-	GET_PAST_GUESSES: ROUTE_PREFIX + "/api/getPastGuesses",
+	MAKE_GUESS_CATEGORY: ROUTE_PREFIX + "/api/makeGuess/category",
+	MAKE_GUESS_SPELL: ROUTE_PREFIX + "/api/makeGuess/spell",
+	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
 };
 
 export async function apiRequestLogin(
@@ -63,18 +65,18 @@ export async function apiRequestValidateSession(
 	});
 }
 
-interface T_ARG_APIREQUEST_MAKE_GUESS {
+interface T_ARG_APIREQUEST_MAKE_GUESS_CATEGORY {
 	accessToken: string;
-	guessData: T_GUESS_MAP_IDS;
+	guessData: T_GUESS_CATEGORIES_IDS_MAP;
 }
 
-export async function apiRequestMakeGuess(
-	paramObject: T_ARG_APIREQUEST_MAKE_GUESS,
+export async function apiRequestMakeGuessCategory(
+	paramObject: T_ARG_APIREQUEST_MAKE_GUESS_CATEGORY,
 ): Promise<AxiosResponse<string>> {
 	console.log(paramObject.guessData);
 	return await axios<string>({
 		method: "POST",
-		url: API_ROUTES.MAKE_GUESS,
+		url: API_ROUTES.MAKE_GUESS_CATEGORY,
 		data: {
 			...Object.fromEntries(paramObject.guessData),
 		},
@@ -84,21 +86,72 @@ export async function apiRequestMakeGuess(
 	});
 }
 
-export async function apiRequestGetPastGuesses(
-	accessToken: string,
-): Promise<T_PAST_GUESS[] | undefined> {
-	console.log("Running apiRequestGetPastGuesses");
-	const res = await axios<T_APIRESPONSE_GET_PAST_GUESSES>({
+interface T_ARG_APIREQUEST_MAKE_GUESS_SPELL {
+	accessToken: string;
+	spell_id: number;
+}
+
+type T_APIRESPONSE_MAKE_GUESS_SPELL = {
+	correct: boolean;
+};
+
+export async function apiRequestMakeGuessSpell(
+	paramObject: T_ARG_APIREQUEST_MAKE_GUESS_SPELL,
+): Promise<AxiosResponse<T_APIRESPONSE_MAKE_GUESS_SPELL>> {
+	return await axios<T_APIRESPONSE_MAKE_GUESS_SPELL>({
 		method: "POST",
-		url: API_ROUTES.GET_PAST_GUESSES,
+		url: API_ROUTES.MAKE_GUESS_SPELL,
+		data: {
+			spell_id: paramObject.spell_id,
+		},
+		headers: {
+			Authorization: `Bearer ${paramObject.accessToken}`,
+		},
+	});
+}
+
+type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
+	guesses: {
+		categories: T_PAST_GUESS_CATEGORIES_MAP[];
+		spells: number[];
+	};
+	spells: string[];
+};
+
+export async function apiRequestGetGameSessionInfo(
+	accessToken: string,
+): Promise<T_GAME_SESSION> {
+	const res = await axios<T_APIRESPONSE_GET_GAME_SESSION_INFO>({
+		method: "POST",
+		url: API_ROUTES.GET_GAME_SESSION_INFO,
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
 
-	if (res.data !== undefined && res.data.guesses.length > 0) {
-		return res.data.guesses.map((guess) => {
+	let guessCategories: T_PAST_GUESS_CATEGORIES_MAP[] = [];
+	let guessSpells: T_PAST_GUESS_SPELLS = [];
+	let spells: string[] = [];
+
+	if (res.data.guesses.categories.length > 0) {
+		guessCategories = res.data.guesses.categories.map((guess) => {
 			return new Map(Object.entries(guess));
 		});
-	} else return undefined;
+	}
+
+	if (res.data.guesses.spells.length > 0) {
+		guessSpells = res.data.guesses.spells;
+	}
+
+	if (res.data.spells.length > 0) {
+		spells = res.data.spells;
+	}
+
+	return {
+		guesses: {
+			categories: guessCategories,
+			spells: guessSpells,
+		},
+		spells,
+	};
 }

@@ -4,6 +4,7 @@ type ResponseUserData struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Username  string `json:"username"`
+	Role      string `json:"role"`
 	UserID    UserID `json:"user_id"`
 }
 
@@ -27,12 +28,12 @@ type ResponseValidateToken struct {
 	Valid bool `json:"valid"`
 }
 
-type ResponseGetGuesses struct {
-	GameSession ResponseGameSessionData `json:"game_session"`
-	Guesses     []GuessAll              `json:"guesses"`
+type ResponsePastGuesses struct {
+	Categories []PastGuessCategory `json:"categories"`
+	Spells     PastGuessesSpells   `json:"spells"`
 }
 
-type ResponsePastGuesses struct {
-	GameSession ResponseGameSessionData `json:"game_session"`
-	Guesses     []PastGuessesAll        `json:"guesses"`
+type ResponseGetGameSessionInfo struct {
+	Guesses ResponsePastGuesses `json:"guesses"`
+	Spells  []string            `json:"spells"`
 }

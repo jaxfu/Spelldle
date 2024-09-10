@@ -2,5 +2,6 @@
 
 set -e
 
-export PGPASSWORD=password &&
-psql -h localhost -d mfb -U postgres -p 5432 -a -w -f init.sql
+psql -U fraterhqc -d spelldle -f drop_tables.sql &&
+psql -U fraterhqc -d spelldle -f create_tables.sql &&
+pg_restore -U fraterhqc -d spelldle --data-only --schema=spells -F c spells_data_backup.dump

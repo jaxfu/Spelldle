@@ -1,79 +1,88 @@
 import styles from "./GuessBox.module.scss";
-import { E_CATEGORY_COMPONENT_TYPE, type T_CATEGORY_INFO } from "../../../../types/categories";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequestMakeGuess } from "../../../../utils/requests";
-import { QUERY_KEYS } from "../../../../utils/consts";
+import { type T_CATEGORY_INFO } from "../../../../types/categories";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { apiRequestMakeGuessCategory } from "../../../../utils/requests";
+import { QUERY_KEYS, USER_ROLES } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
 	deepCopyObject,
+	getAuthStatus,
 	getUserSessionDataFromStorage,
 } from "../../../../utils/methods";
 import {
 	INIT_PAST_GUESS_CATEGORY,
 	type T_PAST_GUESS_CATEGORY,
-	type T_PAST_GUESS,
-	type T_GUESS_MAP_IDS,
+	type T_PAST_GUESS_CATEGORIES_MAP,
 } from "../../../../types/guesses";
 import GuessCell from "./children/GuessCell/GuessCell";
 import Locals from "./Locals";
-
-function checkForValidToSubmit(
-	guessData: React.MutableRefObject<T_GUESS_MAP_IDS> | null,
-	categoriesInfoArr: T_CATEGORY_INFO[],
-) {
-	if (guessData !== null) {
-		categoriesInfoArr.forEach(({component_type, id}) => {
-			const currentValue = guessData.current.get(id)
-			if (currentValue !== undefined) {
-			switch(component_type) {
-				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-					if (currentValue === -1) return false
-					break;
-				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
-				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
-					if (Array.isArray(currentValue) && currentValue.length === 0) return false;
-					break;
-				case E_CATEGORY_COMPONENT_TYPE.LEVEL:
-					if (Array.isArray(currentValue) && currentValue[0] === -1) return false;
-			}
-		}
-
-		})
-	}
-
-	return true
-}
+import GuessCount from "../GuessCount/GuessCount";
+// TODO: remove
+import devRequests from "../../../DEBUG/GuessInfoButton/devRequests";
+import { HttpStatusCode } from "axios";
+import type { T_AUTH_STATUS, T_USERDATA_STATE } from "../../../../types";
+// END
 
 interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
-	mostRecentGuess: T_PAST_GUESS | null;
+	mostRecentGuess: T_PAST_GUESS_CATEGORIES_MAP | null;
+	numGuesses: { category: number; spell: number };
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
+	// TODO: remove
+	const { data } = useQuery({
+		queryKey: [QUERY_KEYS.USER_DATA],
+		queryFn: getAuthStatus,
+		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
+	});
+
+	const nameRef = useRef<HTMLInputElement>(null);
+	// END
+
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: apiRequestMakeGuess,
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.pastGuesses] });
+		mutationFn: apiRequestMakeGuessCategory,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
 		},
 	});
 
+	const [triggerGuessDataChange, setTriggerGuessDataChange] =
+		useState<boolean>(false);
+	const [validForSubmission, setValidForSubmission] = useState<boolean>(false);
 	const guessData = useContext(CtxGuessData);
 
-	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = useMemo(
-		() => deepCopyObject(INIT_PAST_GUESS_CATEGORY),
-		[],
+	const nullPastGuessCategory: T_PAST_GUESS_CATEGORY = deepCopyObject(
+		INIT_PAST_GUESS_CATEGORY,
 	);
 
+	// check for valid submission to render submit button
 	useEffect(() => {
 		if (guessData) {
-			console.log("running")
+			setValidForSubmission(
+				Locals.checkForValidToSubmit(
+					guessData.current,
+					props.categoriesInfoArr,
+				),
+			);
 		}
-	}, [guessData?.current])
+	}, [triggerGuessDataChange, guessData?.current]);
 
 	return (
 		<div className={styles.root}>
+			<div className={styles.session_info}>
+				<GuessCount
+					title={"Category Guesses"}
+					capacity={5}
+					numGuesses={props.numGuesses.category}
+				/>
+			</div>
 			<div className={styles.guess_cells}>
 				{props.categoriesInfoArr.map((category) => {
 					if (props.mostRecentGuess !== null) {
@@ -84,6 +93,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 									key={category.id}
 									categoryInfo={category}
 									mostRecentGuess={mostRecentGuess}
+									setTriggerGuessDataChange={setTriggerGuessDataChange}
 								/>
 							);
 					}
@@ -92,24 +102,62 @@ const GuessBox: React.FC<IProps> = (props) => {
 							key={category.id}
 							categoryInfo={category}
 							mostRecentGuess={nullPastGuessCategory}
+							setTriggerGuessDataChange={setTriggerGuessDataChange}
 						/>
 					);
 				})}
 			</div>
-			<div className={styles.submit}>
-				<button
-					onClick={() => {
-						if (guessData !== null) {
-							mutation.mutate({
-								accessToken: getUserSessionDataFromStorage().access_token,
-								guessData: guessData?.current,
-							});
-						}
-					}}
-				>
-					Submit
-				</button>
-			</div>
+			{validForSubmission && (
+				<div className={styles.submit}>
+					<button
+						onClick={() => {
+							if (guessData !== null) {
+								mutation.mutate({
+									accessToken: getUserSessionDataFromStorage().access_token,
+									guessData: guessData.current,
+								});
+							}
+						}}
+					>
+						Submit
+					</button>
+				</div>
+			)}
+			{/*TODO: remove */}
+			{data?.user_data.role === USER_ROLES.ADMIN && (
+				<>
+					<button
+						onClick={async () => {
+							try {
+								if (guessData && nameRef.current) {
+									const paramObj = {
+										accessToken: getUserSessionDataFromStorage().access_token,
+										category_info: Object.fromEntries(guessData.current),
+										name: nameRef.current.value,
+									};
+									console.log(paramObj);
+									const res = await devRequests.addSpell(paramObj);
+									if (res.status === HttpStatusCode.Ok)
+										console.log("added spell");
+									else console.log("unsuccessful, status " + res.status);
+								}
+							} catch (error) {
+								console.log(error);
+							}
+						}}
+					>
+						Add Spell
+					</button>
+					<input
+						type="text"
+						placeholder="name"
+						name="name"
+						ref={nameRef}
+						style={{ marginBottom: "50px" }}
+					/>
+				</>
+			)}
+			{/*END*/}
 		</div>
 	);
 };

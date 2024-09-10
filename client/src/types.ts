@@ -1,6 +1,13 @@
 import { deepCopyObject } from "./utils/methods";
 
 // USERDATA
+export enum E_USER_ROLES {
+	UNINITIALIZED = -1,
+	USER,
+	GUESS,
+	ADMIN,
+}
+
 export type T_TOKENS = {
 	access_token: string;
 	refresh_token: string;
@@ -31,22 +38,14 @@ export type T_USERDATA_STATE = {
 	username: string;
 	first_name: string;
 	last_name: string;
+	role: string;
 };
 export const INIT_USERDATA_STATE: T_USERDATA_STATE = {
 	user_id: 0,
 	username: "",
 	first_name: "",
 	last_name: "",
-};
-
-// GAME_SESSION
-export type T_GAME_SESSION = {
-	game_session_id: string;
-	current_round: number;
-};
-export const INIT_GAME_SESSION_DATA: T_GAME_SESSION = {
-	game_session_id: "",
-	current_round: 0,
+	role: "U",
 };
 
 // REGISTER
@@ -88,12 +87,10 @@ export const INIT_USERINPUT_LOGIN: T_USERINPUT_LOGIN = {
 
 export type T_APIRESULT_LOGIN = {
 	valid: boolean;
-	user_data: T_USERDATA_STATE;
 	tokens: T_TOKENS;
 };
 export const INIT_APIRESULT_LOGIN: T_APIRESULT_LOGIN = {
 	valid: false,
-	user_data: deepCopyObject(INIT_USERDATA_STATE),
 	tokens: deepCopyObject(INIT_TOKENS),
 };
 

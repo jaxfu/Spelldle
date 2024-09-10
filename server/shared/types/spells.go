@@ -7,13 +7,13 @@ type SpellAll struct {
 }
 
 type SpellCategories struct {
-	Components  []uint `json:"components"`
-	Class       []uint `json:"class"`
-	Effects     []uint `json:"effects"`
-	Level       []uint `json:"level"`
-	School      uint   `json:"school"`
-	CastingTime uint   `json:"casting_time"`
-	Range       uint   `json:"range"`
-	Target      uint   `json:"target"`
-	Duration    uint   `json:"duration"`
+	Components  []uint  `json:"components"`
+	Class       []uint  `json:"class"`
+	Effects     []uint  `json:"effects"`
+	Level       [2]uint `json:"level"`
+	Duration    [2]uint `json:"duration"`
+	School      uint    `json:"school"`
+	CastingTime uint    `json:"casting_time"`
+	Range       uint    `json:"range"`
+	Target      uint    `json:"target"`
 }

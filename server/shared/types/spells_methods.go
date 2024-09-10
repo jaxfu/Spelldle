@@ -16,9 +16,6 @@ func (spell *SpellAll) Equals(other *SpellAll) (bool, string) {
 	if !slices.Equal(spell.Effects, other.Effects) {
 		return false, fmt.Sprintf("field mismatch effects: %v vs %v", spell.Effects, other.Effects)
 	}
-	if !slices.Equal(spell.Level, other.Level) {
-		return false, fmt.Sprintf("field mismatch level: %+v vs %+v", spell.Level, other.Level)
-	}
 
 	if spell.School != other.School {
 		return false, fmt.Sprintf("field mismatch school: %d vs %d", spell.School, other.School)
@@ -31,6 +28,9 @@ func (spell *SpellAll) Equals(other *SpellAll) (bool, string) {
 	}
 	if spell.Target != other.Target {
 		return false, fmt.Sprintf("field mismatch target: %d vs %d", spell.Target, other.Target)
+	}
+	if spell.Level != other.Level {
+		return false, fmt.Sprintf("field mismatch level: %+v vs %+v", spell.Level, other.Level)
 	}
 	if spell.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", spell.Duration, other.Duration)

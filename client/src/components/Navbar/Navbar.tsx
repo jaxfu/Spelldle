@@ -7,14 +7,14 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import { Link, useNavigate } from "react-router-dom";
+import type { T_AUTH_STATUS, T_USERDATA_STATE } from "../../types";
 
-const Navbar: React.FC = () => {
+interface IProps {
+	data: T_AUTH_STATUS | undefined;
+}
+
+const Navbar: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
-	const { data, isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.userData],
-		queryFn: getAuthStatus,
-		retry: false,
-	});
 
 	const navigate = useNavigate();
 
@@ -24,15 +24,17 @@ const Navbar: React.FC = () => {
 				<h1>Spelldle</h1>
 			</span>
 			<span className={styles.username}>
-				{isSuccess && data.valid && <h2>{data.user_data.username}</h2>}
+				{props.data !== undefined && props.data.valid && (
+					<h2>{props.data.user_data.username}</h2>
+				)}
 			</span>
 			<span className={styles.buttons}>
-				{isSuccess && data.valid ? (
+				{props.data !== undefined && props.data.valid ? (
 					<button
 						onClick={() => {
 							clearTokensFromLocalStorage();
 							queryClient.invalidateQueries({
-								queryKey: [QUERY_KEYS.userData],
+								queryKey: [QUERY_KEYS.USER_DATA],
 							});
 							navigate("/login");
 						}}

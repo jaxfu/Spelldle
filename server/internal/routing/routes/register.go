@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	rand "math/rand"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/crypto/bcrypt"
 	"spelldle.com/server/internal/auth"
+	"spelldle.com/server/internal/routing/utils"
 	"spelldle.com/server/shared/dbHandler"
 	"spelldle.com/server/shared/types"
 
@@ -19,8 +19,8 @@ import (
 )
 
 type responseRegister struct {
-	Valid  bool            `json:"valid"`
 	Tokens types.AllTokens `json:"tokens"`
+	Valid  bool            `json:"valid"`
 }
 
 // Register recieves a RequestPayloadRegister, then checks if the username is valid,
@@ -84,6 +84,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			Salt:      salt,
 			FirstName: registerPayload.FirstName,
 			LastName:  registerPayload.LastName,
+			Role:      "U",
 		}
 
 		// Insert UserData
@@ -94,14 +95,22 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// create and insert game session
-		gameSession, err := spawnNewGameSession(userID, db)
+		gameSession, err := utils.SpawnNewGameSession(userID, db)
 		fmt.Printf("created game session: %+v\n", gameSession)
 		if err := db.InsertGameSession(gameSession); err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
-			fmt.Printf("error inserting game session: %+v", err)
+			fmt.Printf("error spawning game session: %+v", err)
 			return
 		}
 
+		// update user gameSessionID
+		if err := db.UpdateGameSessionIDByUserID(gameSession.GameSessionID, userID); err != nil {
+			ctx.JSON(http.StatusInternalServerError, response)
+			fmt.Printf("Error updating user gameSessionID: %+v\n", err)
+			return
+		}
+
+		// generate JWT
 		accessToken, err := auth.CreateJWTFromUserID(userID)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
@@ -132,25 +141,4 @@ func generateSalt(size int) (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(salt), nil
-}
-
-// generate new game session
-func spawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.GameSession, error) {
-	var session types.GameSession
-	session.GameSessionID = types.GameSessionID(fmt.Sprintf("%d", userID))
-	session.UserID = userID
-	session.Rounds = 0
-
-	count, err := db.GetSpellsCount()
-	if err != nil {
-		return session, err
-	}
-
-	session.SpellID = randomUint(count)
-
-	return session, nil
-}
-
-func randomUint(count uint) uint {
-	return uint(rand.Intn(int(count))) + 1
 }
