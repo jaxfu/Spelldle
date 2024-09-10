@@ -93,12 +93,12 @@ func getPastGuessesCategories(gameSession types.GameSession, db *dbHandler.DBHan
 			Components:  types.PastGuessCategoryMulti{Value: values.Components, Result: results.Components},
 			Class:       types.PastGuessCategoryMulti{Value: values.Class, Result: results.Class},
 			Effects:     types.PastGuessCategoryMulti{Value: values.Effects, Result: results.Effects},
-			Level:       types.PastGuessCategoryMulti{Value: values.Level, Result: results.Level},
+			Level:       types.PastGuessCategorySingleWithToggle{Value: values.Level, Result: results.Level},
+			Duration:    types.PastGuessCategorySingleWithToggle{Value: values.Duration, Result: results.Duration},
 			School:      types.PastGuessCategorySingle{Value: values.School, Result: results.School},
 			CastingTime: types.PastGuessCategorySingle{Value: values.CastingTime, Result: results.CastingTime},
 			Range:       types.PastGuessCategorySingle{Value: values.Range, Result: results.Range},
 			Target:      types.PastGuessCategorySingle{Value: values.Target, Result: results.Target},
-			Duration:    types.PastGuessCategorySingle{Value: values.Duration, Result: results.Duration},
 		}
 
 		guesses = append(guesses, guess)

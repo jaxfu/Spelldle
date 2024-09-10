@@ -29,6 +29,9 @@ func (guess *GuessResults) Equals(other *GuessResults) (bool, string) {
 	if guess.Duration != other.Duration {
 		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
 	}
+	if guess.Level != other.Level {
+		return false, fmt.Sprintf("field mismatch duration: %d vs %d", guess.Duration, other.Duration)
+	}
 
 	return true, ""
 }
@@ -37,9 +40,9 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 	var results GuessResults
 
 	// test single ints
-	singlesGuess := [5]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target, &spell.Duration}
-	singlesSpell := [5]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target, &guess.Duration}
-	singlesResult := [5]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target, &results.Duration}
+	singlesGuess := [4]*uint{&spell.School, &spell.CastingTime, &spell.Range, &spell.Target}
+	singlesSpell := [4]*uint{&guess.School, &guess.CastingTime, &guess.Range, &guess.Target}
+	singlesResult := [4]*uint{&results.School, &results.CastingTime, &results.Range, &results.Target}
 
 	for i := range singlesResult {
 		if *singlesGuess[i] == *singlesSpell[i] {
@@ -49,19 +52,26 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 		}
 	}
 
-	// test level
-	if guess.Level[0] != spell.Level[0] {
-		if guess.Level[1] != spell.Level[1] {
-			results.Level = 0
+	// test toggles
+	togglesGuess := [2]*[2]uint{&guess.Level, &guess.Duration}
+	togglesSpell := [2]*[2]uint{&spell.Level, &spell.Duration}
+	togglesResult := [2]*uint{&results.Level, &results.Duration}
+	for i := range togglesResult {
+		if (*togglesGuess[i])[0] != (*togglesSpell[i])[0] {
+			if (*togglesGuess[i])[1] != (*togglesSpell[i])[1] {
+				(*togglesResult[i]) = 0
+			} else {
+				(*togglesResult[i]) = 1
+			}
 		} else {
-			results.Level = 1
+			if (*togglesGuess[i])[1] != (*togglesSpell[i])[1] {
+				(*togglesResult[i]) = 1
+			} else {
+				(*togglesResult[i]) = 2
+			}
 		}
-	} else {
-		if guess.Level[1] != spell.Level[1] {
-			results.Level = 1
-		} else {
-			results.Level = 2
-		}
+
+		fmt.Printf("guess: %v, spell: %v, result: %d\n", *togglesGuess[i], *togglesSpell[i], togglesResult[i])
 	}
 
 	// test arrays
