@@ -48,7 +48,6 @@ const SingleTextWithToggle: React.FC<IProps> = (props) => {
 			props.showingRecentGuess &&
 			checkBoxValueFromMostRecentGuess.current !== checked
 		) {
-			console.log("running");
 			props.setShowingRecentGuess(false);
 		}
 	}, [checked]);

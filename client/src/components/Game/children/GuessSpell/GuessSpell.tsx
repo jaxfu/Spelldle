@@ -49,7 +49,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 			{props.spells.length > 0 && (
 				<div className={styles.pastSpellGuesses}>
 					{props.pastGuesses.map((id) => (
-						<span>{props.spells[id - 1]}</span>
+						<span key={`spellPastGuess${id}`}>{props.spells[id - 1]}</span>
 					))}
 				</div>
 			)}

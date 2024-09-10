@@ -9,7 +9,6 @@ import {
 import CtxGuessData from "../../../../../../../../contexts/CtxGuessData";
 import {
 	E_GUESS_CATEGORY_RESULTS,
-	type T_GUESS_CATEGORIES_IDS_MAP,
 	type T_PAST_GUESS_CATEGORY,
 	translateIdsToDisplay,
 } from "../../../../../../../../types/guesses";

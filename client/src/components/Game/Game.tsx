@@ -29,10 +29,10 @@ interface IProps {
 }
 
 const Game: React.FC<IProps> = (props) => {
-	const [categoryInfoJson, setCategoryInfoJson] = useState<
-		T_CATEGORY_INFO_SEED_JSON | undefined
-	>(undefined);
 	// fetch CATEGORY_INFO.json
+	const [categoryInfoJson, setCategoryInfoJson] = useState<
+	T_CATEGORY_INFO_SEED_JSON | undefined
+>(undefined);
 	useEffect(() => {
 		async function fetchCategoryInfoJson() {
 			try {
@@ -55,7 +55,7 @@ const Game: React.FC<IProps> = (props) => {
 			return generateCategoryInfoFromSeedJSON(categoryInfoJson);
 		else return undefined;
 	}, [categoryInfoJson]);
-	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>();
+	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP | undefined>(undefined);
 
 	useEffect(() => {
 		initialGuessInfo.current = generateGuessesStateFromJSON(categoryInfoJson);
@@ -75,17 +75,17 @@ const Game: React.FC<IProps> = (props) => {
 	// logout and return to login if fetch error
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isFetched && (!isSuccess || error)) {
+		if ((!isFetching && isFetched) && (!isSuccess || error)) {
 			console.log(`Error fetching gameSessionData: ${error}`);
 			clearTokensFromLocalStorage();
 			navigate("/login");
 		}
-	}, [isFetched, isSuccess, error]);
+	}, [isFetched, isFetching, isSuccess, error]);
 
-	if (isFetching) {
+	if (isFetching || categoriesInfo === undefined || initialGuessInfo.current === undefined) {
 		return <Loading />;
-	} else if (isSuccess && data !== undefined && categoriesInfo !== undefined) {
-		if (initialGuessInfo.current !== undefined) {
+	} else if (isSuccess) {
+		if (data !== undefined) {
 			return (
 				<div className={styles.root}>
 					<CtxGuessData.Provider
@@ -126,7 +126,7 @@ const Game: React.FC<IProps> = (props) => {
 			);
 		} else {
 			clearTokensFromLocalStorage();
-			navigate("/login");
+			navigate("/login")
 		}
 	}
 };
