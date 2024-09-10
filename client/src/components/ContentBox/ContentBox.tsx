@@ -11,7 +11,10 @@ const ContentBox: React.FC<IProps> = (props) => {
 		<div
 			className={`${styles.root} ${props.showingPostGame ? styles.showingPostGame : ""}`}
 		>
-			<div className={styles.content}>{props.children}</div>
+			<div className={styles.content}>
+				{props.children}
+				<div className={styles.spacer}></div>
+			</div>
 		</div>
 	);
 };

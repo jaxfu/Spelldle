@@ -34,6 +34,9 @@ const Register: React.FC = () => {
 		onSuccess(data) {
 			sendTokensToLocalStorage(data.data.tokens);
 			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
 			navigate("/");
 		},
 	});

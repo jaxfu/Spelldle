@@ -19,6 +19,9 @@
 		width: 100%;
 		flex: 1;
 		@include flex-center;
+
+		overflow-y: auto;
+
 		//border: 1px solid red;
 	}
 }

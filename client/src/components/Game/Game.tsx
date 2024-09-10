@@ -121,6 +121,7 @@ const Game: React.FC<IProps> = (props) => {
 							/>
 						)}
 					</CtxGuessData.Provider>
+					<div className={styles.spacer}></div>
 				</div>
 			);
 		} else {
