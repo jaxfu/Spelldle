@@ -48,7 +48,12 @@ export function translateIdsToDisplay(
 				const display: T_GUESS_CATEGORIES_STATES_DISPLAY = [
 					categoryInfo.values[id[0]],
 				];
-				display.push(id[1] == 1 ? "true" : "false");
+				// TODO: parse from JSON somehow instead of hardcode
+				if (categoryInfo.id === "level") {
+					if (id[1] == 1) display.unshift("Ritual");
+				} else {
+					if (id[1] == 1) display.unshift("Concentration");
+				}
 				return display;
 			}
 	}

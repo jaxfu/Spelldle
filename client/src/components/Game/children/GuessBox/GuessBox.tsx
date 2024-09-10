@@ -63,7 +63,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	// check for valid submission to render submit button
 	useEffect(() => {
-		console.log("checking validForSubmission")
+		console.log("checking validForSubmission");
 		if (guessDataCtx) {
 			setValidForSubmission(
 				Locals.checkForValidToSubmit(
@@ -72,7 +72,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 				),
 			);
 		}
-	}, [guessDataCtx?.guessData, triggerGuessDataChange]);
+	}, [triggerGuessDataChange]);
 
 	if (guessDataCtx)
 		return (

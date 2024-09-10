@@ -49,7 +49,7 @@ const Locals = {
 					//guessData.current.set(categoryInfo.id, [valueId, currentData[1]]);
 					guessDataCtx.setGuessData((current) => {
 						if (current !== undefined) {
-							return current.set(categoryInfo.id, valueId);
+							return current.set(categoryInfo.id, [valueId, currentData[1]]);
 						}
 					});
 				}

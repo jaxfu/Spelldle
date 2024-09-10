@@ -1,5 +1,5 @@
-import { E_GUESS_CATEGORY_RESULTS } from "../../../../../../../../types/guesses";
 import styles from "./Cell.module.scss";
+import { E_GUESS_CATEGORY_RESULTS } from "../../../../../../../../types/guesses";
 
 export interface ICell {
 	content: string[];
