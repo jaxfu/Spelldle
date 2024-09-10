@@ -1,6 +1,6 @@
 import styles from "./App.module.scss";
 import Navbar from "../Navbar/Navbar";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS, USER_ROLES } from "../../utils/consts";
 import {
@@ -11,11 +11,16 @@ import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
 import AdminApp from "./children/AdminApp/AdminApp";
 import UserApp from "./children/UserApp/UserApp";
+import ContentBox from "../ContentBox/ContentBox";
+import Game from "../Game/Game";
+import Login from "../Login/Login";
+import Register from "../Register/Register";
 
 const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
+	const [gameComponent, setGameComponent] = useState<JSX.Element>(<Loading />);
 
-	const { isFetching, isSuccess, error, data } = useQuery({
+	const { isFetching, isFetched, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
@@ -27,51 +32,93 @@ const App: React.FC = () => {
 		clearTokensFromLocalStorage();
 	}
 
+	// if auth invalid, send to login &&
+	// set gameComponent base on role
 	const navigate = useNavigate();
-
-	// if auth invalid, send to login
 	useEffect(() => {
-		if (isSuccess && !isFetching) {
+		if (isSuccess && !isFetching && isFetched) {
 			if (!data || !data.valid) navigate("/login");
-			else navigate("/");
-		}
-	}, [isFetching, isSuccess]);
-
-	if (isSuccess) {
-		switch (data.user_data.role) {
-			case USER_ROLES.ADMIN:
-				return (
-					<div className={styles.root}>
-						<Navbar data={data} />
-						<AdminApp
-							isFetching={isFetching}
-							isSuccess={isSuccess}
-							showingPostGame={showingPostGame}
-							setShowingPostGame={setShowingPostGame}
-						/>
-					</div>
-				);
-			case USER_ROLES.USER:
-				return (
-					<div className={styles.root}>
-						<Navbar data={data} />
+			else {
+				if (data.user_data.role === USER_ROLES.USER) {
+					setGameComponent(
 						<UserApp
 							isFetching={isFetching}
 							isSuccess={isSuccess}
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
-						/>
-					</div>
-				);
+						/>,
+					);
+				} else {
+					setGameComponent(
+						<AdminApp
+							isFetching={isFetching}
+							isSuccess={isSuccess}
+							showingPostGame={showingPostGame}
+							setShowingPostGame={setShowingPostGame}
+						/>,
+					);
+				}
+			}
 		}
-	} else if (isFetching) {
-		return (
-			<div className={styles.root}>
-				<Navbar data={undefined} />
-				<Loading />
-			</div>
-		);
-	}
+	}, [isFetching, isSuccess, isFetched]);
+
+	// if (isSuccess) {
+	// 	switch (data.user_data.role) {
+	// 		case USER_ROLES.ADMIN:
+	// 			return (
+	// 				<div className={styles.root}>
+	// 					<Navbar data={data} />
+	// 					<AdminApp
+	// 						isFetching={isFetching}
+	// 						isSuccess={isSuccess}
+	// 						showingPostGame={showingPostGame}
+	// 						setShowingPostGame={setShowingPostGame}
+	// 					/>
+	// 				</div>
+	// 			);
+	// 		case USER_ROLES.USER:
+	// 			return (
+	// 				<div className={styles.root}>
+
+	// 					<UserApp
+	// 						isFetching={isFetching}
+	// 						isSuccess={isSuccess}
+	// 						showingPostGame={showingPostGame}
+	// 						setShowingPostGame={setShowingPostGame}
+	// 					/>
+	// 				</div>
+	// 			);
+	// 	}
+	// } else if (isFetching) {
+	// 	return (
+	// 		<div className={styles.root}>
+	// 			<Navbar data={undefined} />
+	// 			<Loading />
+	// 		</div>
+	// 	);
+	// }
+
+	return (
+		<div className={styles.root}>
+			<Navbar data={data} />
+			<ContentBox showingPostGame={showingPostGame}>
+				<Routes>
+					<Route
+						path="/"
+						element={
+							gameComponent
+							// <Game
+							// 	showingPostGame={showingPostGame}
+							// 	setShowingPostGame={setShowingPostGame}
+							// />
+						}
+					/>
+					<Route path="/register" element={<Register />} />
+					<Route path="/login" element={<Login />} />
+				</Routes>
+			</ContentBox>
+		</div>
+	);
 };
 
 export default App;

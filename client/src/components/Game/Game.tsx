@@ -84,40 +84,49 @@ const Game: React.FC<IProps> = (props) => {
 
 	if (isFetching) {
 		return <Loading />;
-	} else if (isSuccess && data && categoriesInfo) {
-		return (
-			<div className={styles.root}>
-				<CtxGuessData.Provider value={initialGuessInfo}>
-					{props.showingPostGame && (
-						<PostGame setShowingPostGame={props.setShowingPostGame} />
-					)}
-					<GuessInfoButton />
-					<GuessSpell
-						spells={data.spells}
-						numGuesses={data.guesses.spells.length}
-						setShowingPostGame={props.setShowingPostGame}
-					/>
-					<GuessBox
-						categoriesInfoArr={categoriesInfo}
-						mostRecentGuess={
-							data.guesses.categories.length > 0
-								? data.guesses.categories[data.guesses.categories.length - 1]
-								: null
+	} else if (isSuccess && data !== undefined && categoriesInfo !== undefined) {
+		if (initialGuessInfo.current !== undefined) {
+			return (
+				<div className={styles.root}>
+					<CtxGuessData.Provider
+						value={
+							initialGuessInfo as React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP>
 						}
-						numGuesses={{
-							category: data.guesses.categories.length,
-							spell: data.guesses.spells.length,
-						}}
-					/>
-					{data.guesses.categories.length > 0 && (
-						<ResultBox
-							pastGuesses={data.guesses.categories}
-							categoriesInfoArr={categoriesInfo}
+					>
+						{props.showingPostGame && (
+							<PostGame setShowingPostGame={props.setShowingPostGame} />
+						)}
+						<GuessInfoButton />
+						<GuessSpell
+							spells={data.spells}
+							numGuesses={data.guesses.spells.length}
+							setShowingPostGame={props.setShowingPostGame}
 						/>
-					)}
-				</CtxGuessData.Provider>
-			</div>
-		);
+						<GuessBox
+							categoriesInfoArr={categoriesInfo}
+							mostRecentGuess={
+								data.guesses.categories.length > 0
+									? data.guesses.categories[data.guesses.categories.length - 1]
+									: null
+							}
+							numGuesses={{
+								category: data.guesses.categories.length,
+								spell: data.guesses.spells.length,
+							}}
+						/>
+						{data.guesses.categories.length > 0 && (
+							<ResultBox
+								pastGuesses={data.guesses.categories}
+								categoriesInfoArr={categoriesInfo}
+							/>
+						)}
+					</CtxGuessData.Provider>
+				</div>
+			);
+		} else {
+			clearTokensFromLocalStorage();
+			navigate("/login");
+		}
 	}
 };
 

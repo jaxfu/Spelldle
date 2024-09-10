@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 import { apiRequestLogin } from "../../utils/requests.ts";
 import {
@@ -19,6 +19,7 @@ const Login: React.FC = () => {
 	const [error, setError] = useState<boolean>(false);
 	const [incorrectInfo, setIncorrectInfo] = useState<boolean>(false);
 
+	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: (
@@ -35,6 +36,7 @@ const Login: React.FC = () => {
 			if (data.data.valid) {
 				sendTokensToLocalStorage(data.data.tokens);
 				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
+				navigate("/");
 			}
 		},
 	});
