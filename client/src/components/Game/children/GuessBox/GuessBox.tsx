@@ -2,7 +2,7 @@ import styles from "./GuessBox.module.scss";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequestMakeGuessCategory } from "../../../../utils/requests";
-import { QUERY_KEYS, USER_ROLES } from "../../../../utils/consts";
+import { LIMITS, QUERY_KEYS, USER_ROLES } from "../../../../utils/consts";
 import CtxGuessData from "../../../../contexts/CtxGuessData";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
@@ -27,6 +27,7 @@ interface IProps {
 	categoriesInfoArr: T_CATEGORY_INFO[];
 	mostRecentGuess: T_PAST_GUESS_CATEGORIES_MAP | null;
 	numGuesses: { category: number; spell: number };
+	showGuessBox: boolean;
 }
 
 const GuessBox: React.FC<IProps> = (props) => {
@@ -63,7 +64,7 @@ const GuessBox: React.FC<IProps> = (props) => {
 
 	// check for valid submission to render submit button
 	useEffect(() => {
-		console.log("checking validForSubmission");
+		//console.log("checking validForSubmission");
 		if (guessDataCtx) {
 			setValidForSubmission(
 				Locals.checkForValidToSubmit(
@@ -80,49 +81,56 @@ const GuessBox: React.FC<IProps> = (props) => {
 				<div className={styles.session_info}>
 					<GuessCount
 						title={"Category Guesses"}
-						capacity={5}
+						capacity={LIMITS.CATEGORY}
 						numGuesses={props.numGuesses.category}
 					/>
 				</div>
-				<div className={styles.guess_cells}>
-					{props.categoriesInfoArr.map((category) => {
-						if (props.mostRecentGuess !== null) {
-							const mostRecentGuess = props.mostRecentGuess.get(category.id);
-							if (mostRecentGuess !== undefined)
+				{props.showGuessBox && (
+					<>
+						<div className={styles.guess_cells}>
+							{props.categoriesInfoArr.map((category) => {
+								if (props.mostRecentGuess !== null) {
+									const mostRecentGuess = props.mostRecentGuess.get(
+										category.id,
+									);
+									if (mostRecentGuess !== undefined)
+										return (
+											<GuessCell
+												key={category.id}
+												categoryInfo={category}
+												mostRecentGuess={mostRecentGuess}
+												setTriggerGuessDataChange={setTriggerGuessDataChange}
+											/>
+										);
+								}
 								return (
 									<GuessCell
 										key={category.id}
 										categoryInfo={category}
-										mostRecentGuess={mostRecentGuess}
+										mostRecentGuess={nullPastGuessCategory}
 										setTriggerGuessDataChange={setTriggerGuessDataChange}
 									/>
 								);
-						}
-						return (
-							<GuessCell
-								key={category.id}
-								categoryInfo={category}
-								mostRecentGuess={nullPastGuessCategory}
-								setTriggerGuessDataChange={setTriggerGuessDataChange}
-							/>
-						);
-					})}
-				</div>
-				{validForSubmission && (
-					<div className={styles.submit}>
-						<button
-							onClick={() => {
-								if (guessDataCtx !== null) {
-									mutation.mutate({
-										accessToken: getUserSessionDataFromStorage().access_token,
-										guessData: guessDataCtx.guessData,
-									});
-								}
-							}}
-						>
-							Submit
-						</button>
-					</div>
+							})}
+						</div>
+						{validForSubmission && (
+							<div className={styles.submit}>
+								<button
+									onClick={() => {
+										if (guessDataCtx !== null) {
+											mutation.mutate({
+												accessToken:
+													getUserSessionDataFromStorage().access_token,
+												guessData: guessDataCtx.guessData,
+											});
+										}
+									}}
+								>
+									Submit
+								</button>
+							</div>
+						)}
+					</>
 				)}
 				{/*TODO: remove */}
 				{data?.user_data.role === USER_ROLES.ADMIN && (

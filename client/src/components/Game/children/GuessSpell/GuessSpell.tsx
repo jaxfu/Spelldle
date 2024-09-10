@@ -4,7 +4,7 @@ import RecommendationBox from "../GuessBox/children/GuessCell/children/Recommend
 import { useMemo, useState } from "react";
 import GuessCount from "../GuessCount/GuessCount";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../../../utils/consts";
+import { LIMITS, QUERY_KEYS } from "../../../../utils/consts";
 import { apiRequestMakeGuessSpell } from "../../../../utils/requests";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
@@ -42,8 +42,8 @@ const GuessSpell: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<GuessCount
-				title="Guesses"
-				capacity={3}
+				title="Spell Guesses"
+				capacity={LIMITS.SPELL}
 				numGuesses={props.pastGuesses.length}
 			/>
 			{props.spells.length > 0 && (

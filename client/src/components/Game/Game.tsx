@@ -1,7 +1,7 @@
 import styles from "./Game.module.scss";
 import GuessBox from "./children/GuessBox/GuessBox";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../utils/consts";
+import { LIMITS, QUERY_KEYS } from "../../utils/consts";
 import {
 	clearTokensFromLocalStorage,
 	getUserSessionDataFromStorage,
@@ -57,16 +57,16 @@ const Game: React.FC<IProps> = (props) => {
 		else return undefined;
 	}, [categoryInfoJson]);
 
-	//const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP | undefined>(undefined);
+	// setup guessData to pass to guessDataCtx
 	const [guessData, setGuessData] = useState<
 		T_GUESS_CATEGORIES_IDS_MAP | undefined
 	>();
-
 	useEffect(() => {
 		if (categoryInfoJson !== undefined)
 			setGuessData(generateGuessesStateFromJSON(categoryInfoJson));
 	}, [categoryInfoJson]);
 
+	// fetch gameSession data
 	const { data, error, isFetching, isSuccess, isFetched } = useQuery({
 		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
@@ -88,6 +88,16 @@ const Game: React.FC<IProps> = (props) => {
 		}
 	}, [isFetched, isFetching, isSuccess, error]);
 
+	// hide GuessBox if at categoryGuessLimit
+	const [showGuessBox, setShowGuessBox] = useState<boolean>(true);
+	useEffect(() => {
+		if (data !== undefined) {
+			if (data.guesses.categories.length >= LIMITS.CATEGORY) {
+				setShowGuessBox(false);
+			}
+		}
+	}, [data]);
+
 	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
 	} else if (isSuccess) {
@@ -106,6 +116,7 @@ const Game: React.FC<IProps> = (props) => {
 						/>
 						<GuessBox
 							categoriesInfoArr={categoriesInfo}
+							showGuessBox={showGuessBox}
 							mostRecentGuess={
 								data.guesses.categories.length > 0
 									? data.guesses.categories[data.guesses.categories.length - 1]

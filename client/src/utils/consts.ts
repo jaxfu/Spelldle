@@ -18,3 +18,8 @@ export const USER_ROLES = {
 	USER: "U",
 	ADMIN: "A",
 };
+
+export const LIMITS = {
+	CATEGORY: 5,
+	SPELL: 3,
+};
