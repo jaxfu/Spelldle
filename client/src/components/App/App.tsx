@@ -20,7 +20,7 @@ const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
 	const [gameComponent, setGameComponent] = useState<JSX.Element>(<Loading />);
 
-	const { isFetching, isFetched, isSuccess, error, data } = useQuery({
+	const { isFetched, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
@@ -36,14 +36,12 @@ const App: React.FC = () => {
 	// set gameComponent base on role
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isSuccess && !isFetching && isFetched) {
+		if (isSuccess && isFetched) {
 			if (!data || !data.valid) navigate("/login");
 			else {
 				if (data.user_data.role === USER_ROLES.USER) {
 					setGameComponent(
 						<UserApp
-							isFetching={isFetching}
-							isSuccess={isSuccess}
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
 						/>,
@@ -51,8 +49,6 @@ const App: React.FC = () => {
 				} else {
 					setGameComponent(
 						<AdminApp
-							isFetching={isFetching}
-							isSuccess={isSuccess}
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
 						/>,
@@ -60,43 +56,7 @@ const App: React.FC = () => {
 				}
 			}
 		}
-	}, [isFetching, isSuccess, isFetched]);
-
-	// if (isSuccess) {
-	// 	switch (data.user_data.role) {
-	// 		case USER_ROLES.ADMIN:
-	// 			return (
-	// 				<div className={styles.root}>
-	// 					<Navbar data={data} />
-	// 					<AdminApp
-	// 						isFetching={isFetching}
-	// 						isSuccess={isSuccess}
-	// 						showingPostGame={showingPostGame}
-	// 						setShowingPostGame={setShowingPostGame}
-	// 					/>
-	// 				</div>
-	// 			);
-	// 		case USER_ROLES.USER:
-	// 			return (
-	// 				<div className={styles.root}>
-
-	// 					<UserApp
-	// 						isFetching={isFetching}
-	// 						isSuccess={isSuccess}
-	// 						showingPostGame={showingPostGame}
-	// 						setShowingPostGame={setShowingPostGame}
-	// 					/>
-	// 				</div>
-	// 			);
-	// 	}
-	// } else if (isFetching) {
-	// 	return (
-	// 		<div className={styles.root}>
-	// 			<Navbar data={undefined} />
-	// 			<Loading />
-	// 		</div>
-	// 	);
-	// }
+	}, [isSuccess, isFetched, showingPostGame]);
 
 	return (
 		<div className={styles.root}>
@@ -107,10 +67,6 @@ const App: React.FC = () => {
 						path="/"
 						element={
 							gameComponent
-							// <Game
-							// 	showingPostGame={showingPostGame}
-							// 	setShowingPostGame={setShowingPostGame}
-							// />
 						}
 					/>
 					<Route path="/register" element={<Register />} />

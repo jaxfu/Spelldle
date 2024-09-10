@@ -7,8 +7,6 @@ import Register from "../../../Register/Register";
 import GuessInfoButton from "../../../DEBUG/GuessInfoButton/GuessInfoButton";
 
 interface IProps {
-	isFetching: boolean;
-	isSuccess: boolean;
 	showingPostGame: boolean;
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
 }

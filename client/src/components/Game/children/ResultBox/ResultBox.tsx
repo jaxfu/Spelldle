@@ -1,6 +1,6 @@
+import styles from "./ResultBox.module.scss";
 import { type T_PAST_GUESS_CATEGORIES_MAP } from "../../../../types/guesses";
 import { type T_CATEGORY_INFO } from "../../../../types/categories";
-import styles from "./ResultBox.module.scss";
 import { useState } from "react";
 import Header from "./children/ResultCol/children/Header/Header";
 import Locals from "./Locals";
@@ -28,6 +28,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 
 	return (
 		<div className={styles.root}>
+			<div className={styles.content}>
 			<div className={styles.headers}>
 				{/* round header explicit because it is not in categoriesInfoArr */}
 				<Header
@@ -54,6 +55,7 @@ const ResultBox: React.FC<IProps> = (props) => {
 					colWidthsMap,
 					setColWidthsMap,
 				)}
+			</div>
 			</div>
 		</div>
 	);

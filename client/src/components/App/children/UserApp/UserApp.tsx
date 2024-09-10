@@ -6,8 +6,6 @@ import Login from "../../../Login/Login";
 import Register from "../../../Register/Register";
 
 interface IProps {
-	isFetching: boolean;
-	isSuccess: boolean;
 	showingPostGame: boolean;
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
 }
