@@ -20,7 +20,7 @@ const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
 	const [gameComponent, setGameComponent] = useState<JSX.Element>(<Loading />);
 
-	const { isFetched, isSuccess, error, data } = useQuery({
+	const { isFetching, isFetched, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
 		retry: false,
@@ -36,7 +36,7 @@ const App: React.FC = () => {
 	// set gameComponent base on role
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isSuccess && isFetched) {
+		if (isSuccess && !isFetching && isFetched) {
 			if (!data || !data.valid) navigate("/login");
 			else {
 				if (data.user_data.role === USER_ROLES.USER) {
@@ -56,7 +56,7 @@ const App: React.FC = () => {
 				}
 			}
 		}
-	}, [isSuccess, isFetched, showingPostGame]);
+	}, [isSuccess, isFetched, isFetching, showingPostGame]);
 
 	return (
 		<div className={styles.root}>
