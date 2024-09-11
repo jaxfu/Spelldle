@@ -43,7 +43,7 @@ func SpawnNewGameSession(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// update user gameSessionID
-		if err := db.UpdateGameSessionIDByUserID(newGameSession.GameSessionID, userID); err != nil {
+		if err := db.UpdateUserGameSessionIDByUserID(newGameSession.GameSessionID, userID); err != nil {
 			fmt.Printf("error in UpdateGameSessionIDByUserID: %+v", err)
 			ctx.Status(http.StatusInternalServerError)
 			return

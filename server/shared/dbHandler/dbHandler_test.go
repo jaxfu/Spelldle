@@ -120,7 +120,7 @@ func TestDBHandler(t *testing.T) {
 		}
 	})
 	t.Run("UpdateGameSessionIDByUserID", func(t *testing.T) {
-		if err := dbHandler.UpdateGameSessionIDByUserID(testGameSessionData.GameSessionID, testUserData.UserID); err != nil {
+		if err := dbHandler.UpdateUserGameSessionIDByUserID(testGameSessionData.GameSessionID, testUserData.UserID); err != nil {
 			t.Errorf("error in InsertGameSessionIDByUserID: %+v", err)
 		}
 	})

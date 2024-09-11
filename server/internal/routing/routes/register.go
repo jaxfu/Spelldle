@@ -104,7 +104,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// update user gameSessionID
-		if err := db.UpdateGameSessionIDByUserID(gameSession.GameSessionID, userID); err != nil {
+		if err := db.UpdateUserGameSessionIDByUserID(gameSession.GameSessionID, userID); err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
 			fmt.Printf("Error updating user gameSessionID: %+v\n", err)
 			return

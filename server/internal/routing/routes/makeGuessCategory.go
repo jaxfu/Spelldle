@@ -58,7 +58,6 @@ func MakeGuessCategory(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 		// get and insert results
 		spell, err := db.GetSpellBySpellId(gameSession.SpellID)
-		fmt.Printf("spell: %+v\n", spell)
 		if err != nil {
 			fmt.Printf("error getting spell: %v\n", err)
 			ctx.Status(http.StatusInternalServerError)
