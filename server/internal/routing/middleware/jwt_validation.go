@@ -24,12 +24,14 @@ func ValidateAccessToken() gin.HandlerFunc {
 			Valid: false,
 		}
 
+		// TODO: use map for quicker route matching
 		if ctx.Request.Method == "POST" {
 			if ctx.Request.URL.Path != consts.RouteUrlValidateSession &&
 				ctx.Request.URL.Path != consts.RouteUrlMakeGuessCategory &&
 				ctx.Request.URL.Path != consts.RouteUrlMakeGuessSpell &&
 				ctx.Request.URL.Path != consts.RouteUrlGetGameSessionInfo &&
-				ctx.Request.URL.Path != consts.RouteUrlAddSpell {
+				ctx.Request.URL.Path != consts.RouteUrlAddSpell &&
+				ctx.Request.URL.Path != consts.RouteUrlSpawnNewGameSession {
 				fmt.Println("Skipping middleware")
 				ctx.Next()
 				return

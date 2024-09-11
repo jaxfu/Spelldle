@@ -13,6 +13,7 @@ import (
 func GetGameSessionInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var response types.ResponseGetGameSessionInfo
+		response.Guesses.Correct = false
 
 		// get userID from jwt
 		userID, err := utils.GetJwtInfoFromCtx(ctx)
@@ -46,16 +47,24 @@ func GetGameSessionInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		if len(guessesCategories) == 0 {
+		// if none, send empty array
+		guessCategoriesLength := len(guessesCategories)
+		if guessCategoriesLength == 0 {
 			response.Guesses.Categories = []types.PastGuessCategory{}
 		} else {
 			response.Guesses.Categories = guessesCategories
 		}
 
-		if len(guessesSpells) == 0 {
+		guessSpellsLength := len(guessesSpells)
+		if guessSpellsLength == 0 {
 			response.Guesses.Spells = types.PastGuessesSpells{}
 		} else {
 			response.Guesses.Spells = guessesSpells
+		}
+
+		// check most recent spell guess for correct
+		if guessSpellsLength != 0 && guessesSpells[guessSpellsLength-1] == gameSession.SpellID {
+			response.Guesses.Correct = true
 		}
 
 		// get spell names
