@@ -24,7 +24,11 @@ const PostGame: React.FC<IProps> = (props) => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.content}>
-				<h2>PostGame</h2>
+				<h2>
+					{props.gameSessionInfo.guesses.correct
+						? "Congratulations!"
+						: "You lost"}
+				</h2>
 				<button
 					onClick={() => {
 						mutation.mutate(getUserSessionDataFromStorage().access_token);
