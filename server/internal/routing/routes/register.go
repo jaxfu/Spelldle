@@ -95,7 +95,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// create and insert game session
-		gameSession, err := utils.SpawnNewGameSession(userID, db)
+		gameSession, err := utils.SpawnFirstGameSession(userID, db)
 		fmt.Printf("created game session: %+v\n", gameSession)
 		if err := db.InsertGameSession(gameSession); err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
