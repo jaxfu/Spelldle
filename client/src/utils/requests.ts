@@ -159,8 +159,14 @@ export async function apiRequestGetGameSessionInfo(
 	};
 }
 
-export async function apiRequestSpawnNewGameSession(accessToken: string) {
-	const res = await axios({
+type T_API_RESPONSE_SPAWN_NEW_GAME_SESSION = {
+	spell_id: number;
+};
+
+export async function apiRequestSpawnNewGameSession(
+	accessToken: string,
+): Promise<AxiosResponse<T_API_RESPONSE_SPAWN_NEW_GAME_SESSION>> {
+	return await axios<T_API_RESPONSE_SPAWN_NEW_GAME_SESSION>({
 		method: "POST",
 		url: API_ROUTES.SPAWN_NEW_GAME_SESSION,
 		headers: {

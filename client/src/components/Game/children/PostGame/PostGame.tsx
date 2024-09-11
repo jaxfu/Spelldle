@@ -4,6 +4,7 @@ import { QUERY_KEYS } from "../../../../utils/consts";
 import type { T_GAME_SESSION } from "../../../../types/gameSession";
 import { apiRequestSpawnNewGameSession } from "../../../../utils/requests";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
+import { useState } from "react";
 
 interface IProps {
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,10 +12,12 @@ interface IProps {
 }
 
 const PostGame: React.FC<IProps> = (props) => {
+	const [spell, setSpell] = useState<string>("");
+
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: apiRequestSpawnNewGameSession,
-		onSuccess: () => {
+		onSuccess: (data) => {
 			queryClient.invalidateQueries({
 				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 			});
@@ -29,6 +32,7 @@ const PostGame: React.FC<IProps> = (props) => {
 						? "Congratulations!"
 						: "You lost"}
 				</h2>
+				<span>Correct Spell: {spell}</span>
 				<button
 					onClick={() => {
 						mutation.mutate(getUserSessionDataFromStorage().access_token);
