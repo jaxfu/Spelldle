@@ -102,17 +102,22 @@ const Game: React.FC<IProps> = (props) => {
 		return <Loading />;
 	} else if (isSuccess) {
 		if (data !== undefined) {
+			if (data.guesses.spells.length >= LIMITS.SPELL) setShowGuessBox(true);
+
 			return (
 				<div className={styles.root}>
 					<CtxGuessData.Provider value={{ guessData, setGuessData }}>
 						{props.showingPostGame && (
-							<PostGame setShowingPostGame={props.setShowingPostGame} />
+							<PostGame
+								setShowingPostGame={props.setShowingPostGame}
+								gameSessionInfo={data}
+							/>
 						)}
 						<GuessInfoButton />
 						<GuessSpell
 							spells={data.spells}
 							setShowingPostGame={props.setShowingPostGame}
-							pastGuesses={data.guesses.spells}
+							pastSpellGuesses={data.guesses.spells}
 						/>
 						<GuessBox
 							categoriesInfoArr={categoriesInfo}

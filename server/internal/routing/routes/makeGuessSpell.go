@@ -64,7 +64,9 @@ func MakeGuessSpell(db *dbHandler.DBHandler) gin.HandlerFunc {
 
 		// if spell correct or spell guess limit reached, set response and spawn new game session
 		if payload.SpellID == gameSession.SpellID || gameSession.SpellRounds+1 == consts.SpellGuessLimit {
-			response.Correct = true
+			if payload.SpellID == gameSession.SpellID {
+				response.Correct = true
+			}
 
 			newGameSession, err := utils.SpawnNewGameSession(userID, gameSession.SpellID, db)
 			if err != nil {

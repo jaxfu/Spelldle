@@ -1,9 +1,11 @@
 import styles from "./PostGame.module.scss";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../../utils/consts";
+import type { T_GAME_SESSION } from "../../../../types/gameSession";
 
 interface IProps {
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	gameSessionInfo: T_GAME_SESSION;
 }
 
 const PostGame: React.FC<IProps> = (props) => {
