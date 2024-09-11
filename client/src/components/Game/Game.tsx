@@ -88,22 +88,24 @@ const Game: React.FC<IProps> = (props) => {
 		}
 	}, [isFetched, isFetching, isSuccess, error]);
 
+	// render postgame if limit reached or if last spell guess was correct &&
 	// hide GuessBox if at categoryGuessLimit
 	const [showGuessBox, setShowGuessBox] = useState<boolean>(true);
 	useEffect(() => {
-		if (data !== undefined) {
+		if (isSuccess && !isFetching && data !== undefined) {
+			if (data.guesses.correct || data.guesses.spells.length >= LIMITS.SPELL)
+				props.setShowingPostGame(true);
+
 			if (data.guesses.categories.length >= LIMITS.CATEGORY) {
 				setShowGuessBox(false);
 			}
 		}
-	}, [data]);
+	}, [data, isFetching, isSuccess]);
 
 	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
 	} else if (isSuccess) {
 		if (data !== undefined) {
-			if (data.guesses.spells.length >= LIMITS.SPELL) setShowGuessBox(true);
-
 			return (
 				<div className={styles.root}>
 					<CtxGuessData.Provider value={{ guessData, setGuessData }}>

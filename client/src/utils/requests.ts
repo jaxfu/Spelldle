@@ -23,6 +23,7 @@ const API_ROUTES = {
 	MAKE_GUESS_CATEGORY: ROUTE_PREFIX + "/api/makeGuess/category",
 	MAKE_GUESS_SPELL: ROUTE_PREFIX + "/api/makeGuess/spell",
 	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
+	SPAWN_NEW_GAME_SESSION: ROUTE_PREFIX + "/api/spawnNewGameSession",
 };
 
 export async function apiRequestLogin(
@@ -114,6 +115,7 @@ type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
 	guesses: {
 		categories: T_PAST_GUESS_CATEGORIES_MAP[];
 		spells: number[];
+		correct: boolean;
 	};
 	spells: string[];
 };
@@ -151,7 +153,18 @@ export async function apiRequestGetGameSessionInfo(
 		guesses: {
 			categories: guessCategories,
 			spells: guessSpells,
+			correct: res.data.guesses.correct,
 		},
 		spells,
 	};
+}
+
+export async function apiRequestSpawnNewGameSession(accessToken: string) {
+	const res = await axios({
+		method: "POST",
+		url: API_ROUTES.SPAWN_NEW_GAME_SESSION,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
 }

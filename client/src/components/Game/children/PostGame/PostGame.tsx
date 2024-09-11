@@ -1,7 +1,9 @@
 import styles from "./PostGame.module.scss";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../../utils/consts";
 import type { T_GAME_SESSION } from "../../../../types/gameSession";
+import { apiRequestSpawnNewGameSession } from "../../../../utils/requests";
+import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,6 +12,14 @@ interface IProps {
 
 const PostGame: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: apiRequestSpawnNewGameSession,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
+		},
+	});
 
 	return (
 		<div className={styles.root}>
@@ -17,9 +27,7 @@ const PostGame: React.FC<IProps> = (props) => {
 				<h2>PostGame</h2>
 				<button
 					onClick={() => {
-						queryClient.invalidateQueries({
-							queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
-						});
+						mutation.mutate(getUserSessionDataFromStorage().access_token);
 						props.setShowingPostGame(false);
 					}}
 				>
