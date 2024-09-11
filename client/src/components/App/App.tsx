@@ -27,18 +27,16 @@ const App: React.FC = () => {
 		refetchOnWindowFocus: false,
 		staleTime: Infinity,
 	});
-	if (error) {
-		console.log(`GET_AUTH_STATUS ERROR: ${error}`);
-		clearTokensFromLocalStorage();
-	}
 
 	// if auth invalid, send to login &&
 	// set gameComponent base on role
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isSuccess && !isFetching && isFetched) {
-			if (!data || !data.valid) navigate("/login");
-			else {
+		if (!isFetching && isFetched) {
+			if (!data || !data.valid || error) {
+				clearTokensFromLocalStorage();
+				navigate("/login");
+			} else if (isSuccess) {
 				if (data.user_data.role === USER_ROLES.USER) {
 					setGameComponent(
 						<UserApp
