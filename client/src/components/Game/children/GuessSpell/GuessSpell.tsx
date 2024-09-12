@@ -19,7 +19,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuessSpell,
-		onSuccess: (data) => {
+		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 			});
@@ -43,7 +43,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 		const spellArr: string[] = [];
 
 		spells.forEach((spell) => {
-			const id = idMap.get(spell);
+			const id = idMap.get(spell.toLowerCase());
 			if (id !== undefined) {
 				if (!pastGuesses.includes(id)) spellArr.push(spell);
 			} else console.log(`error getting spells, spell ${spell} id not found`);
