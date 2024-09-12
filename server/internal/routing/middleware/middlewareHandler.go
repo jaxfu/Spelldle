@@ -16,6 +16,7 @@ func NewMiddlewareHandler() *MiddlewareHandler {
 			consts.RouteUrlGetCorrectSpellInfo: {},
 			consts.RouteUrlAddSpell:            {},
 			consts.RouteUrlSpawnNewGameSession: {},
+			consts.RouteUrlGetSpellList:        {},
 		},
 	}
 
