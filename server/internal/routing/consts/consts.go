@@ -13,5 +13,6 @@ const (
 	RouteUrlGetGameSessionInfo         = RouteUrlBase + "/getGameSessionInfo"
 	RouteUrlAddSpell                   = RouteUrlBase + "/addSpell"
 	RouteUrlSpawnNewGameSession        = RouteUrlBase + "/spawnNewGameSession"
+	RouteUrlGetCorrectSpellInfo        = RouteUrlBase + "/getCorrectSpellInfo"
 	SpellGuessLimit             uint   = 3
 )

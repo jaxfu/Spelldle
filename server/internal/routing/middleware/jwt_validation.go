@@ -31,7 +31,8 @@ func ValidateAccessToken() gin.HandlerFunc {
 				ctx.Request.URL.Path != consts.RouteUrlMakeGuessSpell &&
 				ctx.Request.URL.Path != consts.RouteUrlGetGameSessionInfo &&
 				ctx.Request.URL.Path != consts.RouteUrlAddSpell &&
-				ctx.Request.URL.Path != consts.RouteUrlSpawnNewGameSession {
+				ctx.Request.URL.Path != consts.RouteUrlSpawnNewGameSession &&
+				ctx.Request.URL.Path != consts.RouteUrlGetCorrectSpellInfo {
 				fmt.Println("Skipping middleware")
 				ctx.Next()
 				return
