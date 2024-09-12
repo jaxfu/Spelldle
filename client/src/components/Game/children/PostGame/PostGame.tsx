@@ -7,12 +7,12 @@ import {
 	apiRequestSpawnNewGameSession,
 } from "../../../../utils/requests";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
-import { useState } from "react";
 import type { T_CATEGORY_INFO } from "../../../../types/categories";
 import SpellInfo from "../SpellInfo/SpellInfo";
+import Popup from "../Popup/Popup";
 
 interface IProps {
-	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowing: React.Dispatch<React.SetStateAction<boolean>>;
 	gameSessionInfo: T_GAME_SESSION;
 	categoryInfo: T_CATEGORY_INFO[];
 }
@@ -45,7 +45,7 @@ const PostGame: React.FC<IProps> = (props) => {
 
 	if (isSuccess && data !== undefined) {
 		return (
-			<div className={styles.root}>
+			<Popup>
 				<div className={styles.content}>
 					<h2>
 						{props.gameSessionInfo.guesses.correct
@@ -57,13 +57,13 @@ const PostGame: React.FC<IProps> = (props) => {
 					<button
 						onClick={() => {
 							mutation.mutate(getUserSessionDataFromStorage().access_token);
-							props.setShowingPostGame(false);
+							props.setShowing(false);
 						}}
 					>
 						New Game
 					</button>
 				</div>
-			</div>
+			</Popup>
 		);
 	}
 };

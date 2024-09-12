@@ -119,6 +119,10 @@ const Game: React.FC<IProps> = (props) => {
 		}
 	}, [data, isFetching, isSuccess]);
 
+	// intial info popup
+	const [showInfoPopup, setShowInfoPopup] = useState<boolean>(false);
+
+	// component render
 	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
 	} else if (isSuccess && spellListQuery.isSuccess) {
@@ -128,7 +132,7 @@ const Game: React.FC<IProps> = (props) => {
 					<CtxGuessData.Provider value={{ guessData, setGuessData }}>
 						{props.showingPostGame && (
 							<PostGame
-								setShowingPostGame={props.setShowingPostGame}
+								setShowing={props.setShowingPostGame}
 								gameSessionInfo={data}
 								categoryInfo={categoriesInfo}
 							/>
