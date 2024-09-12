@@ -38,7 +38,6 @@ const Header: React.FC<IProps> = (props) => {
 				ref.current.style.width = `${colWidth}px`;
 			}
 		}
-		console.log("re-sizing header widths");
 	}, [triggerColResize]);
 
 	return (
