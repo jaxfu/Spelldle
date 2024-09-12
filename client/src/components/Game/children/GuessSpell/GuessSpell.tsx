@@ -15,6 +15,7 @@ interface IProps {
 }
 
 const GuessSpell: React.FC<IProps> = (props) => {
+	// setup submit button mutation
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuessSpell,
@@ -34,6 +35,23 @@ const GuessSpell: React.FC<IProps> = (props) => {
 	);
 
 	const hasValidInput = spellIdMap.has(input.toLowerCase());
+	const spells = (
+		spells: string[],
+		idMap: Map<string, number>,
+		pastGuesses: number[],
+	): string[] => {
+		const spellArr: string[] = [];
+
+		spells.forEach((spell) => {
+			const id = idMap.get(spell);
+			if (id !== undefined) {
+				if (!pastGuesses.includes(id)) spellArr.push(spell);
+			} else console.log(`error getting spells, spell ${spell} id not found`);
+		});
+
+		console.log(spellArr);
+		return spellArr;
+	};
 
 	return (
 		<div className={styles.root}>
@@ -61,7 +79,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 					/>
 					{show && (
 						<RecommendationBox
-							values={props.spells}
+							values={spells(props.spells, spellIdMap, props.pastSpellGuesses)}
 							input={input}
 							setInput={setInput}
 						/>

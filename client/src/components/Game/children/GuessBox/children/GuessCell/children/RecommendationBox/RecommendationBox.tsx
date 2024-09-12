@@ -2,6 +2,7 @@ import styles from "./RecommendationBox.module.scss";
 import { useMemo } from "react";
 
 interface IProps {
+	// TODO: switch to Set<string>
 	values: string[];
 	input: string;
 	setInput: React.Dispatch<React.SetStateAction<string>>;
