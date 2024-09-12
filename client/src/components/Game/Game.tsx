@@ -1,6 +1,6 @@
 import styles from "./Game.module.scss";
 import GuessBox from "./children/GuessBox/GuessBox";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LIMITS, QUERY_KEYS } from "../../utils/consts";
 import {
 	clearTokensFromLocalStorage,
@@ -67,6 +67,7 @@ const Game: React.FC<IProps> = (props) => {
 	}, [categoryInfoJson]);
 
 	// fetch gameSession data
+	const queryClient = useQueryClient();
 	const { data, error, isFetching, isSuccess, isFetched } = useQuery({
 		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
@@ -93,10 +94,12 @@ const Game: React.FC<IProps> = (props) => {
 	const [showGuessBox, setShowGuessBox] = useState<boolean>(true);
 	useEffect(() => {
 		if (isSuccess && !isFetching && data !== undefined) {
-			if (data.guesses.correct || data.guesses.spells.length >= LIMITS.SPELL)
+			if (data.guesses.correct || data.guesses.spells.length >= LIMITS.SPELL) {
 				props.setShowingPostGame(true);
-
-			if (data.guesses.categories.length >= LIMITS.CATEGORY) {
+				queryClient.invalidateQueries({
+					queryKey: [QUERY_KEYS.CORRECT_SPELL_INFO],
+				});
+			} else if (data.guesses.categories.length >= LIMITS.CATEGORY) {
 				setShowGuessBox(false);
 			}
 		}
