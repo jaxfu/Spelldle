@@ -1,5 +1,5 @@
 import styles from "./Header.module.scss";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface IProps {
 	title: string;
@@ -10,6 +10,7 @@ interface IProps {
 
 const Header: React.FC<IProps> = (props) => {
 	const ref: React.MutableRefObject<HTMLDivElement | null> = useRef(null);
+	const [triggerColResize, setTriggerColResize] = useState<boolean>(false);
 
 	// update colWidthsMap on load
 	useEffect(() => {
@@ -25,6 +26,7 @@ const Header: React.FC<IProps> = (props) => {
 
 			return colWidthsMap;
 		});
+		setTriggerColResize((current) => !current);
 	}, [ref.current]);
 
 	// update ref width on colWidthsMap change
@@ -36,7 +38,8 @@ const Header: React.FC<IProps> = (props) => {
 				ref.current.style.width = `${colWidth}px`;
 			}
 		}
-	}, [props.colWidthsMap]);
+		console.log("re-sizing header widths");
+	}, [triggerColResize]);
 
 	return (
 		<div className={`${styles.root} ${props.categoryID} header`} ref={ref}>

@@ -1,5 +1,5 @@
-import Cell from "./children/Cell/Cell";
 import styles from "./ResultCol.module.scss";
+import Cell from "./children/Cell/Cell";
 import { ICell } from "./children/Cell/Cell";
 import { useEffect, useRef } from "react";
 
