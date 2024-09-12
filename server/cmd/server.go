@@ -53,6 +53,7 @@ func main() {
 		router.Use(cors.New(config))
 	}
 
+	middleware := middleware.NewMiddlewareHandler()
 	router.Use(middleware.ValidateAccessToken())
 
 	router.POST(consts.RouteUrlRegister, routes.Register(db))
