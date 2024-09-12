@@ -26,6 +26,7 @@ const API_ROUTES = {
 	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
 	SPAWN_NEW_GAME_SESSION: ROUTE_PREFIX + "/api/spawnNewGameSession",
 	GET_CORRECT_SPELL_INFO: ROUTE_PREFIX + "/api/getCorrectSpellInfo",
+	GET_SPELL_LIST: ROUTE_PREFIX + "/api/getSpellList",
 };
 
 export async function apiRequestLogin(
@@ -137,19 +138,26 @@ export async function apiRequestGetGameSessionInfo(
 	if (res.data.guesses.spells.length > 0) {
 		guessSpells = res.data.guesses.spells;
 	}
-
-	if (res.data.spells.length > 0) {
-		spells = res.data.spells;
-	}
-
 	return {
 		guesses: {
 			categories: guessCategories,
 			spells: guessSpells,
 			correct: res.data.guesses.correct,
 		},
-		spells,
 	};
+}
+
+export async function apiRequestGetSpellList(
+	accessToken: string,
+): Promise<AxiosResponse<string[]>> {
+	console.log("running apiRequestGetSpellList");
+	return await axios<string[]>({
+		method: "POST",
+		url: API_ROUTES.GET_SPELL_LIST,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
 }
 
 export async function apiRequestSpawnNewGameSession(

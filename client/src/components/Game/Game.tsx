@@ -6,7 +6,10 @@ import {
 	clearTokensFromLocalStorage,
 	getUserSessionDataFromStorage,
 } from "../../utils/methods";
-import { apiRequestGetGameSessionInfo } from "../../utils/requests";
+import {
+	apiRequestGetGameSessionInfo,
+	apiRequestGetSpellList,
+} from "../../utils/requests";
 import { useEffect, useMemo, useRef, useState } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
@@ -66,6 +69,16 @@ const Game: React.FC<IProps> = (props) => {
 			setGuessData(generateGuessesStateFromJSON(categoryInfoJson));
 	}, [categoryInfoJson]);
 
+	// fetch spell list on first load
+	const spellListQuery = useQuery({
+		queryKey: [QUERY_KEYS.SPELL_LIST],
+		queryFn: () =>
+			apiRequestGetSpellList(getUserSessionDataFromStorage().access_token),
+		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
+	});
+
 	// fetch gameSession data
 	const queryClient = useQueryClient();
 	const { data, error, isFetching, isSuccess, isFetched } = useQuery({
@@ -77,6 +90,7 @@ const Game: React.FC<IProps> = (props) => {
 		retry: false,
 		refetchOnWindowFocus: false,
 		staleTime: Infinity,
+		enabled: spellListQuery.isSuccess,
 	});
 
 	// logout and return to login if fetch error
@@ -107,8 +121,8 @@ const Game: React.FC<IProps> = (props) => {
 
 	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
-	} else if (isSuccess) {
-		if (data !== undefined) {
+	} else if (isSuccess && spellListQuery.isSuccess) {
+		if (data !== undefined && spellListQuery.data !== undefined) {
 			return (
 				<div className={styles.root}>
 					<CtxGuessData.Provider value={{ guessData, setGuessData }}>
@@ -120,7 +134,7 @@ const Game: React.FC<IProps> = (props) => {
 						)}
 						<GuessInfoButton />
 						<GuessSpell
-							spells={data.spells}
+							spells={spellListQuery.data.data}
 							setShowingPostGame={props.setShowingPostGame}
 							pastSpellGuesses={data.guesses.spells}
 						/>

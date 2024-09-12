@@ -15,6 +15,7 @@ export const QUERY_KEYS = {
 	USER_DATA: "user_data",
 	GAME_SESSION_INFO: "game_session_info",
 	CORRECT_SPELL_INFO: "correct_spell_info",
+	SPELL_LIST: "spell_list",
 };
 
 export const USER_ROLES = {

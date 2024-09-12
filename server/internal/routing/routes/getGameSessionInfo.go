@@ -67,15 +67,6 @@ func GetGameSessionInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 			response.Guesses.Correct = true
 		}
 
-		// get spell names
-		names, err := db.GetSpellNames()
-		if err != nil {
-			fmt.Printf("error in GetSpellNames %+v\n", err)
-			ctx.JSON(http.StatusInternalServerError, response)
-			return
-		}
-		response.Spells = names
-
 		ctx.JSON(http.StatusOK, response)
 	}
 }

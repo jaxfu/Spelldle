@@ -6,5 +6,4 @@ export type T_GAME_SESSION = {
 		spells: number[];
 		correct: boolean;
 	};
-	spells: string[];
 };
