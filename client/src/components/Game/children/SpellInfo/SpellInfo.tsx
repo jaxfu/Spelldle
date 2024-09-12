@@ -1,12 +1,10 @@
-import { DiVim } from "react-icons/di";
+import styles from "./SpellInfo.module.scss";
 import type { T_CATEGORY_INFO } from "../../../../types/categories";
 import {
 	translateIdsToDisplay,
 	type T_GUESS_CATEGORIES_IDS_MAP,
 } from "../../../../types/guesses";
 import type { T_Spell } from "../../../../types/spells";
-import type { ICell } from "../ResultBox/children/ResultCol/children/Cell/Cell";
-import styles from "./SpellInfo.module.scss";
 
 interface IProps {
 	spellInfo: T_Spell;
