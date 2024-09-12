@@ -130,6 +130,7 @@ const Game: React.FC<IProps> = (props) => {
 							<PostGame
 								setShowingPostGame={props.setShowingPostGame}
 								gameSessionInfo={data}
+								categoryInfo={categoriesInfo}
 							/>
 						)}
 						<GuessInfoButton />

@@ -17,6 +17,7 @@
 
 	.content {
 		@include flex-center;
+		gap: 10px;
 		width: 80%;
 		height: 500px;
 

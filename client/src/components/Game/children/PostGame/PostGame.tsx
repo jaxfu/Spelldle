@@ -8,10 +8,13 @@ import {
 } from "../../../../utils/requests";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 import { useState } from "react";
+import type { T_CATEGORY_INFO } from "../../../../types/categories";
+import SpellInfo from "../SpellInfo/SpellInfo";
 
 interface IProps {
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
 	gameSessionInfo: T_GAME_SESSION;
+	categoryInfo: T_CATEGORY_INFO[];
 }
 
 const PostGame: React.FC<IProps> = (props) => {
@@ -40,7 +43,7 @@ const PostGame: React.FC<IProps> = (props) => {
 		},
 	});
 
-	if (isSuccess) {
+	if (isSuccess && data !== undefined) {
 		return (
 			<div className={styles.root}>
 				<div className={styles.content}>
@@ -50,6 +53,7 @@ const PostGame: React.FC<IProps> = (props) => {
 							: "You lost"}
 					</h2>
 					<span>Correct Spell: {data.name}</span>
+					<SpellInfo spellInfo={data} categoryInfo={props.categoryInfo} />
 					<button
 						onClick={() => {
 							mutation.mutate(getUserSessionDataFromStorage().access_token);
