@@ -11,7 +11,9 @@ import (
 )
 
 type getCorrectSpellInfoResponse struct {
-	types.SpellAll
+	Name       string                `json:"name"`
+	Categories types.SpellCategories `json:"categories"`
+	SpellID    uint                  `json:"spell_id"`
 }
 
 func GetCorrectSpellInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
@@ -43,7 +45,9 @@ func GetCorrectSpellInfo(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		res.SpellAll = spell
+		res.Name = spell.Name
+		res.SpellID = spell.SpellID
+		res.Categories = spell.SpellCategories
 
 		ctx.JSON(http.StatusOK, res)
 	}
