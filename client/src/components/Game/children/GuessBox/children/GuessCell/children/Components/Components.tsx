@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const Components: React.FC<IProps> = (props) => {
-	const guessData = useContext(CtxGuessData);
+	const guessDataCtx = useContext(CtxGuessData);
 	const displayValuesFromMostRecentGuess = useRef<number[]>([]);
 	const [checkedStates, setCheckedStates] = useState<boolean[]>(
 		props.categoryInfo.values.map((value) => false),
@@ -48,12 +48,14 @@ const Components: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		const newArr: number[] = [];
 		checkedStates.forEach((bool, i) => bool && newArr.push(i));
-		Locals.setGuessCategoriesMap(
-			newArr.sort(),
-			guessData,
-			props.categoryInfo.id,
-			props.setTriggerGuessDataChange,
-		);
+		if (guessDataCtx) {
+			Locals.setGuessCategoriesMap(
+				newArr.sort(),
+				guessDataCtx,
+				props.categoryInfo.id,
+				props.setTriggerGuessDataChange,
+			);
+		}
 		if (
 			props.showingRecentGuess &&
 			newArr.sort().join() !==

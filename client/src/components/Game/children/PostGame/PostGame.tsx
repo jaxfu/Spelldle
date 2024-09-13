@@ -1,31 +1,71 @@
 import styles from "./PostGame.module.scss";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../../utils/consts";
+import type { T_GAME_SESSION } from "../../../../types/gameSession";
+import {
+	apiRequestGetCorrectSpellInfo,
+	apiRequestSpawnNewGameSession,
+} from "../../../../utils/requests";
+import { getUserSessionDataFromStorage } from "../../../../utils/methods";
+import type { T_CATEGORY_INFO } from "../../../../types/categories";
+import SpellInfo from "../SpellInfo/SpellInfo";
+import Popup from "../Popup/Popup";
 
 interface IProps {
-	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowing: React.Dispatch<React.SetStateAction<boolean>>;
+	gameSessionInfo: T_GAME_SESSION;
+	categoryInfo: T_CATEGORY_INFO[];
 }
 
 const PostGame: React.FC<IProps> = (props) => {
-	const queryClient = useQueryClient();
+	// fetch spell information
+	const { data, error, isSuccess } = useQuery({
+		queryKey: [QUERY_KEYS.CORRECT_SPELL_INFO],
+		queryFn: () =>
+			apiRequestGetCorrectSpellInfo(
+				getUserSessionDataFromStorage().access_token,
+			),
+		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
+	});
+	if (error) {
+		console.log(`apiRequestGetCorrectSpellInfo error: ${error}`);
+	}
 
-	return (
-		<div className={styles.root}>
-			<div className={styles.content}>
-				<h2>PostGame</h2>
-				<button
-					onClick={() => {
-						queryClient.invalidateQueries({
-							queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
-						});
-						props.setShowingPostGame(false);
-					}}
-				>
-					New Game
-				</button>
-			</div>
-		</div>
-	);
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: apiRequestSpawnNewGameSession,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+			});
+		},
+	});
+
+	if (isSuccess && data !== undefined) {
+		return (
+			<Popup>
+				<div className={styles.content}>
+					<h2>
+						{props.gameSessionInfo.guesses.correct
+							? "Congratulations!"
+							: "You lost"}
+					</h2>
+					<span>Correct Spell: {data.name}</span>
+					<SpellInfo spellInfo={data} categoryInfo={props.categoryInfo} />
+					<button
+						onClick={() => {
+							mutation.mutate(getUserSessionDataFromStorage().access_token);
+							props.setShowing(false);
+						}}
+					>
+						New Game
+					</button>
+				</div>
+			</Popup>
+		);
+	}
 };
 
 export default PostGame;

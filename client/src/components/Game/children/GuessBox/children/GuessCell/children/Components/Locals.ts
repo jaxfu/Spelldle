@@ -1,19 +1,22 @@
+import type { IGuessDataCtx } from "../../../../../../../../contexts/CtxGuessData";
 import { T_GUESS_CATEGORIES_IDS_MAP } from "../../../../../../../../types/guesses";
 
 const Locals = {
 	setGuessCategoriesMap: function (
 		newArray: number[],
-		guessData: React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP> | null,
+		guessDataCtx: IGuessDataCtx,
 		categoryId: string,
 		setTriggerGuessDataChange: React.Dispatch<React.SetStateAction<boolean>>,
 	) {
-		if (guessData !== null) {
-			const currentArr = guessData.current.get(categoryId);
-			if (currentArr !== undefined) {
-				guessData.current.set(categoryId, newArray.sort());
-			}
-			setTriggerGuessDataChange((current) => !current);
+		const currentArr = guessDataCtx.guessData.get(categoryId);
+		if (currentArr !== undefined) {
+			//guessDataCtx.current.set(categoryId, newArray.sort());
+			guessDataCtx.setGuessData((current) => {
+				if (current !== undefined)
+					return current.set(categoryId, newArray.sort());
+			});
 		}
+		setTriggerGuessDataChange((current) => !current);
 	},
 };
 

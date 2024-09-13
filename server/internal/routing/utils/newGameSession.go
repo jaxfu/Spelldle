@@ -9,8 +9,43 @@ import (
 	"spelldle.com/server/shared/types"
 )
 
-// generate new game session
-func SpawnNewGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.GameSession, error) {
+// generate new game session with different spellID than current
+func SpawnNewGameSession(userID types.UserID, currentSpellID uint, db *dbHandler.DBHandler) (types.GameSession, error) {
+	var session types.GameSession
+
+	gameSessionID, err := createAndInsertNewGameSessionID(db)
+	if err != nil {
+		return session, err
+	}
+
+	// initialize guesses.spells
+	if err := db.InitializeGuessSpell(gameSessionID); err != nil {
+		return session, err
+	}
+
+	session.GameSessionID = gameSessionID
+	session.UserID = userID
+	session.CategoryRounds = 0
+	session.SpellRounds = 0
+
+	count, err := db.GetSpellsCount()
+	if err != nil {
+		return session, err
+	}
+
+	for {
+		spellID := randomUint(count)
+		if spellID != currentSpellID {
+			session.SpellID = spellID
+			break
+		}
+	}
+
+	return session, nil
+}
+
+// generate first game session on register
+func SpawnFirstGameSession(userID types.UserID, db *dbHandler.DBHandler) (types.GameSession, error) {
 	var session types.GameSession
 
 	gameSessionID, err := createAndInsertNewGameSessionID(db)

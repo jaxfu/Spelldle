@@ -1,13 +1,9 @@
-import React from "react";
 import styles from "./Navbar.module.scss";
-import {
-	clearTokensFromLocalStorage,
-	getAuthStatus,
-} from "../../utils/methods";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../utils/consts";
-import { Link, useNavigate } from "react-router-dom";
-import type { T_AUTH_STATUS, T_USERDATA_STATE } from "../../types";
+import { clearTokensFromLocalStorage } from "../../utils/methods";
+import { useQueryClient } from "@tanstack/react-query";
+import { APP_VERSION, QUERY_KEYS } from "../../utils/consts";
+import { useNavigate } from "react-router-dom";
+import type { T_AUTH_STATUS } from "../../types";
 
 interface IProps {
 	data: T_AUTH_STATUS | undefined;

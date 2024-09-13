@@ -20,7 +20,7 @@ interface IProps {
 }
 
 const SingleTextWithToggle: React.FC<IProps> = (props) => {
-	const guessData = useContext(CtxGuessData);
+	const guessDataCtx = useContext(CtxGuessData);
 	const checkBoxValueFromMostRecentGuess = useRef<boolean>(false);
 	const [checked, setChecked] = useState(false);
 
@@ -48,27 +48,28 @@ const SingleTextWithToggle: React.FC<IProps> = (props) => {
 			props.showingRecentGuess &&
 			checkBoxValueFromMostRecentGuess.current !== checked
 		) {
-			console.log("running");
 			props.setShowingRecentGuess(false);
 		}
 	}, [checked]);
 
 	// update guess map on checked change
 	useEffect(() => {
-		if (checked) {
-			Locals.updateGuessCategoriesMapToggle(
-				true,
-				props.categoryInfo.id,
-				guessData,
-				props.setTriggerGuessDataChange,
-			);
-		} else {
-			Locals.updateGuessCategoriesMapToggle(
-				false,
-				props.categoryInfo.id,
-				guessData,
-				props.setTriggerGuessDataChange,
-			);
+		if (guessDataCtx) {
+			if (checked) {
+				Locals.updateGuessCategoriesMapToggle(
+					true,
+					props.categoryInfo.id,
+					guessDataCtx,
+					props.setTriggerGuessDataChange,
+				);
+			} else {
+				Locals.updateGuessCategoriesMapToggle(
+					false,
+					props.categoryInfo.id,
+					guessDataCtx,
+					props.setTriggerGuessDataChange,
+				);
+			}
 		}
 	}, [checked]);
 
@@ -80,12 +81,14 @@ const SingleTextWithToggle: React.FC<IProps> = (props) => {
 					className={!checked ? styles.unchecked : ""}
 					onClick={() => {
 						setChecked((checked) => !checked);
-						Locals.updateGuessCategoriesMapToggle(
-							!checked,
-							props.categoryInfo.id,
-							guessData,
-							props.setTriggerGuessDataChange,
-						);
+						if (guessDataCtx) {
+							Locals.updateGuessCategoriesMapToggle(
+								!checked,
+								props.categoryInfo.id,
+								guessDataCtx,
+								props.setTriggerGuessDataChange,
+							);
+						}
 					}}
 				>
 					{props.categoryInfo.id == "level" ? "Ritual:" : "Conc:"}

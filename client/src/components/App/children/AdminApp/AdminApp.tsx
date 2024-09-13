@@ -9,6 +9,8 @@ import GuessInfoButton from "../../../DEBUG/GuessInfoButton/GuessInfoButton";
 interface IProps {
 	showingPostGame: boolean;
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	showingInfoPopup: boolean;
+	setShowingInfoPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AdminApp: React.FC<IProps> = (props) => {
@@ -20,6 +22,8 @@ const AdminApp: React.FC<IProps> = (props) => {
 			<Game
 				showingPostGame={props.showingPostGame}
 				setShowingPostGame={props.setShowingPostGame}
+				showingInfoPopup={props.showingInfoPopup}
+				setShowingInfoPopup={props.setShowingInfoPopup}
 			/>
 		</>
 	);

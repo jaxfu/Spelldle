@@ -8,6 +8,8 @@ import Register from "../../../Register/Register";
 interface IProps {
 	showingPostGame: boolean;
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	showingInfoPopup: boolean;
+	setShowingInfoPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserApp: React.FC<IProps> = (props) => {
@@ -16,6 +18,8 @@ const UserApp: React.FC<IProps> = (props) => {
 			<Game
 				showingPostGame={props.showingPostGame}
 				setShowingPostGame={props.setShowingPostGame}
+				showingInfoPopup={props.showingInfoPopup}
+				setShowingInfoPopup={props.setShowingInfoPopup}
 			/>
 		</>
 	);

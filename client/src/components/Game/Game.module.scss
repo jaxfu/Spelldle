@@ -5,9 +5,7 @@
 	height: 100%;
 	//border: 1px solid white;
 
-	.spells {
-		@include flex-center;
-		width: 80%;
-		border: 1px solid white;
+	.spacer {
+		height: 50px;
 	}
 }

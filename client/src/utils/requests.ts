@@ -13,6 +13,7 @@ import {
 } from "../types/guesses";
 import { type T_TOKENS } from "../types";
 import type { T_GAME_SESSION } from "../types/gameSession";
+import type { T_Spell } from "../types/spells";
 
 // Routes
 const ROUTE_PREFIX: string = import.meta.env.DEV ? "http://localhost:5000" : "";
@@ -23,6 +24,9 @@ const API_ROUTES = {
 	MAKE_GUESS_CATEGORY: ROUTE_PREFIX + "/api/makeGuess/category",
 	MAKE_GUESS_SPELL: ROUTE_PREFIX + "/api/makeGuess/spell",
 	GET_GAME_SESSION_INFO: ROUTE_PREFIX + "/api/getGameSessionInfo",
+	SPAWN_NEW_GAME_SESSION: ROUTE_PREFIX + "/api/spawnNewGameSession",
+	GET_CORRECT_SPELL_INFO: ROUTE_PREFIX + "/api/getCorrectSpellInfo",
+	GET_SPELL_LIST: ROUTE_PREFIX + "/api/getSpellList",
 };
 
 export async function apiRequestLogin(
@@ -110,18 +114,10 @@ export async function apiRequestMakeGuessSpell(
 	});
 }
 
-type T_APIRESPONSE_GET_GAME_SESSION_INFO = {
-	guesses: {
-		categories: T_PAST_GUESS_CATEGORIES_MAP[];
-		spells: number[];
-	};
-	spells: string[];
-};
-
 export async function apiRequestGetGameSessionInfo(
 	accessToken: string,
 ): Promise<T_GAME_SESSION> {
-	const res = await axios<T_APIRESPONSE_GET_GAME_SESSION_INFO>({
+	const res = await axios<T_GAME_SESSION>({
 		method: "POST",
 		url: API_ROUTES.GET_GAME_SESSION_INFO,
 		headers: {
@@ -142,16 +138,54 @@ export async function apiRequestGetGameSessionInfo(
 	if (res.data.guesses.spells.length > 0) {
 		guessSpells = res.data.guesses.spells;
 	}
-
-	if (res.data.spells.length > 0) {
-		spells = res.data.spells;
-	}
-
 	return {
 		guesses: {
 			categories: guessCategories,
 			spells: guessSpells,
+			correct: res.data.guesses.correct,
 		},
-		spells,
 	};
+}
+
+export async function apiRequestGetSpellList(
+	accessToken: string,
+): Promise<AxiosResponse<string[]>> {
+	console.log("running apiRequestGetSpellList");
+	return await axios<string[]>({
+		method: "POST",
+		url: API_ROUTES.GET_SPELL_LIST,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+}
+
+export async function apiRequestSpawnNewGameSession(
+	accessToken: string,
+): Promise<AxiosResponse<any>> {
+	return await axios<any>({
+		method: "POST",
+		url: API_ROUTES.SPAWN_NEW_GAME_SESSION,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+}
+
+export async function apiRequestGetCorrectSpellInfo(
+	accessToken: string,
+): Promise<T_Spell> {
+	console.log("running apiRequestGetCorrectSpellInfo");
+	const res = await axios<T_Spell>({
+		method: "POST",
+		url: API_ROUTES.GET_CORRECT_SPELL_INFO,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+
+	const spell: T_Spell = { ...res.data };
+	spell.categories = new Map(Object.entries(spell.categories));
+
+	return spell;
 }

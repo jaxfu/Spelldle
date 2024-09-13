@@ -31,9 +31,9 @@ type ResponseValidateToken struct {
 type ResponsePastGuesses struct {
 	Categories []PastGuessCategory `json:"categories"`
 	Spells     PastGuessesSpells   `json:"spells"`
+	Correct    bool                `json:"correct"`
 }
 
 type ResponseGetGameSessionInfo struct {
 	Guesses ResponsePastGuesses `json:"guesses"`
-	Spells  []string            `json:"spells"`
 }

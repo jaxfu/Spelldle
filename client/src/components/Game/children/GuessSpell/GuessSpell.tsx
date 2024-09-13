@@ -4,28 +4,25 @@ import RecommendationBox from "../GuessBox/children/GuessCell/children/Recommend
 import { useMemo, useState } from "react";
 import GuessCount from "../GuessCount/GuessCount";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../../../utils/consts";
+import { LIMITS, QUERY_KEYS } from "../../../../utils/consts";
 import { apiRequestMakeGuessSpell } from "../../../../utils/requests";
 import { getUserSessionDataFromStorage } from "../../../../utils/methods";
 
 interface IProps {
 	spells: string[];
-	numGuesses: number;
+	pastSpellGuesses: number[];
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GuessSpell: React.FC<IProps> = (props) => {
+	// setup submit button mutation
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: apiRequestMakeGuessSpell,
-		onSuccess: (data) => {
-			console.log(`CORRECT: ${data.data.correct}`);
+		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 			});
-			if (data.data.correct) {
-				props.setShowingPostGame(true);
-			}
 		},
 	});
 
@@ -38,10 +35,37 @@ const GuessSpell: React.FC<IProps> = (props) => {
 	);
 
 	const hasValidInput = spellIdMap.has(input.toLowerCase());
+	const spells = (
+		spells: string[],
+		idMap: Map<string, number>,
+		pastGuesses: number[],
+	): string[] => {
+		const spellArr: string[] = [];
+
+		spells.forEach((spell) => {
+			const id = idMap.get(spell.toLowerCase());
+			if (id !== undefined) {
+				if (!pastGuesses.includes(id)) spellArr.push(spell);
+			} else console.log(`error getting spells, spell ${spell} id not found`);
+		});
+
+		return spellArr;
+	};
 
 	return (
 		<div className={styles.root}>
-			<GuessCount title="Guesses" capacity={3} numGuesses={props.numGuesses} />
+			<GuessCount
+				title="Spell Guesses"
+				capacity={LIMITS.SPELL}
+				numGuesses={props.pastSpellGuesses.length}
+			/>
+			{props.pastSpellGuesses.length > 0 && (
+				<div className={styles.pastSpellGuesses}>
+					{props.pastSpellGuesses.map((id, i) => (
+						<span key={`spellPastGuess${i}`}>{props.spells[id - 1]}</span>
+					))}
+				</div>
+			)}
 			<div className={styles.cell}>
 				<h3>Spell</h3>
 				<div className={styles.input}>
@@ -54,7 +78,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 					/>
 					{show && (
 						<RecommendationBox
-							values={props.spells}
+							values={spells(props.spells, spellIdMap, props.pastSpellGuesses)}
 							input={input}
 							setInput={setInput}
 						/>

@@ -33,9 +33,10 @@ func (dbHandler *DBHandler) GetGameSessionByGameSessionID(gameSessionID types.Ga
 
 const QGetGameSessionByUserID = `
   SELECT game_session_id, user_id, spell_id, category_rounds, spell_rounds
-	FROM users.data
-	NATURAL JOIN game_sessions.data
+	FROM users.data u
+	NATURAL JOIN game_sessions.data g
   WHERE user_id=$1
+	AND u.game_session_id=g.game_session_id
 `
 
 func (dbHandler *DBHandler) GetGameSessionByUserID(userID types.UserID) (types.GameSession, error) {
@@ -110,16 +111,16 @@ func (dbHandler *DBHandler) InsertGameSession(session types.GameSession) error {
 
 // UPDATES
 
-const EUpdateGameSessionIDByUserID = `
+const EUpdateUserGameSessionIDByUserID = `
 	UPDATE users.data
   SET game_session_id = $1
 	WHERE user_id = $2
 `
 
-func (dbHandler *DBHandler) UpdateGameSessionIDByUserID(gameSessionID types.GameSessionID, userID types.UserID) error {
+func (dbHandler *DBHandler) UpdateUserGameSessionIDByUserID(gameSessionID types.GameSessionID, userID types.UserID) error {
 	_, err := dbHandler.Conn.Exec(
 		context.Background(),
-		EUpdateGameSessionIDByUserID,
+		EUpdateUserGameSessionIDByUserID,
 		gameSessionID,
 		userID,
 	)
@@ -128,15 +129,17 @@ func (dbHandler *DBHandler) UpdateGameSessionIDByUserID(gameSessionID types.Game
 }
 
 const EUpdateCategoryRoundsByUserID = `
-  UPDATE game_sessions.data
-  SET category_rounds = $1, updated_at = NOW()
-  WHERE user_id = $2
+	UPDATE game_sessions.data g
+	SET category_rounds = $2, updated_at = now()
+	FROM users.data u
+	WHERE u.user_id = $1
+	AND g.game_session_id = u.game_session_id;
 `
 
 func (dbHandler *DBHandler) UpdateGameSessionCategoryRounds(userID types.UserID, rounds uint) error {
 	_, err := dbHandler.Conn.Exec(context.Background(), EUpdateCategoryRoundsByUserID,
-		rounds,
 		userID,
+		rounds,
 	)
 	if err != nil {
 		return err
@@ -146,15 +149,17 @@ func (dbHandler *DBHandler) UpdateGameSessionCategoryRounds(userID types.UserID,
 }
 
 const EUpdateSpellRoundsByUserID = `
-  UPDATE game_sessions.data
-  SET spell_rounds = $1, updated_at = NOW()
-  WHERE user_id = $2
+	UPDATE game_sessions.data g
+	SET spell_rounds = $2, updated_at = now()
+	FROM users.data u
+	WHERE u.user_id = $1
+	AND g.game_session_id = u.game_session_id;
 `
 
 func (dbHandler *DBHandler) UpdateGameSessionSpellRounds(userID types.UserID, rounds uint) error {
 	_, err := dbHandler.Conn.Exec(context.Background(), EUpdateSpellRoundsByUserID,
-		rounds,
 		userID,
+		rounds,
 	)
 	if err != nil {
 		return err

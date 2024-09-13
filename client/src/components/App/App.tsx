@@ -12,14 +12,16 @@ import Loading from "../Loading/Loading";
 import AdminApp from "./children/AdminApp/AdminApp";
 import UserApp from "./children/UserApp/UserApp";
 import ContentBox from "../ContentBox/ContentBox";
-import Game from "../Game/Game";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
+import Locals from "./Locals";
+import VersionLabel from "./children/VersionLabel/VersionLabel";
 
 const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
 	const [gameComponent, setGameComponent] = useState<JSX.Element>(<Loading />);
 
+	// fetch auth status if tokens in localstorage
 	const { isFetching, isFetched, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
@@ -27,23 +29,27 @@ const App: React.FC = () => {
 		refetchOnWindowFocus: false,
 		staleTime: Infinity,
 	});
-	if (error) {
-		console.log(`GET_AUTH_STATUS ERROR: ${error}`);
-		clearTokensFromLocalStorage();
-	}
+
+	// check and set showingInfoPopup status
+	const [showingInfoPopup, setShowingInfoPopup] = useState<boolean>(false);
+	useEffect(() => Locals.checkAndSetShowingInfoPopup(setShowingInfoPopup), []);
 
 	// if auth invalid, send to login &&
 	// set gameComponent base on role
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isSuccess && !isFetching && isFetched) {
-			if (!data || !data.valid) navigate("/login");
-			else {
+		if (!isFetching && isFetched) {
+			if (!data || !data.valid || error) {
+				clearTokensFromLocalStorage();
+				navigate("/login");
+			} else if (isSuccess) {
 				if (data.user_data.role === USER_ROLES.USER) {
 					setGameComponent(
 						<UserApp
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
+							showingInfoPopup={showingInfoPopup}
+							setShowingInfoPopup={setShowingInfoPopup}
 						/>,
 					);
 				} else {
@@ -51,17 +57,23 @@ const App: React.FC = () => {
 						<AdminApp
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
+							showingInfoPopup={showingInfoPopup}
+							setShowingInfoPopup={setShowingInfoPopup}
 						/>,
 					);
 				}
 			}
 		}
-	}, [isSuccess, isFetched, isFetching, showingPostGame]);
+	}, [isSuccess, isFetched, isFetching, showingPostGame, showingInfoPopup]);
 
 	return (
 		<div className={styles.root}>
 			<Navbar data={data} />
-			<ContentBox showingPostGame={showingPostGame}>
+			<VersionLabel />
+			<ContentBox
+				showingPostGame={showingPostGame}
+				showingInfoPopup={showingInfoPopup}
+			>
 				<Routes>
 					<Route path="/" element={gameComponent} />
 					<Route path="/register" element={<Register />} />

@@ -71,7 +71,7 @@ func (guess *GuessCategories) GetResults(spell *SpellAll) GuessResults {
 			}
 		}
 
-		fmt.Printf("guess: %v, spell: %v, result: %d\n", *togglesGuess[i], *togglesSpell[i], togglesResult[i])
+		fmt.Printf("guess: %v, spell: %v, result: %d\n", *togglesGuess[i], *togglesSpell[i], *togglesResult[i])
 	}
 
 	// test arrays

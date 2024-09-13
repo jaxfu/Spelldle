@@ -59,23 +59,21 @@ function generateValuesMapFromValues(arr: string[]): Map<string, number> {
 }
 
 export function generateGuessesStateFromJSON(
-	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON | undefined,
+	categoryInfoJson: T_CATEGORY_INFO_SEED_JSON,
 ): T_GUESS_CATEGORIES_IDS_MAP {
 	const map: T_GUESS_CATEGORIES_IDS_MAP = new Map();
 
-	if (categoryInfoJson !== undefined) {
-		for (const { id, component_type } of categoryInfoJson) {
-			switch (component_type) {
-				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
-					map.set(id, -1);
-					break;
-				case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
-				case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
-					map.set(id, []);
-					break;
-				case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
-					map.set(id, [0, 0]);
-			}
+	for (const { id, component_type } of categoryInfoJson) {
+		switch (component_type) {
+			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT:
+				map.set(id, -1);
+				break;
+			case E_CATEGORY_COMPONENT_TYPE.MULTI_TEXT:
+			case E_CATEGORY_COMPONENT_TYPE.COMPONENTS:
+				map.set(id, []);
+				break;
+			case E_CATEGORY_COMPONENT_TYPE.SINGLE_TEXT_WITH_TOGGLE:
+				map.set(id, [0, 0]);
 		}
 	}
 

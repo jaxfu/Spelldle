@@ -18,23 +18,13 @@ type invalidResponse struct {
 	Valid bool `json:"valid"`
 }
 
-func ValidateAccessToken() gin.HandlerFunc {
+func (mw *MiddlewareHandler) ValidateAccessToken() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		invalidResponse := invalidResponse{
 			Valid: false,
 		}
 
-		if ctx.Request.Method == "POST" {
-			if ctx.Request.URL.Path != consts.RouteUrlValidateSession &&
-				ctx.Request.URL.Path != consts.RouteUrlMakeGuessCategory &&
-				ctx.Request.URL.Path != consts.RouteUrlMakeGuessSpell &&
-				ctx.Request.URL.Path != consts.RouteUrlGetGameSessionInfo &&
-				ctx.Request.URL.Path != consts.RouteUrlAddSpell {
-				fmt.Println("Skipping middleware")
-				ctx.Next()
-				return
-			}
-		} else {
+		if _, exists := mw.JWTValidatedRoutes[ctx.FullPath()]; !exists {
 			fmt.Println("Skipping middleware")
 			ctx.Next()
 			return

@@ -57,6 +57,7 @@ func TestPostRequestWithAuthTokens[P any, R any](route string, payload *P, respo
 	}
 	r.Header.Set(consts.HeaderTypeAuthorization, fmt.Sprintf("%s%s", consts.BearerTokenPrefix, tokens.AccessToken))
 	fmt.Printf("HEADER: %+v\n", r.Header.Get(consts.HeaderTypeAuthorization))
+	middleware := middleware.NewMiddlewareHandler()
 	router.Use(middleware.ValidateAccessToken())
 	router.POST(route, routeHandler)
 	router.ServeHTTP(w, r)

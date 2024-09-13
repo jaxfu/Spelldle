@@ -53,6 +53,7 @@ func main() {
 		router.Use(cors.New(config))
 	}
 
+	middleware := middleware.NewMiddlewareHandler()
 	router.Use(middleware.ValidateAccessToken())
 
 	router.POST(consts.RouteUrlRegister, routes.Register(db))
@@ -62,6 +63,9 @@ func main() {
 	router.POST(consts.RouteUrlMakeGuessSpell, routes.MakeGuessSpell(db))
 	router.POST(consts.RouteUrlGetGameSessionInfo, routes.GetGameSessionInfo(db))
 	router.POST(consts.RouteUrlAddSpell, routes.AddSpell(db))
+	router.POST(consts.RouteUrlSpawnNewGameSession, routes.SpawnNewGameSession(db))
+	router.POST(consts.RouteUrlGetCorrectSpellInfo, routes.GetCorrectSpellInfo(db))
+	router.POST(consts.RouteUrlGetSpellList, routes.GetSpellList(db))
 
 	router.Use(spa.Middleware("/", "client"))
 

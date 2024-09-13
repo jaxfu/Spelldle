@@ -14,8 +14,13 @@
 	overflow: hidden;
 
 	.title {
-		color: $color-navbar-title;
 		padding-left: 10px;
+		display: flex;
+		gap: 5px;
+
+		h1 {
+			color: $color-navbar-title;
+		}
 	}
 
 	.username {

@@ -1,12 +1,15 @@
 import styles from "./Game.module.scss";
 import GuessBox from "./children/GuessBox/GuessBox";
-import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../utils/consts";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { LIMITS, QUERY_KEYS } from "../../utils/consts";
 import {
 	clearTokensFromLocalStorage,
 	getUserSessionDataFromStorage,
 } from "../../utils/methods";
-import { apiRequestGetGameSessionInfo } from "../../utils/requests";
+import {
+	apiRequestGetGameSessionInfo,
+	apiRequestGetSpellList,
+} from "../../utils/requests";
 import { useEffect, useMemo, useRef, useState } from "react";
 import GuessInfoButton from "../DEBUG/GuessInfoButton/GuessInfoButton";
 import {
@@ -22,17 +25,22 @@ import Loading from "../Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import GuessSpell from "./children/GuessSpell/GuessSpell";
 import PostGame from "./children/PostGame/PostGame";
+import InfoPopup from "./children/InfoPopup/InfoPopup";
+import Navbar from "../Navbar/Navbar";
+import InfoButton from "./children/InfoButton/InfoButton";
 
 interface IProps {
 	showingPostGame: boolean;
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	showingInfoPopup: boolean;
+	setShowingInfoPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Game: React.FC<IProps> = (props) => {
+	// fetch CATEGORY_INFO.json
 	const [categoryInfoJson, setCategoryInfoJson] = useState<
 		T_CATEGORY_INFO_SEED_JSON | undefined
-	>(undefined);
-	// fetch CATEGORY_INFO.json
+	>();
 	useEffect(() => {
 		async function fetchCategoryInfoJson() {
 			try {
@@ -50,17 +58,34 @@ const Game: React.FC<IProps> = (props) => {
 		fetchCategoryInfoJson();
 	}, []);
 
+	// generate categoriesInfo
 	const categoriesInfo: T_CATEGORY_INFO[] | undefined = useMemo(() => {
 		if (categoryInfoJson !== undefined)
 			return generateCategoryInfoFromSeedJSON(categoryInfoJson);
 		else return undefined;
 	}, [categoryInfoJson]);
-	const initialGuessInfo = useRef<T_GUESS_CATEGORIES_IDS_MAP>();
 
+	// setup guessData to pass to guessDataCtx
+	const [guessData, setGuessData] = useState<
+		T_GUESS_CATEGORIES_IDS_MAP | undefined
+	>();
 	useEffect(() => {
-		initialGuessInfo.current = generateGuessesStateFromJSON(categoryInfoJson);
+		if (categoryInfoJson !== undefined)
+			setGuessData(generateGuessesStateFromJSON(categoryInfoJson));
 	}, [categoryInfoJson]);
 
+	// fetch spell list on first load
+	const spellListQuery = useQuery({
+		queryKey: [QUERY_KEYS.SPELL_LIST],
+		queryFn: () =>
+			apiRequestGetSpellList(getUserSessionDataFromStorage().access_token),
+		retry: false,
+		refetchOnWindowFocus: false,
+		staleTime: Infinity,
+	});
+
+	// fetch gameSession data
+	const queryClient = useQueryClient();
 	const { data, error, isFetching, isSuccess, isFetched } = useQuery({
 		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
@@ -70,40 +95,63 @@ const Game: React.FC<IProps> = (props) => {
 		retry: false,
 		refetchOnWindowFocus: false,
 		staleTime: Infinity,
+		enabled: spellListQuery.isSuccess,
 	});
 
 	// logout and return to login if fetch error
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isFetched && (!isSuccess || error)) {
+		if (!isFetching && isFetched && (!isSuccess || error)) {
 			console.log(`Error fetching gameSessionData: ${error}`);
 			clearTokensFromLocalStorage();
 			navigate("/login");
 		}
-	}, [isFetched, isSuccess, error]);
+	}, [isFetched, isFetching, isSuccess, error]);
 
-	if (isFetching) {
+	// render postgame if limit reached or if last spell guess was correct &&
+	// hide GuessBox if at categoryGuessLimit
+	const [showGuessBox, setShowGuessBox] = useState<boolean>(true);
+	useEffect(() => {
+		if (isSuccess && !isFetching && data !== undefined) {
+			if (data.guesses.correct || data.guesses.spells.length >= LIMITS.SPELL) {
+				props.setShowingPostGame(true);
+				queryClient.invalidateQueries({
+					queryKey: [QUERY_KEYS.CORRECT_SPELL_INFO],
+				});
+			} else if (data.guesses.categories.length >= LIMITS.CATEGORY) {
+				setShowGuessBox(false);
+			}
+		}
+	}, [data, isFetching, isSuccess]);
+
+	// component render
+	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
-	} else if (isSuccess && data !== undefined && categoriesInfo !== undefined) {
-		if (initialGuessInfo.current !== undefined) {
+	} else if (isSuccess && spellListQuery.isSuccess) {
+		if (data !== undefined && spellListQuery.data !== undefined) {
 			return (
 				<div className={styles.root}>
-					<CtxGuessData.Provider
-						value={
-							initialGuessInfo as React.MutableRefObject<T_GUESS_CATEGORIES_IDS_MAP>
-						}
-					>
+					<CtxGuessData.Provider value={{ guessData, setGuessData }}>
 						{props.showingPostGame && (
-							<PostGame setShowingPostGame={props.setShowingPostGame} />
+							<PostGame
+								setShowing={props.setShowingPostGame}
+								gameSessionInfo={data}
+								categoryInfo={categoriesInfo}
+							/>
 						)}
+						{props.showingInfoPopup && (
+							<InfoPopup setShowing={props.setShowingInfoPopup} />
+						)}
+						<InfoButton setShowingInfoPopup={props.setShowingInfoPopup} />
 						<GuessInfoButton />
 						<GuessSpell
-							spells={data.spells}
-							numGuesses={data.guesses.spells.length}
+							spells={spellListQuery.data.data}
 							setShowingPostGame={props.setShowingPostGame}
+							pastSpellGuesses={data.guesses.spells}
 						/>
 						<GuessBox
 							categoriesInfoArr={categoriesInfo}
+							showGuessBox={showGuessBox}
 							mostRecentGuess={
 								data.guesses.categories.length > 0
 									? data.guesses.categories[data.guesses.categories.length - 1]
@@ -121,6 +169,7 @@ const Game: React.FC<IProps> = (props) => {
 							/>
 						)}
 					</CtxGuessData.Provider>
+					<div className={styles.spacer}></div>
 				</div>
 			);
 		} else {
