@@ -4,11 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../utils/consts";
 import { useNavigate } from "react-router-dom";
 import type { T_AUTH_STATUS } from "../../types";
-import { FaQuestionCircle } from "react-icons/fa";
 
 interface IProps {
 	data: T_AUTH_STATUS | undefined;
-	setShowingInfoPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Navbar: React.FC<IProps> = (props) => {
@@ -28,23 +26,17 @@ const Navbar: React.FC<IProps> = (props) => {
 			</span>
 			<span className={styles.buttons}>
 				{props.data !== undefined && props.data.valid ? (
-					<>
-						<button
-							onClick={() => {
-								clearTokensFromLocalStorage();
-								queryClient.invalidateQueries({
-									queryKey: [QUERY_KEYS.USER_DATA],
-								});
-								navigate("/login");
-							}}
-						>
-							Logout
-						</button>
-						<FaQuestionCircle
-							className={styles.icon}
-							onClick={() => props.setShowingInfoPopup((current) => !current)}
-						/>
-					</>
+					<button
+						onClick={() => {
+							clearTokensFromLocalStorage();
+							queryClient.invalidateQueries({
+								queryKey: [QUERY_KEYS.USER_DATA],
+							});
+							navigate("/login");
+						}}
+					>
+						Logout
+					</button>
 				) : (
 					<>
 						{/* <Link to={"/login"}>
