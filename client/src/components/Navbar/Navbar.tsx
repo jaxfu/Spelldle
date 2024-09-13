@@ -42,7 +42,7 @@ const Navbar: React.FC<IProps> = (props) => {
 						</button>
 						<FaQuestionCircle
 							className={styles.icon}
-							onClick={() => props.setShowingInfoPopup(true)}
+							onClick={() => props.setShowingInfoPopup((current) => !current)}
 						/>
 					</>
 				) : (
