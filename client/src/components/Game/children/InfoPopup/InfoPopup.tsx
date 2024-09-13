@@ -1,8 +1,12 @@
 import styles from "./InfoPopup.module.scss";
 import Popup from "../Popup/Popup";
-import { LIMITS } from "../../../../utils/consts";
+import { LIMITS, LOCAL_STORAGE_KEYS } from "../../../../utils/consts";
 
-const InfoPopup: React.FC = () => {
+interface IProps {
+	setShowing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const InfoPopup: React.FC<IProps> = (props) => {
 	return (
 		<Popup>
 			<div className={styles.content}>
@@ -58,8 +62,15 @@ const InfoPopup: React.FC = () => {
 					</i>
 				</div>
 				<div className={styles.buttons}>
-					<button>Ok</button>
-					<button>Don't Show Again</button>
+					<button onClick={() => props.setShowing(false)}>Ok</button>
+					<button
+						onClick={() => {
+							props.setShowing(false);
+							localStorage.setItem(LOCAL_STORAGE_KEYS.show_info_popup, "false");
+						}}
+					>
+						Don't Show Again
+					</button>
 				</div>
 			</div>
 		</Popup>

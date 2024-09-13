@@ -137,7 +137,9 @@ const Game: React.FC<IProps> = (props) => {
 								categoryInfo={categoriesInfo}
 							/>
 						)}
-						{props.showingInfoPopup && <InfoPopup />}
+						{props.showingInfoPopup && (
+							<InfoPopup setShowing={props.setShowingInfoPopup} />
+						)}
 						<GuessInfoButton />
 						<GuessSpell
 							spells={spellListQuery.data.data}

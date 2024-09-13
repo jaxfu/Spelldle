@@ -1,13 +1,15 @@
-type T_KEYS_TOKENS = {
+type T_LOCAL_STORAGE_KEYS = {
 	access_token: string;
 	refresh_token: string;
 	correct_spell_info: string;
+	show_info_popup: string;
 };
 
-export const LOCAL_STORAGE_TOKENS_KEYS: T_KEYS_TOKENS = {
+export const LOCAL_STORAGE_KEYS: T_LOCAL_STORAGE_KEYS = {
 	access_token: "ACCESS_TOKEN",
 	refresh_token: "REFRESH_TOKEN",
 	correct_spell_info: "CORRECT_SPELL_INFO",
+	show_info_popup: "SHOW_INFO_POPUP",
 };
 
 // React-Query

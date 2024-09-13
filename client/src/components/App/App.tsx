@@ -2,7 +2,7 @@ import styles from "./App.module.scss";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS, USER_ROLES } from "../../utils/consts";
+import { LOCAL_STORAGE_KEYS, QUERY_KEYS, USER_ROLES } from "../../utils/consts";
 import {
 	clearTokensFromLocalStorage,
 	getAuthStatus,
@@ -12,15 +12,15 @@ import Loading from "../Loading/Loading";
 import AdminApp from "./children/AdminApp/AdminApp";
 import UserApp from "./children/UserApp/UserApp";
 import ContentBox from "../ContentBox/ContentBox";
-import Game from "../Game/Game";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
+import Locals from "./Locals";
 
 const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
-	const [showingInfoPopup, setShowingInfoPopup] = useState<boolean>(true);
 	const [gameComponent, setGameComponent] = useState<JSX.Element>(<Loading />);
 
+	// fetch auth status if tokens in localstorage
 	const { isFetching, isFetched, isSuccess, error, data } = useQuery({
 		queryKey: [QUERY_KEYS.USER_DATA],
 		queryFn: getAuthStatus,
@@ -28,6 +28,15 @@ const App: React.FC = () => {
 		refetchOnWindowFocus: false,
 		staleTime: Infinity,
 	});
+
+	// check for show InfoPopup
+	const [showingInfoPopup, setShowingInfoPopup] = useState<boolean>(false);
+
+	useEffect(
+		() =>
+			Locals.checkLocalStorageForShowInfoPopupAndSetStatus(setShowingInfoPopup),
+		[],
+	);
 
 	// if auth invalid, send to login &&
 	// set gameComponent base on role
@@ -59,7 +68,7 @@ const App: React.FC = () => {
 				}
 			}
 		}
-	}, [isSuccess, isFetched, isFetching, showingPostGame]);
+	}, [isSuccess, isFetched, isFetching, showingPostGame, showingInfoPopup]);
 
 	return (
 		<div className={styles.root}>
