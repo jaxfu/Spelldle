@@ -30,6 +30,8 @@ import InfoPopup from "./children/InfoPopup/InfoPopup";
 interface IProps {
 	showingPostGame: boolean;
 	setShowingPostGame: React.Dispatch<React.SetStateAction<boolean>>;
+	showingInfoPopup: boolean;
+	setShowingInfoPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Game: React.FC<IProps> = (props) => {
@@ -120,9 +122,6 @@ const Game: React.FC<IProps> = (props) => {
 		}
 	}, [data, isFetching, isSuccess]);
 
-	// intial info popup
-	const [showInfoPopup, setShowInfoPopup] = useState<boolean>(false);
-
 	// component render
 	if (guessData === undefined || categoriesInfo === undefined || isFetching) {
 		return <Loading />;
@@ -138,7 +137,7 @@ const Game: React.FC<IProps> = (props) => {
 								categoryInfo={categoriesInfo}
 							/>
 						)}
-						{showInfoPopup && <InfoPopup />}
+						{props.showingInfoPopup && <InfoPopup />}
 						<GuessInfoButton />
 						<GuessSpell
 							spells={spellListQuery.data.data}

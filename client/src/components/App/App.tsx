@@ -18,6 +18,7 @@ import Register from "../Register/Register";
 
 const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
+	const [showingInfoPopup, setShowingInfoPopup] = useState<boolean>(true);
 	const [gameComponent, setGameComponent] = useState<JSX.Element>(<Loading />);
 
 	const { isFetching, isFetched, isSuccess, error, data } = useQuery({
@@ -42,6 +43,8 @@ const App: React.FC = () => {
 						<UserApp
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
+							showingInfoPopup={showingInfoPopup}
+							setShowingInfoPopup={setShowingInfoPopup}
 						/>,
 					);
 				} else {
@@ -49,6 +52,8 @@ const App: React.FC = () => {
 						<AdminApp
 							showingPostGame={showingPostGame}
 							setShowingPostGame={setShowingPostGame}
+							showingInfoPopup={showingInfoPopup}
+							setShowingInfoPopup={setShowingInfoPopup}
 						/>,
 					);
 				}
@@ -59,7 +64,10 @@ const App: React.FC = () => {
 	return (
 		<div className={styles.root}>
 			<Navbar data={data} />
-			<ContentBox showingPostGame={showingPostGame}>
+			<ContentBox
+				showingPostGame={showingPostGame}
+				showingInfoPopup={showingInfoPopup}
+			>
 				<Routes>
 					<Route path="/" element={gameComponent} />
 					<Route path="/register" element={<Register />} />
