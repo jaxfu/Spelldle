@@ -2,7 +2,7 @@ import styles from "./App.module.scss";
 import Navbar from "../Navbar/Navbar";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { LOCAL_STORAGE_KEYS, QUERY_KEYS, USER_ROLES } from "../../utils/consts";
+import { QUERY_KEYS, USER_ROLES } from "../../utils/consts";
 import {
 	clearTokensFromLocalStorage,
 	getAuthStatus,
@@ -29,14 +29,9 @@ const App: React.FC = () => {
 		staleTime: Infinity,
 	});
 
-	// check for show InfoPopup
+	// check and set showingInfoPopup status
 	const [showingInfoPopup, setShowingInfoPopup] = useState<boolean>(false);
-
-	useEffect(
-		() =>
-			Locals.checkLocalStorageForShowInfoPopupAndSetStatus(setShowingInfoPopup),
-		[],
-	);
+	useEffect(() => Locals.checkAndSetShowingInfoPopup(setShowingInfoPopup), []);
 
 	// if auth invalid, send to login &&
 	// set gameComponent base on role
@@ -72,7 +67,7 @@ const App: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
-			<Navbar data={data} />
+			<Navbar data={data} setShowingInfoPopup={setShowingInfoPopup} />
 			<ContentBox
 				showingPostGame={showingPostGame}
 				showingInfoPopup={showingInfoPopup}
