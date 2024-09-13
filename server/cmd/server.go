@@ -53,9 +53,11 @@ func main() {
 		router.Use(cors.New(config))
 	}
 
+	// init middleware handler
 	middleware := middleware.NewMiddlewareHandler()
 	router.Use(middleware.ValidateAccessToken())
 
+	router.SetTrustedProxies([]string{"127.0.0.1"})
 	router.POST(consts.RouteUrlRegister, routes.Register(db))
 	router.POST(consts.RouteUrlLogin, routes.Login(db))
 	router.POST(consts.RouteUrlValidateSession, routes.ValidateSession(db))
