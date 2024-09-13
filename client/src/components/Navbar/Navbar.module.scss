@@ -14,8 +14,20 @@
 	overflow: hidden;
 
 	.title {
-		color: $color-navbar-title;
 		padding-left: 10px;
+		display: flex;
+		gap: 5px;
+
+		h1 {
+			color: $color-navbar-title;
+		}
+
+		span {
+			display: flex;
+			align-items: center;
+			color: rgba($color: #808080, $alpha: 0.5);
+			margin-top: 10px;
+		}
 	}
 
 	.username {

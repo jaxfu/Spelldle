@@ -1,7 +1,7 @@
 import styles from "./Navbar.module.scss";
 import { clearTokensFromLocalStorage } from "../../utils/methods";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../utils/consts";
+import { APP_VERSION, QUERY_KEYS } from "../../utils/consts";
 import { useNavigate } from "react-router-dom";
 import type { T_AUTH_STATUS } from "../../types";
 
@@ -18,6 +18,7 @@ const Navbar: React.FC<IProps> = (props) => {
 		<div className={styles.root}>
 			<span className={styles.title}>
 				<h1>Spelldle</h1>
+				<span>v{APP_VERSION}</span>
 			</span>
 			<span className={styles.username}>
 				{props.data !== undefined && props.data.valid && (

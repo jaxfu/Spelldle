@@ -29,3 +29,5 @@ export const LIMITS = {
 	CATEGORY: 5,
 	SPELL: 3,
 };
+
+export const APP_VERSION: string = "0.6b";
