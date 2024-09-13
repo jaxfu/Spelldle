@@ -15,6 +15,7 @@ import ContentBox from "../ContentBox/ContentBox";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Locals from "./Locals";
+import VersionLabel from "./children/VersionLabel/VersionLabel";
 
 const App: React.FC = () => {
 	const [showingPostGame, setShowingPostGame] = useState<boolean>(false);
@@ -67,7 +68,8 @@ const App: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
-			<Navbar data={data} setShowingInfoPopup={setShowingInfoPopup} />
+			<Navbar data={data} />
+			<VersionLabel />
 			<ContentBox
 				showingPostGame={showingPostGame}
 				showingInfoPopup={showingInfoPopup}
