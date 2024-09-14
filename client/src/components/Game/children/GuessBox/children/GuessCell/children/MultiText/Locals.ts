@@ -43,7 +43,7 @@ const Locals = {
 		// );
 		guessDataCtx.setGuessData((current) => {
 			if (current !== undefined) {
-				const newMap = new Map(current)
+				const newMap = new Map(current);
 				return newMap.set(
 					categoryID,
 					mapArr.sort((a, b) => a - b),

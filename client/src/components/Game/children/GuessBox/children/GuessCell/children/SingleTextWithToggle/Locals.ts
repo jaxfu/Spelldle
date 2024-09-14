@@ -16,9 +16,9 @@ const Locals = {
 			//guessDataCtx.current.set(categoryId, newData);
 			guessDataCtx.setGuessData((current) => {
 				if (current !== undefined) {
-					const newMap = new Map(current)
+					const newMap = new Map(current);
 					return newMap.set(categoryId, newData);
-				} 
+				}
 			});
 
 			setTriggerGuessDataChange((current) => !current);

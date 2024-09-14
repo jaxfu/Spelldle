@@ -15,7 +15,8 @@ const InfoPopup: React.FC<IProps> = (props) => {
 				<ul className={styles.rules}>
 					<li>
 						You have {LIMITS.CATEGORY.toString()} chances to guess the
-						categories of the spell
+						categories of the spell. You must enter a value in every category
+						before you can submit.
 					</li>
 					<li>
 						You have {LIMITS.SPELL.toString()} chances to guess the spell itself
