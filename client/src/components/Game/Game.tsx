@@ -142,7 +142,7 @@ const Game: React.FC<IProps> = (props) => {
 							<InfoPopup setShowing={props.setShowingInfoPopup} />
 						)}
 						<InfoButton setShowingInfoPopup={props.setShowingInfoPopup} />
-						<GuessInfoButton />
+						{/* <GuessInfoButton /> */}
 						<GuessSpell
 							spells={spellListQuery.data.data}
 							setShowingPostGame={props.setShowingPostGame}
