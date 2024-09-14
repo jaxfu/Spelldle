@@ -42,11 +42,13 @@ const Locals = {
 		// 	mapArr.sort((a, b) => a - b),
 		// );
 		guessDataCtx.setGuessData((current) => {
-			if (current !== undefined)
-				return current.set(
+			if (current !== undefined) {
+				const newMap = new Map(current)
+				return newMap.set(
 					categoryID,
 					mapArr.sort((a, b) => a - b),
 				);
+			}
 		});
 
 		setTriggerGuessDataChange((current) => !current);

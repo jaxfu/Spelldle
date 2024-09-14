@@ -10,10 +10,11 @@ const Locals = {
 	) {
 		const currentArr = guessDataCtx.guessData.get(categoryId);
 		if (currentArr !== undefined) {
-			//guessDataCtx.current.set(categoryId, newArray.sort());
 			guessDataCtx.setGuessData((current) => {
-				if (current !== undefined)
-					return current.set(categoryId, newArray.sort());
+				if (current !== undefined) {
+					const newMap = new Map(current)
+					return newMap.set(categoryId, newArray.sort());
+				}
 			});
 		}
 		setTriggerGuessDataChange((current) => !current);

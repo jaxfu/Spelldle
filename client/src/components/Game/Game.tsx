@@ -26,7 +26,6 @@ import { useNavigate } from "react-router-dom";
 import GuessSpell from "./children/GuessSpell/GuessSpell";
 import PostGame from "./children/PostGame/PostGame";
 import InfoPopup from "./children/InfoPopup/InfoPopup";
-import Navbar from "../Navbar/Navbar";
 import InfoButton from "./children/InfoButton/InfoButton";
 
 interface IProps {
@@ -143,7 +142,7 @@ const Game: React.FC<IProps> = (props) => {
 							<InfoPopup setShowing={props.setShowingInfoPopup} />
 						)}
 						<InfoButton setShowingInfoPopup={props.setShowingInfoPopup} />
-						{/* <GuessInfoButton /> */}
+						<GuessInfoButton />
 						<GuessSpell
 							spells={spellListQuery.data.data}
 							setShowingPostGame={props.setShowingPostGame}

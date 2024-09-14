@@ -16,14 +16,20 @@ const Locals = {
 			if (valueId !== undefined) {
 				//guessData.current.set(categoryInfo.id, valueId);
 				guessDataCtx.setGuessData((current) => {
-					if (current !== undefined)
-						return current.set(categoryInfo.id, valueId);
+					if (current !== undefined) {
+						const newMap = new Map(current)
+						return newMap.set(categoryInfo.id, valueId);
+					}
+
 				});
 			}
 		} else {
 			//guessData.current.set(categoryInfo.id, -1);
 			guessDataCtx.setGuessData((current) => {
-				if (current !== undefined) return current.set(categoryInfo.id, -1);
+				if (current !== undefined) {
+					const newMap = new Map(current)
+					return newMap.set(categoryInfo.id, -1);
+				} 
 			});
 		}
 
@@ -49,7 +55,8 @@ const Locals = {
 					//guessData.current.set(categoryInfo.id, [valueId, currentData[1]]);
 					guessDataCtx.setGuessData((current) => {
 						if (current !== undefined) {
-							return current.set(categoryInfo.id, [valueId, currentData[1]]);
+							const newMap = new Map(current)
+							return newMap.set(categoryInfo.id, [valueId, currentData[1]]);
 						}
 					});
 				}
@@ -57,7 +64,8 @@ const Locals = {
 				//guessData.current.set(categoryInfo.id, [-1, currentData[1]]);
 				guessDataCtx.setGuessData((current) => {
 					if (current !== undefined) {
-						return current.set(categoryInfo.id, [-1, currentData[1]]);
+						const newMap = new Map(current)
+						return newMap.set(categoryInfo.id, [-1, currentData[1]]);
 					}
 				});
 			}
