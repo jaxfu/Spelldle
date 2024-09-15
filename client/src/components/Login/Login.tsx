@@ -40,12 +40,16 @@ const Login: React.FC = () => {
 					queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 				});
 				navigate("/");
+			} else {
+				setIncorrectInfo(true)
 			}
 		},
 	});
 
 	// INPUT HANDLER
 	const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		if (incorrectInfo) setIncorrectInfo(false);
+
 		setUserInuput({
 			...userInput,
 			[e.target.name]: e.target.value,
@@ -79,20 +83,22 @@ const Login: React.FC = () => {
 					onClick={togglePasswordLogin}
 				/>
 			</div>
-			<br />
+
 			{incorrectInfo && (
-				<div>
-					<div>Incorrect Login Information, Please Try Again</div>
-					<br />
+				<div style={{ color: "red", marginTop: "10px" }}>
+					Information was incorrect
 				</div>
 			)}
+
 			{error && (
 				<div>
 					<div>Error, Please Try Again</div>
 					<br />
 				</div>
 			)}
+
 			<button
+				style={{ marginTop: "10px" }}
 				onClick={() => {
 					mutation.mutate(userInput);
 				}}

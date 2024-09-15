@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import styles from "./Register.module.scss";
+import React, { useState } from "react";
 import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
 import { apiRequestRegister } from "../../utils/requests.ts";
 import {
@@ -18,6 +18,7 @@ const Register: React.FC = () => {
 	});
 	const [taken, setTaken] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
+	const [passwordsDifferent, setPasswordsDifferent] = useState<boolean>(false);
 
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
@@ -43,6 +44,8 @@ const Register: React.FC = () => {
 
 	//INPUT HANDLER
 	function inputHandler(e: React.ChangeEvent<HTMLInputElement>): void {
+		if (passwordsDifferent) setPasswordsDifferent(false);
+
 		setUserInput({
 			...userInput,
 			[e.target.name]: e.target.value,
@@ -110,10 +113,25 @@ const Register: React.FC = () => {
 				</div>
 			)}
 
-			<br />
+			{passwordsDifferent && (
+				<div style={{ color: "red", marginTop: "10px" }}>
+					Passwords must match
+				</div>
+			)}
+
 			<button
 				className="btn btn-primary"
-				onClick={() => mutation.mutate(userInput)}
+				style={{ marginTop: "10px" }}
+				onClick={() => {
+					if (
+						userInput.password.toLowerCase() !==
+						userInput.password2.toLowerCase()
+					) {
+						setPasswordsDifferent(true);
+					} else {
+						mutation.mutate(userInput);
+					}
+				}}
 			>
 				Register
 			</button>
