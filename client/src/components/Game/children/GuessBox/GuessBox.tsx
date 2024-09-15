@@ -139,9 +139,13 @@ const GuessBox: React.FC<IProps> = (props) => {
 							onClick={async () => {
 								try {
 									if (guessDataCtx && nameRef.current) {
+										const categories = Object.fromEntries(
+											guessDataCtx.guessData,
+										);
+										categories.effects = [0];
 										const paramObj = {
 											accessToken: getUserSessionDataFromStorage().access_token,
-											category_info: Object.fromEntries(guessDataCtx.guessData),
+											category_info: { ...categories },
 											name: nameRef.current.value,
 										};
 										console.log(paramObj);

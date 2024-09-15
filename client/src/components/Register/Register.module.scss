@@ -4,4 +4,9 @@
 .root {
 	@include full-size-percent;
 	@include flex-center;
+
+	input {
+		text-align: center;
+		font-size: 1.5rem;
+	}
 }

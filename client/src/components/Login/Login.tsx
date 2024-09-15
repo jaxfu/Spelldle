@@ -1,6 +1,6 @@
+import styles from "./Login.module.scss";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./Login.module.scss";
 import { apiRequestLogin } from "../../utils/requests.ts";
 import {
 	INIT_USERINPUT_LOGIN,
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
-			<div>Username:</div>
+			<h2>Username:</h2>
 			<input
 				type="text"
 				name="username"
@@ -68,7 +68,7 @@ const Login: React.FC = () => {
 			/>
 			<br />
 			<div className={styles.passwordBox}>
-				<div>Password:</div>
+				<h2>Password:</h2>
 				<input
 					type="password"
 					name="password"
@@ -83,20 +83,17 @@ const Login: React.FC = () => {
 					onClick={togglePasswordLogin}
 				/>
 			</div>
-
 			{incorrectInfo && (
 				<div style={{ color: "red", marginTop: "10px" }}>
 					Information was incorrect
 				</div>
 			)}
-
 			{error && (
 				<div>
 					<div>Error, Please Try Again</div>
 					<br />
 				</div>
 			)}
-
 			<button
 				style={{ marginTop: "10px" }}
 				onClick={() => {
@@ -105,6 +102,7 @@ const Login: React.FC = () => {
 			>
 				Login
 			</button>
+			or
 			<Link to={"/register"}>
 				<button>Register</button>
 			</Link>

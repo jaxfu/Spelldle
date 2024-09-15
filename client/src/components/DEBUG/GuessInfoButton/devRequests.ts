@@ -6,11 +6,15 @@ interface IParamObject {
 	name: string;
 }
 
+const ROUTE: string = import.meta.env.DEV
+	? "http://localhost:5000/api/addSpell"
+	: "/api/addSpell";
+
 const devRequests = {
 	addSpell: async function (paramObject: IParamObject) {
 		return await axios({
 			method: "POST",
-			url: "http://localhost:5000/api/addSpell",
+			url: ROUTE,
 			data: {
 				name: paramObject.name,
 				...paramObject.category_info,

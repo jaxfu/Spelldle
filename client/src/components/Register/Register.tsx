@@ -54,7 +54,7 @@ const Register: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
-			<div>First Name:</div>
+			<h2>First Name:</h2>
 			<input
 				type="text"
 				name="first_name"
@@ -63,7 +63,7 @@ const Register: React.FC = () => {
 				autoComplete="on"
 			/>
 
-			<div>Last Name:</div>
+			<h2>Last Name:</h2>
 			<input
 				type="text"
 				name="last_name"
@@ -72,7 +72,7 @@ const Register: React.FC = () => {
 				autoComplete="on"
 			/>
 
-			<div>Username:</div>
+			<h2>Username:</h2>
 			<input
 				type="text"
 				name="username"
@@ -81,7 +81,7 @@ const Register: React.FC = () => {
 				autoComplete="on"
 			/>
 
-			<div>Password:</div>
+			<h2>Password:</h2>
 			<input
 				type="password"
 				name="password"
@@ -90,7 +90,7 @@ const Register: React.FC = () => {
 				autoComplete="on"
 			/>
 
-			<div>Confirm Password:</div>
+			<h2>Confirm Password:</h2>
 			<input
 				type="password"
 				name="password2"

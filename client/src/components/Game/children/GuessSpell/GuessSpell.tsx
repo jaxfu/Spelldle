@@ -49,7 +49,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 			} else console.log(`error getting spells, spell ${spell} id not found`);
 		});
 
-		return spellArr;
+		return spellArr.sort();
 	};
 
 	return (
