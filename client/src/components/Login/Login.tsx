@@ -41,7 +41,7 @@ const Login: React.FC = () => {
 				});
 				navigate("/");
 			} else {
-				setIncorrectInfo(true)
+				setIncorrectInfo(true);
 			}
 		},
 	});

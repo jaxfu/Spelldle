@@ -9,6 +9,7 @@ interface IProps {
 const InfoPopup: React.FC<IProps> = (props) => {
 	return (
 		<Popup>
+			<div className={styles.spacer}></div>
 			<div className={styles.content}>
 				<h2>Welcome to Spelldle!</h2>
 				<h3>Rules:</h3>

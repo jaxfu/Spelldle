@@ -53,7 +53,9 @@ const PostGame: React.FC<IProps> = (props) => {
 							: "You lost"}
 					</h2>
 					<span>Correct Spell: {data.name}</span>
-					<SpellInfo spellInfo={data} categoryInfo={props.categoryInfo} />
+					<div className={styles.guesses}>
+						<SpellInfo spellInfo={data} categoryInfo={props.categoryInfo} />
+					</div>
 					<button
 						onClick={() => {
 							mutation.mutate(getUserSessionDataFromStorage().access_token);

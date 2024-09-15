@@ -2,9 +2,10 @@
 @import "../../../../styles/mixins";
 
 .content {
-	@include flex-center;
 	width: 80%;
-	height: fit-content;
+	min-height: 70dvh;
+	max-height: 80dvh;
+	overflow-y: auto;
 
 	position: relative;
 	top: 50%;
@@ -19,6 +20,10 @@
 		@include flex-center;
 		border-bottom: 1px solid white;
 		width: 100%;
+	}
+
+	h3 {
+		text-align: center;
 	}
 
 	ul {
