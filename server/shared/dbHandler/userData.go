@@ -8,7 +8,7 @@ import (
 
 // Gets
 const QGetUserIDByUsername = `
-	SELECT user_id FROM users.data WHERE username=$1
+	SELECT user_id FROM users.data WHERE LOWER(username)=LOWER($1)
 `
 
 func (dbHandler *DBHandler) GetUserIDByUsername(username string) (types.UserID, error) {
