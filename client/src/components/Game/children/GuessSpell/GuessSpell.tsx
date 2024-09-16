@@ -67,7 +67,7 @@ const GuessSpell: React.FC<IProps> = (props) => {
 				</div>
 			)}
 			<div className={styles.cell}>
-				<h3>Spell</h3>
+				<h2>Spell</h2>
 				<div className={styles.input}>
 					<SingleTextInput
 						input={input}
