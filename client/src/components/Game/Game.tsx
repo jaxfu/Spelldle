@@ -43,7 +43,7 @@ const Game: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		async function fetchCategoryInfoJson() {
 			try {
-				const response = await fetch("/CATEGORY_INFO.json");
+				const response = await fetch("/CATEGORY_INFOv2.json");
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
@@ -89,7 +89,7 @@ const Game: React.FC<IProps> = (props) => {
 		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
-				getUserSessionDataFromStorage().access_token,
+				getUserSessionDataFromStorage().access_token
 			),
 		retry: false,
 		refetchOnWindowFocus: false,

@@ -39,6 +39,7 @@
 			"10 Feet",
 			"30 Feet",
 			"60 Feet",
+			"90 Feet",
 			"120 Feet",
 			"120+ Feet",
 			"Touch",
@@ -50,7 +51,14 @@
 	{
 		"id": "target",
 		"display_name": "Target",
-		"values": ["Area", "Creature", "Object", "Point", "Unnocupied Space", "Self"],
+		"values": [
+			"Area",
+			"Creature",
+			"Object",
+			"Point",
+			"Unnocupied Space",
+			"Self"
+		],
 		"component_type": 0,
 		"has_modifiers": false
 	},
