@@ -42,3 +42,18 @@
 		}
 	}
 }
+
+@media (max-width: 550px) {
+	.root {
+		.title {
+			font-size: 1.5rem;
+		}
+
+		.guesses {
+			.guess {
+				width: 3rem;
+				height: 3rem;
+			}
+		}
+	}
+}

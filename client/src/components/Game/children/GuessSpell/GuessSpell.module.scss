@@ -7,6 +7,13 @@
 	margin-top: 50px;
 	margin-bottom: 50px;
 
+	button {
+		border: 1px solid white;
+		padding: 5px;
+		border-radius: 10px;
+		font-size: 1.2rem;
+	}
+
 	//border: 1px solid white;
 	.cell {
 		width: fit-content;
@@ -28,6 +35,7 @@
 		}
 
 		.input {
+			@include full-size-percent;
 			position: relative;
 		}
 	}
@@ -47,6 +55,17 @@
 			background: red;
 			border-radius: 5px;
 			padding: 5px;
+		}
+	}
+}
+
+@media (max-width: 550px) {
+	.root {
+		.cell {
+			width: 90%;
+		}
+		button {
+			font-size: 1.5rem;
 		}
 	}
 }

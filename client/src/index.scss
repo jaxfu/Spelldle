@@ -45,7 +45,6 @@ input[type="checkbox"] {
 
 input[type="text"] {
 	box-shadow: none;
-	font-size: 1.2rem;
 }
 
 .round.col {
@@ -62,4 +61,10 @@ input[type="text"] {
 
 	z-index: 9;
 	background: $main_bg;
+}
+
+@media (max-width: 550px) {
+	input[type="text"] {
+		font-size: 2rem;
+	}
 }

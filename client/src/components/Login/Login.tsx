@@ -95,7 +95,7 @@ const Login: React.FC = () => {
 				</div>
 			)}
 			<button
-			className={styles.login}
+				className={styles.login}
 				style={{ marginTop: "10px" }}
 				onClick={() => {
 					mutation.mutate(userInput);
@@ -105,9 +105,7 @@ const Login: React.FC = () => {
 			</button>
 			or
 			<Link to={"/register"}>
-				<button
-				className={styles.register}
-				>Register</button>
+				<button className={styles.register}>Register</button>
 			</Link>
 		</div>
 	);

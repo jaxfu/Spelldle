@@ -1,7 +1,6 @@
 .root {
 	width: 100%;
 	text-align: center;
-	min-height: fit-content;
 	max-height: 100px;
 	border: 1px solid black;
 	background: white;
@@ -23,5 +22,12 @@
 		&:hover {
 			background: lightseagreen;
 		}
+	}
+}
+
+@media (max-width: 550px) {
+	.root {
+		font-size: 1.2rem;
+		max-height: 8rem;
 	}
 }

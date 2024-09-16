@@ -29,8 +29,18 @@
 		@include flex-center;
 
 		button {
-			border-radius: 1rem;
+			border: 1px solid white;
 			padding: 5px;
+			border-radius: 10px;
+			font-size: 1.2rem;
+		}
+	}
+}
+
+@media (max-width: 550px) {
+	.root {
+		button {
+			font-size: 1.5rem;
 		}
 	}
 }
