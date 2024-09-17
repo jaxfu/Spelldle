@@ -43,7 +43,7 @@ const Game: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		async function fetchCategoryInfoJson() {
 			try {
-				const response = await fetch("/CATEGORY_INFOv2.json");
+				const response = await fetch("/CATEGORY_INFOv3.json");
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}

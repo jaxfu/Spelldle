@@ -78,7 +78,12 @@ export async function apiRequestMakeGuessCategory(
 	paramObject: T_ARG_APIREQUEST_MAKE_GUESS_CATEGORY,
 ): Promise<AxiosResponse<string>> {
 	console.log(paramObject.guessData);
-	const obj = { ...Object.fromEntries(paramObject.guessData), effects: [4] };
+	// TODO: temp fix
+	const obj = {
+		...Object.fromEntries(paramObject.guessData),
+		effects: [0],
+		target: 0,
+	};
 	console.log(obj);
 	// Todo: temp fix
 	return await axios<string>({

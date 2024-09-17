@@ -142,7 +142,9 @@ const GuessBox: React.FC<IProps> = (props) => {
 										const categories = Object.fromEntries(
 											guessDataCtx.guessData,
 										);
+										// TODO: temp fix
 										categories.effects = [0];
+										categories.target = 0;
 										const paramObj = {
 											accessToken: getUserSessionDataFromStorage().access_token,
 											category_info: { ...categories },
