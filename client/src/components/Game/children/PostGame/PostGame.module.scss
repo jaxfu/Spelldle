@@ -23,6 +23,14 @@
 
 	h2 {
 		text-align: center;
+
+		&.correct {
+			color: $color-correct;
+		}
+
+		&.incorrect {
+			color: $color-incorrect;
+		}
 	}
 
 	span {
@@ -32,5 +40,18 @@
 	.guesses {
 		width: 100%;
 		@include flex-center;
+	}
+
+	button {
+		font-size: larger;
+		font-weight: bolder;
+		padding: 5px;
+		border: none;
+		border-top: 1px solid white;
+		background: $color-correct;
+
+		&:hover {
+			background: rgb(104, 163, 104);
+		}
 	}
 }

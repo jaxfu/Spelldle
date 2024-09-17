@@ -47,10 +47,14 @@ const PostGame: React.FC<IProps> = (props) => {
 		return (
 			<Popup>
 				<div className={styles.content}>
-					<h2>
-						{props.gameSessionInfo.guesses.correct
-							? "Congratulations!"
-							: "You lost"}
+					<h2
+						className={
+							props.gameSessionInfo.guesses.correct
+								? styles.correct
+								: styles.incorrect
+						}
+					>
+						{props.gameSessionInfo.guesses.correct ? "Nice! :)" : "You lost :("}
 					</h2>
 					<span>Correct Spell: {data.name}</span>
 					<div className={styles.guesses}>
