@@ -89,7 +89,7 @@ const Game: React.FC<IProps> = (props) => {
 		queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
 		queryFn: () =>
 			apiRequestGetGameSessionInfo(
-				getUserSessionDataFromStorage().access_token
+				getUserSessionDataFromStorage().access_token,
 			),
 		retry: false,
 		refetchOnWindowFocus: false,

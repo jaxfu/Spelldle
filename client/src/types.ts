@@ -52,26 +52,29 @@ export const INIT_USERDATA_STATE: T_USERDATA_STATE = {
 export type T_USERINPUT_REGISTER = {
 	username: string;
 	password: string;
-	password2: string;
+	confirm_password: string;
 	first_name: string;
 	last_name: string;
 };
 export const INIT_USERINPUT_REGISTER: T_USERINPUT_REGISTER = {
 	username: "",
 	password: "",
-	password2: "",
+	confirm_password: "",
 	first_name: "",
 	last_name: "",
 };
 
+export enum E_REGISTER_RESULT {
+	NULL = -1,
+	USERNAME_EXISTS,
+	VALID,
+}
 export type T_APIRESULT_REGISTER = {
-	valid: boolean;
-	user_data: T_USERDATA_STATE;
+	result: E_REGISTER_RESULT;
 	tokens: T_TOKENS;
 };
 export const INIT_APIRESULT_REGISTER: T_APIRESULT_REGISTER = {
-	valid: false,
-	user_data: deepCopyObject(INIT_USERDATA_STATE),
+	result: E_REGISTER_RESULT.NULL,
 	tokens: deepCopyObject(INIT_TOKENS),
 };
 

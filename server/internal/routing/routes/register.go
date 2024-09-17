@@ -18,9 +18,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	RESULT_NULL            int = -1
+	RESULT_USERNAME_EXISTS int = 0
+	RESULT_VALID           int = 1
+)
+
 type responseRegister struct {
 	Tokens types.AllTokens `json:"tokens"`
-	Valid  bool            `json:"valid"`
+	Result int             `json:"result"`
 }
 
 // Register recieves a RequestPayloadRegister, then checks if the username is valid,
@@ -29,7 +35,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var registerPayload types.RequestPayloadRegister
 		response := responseRegister{
-			Valid: false,
+			Result: RESULT_NULL,
 		}
 
 		// Bind request body
@@ -50,7 +56,8 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			}
 		} else {
 			fmt.Printf("Username '%s' already exists", registerPayload.Username)
-			ctx.JSON(http.StatusUnauthorized, response)
+			response.Result = RESULT_USERNAME_EXISTS
+			ctx.JSON(http.StatusOK, response)
 			return
 		}
 
@@ -117,7 +124,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		response.Valid = true
+		response.Result = RESULT_VALID
 		response.Tokens = types.AllTokens{
 			AccessToken:  accessToken,
 			RefreshToken: accessToken,

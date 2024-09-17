@@ -6,23 +6,29 @@ import {
 	INIT_USERINPUT_REGISTER,
 	type T_USERINPUT_REGISTER,
 	type T_APIRESULT_REGISTER,
+	E_REGISTER_RESULT,
 } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { QUERY_KEYS } from "../../utils/consts.ts";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "@tanstack/react-form";
+
+function isAlpha(input: string): boolean {
+	let regex = /^[a-zA-Z]+$/;
+	return regex.test(input);
+}
 
 const Register: React.FC = () => {
 	const [userInput, setUserInput] = useState<T_USERINPUT_REGISTER>({
 		...INIT_USERINPUT_REGISTER,
 	});
-	const [taken, setTaken] = useState<boolean>(false);
-	const [error, setError] = useState<boolean>(false);
 	const [passwordsDifferent, setPasswordsDifferent] = useState<boolean>(false);
+	const [errMessage, setErrMessage] = useState<string>("");
 
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	const mutation = useMutation({
+	const { data, isSuccess, mutate } = useMutation({
 		mutationFn: (
 			userInput: T_USERINPUT_REGISTER,
 		): Promise<AxiosResponse<T_APIRESULT_REGISTER>> => {
@@ -30,112 +36,225 @@ const Register: React.FC = () => {
 		},
 		onError(err) {
 			console.log(err);
+			alert("Error, please refresh and try again");
 		},
-		// TODO: handle taken and error
 		onSuccess(data) {
-			sendTokensToLocalStorage(data.data.tokens);
-			queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
-			queryClient.invalidateQueries({
-				queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
-			});
-			navigate("/");
+			switch (data.data.result) {
+				case E_REGISTER_RESULT.VALID:
+					sendTokensToLocalStorage(data.data.tokens);
+					queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
+					queryClient.invalidateQueries({
+						queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+					});
+					navigate("/");
+					break;
+				case E_REGISTER_RESULT.USERNAME_EXISTS:
+					setErrMessage(
+						`Username '${form.getFieldValue("username")}' already exists`,
+					);
+			}
 		},
 	});
 
-	//INPUT HANDLER
-	function inputHandler(e: React.ChangeEvent<HTMLInputElement>): void {
-		if (passwordsDifferent) setPasswordsDifferent(false);
-
-		setUserInput({
-			...userInput,
-			[e.target.name]: e.target.value,
-		});
-	}
+	const form = useForm<T_USERINPUT_REGISTER>({
+		defaultValues: {
+			first_name: "",
+			last_name: "",
+			username: "",
+			password: "",
+			confirm_password: "",
+		},
+		onSubmit: ({ value }) => {
+			mutate({
+				first_name: value.first_name.trim(),
+				last_name: value.last_name.trim(),
+				username: value.username.trim(),
+				password: value.password.trim(),
+				confirm_password: value.password.trim(),
+			});
+		},
+	});
 
 	return (
-		<div className={styles.root}>
-			<h2>First Name:</h2>
-			<input
-				type="text"
+		<form
+			className={styles.root}
+			onSubmit={(e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				form.handleSubmit();
+			}}
+		>
+			<form.Field
 				name="first_name"
-				value={userInput.first_name}
-				onChange={inputHandler}
-				autoComplete="on"
-			/>
+				children={(field) => (
+					<>
+						<h2>First Name</h2>
+						<input
+							name={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(e.target.value)}
+							className={field.state.meta.errors.length > 0 ? styles.err : ""}
+						/>
+						{field.state.meta.errors ? (
+							<div className={styles.err}>
+								{field.state.meta.errors.join(", ")}
+							</div>
+						) : null}
+					</>
+				)}
+				validators={{
+					onChange: ({ value }) => {
+						if (!isAlpha(value) && value !== "") {
+							return "Names can only contain letters";
+						}
 
-			<h2>Last Name:</h2>
-			<input
-				type="text"
-				name="last_name"
-				value={userInput.last_name}
-				onChange={inputHandler}
-				autoComplete="on"
-			/>
-
-			<h2>Username:</h2>
-			<input
-				type="text"
-				name="username"
-				value={userInput.username}
-				onChange={inputHandler}
-				autoComplete="on"
-			/>
-
-			<h2>Password:</h2>
-			<input
-				type="password"
-				name="password"
-				value={userInput.password}
-				onChange={inputHandler}
-				autoComplete="on"
-			/>
-
-			<h2>Confirm Password:</h2>
-			<input
-				type="password"
-				name="password2"
-				value={userInput.password2}
-				onChange={inputHandler}
-				autoComplete="on"
-			/>
-
-			{taken && (
-				<div>
-					<div>Username Taken</div>
-					<br />
-				</div>
-			)}
-
-			{error && (
-				<div>
-					<div>Error, please try again</div>
-					<br />
-				</div>
-			)}
-
-			{passwordsDifferent && (
-				<div style={{ color: "red", marginTop: "10px" }}>
-					Passwords must match
-				</div>
-			)}
-
-			<button
-				className="btn btn-primary"
-				style={{ marginTop: "10px" }}
-				onClick={() => {
-					if (
-						userInput.password.toLowerCase() !==
-						userInput.password2.toLowerCase()
-					) {
-						setPasswordsDifferent(true);
-					} else {
-						mutation.mutate(userInput);
-					}
+						return undefined;
+					},
+					onSubmit: ({ value }) => {
+						return value === "" ? "Cannot be empty" : undefined;
+					},
 				}}
-			>
-				Register
-			</button>
-		</div>
+			/>
+			<form.Field
+				name="last_name"
+				children={(field) => (
+					<>
+						<h2>Last Name</h2>
+						<input
+							name={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(e.target.value)}
+							className={field.state.meta.errors.length > 0 ? styles.err : ""}
+						/>
+						{field.state.meta.errors ? (
+							<div className={styles.err}>
+								{field.state.meta.errors.join(", ")}
+							</div>
+						) : null}
+					</>
+				)}
+				validators={{
+					onChange: ({ value }) => {
+						if (!isAlpha(value) && value !== "") {
+							return "Names can only contain letters";
+						}
+
+						return undefined;
+					},
+					onSubmit: ({ value }) => {
+						return value === "" ? "Cannot be empty" : undefined;
+					},
+				}}
+			/>
+			<form.Field
+				name="username"
+				children={(field) => (
+					<>
+						<h2>Username</h2>
+						<input
+							name={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(e.target.value)}
+							className={field.state.meta.errors.length > 0 ? styles.err : ""}
+						/>
+						{field.state.meta.errors ? (
+							<div className={styles.err}>
+								{field.state.meta.errors.join(", ")}
+							</div>
+						) : null}
+					</>
+				)}
+				validators={{
+					onChange: ({ value }) => {
+						if (value.includes(" ")) {
+							return "Username cannot contain spaces";
+						} else if (!isAlpha(value) && value !== "") {
+							return "Username can only contain letters";
+						}
+
+						return undefined;
+					},
+					onSubmit: ({ value }) => {
+						return value === "" ? "Cannot be empty" : undefined;
+					},
+				}}
+			/>
+			<form.Field
+				name="password"
+				children={(field) => (
+					<>
+						<h2>Password</h2>
+						<input
+							name={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(e.target.value)}
+							className={field.state.meta.errors.length > 0 ? styles.err : ""}
+							type="password"
+						/>
+						{field.state.meta.errors ? (
+							<div className={styles.err}>
+								{field.state.meta.errors.join(", ")}
+							</div>
+						) : null}
+					</>
+				)}
+				validators={{
+					onChange: ({ value }) => {
+						return value.includes(" ")
+							? "Password cannot contain spaces"
+							: undefined;
+					},
+					onSubmit: ({ value }) => {
+						return value === "" ? "Cannot be empty" : undefined;
+					},
+				}}
+			/>
+			<form.Field
+				name="confirm_password"
+				children={(field) => (
+					<>
+						<h2>Confirm Password</h2>
+						<input
+							name={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(e.target.value)}
+							className={field.state.meta.errors.length > 0 ? styles.err : ""}
+							type="password"
+						/>
+						{field.state.meta.errors ? (
+							<div className={styles.err}>
+								{field.state.meta.errors.join(", ")}
+							</div>
+						) : null}
+					</>
+				)}
+				validators={{
+					onChange: ({ value }) => {
+						if (value.includes(" ")) {
+							return "Password cannot contain spaces";
+						}
+
+						return undefined;
+					},
+					onSubmit: ({ value, fieldApi }) => {
+						if (value === "") {
+							return "Cannot be empty";
+						} else if (value !== fieldApi.form.getFieldValue("password")) {
+							return "Passwords must match";
+						}
+
+						return undefined;
+					},
+				}}
+			/>
+			{<div className={styles.err}>{errMessage}</div>}
+			<button type="submit">Register</button>
+		</form>
 	);
 };
 
