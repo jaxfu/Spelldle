@@ -32,18 +32,30 @@
 			background: $color-btn;
 			color: lightseagreen;
 
-			&:hover {
-				background: $main_bg;
-			}
+			// &:hover {
+			// 	background: $main_bg;
+			// }
 		}
 
 		&.unchecked {
 			background: $main_bg;
 			color: red;
 
-			&:hover {
-				background: $color-btn-hover;
-			}
+			// &:hover {
+			// 	background: $color-btn-hover;
+			// }
+		}
+	}
+}
+
+@media screen and (min-width: 550px) {
+	.root {
+		span.checked:hover {
+			background: $main_bg;
+		}
+
+		span.unchecked:hover {
+			background: $color-btn-hover;
 		}
 	}
 }

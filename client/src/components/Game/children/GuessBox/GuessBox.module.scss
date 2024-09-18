@@ -37,7 +37,7 @@
 	}
 }
 
-@media (max-width: 550px) {
+@media screen and (max-width: 550px) {
 	.root {
 		button {
 			font-size: 1.5rem;

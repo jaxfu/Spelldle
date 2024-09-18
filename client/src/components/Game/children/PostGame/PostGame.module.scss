@@ -7,19 +7,15 @@
 	gap: 10px;
 
 	width: 80%;
-	max-height: 70dvh;
+	height: fit-content;
 	overflow-y: auto;
-
-	position: fixed;
-	top: 40%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 
 	border: 1px solid white;
 	border-radius: 0.5rem;
 	background: $color-bg;
 
-	margin-top: 50px;
+	margin-top: 100px;
+	margin-bottom: 100px;
 
 	h2 {
 		text-align: center;

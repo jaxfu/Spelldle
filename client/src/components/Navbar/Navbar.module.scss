@@ -32,12 +32,18 @@
 		@include flex-center;
 		flex-direction: row;
 		gap: 10px;
+		//border: 1px solid white;
+		justify-content: flex-end;
 
 		button {
 			border: 1px solid white;
 			padding: 5px;
 			border-radius: 10px;
 			font-size: 1.2rem;
+		}
+
+		.logout {
+			margin-right: 1rem;
 		}
 	}
 }

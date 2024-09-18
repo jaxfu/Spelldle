@@ -4,10 +4,11 @@
 .root {
 	width: 100%;
 	height: calc(100% - $height-navbar);
-	padding-top: 100px;
-	padding-bottom: 100px;
 
-	overflow-y: hidden;
+	display: flex;
+	justify-content: center;
+
+	overflow-y: auto;
 
 	position: absolute;
 

@@ -34,6 +34,7 @@ const Navbar: React.FC<IProps> = (props) => {
 							});
 							navigate("/login");
 						}}
+						className={styles.logout}
 					>
 						Logout
 					</button>
