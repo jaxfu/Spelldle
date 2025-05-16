@@ -1,3 +1,0 @@
-- Past questions above or below?
-- Navbar styling
-- Getting spell info for insertion
