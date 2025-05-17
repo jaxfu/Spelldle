@@ -22,24 +22,19 @@ func main() {
 	// ENV CONFIG
 	if os.Getenv("MODE") != "PROD" {
 		if err := godotenv.Load("../config/config.env"); err != nil {
-			fmt.Printf("%+v\n", err)
-			os.Exit(1)
+			log.Fatalf("%+v\n", err)
 		}
 	}
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
-		fmt.Println("No env variable PORT")
-		os.Exit(1)
+		log.Fatal("No env variable PORT")
 	}
 
-	// Test backup
-	// cmd := exec.Command("./backup.sh")
-	// if err := cmd.Run(); err != nil {
-	// 	log.Printf("Error backing up Postgres: %+v\n", err)
-	// }
-
 	// Conn
-	db := dbHandler.InitDBHandler(os.Getenv("DB_URL"))
+	db, err := dbHandler.InitDBHandler(os.Getenv("DB_URL"))
+	if err != nil {
+		log.Fatalf("error opening db connection: %+v", err)
+	}
 	defer db.Conn.Close()
 
 	// ROUTING

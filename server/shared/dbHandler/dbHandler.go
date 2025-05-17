@@ -3,7 +3,6 @@ package dbHandler
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -16,15 +15,22 @@ type DBHandler struct {
 
 // InitDBHandler is the constructor for DBHandler, takes a database connection
 // string and returns a pointer to instantiated DBHandler.
-func InitDBHandler(connectionString string) *DBHandler {
+func InitDBHandler(connectionString string) (*DBHandler, error) {
 	var newDBHandler DBHandler
-	db, err := pgxpool.New(context.Background(), connectionString)
+	db, err := pgxpool.New(
+		context.Background(),
+		connectionString,
+	)
 	if err != nil {
-		fmt.Printf("%+v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
+
+	if err := db.Ping(context.Background()); err != nil {
+		return nil, err
+	}
+
 	newDBHandler.Conn = db
-	return &newDBHandler
+	return &newDBHandler, nil
 }
 
 // TESTING

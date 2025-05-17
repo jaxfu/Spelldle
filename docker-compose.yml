@@ -1,0 +1,19 @@
+name: spelldle
+
+services:
+  server:
+    image: golang
+    platform: linux/amd64
+    container_name: spelldle_server
+    volumes:
+      - ./server:/app
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    container_name: spelldle_postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"

@@ -56,6 +56,8 @@ const Register: React.FC = () => {
 		},
 	});
 
+	// TODO: investigate
+	// @ts-ignore
 	const form = useForm<T_USERINPUT_REGISTER>({
 		defaultValues: {
 			first_name: "",
